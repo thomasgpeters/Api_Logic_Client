@@ -1,0 +1,1 @@
+fn BuildWindowfn BuildSubViewsfn BuildMenuon appevent		fn DoAppEvent			// assign application event handler functionon menu			fn DoMenu					// assign menu event handler functionon dialog			fn DoDialog				// assign window/control event handler functiongProjectDictionary = fn MutableDictionaryNewprojectName = fn MutableStringNewHandleEvents

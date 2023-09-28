@@ -1,0 +1,110 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXFileReference section */
+		D4986AF92A9EBEFE00147BC3 /* ProjectCreateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProjectCreateView.xib; sourceTree = "<group>"; };
+		D4986AFA2A9EBF3400147BC3 /* WelcomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WelcomeView.xib; sourceTree = "<group>"; };
+		D4986AFB2A9EBF3400147BC3 /* ProjectDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProjectDetailView.xib; sourceTree = "<group>"; };
+		D4986AFC2A9EBF3400147BC3 /* Toolbar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Toolbar.xib; sourceTree = "<group>"; };
+		D4986AFD2A9EBF3400147BC3 /* AttributeDetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttributeDetailView.xib; sourceTree = "<group>"; };
+		D4986AFE2A9EBF3400147BC3 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		D4986B042AA6C47E00147BC3 /* Window.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Window.xib; sourceTree = "<group>"; };
+		D4986B052AA6C49400147BC3 /* TextField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextField.xib; sourceTree = "<group>"; };
+		D4986B062AA6C49400147BC3 /* View.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
+		D4986B072AA6C49400147BC3 /* Button.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Button.xib; sourceTree = "<group>"; };
+		D4986B082AA6C49400147BC3 /* Label.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Label.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		D4986AF22A9EBDCB00147BC3 = {
+			isa = PBXGroup;
+			children = (
+				D4986B032AA6C45300147BC3 /* Templates */,
+				D4986B022AA6C43700147BC3 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		D4986B022AA6C43700147BC3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D4986AFE2A9EBF3400147BC3 /* MainWindow.xib */,
+				D4986AFD2A9EBF3400147BC3 /* AttributeDetailView.xib */,
+				D4986AFB2A9EBF3400147BC3 /* ProjectDetailView.xib */,
+				D4986AF92A9EBEFE00147BC3 /* ProjectCreateView.xib */,
+				D4986AFA2A9EBF3400147BC3 /* WelcomeView.xib */,
+				D4986AFC2A9EBF3400147BC3 /* Toolbar.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		D4986B032AA6C45300147BC3 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				D4986B072AA6C49400147BC3 /* Button.xib */,
+				D4986B082AA6C49400147BC3 /* Label.xib */,
+				D4986B052AA6C49400147BC3 /* TextField.xib */,
+				D4986B062AA6C49400147BC3 /* View.xib */,
+				D4986B042AA6C47E00147BC3 /* Window.xib */,
+			);
+			name = Templates;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		D4986AF32A9EBDCB00147BC3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = D4986AF62A9EBDCB00147BC3 /* Build configuration list for PBXProject "Api_Logic_Client" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D4986AF22A9EBDCB00147BC3;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		D4986AF72A9EBDCB00147BC3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		D4986AF82A9EBDCB00147BC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D4986AF62A9EBDCB00147BC3 /* Build configuration list for PBXProject "Api_Logic_Client" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4986AF72A9EBDCB00147BC3 /* Debug */,
+				D4986AF82A9EBDCB00147BC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D4986AF32A9EBDCB00147BC3 /* Project object */;
+}

@@ -1,0 +1,428 @@
+{
+    "resources": {
+        "Category": {
+            "attributes": [
+                {
+                    "name": "category_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "category_name",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "description",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "picture",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "Customer": {
+            "attributes": [
+                {
+                    "name": "customer_id",
+                    "type": "VARCHAR(5)"
+                },
+                {
+                    "name": "company_name",
+                    "type": "VARCHAR(40)"
+                },
+                {
+                    "name": "contact_name",
+                    "type": "VARCHAR(30)"
+                },
+                {
+                    "name": "contact_title",
+                    "type": "VARCHAR(30)"
+                },
+                {
+                    "name": "address",
+                    "type": "VARCHAR(60)"
+                },
+                {
+                    "name": "city",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "region",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "postal_code",
+                    "type": "VARCHAR(10)"
+                },
+                {
+                    "name": "country",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "phone",
+                    "type": "VARCHAR(24)"
+                },
+                {
+                    "name": "fax",
+                    "type": "VARCHAR(24)"
+                }
+            ]
+        },
+        "CustomerCustomerDemo": {
+            "attributes": [
+                {
+                    "name": "customer_id",
+                    "type": "VARCHAR(5)"
+                },
+                {
+                    "name": "customer_type_id",
+                    "type": "VARCHAR(5)"
+                }
+            ]
+        },
+        "CustomerDemographic": {
+            "attributes": [
+                {
+                    "name": "customer_type_id",
+                    "type": "VARCHAR(5)"
+                },
+                {
+                    "name": "customer_desc",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "Employee": {
+            "attributes": [
+                {
+                    "name": "employee_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "last_name",
+                    "type": "VARCHAR(20)"
+                },
+                {
+                    "name": "first_name",
+                    "type": "VARCHAR(10)"
+                },
+                {
+                    "name": "title",
+                    "type": "VARCHAR(30)"
+                },
+                {
+                    "name": "title_of_courtesy",
+                    "type": "VARCHAR(25)"
+                },
+                {
+                    "name": "birth_date",
+                    "type": "DATE"
+                },
+                {
+                    "name": "hire_date",
+                    "type": "DATE"
+                },
+                {
+                    "name": "address",
+                    "type": "VARCHAR(60)"
+                },
+                {
+                    "name": "city",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "region",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "postal_code",
+                    "type": "VARCHAR(10)"
+                },
+                {
+                    "name": "country",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "home_phone",
+                    "type": "VARCHAR(24)"
+                },
+                {
+                    "name": "extension",
+                    "type": "VARCHAR(4)"
+                },
+                {
+                    "name": "photo",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "notes",
+                    "type": "TEXT"
+                },
+                {
+                    "name": "reports_to",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "photo_path",
+                    "type": "VARCHAR(255)"
+                }
+            ]
+        },
+        "EmployeeTerritory": {
+            "attributes": [
+                {
+                    "name": "employee_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "territory_id",
+                    "type": "VARCHAR(20)"
+                }
+            ]
+        },
+        "Order": {
+            "attributes": [
+                {
+                    "name": "order_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "customer_id",
+                    "type": "VARCHAR(5)"
+                },
+                {
+                    "name": "employee_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "order_date",
+                    "type": "DATE"
+                },
+                {
+                    "name": "required_date",
+                    "type": "DATE"
+                },
+                {
+                    "name": "shipped_date",
+                    "type": "DATE"
+                },
+                {
+                    "name": "ship_via",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "freight",
+                    "type": "FLOAT"
+                },
+                {
+                    "name": "ship_name",
+                    "type": "VARCHAR(40)"
+                },
+                {
+                    "name": "ship_address",
+                    "type": "VARCHAR(60)"
+                },
+                {
+                    "name": "ship_city",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "ship_region",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "ship_postal_code",
+                    "type": "VARCHAR(10)"
+                },
+                {
+                    "name": "ship_country",
+                    "type": "VARCHAR(15)"
+                }
+            ]
+        },
+        "OrderDetail": {
+            "attributes": [
+                {
+                    "name": "order_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "product_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "unit_price",
+                    "type": "FLOAT"
+                },
+                {
+                    "name": "quantity",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "discount",
+                    "type": "FLOAT"
+                }
+            ]
+        },
+        "Product": {
+            "attributes": [
+                {
+                    "name": "product_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "product_name",
+                    "type": "VARCHAR(40)"
+                },
+                {
+                    "name": "supplier_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "category_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "quantity_per_unit",
+                    "type": "VARCHAR(20)"
+                },
+                {
+                    "name": "unit_price",
+                    "type": "FLOAT"
+                },
+                {
+                    "name": "units_in_stock",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "units_on_order",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "reorder_level",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "discontinued",
+                    "type": "INTEGER"
+                }
+            ]
+        },
+        "Region": {
+            "attributes": [
+                {
+                    "name": "region_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "region_description",
+                    "type": "VARCHAR(60)"
+                }
+            ]
+        },
+        "Shipper": {
+            "attributes": [
+                {
+                    "name": "shipper_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "company_name",
+                    "type": "VARCHAR(40)"
+                },
+                {
+                    "name": "phone",
+                    "type": "VARCHAR(24)"
+                }
+            ]
+        },
+        "Supplier": {
+            "attributes": [
+                {
+                    "name": "supplier_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "company_name",
+                    "type": "VARCHAR(40)"
+                },
+                {
+                    "name": "contact_name",
+                    "type": "VARCHAR(30)"
+                },
+                {
+                    "name": "contact_title",
+                    "type": "VARCHAR(30)"
+                },
+                {
+                    "name": "address",
+                    "type": "VARCHAR(60)"
+                },
+                {
+                    "name": "city",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "region",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "postal_code",
+                    "type": "VARCHAR(10)"
+                },
+                {
+                    "name": "country",
+                    "type": "VARCHAR(15)"
+                },
+                {
+                    "name": "phone",
+                    "type": "VARCHAR(24)"
+                },
+                {
+                    "name": "fax",
+                    "type": "VARCHAR(24)"
+                },
+                {
+                    "name": "homepage",
+                    "type": "TEXT"
+                }
+            ]
+        },
+        "Territory": {
+            "attributes": [
+                {
+                    "name": "territory_id",
+                    "type": "VARCHAR(20)"
+                },
+                {
+                    "name": "territory_description",
+                    "type": "VARCHAR(60)"
+                },
+                {
+                    "name": "region_id",
+                    "type": "SMALLINT"
+                }
+            ]
+        },
+        "UsState": {
+            "attributes": [
+                {
+                    "name": "state_id",
+                    "type": "SMALLINT"
+                },
+                {
+                    "name": "state_name",
+                    "type": "VARCHAR(100)"
+                },
+                {
+                    "name": "state_abbr",
+                    "type": "VARCHAR(2)"
+                },
+                {
+                    "name": "state_region",
+                    "type": "VARCHAR(50)"
+                }
+            ]
+        }
+    }
+}

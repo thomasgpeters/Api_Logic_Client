@@ -1,0 +1,1 @@
+void local fn ValidateRequiredValues'~'1if ( len(textfield( _projectNameEdit )) > 0 && len(textfield( _baseURLEdit )) > 0 && len(textfield( _authNameEdit )) > 0 && len(textfield( _authPasswordEdit )) > 0 )button _createProjectCreateBtn, YESelsebutton _createProjectCreateBtn, NOend ifend fn

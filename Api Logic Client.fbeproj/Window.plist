@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API Interface</key>
+	<string>{{605, 142}, {560, 746}}</string>
+	<key>API Interface.incl</key>
+	<string>{{624, 52}, {969, 1003}}</string>
+	<key>Api Logic Client.fbeproj</key>
+	<string>{{208, 435}, {259, 623}}</string>
+	<key>Api Logic Client.main</key>
+	<string>{{384, 84}, {560, 746}}</string>
+	<key>EventHandlers.incl</key>
+	<string>{{593, 56}, {944, 924}}</string>
+	<key>Menus.incl</key>
+	<string>{{428, 96}, {589, 786}}</string>
+	<key>My Globals.glbl</key>
+	<string>{{977, 126}, {805, 876}}</string>
+	<key>Project Actions</key>
+	<string>{{353, 138}, {560, 746}}</string>
+	<key>Project Actions.incl</key>
+	<string>{{269, 156}, {1013, 899}}</string>
+	<key>Validations.incl</key>
+	<string>{{324, 134}, {782, 779}}</string>
+	<key>Windows.incl</key>
+	<string>{{385, 47}, {1179, 936}}</string>
+</dict>
+</plist>

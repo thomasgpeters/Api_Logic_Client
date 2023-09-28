@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment version="1070" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <toolbar implicitIdentifier="1EDAED16-18CC-4E92-8DB0-674E387EE6B5" explicitIdentifier="5000" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="hVU-XW-Gpx" userLabel="Main Toolbar">
+            <allowedToolbarItems>
+                <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="Qva-YQ-mZn"/>
+                <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="IJy-mn-ipo"/>
+                <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="xoO-rQ-laA"/>
+                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="RHh-fr-l3T"/>
+                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="qIa-qk-Pa9"/>
+                <toolbarItem implicitItemIdentifier="A3068DEC-2E11-47B7-B61B-4415A19E3441" label="Project" paletteLabel="Project" tag="205" selectable="YES" id="2eO-zU-eHn">
+                    <imageReference key="image" image="hammer" catalog="system" symbolScale="large"/>
+                    <size key="minSize" width="50.5" height="27"/>
+                    <size key="maxSize" width="50.5" height="27"/>
+                </toolbarItem>
+                <toolbarItem implicitItemIdentifier="D7FD00B5-CDCE-4595-A8E7-D013CEA2283D" label="Object" paletteLabel="Object" tag="303" selectable="YES" id="h9C-ui-w99">
+                    <imageReference key="image" image="puzzlepiece.extension" catalog="system" symbolScale="large"/>
+                    <size key="minSize" width="34" height="27"/>
+                    <size key="maxSize" width="34" height="27"/>
+                </toolbarItem>
+                <toolbarItem implicitItemIdentifier="EB0E98F7-D7A0-4B9D-94C0-69D4ABFAD736" label="Generate" paletteLabel="Generate" tag="500" selectable="YES" id="Bia-FU-gCc">
+                    <imageReference key="image" image="arrowshape.turn.up.left.circle" catalog="system" symbolScale="large"/>
+                    <size key="minSize" width="50.5" height="27"/>
+                    <size key="maxSize" width="50.5" height="27"/>
+                </toolbarItem>
+                <toolbarItem implicitItemIdentifier="C0D9A131-53E7-4E44-8166-14E76805E7AD" label="Settings" paletteLabel="Settings" tag="501" id="qtW-i4-FSm">
+                    <imageReference key="image" image="gearshape" catalog="system" symbolScale="large"/>
+                    <size key="minSize" width="50.5" height="27"/>
+                    <size key="maxSize" width="50.5" height="27"/>
+                </toolbarItem>
+            </allowedToolbarItems>
+            <defaultToolbarItems>
+                <toolbarItem reference="2eO-zU-eHn"/>
+                <toolbarItem reference="h9C-ui-w99"/>
+                <toolbarItem reference="Bia-FU-gCc"/>
+                <toolbarItem reference="RHh-fr-l3T"/>
+                <toolbarItem reference="qtW-i4-FSm"/>
+                <toolbarItem reference="qIa-qk-Pa9"/>
+                <toolbarItem reference="xoO-rQ-laA"/>
+            </defaultToolbarItems>
+            <point key="canvasLocation" x="-165" y="-692"/>
+        </toolbar>
+    </objects>
+    <resources>
+        <image name="arrowshape.turn.up.left.circle" catalog="system" width="19" height="19"/>
+        <image name="gearshape" catalog="system" width="20" height="20"/>
+        <image name="hammer" catalog="system" width="25" height="22"/>
+        <image name="puzzlepiece.extension" catalog="system" width="23" height="18"/>
+    </resources>
+</document>
