@@ -22,6 +22,11 @@ Northwind (`example_proj.json`) is the first target model.
 - Logging is gated on `isLoggingOn`.
 
 ## References
+- **FB language reference** (statements, functions, types, directives):
+  https://www.brilorsoftware.com/fb/documentation/FBHelp/FBHelp.htm.
+  `docs/FB Reference Index.md` maps every keyword to its page. Fetch single
+  pages on demand (the site has bot protection; don't crawl it). Needs the
+  `Api_Logic_Client` cloud environment, which allows brilorsoftware.com.
 - Cocoa toolboxes (exact `fn` wrapper names/signatures) and ~570 examples:
   https://github.com/thomasgpeters/futurebasic-apis (`CocoaUI/*.incl`, `FB Examples/`).
   Verify toolbox calls there rather than from memory.
