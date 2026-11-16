@@ -60,11 +60,43 @@ list without tag clashes.
 ]
 ```
 
-**Source of relationships — open question.** `/metadata?include=attributes`
+**Source of relationships** — lite edition: SQLite foreign keys (see below).
+ALS edition, still open: `/metadata?include=attributes`
 (see `Samples/Northwind/metadata.json`) carries no relationships. Candidates:
 the ALS model's own relationship info if `/metadata` can include it, the
 JSON:API `relationships` member of a fetched record (names + related-resource
 links, but not the target type or keys), or ALS's Swagger/OpenAPI document.
+
+## Lite edition (first) — SQLite direct
+
+The first generated apps talk **directly to the SQLite database**; the ALS
+middleware (JSON:API) is added later behind the same data interface.
+
+Reference project: `nw/` in FutureBasic_Documentation (ALS Northwind:
+`database/db.sqlite`, `database/models.py`, `ui/admin/admin.yaml`).
+
+**Model source**
+- **SQLite introspection (authoritative)** — the generator opens the `.sqlite`
+  file and reads `sqlite_master`, `PRAGMA table_info` (columns, declared types,
+  primary keys, incl. composite) and `PRAGMA foreign_key_list` (relationships,
+  incl. composite keys such as `Order(Country, City) → Location`).
+  A foreign key gives both directions: `toone` on the child, `tomany` on the parent.
+- **`admin.yaml` hints (optional, later)** — ALS's UI model: attribute order and
+  labels, `user_key` (the field shown for a record, e.g. Customer → `CompanyName`,
+  used in lists and the crumb trail), relationship names (`OrderList`), search/sort.
+- **Naming without hints** — follow ALS conventions: tomany = `<Child>List`,
+  toone = parent entity name; `user_key` = first text column that is not a key.
+- **Entity names** — the table name (ALS class names can differ:
+  `CategoryTableNameTest` is class `Category`; `admin.yaml` provides the mapping).
+
+**Data layer** — the DataObject query builder proven in Test_Xib_View
+(Select / Insert / Update / Delete dictionaries, parameterized SQL, `SQLBindValues`),
+packaged as runtime files. The shell calls a small data interface (list rows,
+get row, related rows, insert, update, delete) so the ALS JSON:API client can
+replace SQLite later without touching the UI code.
+
+**Identifiers** — SQLite tables and columns can be reserved words (`Order`,
+`Union`) or mixed case: generated SQL quotes every identifier (`"Order"`).
 
 ## Data access
 
@@ -87,6 +119,7 @@ Hand edits go in the hook files; regeneration never overwrites them.
 
 ## Build order
 
+0. Model from SQLite introspection (generator) → `Model.json` with keys and relationships.
 1. List XIB parts per entity (generator).
 2. Shell: navigator + List part + Scalar part, wired to ALS (replaces today's master-detail).
 3. Crumb trail and page stack.
