@@ -30,6 +30,10 @@ so rules can be written and managed in FB syntax.
 - [ ] Confirm FBE bundles `../Runtime/*.incl` as resources from the Generator project.
 - [ ] Move to the FB 7.1.5 NS type names (`ArrayRef`, `DictionaryRef`, …) for CocoaUI calls.
 
+- [ ] SQLite target for generated apps: emit the Test_Xib_View query-builder
+      pattern (Select/Insert/Update/Delete dictionaries + `SQLBindValues`) per
+      resource, alongside `Database/build_db.py --als` for the schema.
+
 ## Tooling
 
 - [ ] Retire or make private `futurebasic-apis`: it is outdated (pre-7.0.35) and

@@ -76,6 +76,20 @@ python3 tools/fblint.py ~/ApiLogicClient/"<project>"     # a generated project
     ALS JSON). Show them with `ControlSetObjectValue`; `ControlSetStringValue`
     expects a string.
 
+18. **SQL is parameterized.** Build statements as dictionaries and generate SQL
+    with `?` placeholders (Test_Xib_View's `DataObject*.incl`: Select / Insert /
+    Update / Delete builders); bind values in placeholder order with one binder
+    (`SQLBindValues`). Text binds with length `-1` (SQLite counts UTF-8 bytes);
+    `IS NULL` filters have no placeholder. UPDATE and DELETE without a filter are refused.
+
+## Language details that bite
+
+19. **`local mode` before a `local fn`** makes the `dim`s that follow local to that
+    function and hides globals inside it; executable statements placed between
+    `local` and `local fn` never run. *Source: `local.html`.*
+20. **A CF dictionary cannot hold NULL** (`CFDictionaryAddValue( d, key, NULL )`
+    crashes with CFType callbacks) — pass `@""` or leave the key out.
+
 ## Deprecated — don't write these
 
 | Don't | Use | Since |
