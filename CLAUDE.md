@@ -19,7 +19,7 @@ client, and logic binding the API to the UI. Northwind is only the test model.
   `ALS Binding.incl` (record ↔ controls via Model.json field maps),
   `ALS App.incl` (master-detail window, requests, events).
 - `Samples/Northwind/metadata.json` — sample `/metadata` response.
-- `docs/` — `FB Reference Index.md` and other notes.
+- `docs/` — `FB Reference Index.md`, `BACKLOG.md` and other notes.
 
 Generated output goes to `~/ApiLogicClient/<project>/`.
 
