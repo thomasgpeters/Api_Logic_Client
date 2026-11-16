@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Logic for FutureBasic: design (engine + Imagery Logic Studio)
+## 2026-11-16 — Logic for FutureBasic: design (engine + Imagery Logic Studio) (`5692f18`)
 
 - Studied LogicBank's Python source (`logic_row.py`, `aggregate.py`, `rule_bank_setup.py`,
   `formula.py`): before_flush hook; per-row sequence (early events, defaults, parents,
