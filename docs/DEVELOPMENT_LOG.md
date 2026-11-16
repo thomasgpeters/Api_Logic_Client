@@ -6,19 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Generated apps are FB projects with starting templates (`86d59b6`)
+## 2026-11-16 — Project folder holds settings; the app goes in `FBapp/` (`38a6447`)
 
-- **Project, not a single file.** `<project>.fbeproj` with a generated `data.fbproj`
-  (groups Runtime, Model, Bindings, Resources, Controller, View, Main — the
-  Test_Xib_View layout) and `Settings2.plist` from `src/Templates/Project`.
-- **`.main` stays short:** connection globals, `on …` registration, then
-  `ALSAppStart` → `BuildMenus` → `BuildWindows` → `ALSAppReady`.
-- **Starting templates** (written only when missing, then the developer's):
-  `EventHandlers.incl`, `Menus.incl` (from `src/Templates/App`) and `Windows.incl`
-  (generated: a `nibview` per entity Form part). Menus moved out of `ALS App.incl`;
-  the runtime still loads any part `Windows.incl` doesn't (`ALSEnsureResourceViews`).
-- **Templates are a folder resource** (`resources "../Templates"`), like Runtime.
-- fblint: declarations with initializers containing commas were split wrongly
-  (`"fn" is an FB keyword`); now split at the top level.
+- `workspace/<project>/` is the project: `Project.json` (name, model source, base URL,
+  user name — never passwords), `Design.json`, later `Database/` and `.git/`.
+- The generated FutureBasic app goes in `workspace/<project>/FBapp/`, named after the
+  project as typed (without the heading's " Project").
+- New `Project Workspace.incl` (one concern: folders + `Project.json`), moved out of
+  `Project Actions.incl`. Opening a model reloads saved connection fields that are empty,
+  then saves; Generate saves first.
 
 ---

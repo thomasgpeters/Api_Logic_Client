@@ -18,8 +18,9 @@ lists in tabs, drill-in with a crumb trail.
    `Design.json` and survive regeneration.
 3. **Generate** — each step on its own, or all at once:
    *Generate XIBs* · *Generate XIB for Selected Entity* · *Generate Binding Code* ·
-   *Generate App*. Output goes to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`.
-4. **Open `<project>.fbeproj` in FutureBasic**, build, and keep editing: generated code is
+   *Generate App*. Output goes to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/FBapp/`;
+   the project's own settings (`Project.json`, `Design.json`) stay in `<project>/`.
+4. **Open `FBapp/<project>.fbeproj` in FutureBasic**, build, and keep editing: generated code is
    plain, readable FB; `EventHandlers.incl`, `Menus.incl` and `Windows.incl` start from
    templates and are yours — regeneration never touches them.
 
@@ -52,21 +53,23 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
 ~/Library/Application Support/Api_Logic_Client/
 ├── Settings.plist                 (planned) settings: git, GitHub, ALS/APIs, AI/LLMs, SMTP
 └── workspace/
-    └── <project>/                 one folder per project
-        ├── <project>.fbeproj      the FB project: data.fbproj (regenerated), Settings2.plist (kept)
-        ├── <project>.main         main program: connection, handler registration, start (regenerated)
-        ├── EventHandlers.incl     DoAppEvent / DoMenu / DoDialog (starting template, kept)
-        ├── Menus.incl             BuildMenus (starting template, kept)
-        ├── Windows.incl           BuildWindows + nibview per Form part (starting template, kept)
-        ├── <Entity>Form.xib       generated Form part per entity (regenerated)
-        ├── <Entity>List.xib       generated List part per entity (regenerated)
-        ├── <Entity> Binding.incl  generated binding code per entity (regenerated)
-        ├── Model.json             the model the app reads at run time (regenerated)
-        ├── Model Tags.incl        tag constants for your own code (regenerated)
-        ├── *.incl                 runtime files copied from src/Runtime (regenerated)
+    └── <project>/                 one folder per project: the generator's settings for it
+        ├── Project.json           name, model source, base URL, user name (no passwords)
         ├── Design.json            the designer's adjustments (kept)
-        ├── <Entity> Hooks.incl    (planned) your hand-written code, never overwritten
-        └── Database/              (planned) the SQLite file and schema
+        ├── Database/              (planned) the SQLite file and schema
+        └── FBapp/                 the generated FutureBasic app - open <project>.fbeproj
+            ├── <project>.fbeproj      the FB project: data.fbproj (regenerated), Settings2.plist (kept)
+            ├── <project>.main         main program: connection, handler registration, start (regenerated)
+            ├── EventHandlers.incl     DoAppEvent / DoMenu / DoDialog (starting template, kept)
+            ├── Menus.incl             BuildMenus (starting template, kept)
+            ├── Windows.incl           BuildWindows + nibview per Form part (starting template, kept)
+            ├── <Entity>Form.xib       generated Form part per entity (regenerated)
+            ├── <Entity>List.xib       generated List part per entity (regenerated)
+            ├── <Entity> Binding.incl  generated binding code per entity (regenerated)
+            ├── Model.json             the model the app reads at run time (regenerated)
+            ├── Model Tags.incl        tag constants for your own code (regenerated)
+            ├── *.incl                 runtime files copied from src/Runtime (regenerated)
+            └── <Entity> Hooks.incl    (planned) your hand-written code, never overwritten
 ```
 
 Secrets (tokens, API keys, passwords) go in the macOS Keychain, never in a file.

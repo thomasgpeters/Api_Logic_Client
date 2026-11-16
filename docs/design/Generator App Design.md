@@ -28,16 +28,18 @@ until a product name is chosen.
 ~/Library/Application Support/Api_Logic_Client/
 ├── Settings.plist             (planned)
 └── workspace/
-    ├── <Project>/             one generated app = one git repository
-    │   ├── <Project>.fbeproj      FB project: Settings2.plist (template, kept) + data.fbproj (regenerated)
-    │   ├── <Project>.main         main program (regenerated, kept short)
-    │   ├── EventHandlers.incl, Menus.incl, Windows.incl   starting templates, created only if missing
-    │   ├── Model.json, *.xib, …   generated (regenerated)
-    │   ├── <Entity> Binding.incl  generated (regenerated)
+    ├── <Project>/             one project = one git repository (Project Workspace.incl)
+    │   ├── Project.json           settings: name, model source, base URL, user name - never passwords
     │   ├── Design.json            the designer's adjustments
-    │   ├── <Entity> Hooks.incl    hand-edited, created only if missing (planned)
     │   ├── Database/              the SQLite file (lite edition) and schema (planned)
-    │   └── .git/                  (planned)
+    │   ├── .git/                  (planned)
+    │   └── FBapp/                 the generated FutureBasic app
+    │       ├── <Project>.fbeproj      FB project: Settings2.plist (template, kept) + data.fbproj (regenerated)
+    │       ├── <Project>.main         main program (regenerated, kept short)
+    │       ├── EventHandlers.incl, Menus.incl, Windows.incl   starting templates, created only if missing
+    │       ├── Model.json, *.xib, …   generated (regenerated)
+    │       ├── <Entity> Binding.incl  generated (regenerated)
+    │       └── <Entity> Hooks.incl    hand-edited, created only if missing (planned)
     └── …
 ```
 

@@ -21,6 +21,7 @@ mode work without extra code).
   - `XIB Generator.incl` — Form and List parts per entity; `Model Tags.incl`; model entries.
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
+  - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `Project Actions.incl` — model loading, entity definitions, design load/save, generate commands.
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
   of the generator via `../Runtime/…`): `ALS Client.incl`, `ALS Binding.incl`,
@@ -40,7 +41,7 @@ mode work without extra code).
 
 One concern per file, aptly named — in `src/` and in what the generator emits.
 
-Generated output goes to the workspace, `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; settings will live in `~/Library/Application Support/Api_Logic_Client/`, secrets in the Keychain (see `docs/design/Generator App Design.md`). The app bundle is never written to. macOS only.
+Generated apps go to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/FBapp/`; the project's settings (`Project.json`, `Design.json`) to `<project>/`; settings will live in `~/Library/Application Support/Api_Logic_Client/`, secrets in the Keychain (see `docs/design/Generator App Design.md`). The app bundle is never written to. macOS only.
 
 ## Related repositories
 - **thomasgpeters/FutureBasic_Documentation** (private) — the FB reference. See References.

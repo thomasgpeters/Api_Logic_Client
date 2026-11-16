@@ -42,6 +42,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [x] Model from a SQLite database — `SQLite Model.incl`
 - [ ] Product name (sets the bundle id; the Application Support folder is `Api_Logic_Client` until then) — ideas: Lexicon, Keel, Foundry, ModelWorks
 - [x] Workspace in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; *Show Workspace in Finder*
+- [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
+- [ ] Open Project command: list the workspace's projects and reopen one from its `Project.json` (model source + design)
 - [ ] Settings window; `Settings.plist` in Application Support; secrets in the Keychain
 - [ ] Git via `/usr/bin/git` (NSTask): init/commit on generation, status, push/pull
 - [ ] GitHub REST (create repo, pull requests) and generic Git remotes
