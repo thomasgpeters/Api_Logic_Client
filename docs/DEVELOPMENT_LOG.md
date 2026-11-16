@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Responsive generator window; Hello menu removed
+## 2026-11-16 — Responsive generator window; Hello menu removed (`6632828`)
 
 - Window: minimum content size 1000 × 620. Entity list from the top edge to the +/−
   buttons, height follows the window. Heading moved right of the list and stretches.
