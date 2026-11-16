@@ -61,6 +61,21 @@ python3 tools/fblint.py ~/ApiLogicClient/"<project>"     # a generated project
 12. **Don't use `end` to quit a Cocoa app** — it calls `exit(0)` without cleanup.
     *Source: `end.html`.*
 
+## Data access
+
+13. **`sqlite3_open` creates an empty database when the file is missing** and
+    still returns OK. Create the schema first (or check the tables exist),
+    otherwise every query fails to prepare and the statement is NULL.
+14. **Keep queries and schema in step.** A column a query selects but the table
+    lacks fails the whole prepare ("no such column"). Upgrade existing
+    databases with `ALTER TABLE … ADD COLUMN …` (it fails harmlessly once the
+    column exists).
+15. **Log the reason when a prepare fails:**
+    `NSLog( @"statement is NULL: %@\nSQL: %@", fn SQL3ErrorMsg( db ), sql )`.
+16. **Numbers arrive as NSNumber, nulls as NSNull** (SQLite REAL/INTEGER columns,
+    ALS JSON). Show them with `ControlSetObjectValue`; `ControlSetStringValue`
+    expects a string.
+
 ## Deprecated — don't write these
 
 | Don't | Use | Since |
@@ -74,5 +89,5 @@ python3 tools/fblint.py ~/ApiLogicClient/"<project>"     # a generated project
 
 ## Files
 
-13. **FB source uses CR line endings**; XIB and JSON use LF. The generator
+17. **FB source uses CR line endings**; XIB and JSON use LF. The generator
     converts its FB output to CR (`AppWriteSource`).
