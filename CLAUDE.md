@@ -19,7 +19,8 @@ client, and logic binding the API to the UI. Northwind is only the test model.
   `ALS Binding.incl` (record ↔ controls via Model.json field maps),
   `ALS App.incl` (master-detail window, requests, events).
 - `Samples/Northwind/metadata.json` — sample `/metadata` response.
-- `docs/` — `FB Documentation Map.md`, `FB Reference Index.md`, `BACKLOG.md`.
+- `docs/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `BACKLOG.md`.
+- `tools/fblint.py` — checks FB sources (and generated projects) against the coding rules.
 
 Generated output goes to `~/ApiLogicClient/<project>/`.
 
@@ -27,8 +28,12 @@ Generated output goes to `~/ApiLogicClient/<project>/`.
 - FB source files use classic-Mac **CR** line endings. Preserve them
   (convert to LF to edit, back to CR before committing). XIB/JSON use LF.
 - Logging is gated on `isLoggingOn`.
-- FB 7.1.4+: any fn that returns a value must declare a return type
-  (`local fn Name(...) as Type`); untyped functions are `void`.
+- **Follow `docs/FB Coding Rules.md`** for all FB code — including the code the
+  generator emits. Key rules: typed return values (FB 7.1.4+), `//` comments
+  never `'`, no `'~'1` divider lines, no `#build` in projects, verify toolbox
+  names in the headers.
+- Run `python3 tools/fblint.py --headers <FutureBasic_Documentation>/Toolboxes/Headers Generator Runtime`
+  before committing FB changes, and on a generated project before handing it over.
 - Never copy FB toolbox files into generated projects — they are FB-team code
   with no redistribution license; generated apps use the user's FB install.
 
