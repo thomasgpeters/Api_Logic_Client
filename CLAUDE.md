@@ -17,6 +17,8 @@ mode work without extra code).
     that calls it (FB needs definition before use).
   - `API Interface.incl` — ALS connectivity for the generator itself (metadata fetch).
   - `Project Actions.incl` — model loading (`InitProject`, `OpenMetadataFile`), `BuildProjectXIBs`.
+  - `SQLite Access.incl` — our own minimal SQLite declarations (open read-only, prepare, step, columns).
+  - `SQLite Model.incl` — the model from a SQLite file: columns, keys (`keyKind`), relationships.
   - `XIB Generator.incl` — type → control mapping; `<Resource>View.xib`, `Model Tags.incl`, model entries.
   - `App Generator.incl` — the pipeline: `Model.json`, `<project>.fb`, runtime copies.
 - `Runtime/` — our FB code copied into every generated app (bundled as
@@ -24,10 +26,11 @@ mode work without extra code).
   `ALS Binding.incl` (record ↔ controls via Model.json field maps),
   `ALS App.incl` (master-detail window, requests, events).
 - `Samples/Northwind/metadata.json` — sample `/metadata` response.
-- `docs/` — `App Shell Design.md` (the generated app's UI), `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `BACKLOG.md`.
+- `docs/` — `Generator App Design.md` (the generator app: workspace, settings, git), `App Shell Design.md` (the generated app's UI), `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `BACKLOG.md`.
 - `tools/fblint.py` — checks FB sources (and generated projects) against the coding rules.
+- `tools/sqlite_model.py` — reference implementation of the SQLite model reader; its output is what `SQLite Model.incl` must produce.
 
-Generated output goes to `~/ApiLogicClient/<project>/`.
+Generated output goes to `~/ApiLogicClient/<project>/` (becoming a user-chosen workspace; settings in Application Support, secrets in the Keychain — see `docs/Generator App Design.md`). macOS only.
 
 ## Related repositories
 - **thomasgpeters/FutureBasic_Documentation** (private) — the FB reference. See References.

@@ -18,6 +18,17 @@ so rules can be written and managed in FB syntax.
   - How rule dependencies are tracked and ordered without SQLAlchemy events.
   - Whether the generator emits rule stubs per resource from the ALS model.
 
+## Generator app (see docs/Generator App Design.md)
+
+- [x] Model from a SQLite database (tables, keys, keyKind, relationships) — `SQLite Model.incl`
+- [ ] Product name (sets the Application Support folder and bundle id)
+- [ ] Workspace folder (user-chosen) replaces `~/ApiLogicClient`
+- [ ] Settings window; `Settings.plist` in Application Support; secrets in the Keychain
+- [ ] Git via `/usr/bin/git` (NSTask): init/commit on generation, status, push/pull
+- [ ] GitHub REST (create repo, pull requests) and generic Git remotes
+- [ ] Settings groups for ALS/APIs, AI/LLM providers, SMTP notifications
+- [ ] Optional `admin.yaml` hints (labels, user_key, relationship names)
+
 ## App shell (current direction — see docs/App Shell Design.md)
 
 - [ ] List XIB part per entity (table, one column per attribute)
