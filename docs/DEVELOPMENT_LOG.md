@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Generated apps are FB projects with starting templates
+## 2026-11-16 — Generated apps are FB projects with starting templates (`86d59b6`)
 
 - **Project, not a single file.** `<project>.fbeproj` with a generated `data.fbproj`
   (groups Runtime, Model, Bindings, Resources, Controller, View, Main — the
