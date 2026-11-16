@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Architecture</key>
+	<string>Intel</string>
+	<key>BaseSDK</key>
+	<string>13.1</string>
+	<key>CheckArrayBounds</key>
+	<integer>1</integer>
+	<key>ClearLogEachTime</key>
+	<integer>1</integer>
+	<key>CompilerOptions</key>
+	<string>-lsqlite3 -Wno-sometimes-uninitialized -Wno-unused-but-set-variable -Wno-unused-command-line-argument</string>
+	<key>CompilerOptionsArray</key>
+	<array>
+		<string>-lsqlite3 -Wno-sometimes-uninitialized -Wno-unused-but-set-variable -Wno-unused-command-line-argument</string>
+		<string>-m64 -DDECARBONATE</string>
+	</array>
+	<key>DebugLevel</key>
+	<integer>2</integer>
+	<key>FontSize</key>
+	<integer>12</integer>
+	<key>HideLogWindowAfterBuild</key>
+	<integer>0</integer>
+	<key>LogUNIXCommands</key>
+	<integer>0</integer>
+	<key>MinDeployment</key>
+	<string>10.12</string>
+	<key>Optimization</key>
+	<integer>2</integer>
+	<key>PutLineNumInfoInApp</key>
+	<integer>0</integer>
+	<key>ShowMoreWarnings</key>
+	<integer>0</integer>
+	<key>SourceFileCombining</key>
+	<string>Medium</string>
+	<key>StopOnFirstError</key>
+	<integer>0</integer>
+	<key>StripUnusedCode</key>
+	<integer>1</integer>
+	<key>UsePrecompiledHeader</key>
+	<integer>0</integer>
+	<key>WarnOfScopedVars</key>
+	<integer>0</integer>
+	<key>WarnOfUntypedVars</key>
+	<integer>1</integer>
+	<key>WarnOfUnusedFunctions</key>
+	<integer>0</integer>
+</dict>
+</plist>

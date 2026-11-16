@@ -76,7 +76,7 @@ def strip_strings_and_comments(line):
 FN_DEF = re.compile(r'^\s*(?:(void)\s+|(\w+)\s+)?local\s+fn\s+(\w+)(\s*\(.*?\))?(.*)$')
 
 
-def lint_file(path, is_project_file, known_toolbox, local_fns):
+def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=frozenset(), arity=None):
     raw = open(path, 'rb').read()
     try:
         text = raw.decode('utf-8')
@@ -107,6 +107,31 @@ def lint_file(path, is_project_file, known_toolbox, local_fns):
             report(no, f'{wm.group(1)} takes a view tag, but {wm.group(2)} looks like a window tag - '
                        f'use _windowContentViewTag for the window\'s content view')
 
+        code_only = strip_strings_and_comments(line)
+        if re.match(r'\s*for\s+\w+\s+in\s+(fn\b|@\[)', code_only):
+            report(no, 'for ... in needs an array variable, not an expression - assign it first')
+        if fb_keywords:
+            declared = [d for d in re.findall(r'\b(\w+)\s+as\s+\w', code_only) if d.lower() != 'dim']
+            dm = re.match(r'\s*(?:[A-Z]\w*Ref|long|BOOL|double|NSInteger|NSUInteger|SInt64|SInt32|ptr|CGRect|CGFloat|CFRange)\s+(.*)$', code_only)
+            if dm and not re.search(r'\blocal\s+fn\b', code_only):
+                declared += [re.match(r'\s*(\w+)', part).group(1) for part in split_args(dm.group(1)) if re.match(r'\s*\w+', part)]
+            fm = re.match(r'\s*for\s+(\w+)\s+in\b', code_only)
+            if fm: declared.append(fm.group(1))
+            for name in declared:
+                if name.lower() in fb_keywords:
+                    report(no, f'"{name}" is an FB keyword - rename the variable')
+        if arity:
+            for cm in re.finditer(r'\bfn\s+(\w+)\s*\(', code_only):
+                name = cm.group(1).lower()
+                if name in arity and name not in local_fns:
+                    depth, j = 1, cm.end()
+                    while j < len(code_only) and depth:
+                        depth += {'(': 1, ')': -1}.get(code_only[j], 0); j += 1
+                    if depth == 0:
+                        given = len(split_args(code_only[cm.end():j - 1]))
+                        expected, variadic = arity[name]
+                        if given != expected and not ( variadic and given >= expected ):
+                            report(no, f'{cm.group(1)} takes {expected} argument(s) (per the headers); {given} given')
         m = FN_DEF.match(line)
         if m:
             void, prefix_type, name, _params, tail = m.groups()
@@ -145,6 +170,61 @@ def collect(args):
     return files
 
 
+def split_args(text):
+    out, depth, cur, quote = [], 0, '', False
+    for ch in text:
+        if ch == '"': quote = not quote
+        if not quote:
+            if ch in '([{': depth += 1
+            if ch in ')]}': depth -= 1
+            if ch == ',' and depth == 0:
+                out.append(cur.strip()); cur = ''; continue
+        cur += ch
+    if cur.strip(): out.append(cur.strip())
+    return out
+
+
+def keywords(headers):
+    path = os.path.join(headers, 'Key Words')
+    if not os.path.exists(path): return set()
+    text = open(path, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
+    return {l.split('//')[0].strip().lower() for l in text.split('\n')
+            if re.fullmatch(r'[A-Za-z_]\w*', l.split('//')[0].strip())}
+
+
+def active_lines(text):
+    """Drop '#if 0' branches (the headers keep planned signatures there, e.g. ERROR_PARAM)."""
+    out, skipping, depth = [], False, 0
+    for line in text.split('\n'):
+        directive = line.strip()
+        if skipping:
+            if re.match(r'#if', directive): depth += 1
+            elif re.match(r'#endif', directive):
+                if depth == 0: skipping = False
+                else: depth -= 1
+            elif re.match(r'#else', directive) and depth == 0: skipping = False
+            continue
+        if re.match(r'#if\s+0\b', directive):
+            skipping, depth = True, 0
+            continue
+        out.append(line)
+    return '\n'.join(out)
+
+
+def toolbox_arity(headers):
+    """name -> (parameter count, variadic) of the active declaration (outside '#if 0' blocks)."""
+    arity = {}
+    for p in sorted(glob.glob(os.path.join(headers, '**', '*.incl'), recursive=True)):
+        s = active_lines(open(p, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n'))
+        for m in re.finditer(r'^\s*toolbox\s+(?:fn\s+)?(\w+)\s*\(([^)]*)\)', s, re.M):
+            name, params = m.group(1).lower(), m.group(2).strip()
+            if name not in arity:
+                parts = [] if params in ('', 'void') else split_args(params)
+                variadic = bool(parts) and parts[-1].strip() == '...'
+                arity[name] = ( len(parts) - (1 if variadic else 0), variadic )
+    return arity
+
+
 def toolbox_names(headers):
     names = set()
     for p in glob.glob(os.path.join(headers, '**', '*.incl'), recursive=True):
@@ -170,10 +250,18 @@ def main(argv):
         local_fns |= set(re.findall(r'^\s*#define\s+(\w+)', s, re.M))
     local_fns = {n.lower() for n in local_fns}
     known = {n.lower() for n in toolbox_names(headers)} | {'nslog'} if headers else None
+    fb_keywords = keywords(headers) if headers else set()
+    arity = toolbox_arity(headers) if headers else None
     problems = []
     for p in files:
         # single-file programs (.fb/.bas) may use #build; project files may not
-        problems += lint_file(p, not p.endswith(('.fb', '.bas')), known, local_fns)
+        problems += lint_file(p, not p.endswith(('.fb', '.bas')), known, local_fns, fb_keywords, arity)
+    for a in argv:
+        for proj in glob.glob(os.path.join(a, '**', 'data.fbproj'), recursive=True) if os.path.isdir(a) else []:
+            text = open(proj, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
+            for no, line in enumerate(text.split('\n'), 1):
+                if re.match(r'\s*resources\s+"[^"]*\.(incl|glbl|bas)"', line):
+                    problems.append(f'{proj}:{no}: an FB source file listed as a resource is compiled into the app - bundle its folder instead')
     for line in problems: print(line)
     print(f'fblint: {len(files)} files, {len(problems)} problems')
     return 1 if problems else 0

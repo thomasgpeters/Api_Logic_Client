@@ -17,6 +17,11 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
 | a window tag passed to a `View…` function | use `_windowContentViewTag` |
 | LF line endings | FB source uses CR |
 | `--headers`: every `fn`/toolbox name exists | in FutureBasic_Documentation's headers or the checked code |
+| `--headers`: FB keywords used as variable / parameter names | `Key Words` list (350) |
+| `--headers`: toolbox argument counts | against the active declaration (`#if 0` blocks skipped; variadic `...` allowed) |
+| `for x in` over an expression | needs an array variable |
+| `data.fbproj` listing an FB source file as a resource | it would be compiled into the app |
 
-Validated against real failures: it flags all 67 original Test_Xib_View build errors'
-causes. Not yet checked: statement syntax (e.g. `tableview`'s `columnWidths`).
+Validated against real failures: it flags the causes of all 67 original Test_Xib_View
+build errors, and every error class in the generator's first build (keywords,
+`for … in`, argument counts, runtime files compiled as resources). Not yet checked: statement syntax (e.g. `tableview`'s `columnWidths`).

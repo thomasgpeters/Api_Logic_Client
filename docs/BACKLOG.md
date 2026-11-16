@@ -10,7 +10,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Regex Title split (`StringByReplacingOccurrencesOfStringWithOptions`, `$1 $2`)
 - [ ] `SQLite Access.incl` `cln` declarations compile and link (`-lsqlite3`)
 - [ ] Generate XIBs / XIB / Binding Code / App write the expected files; generated XIBs open in Xcode
-- [ ] FBE bundles `../Runtime/*.incl` as resources of the generator
+- [ ] FBE bundles the `../Runtime` and `../Templates` folders as resources of the generator
+- [ ] Generated `<project>.fbeproj` opens in FB with its groups and builds; `nibview` in `Windows.incl` places each Form part
 
 ## App shell — lite edition (see `design/App Shell Design.md`)
 
@@ -22,7 +23,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Per-entity event handlers routed from one `on dialog` handler by tag range
 - [ ] Crumb trail and page stack (drill-in replaces the page; back via crumbs)
 - [ ] Related-list tabs (master-detail) and drill-in
-- [ ] Per-entity and app hook files, created only if missing
+- [x] App starting templates, created only if missing: `EventHandlers.incl`, `Menus.incl`, `Windows.incl`
+- [ ] Per-entity hook files, created only if missing
 - [ ] Optional: open related records in a modal dialog instead of replacing the page
 - [ ] Form controls for assigned keys: editable on New, read-only after; identity keys read-only
 - [ ] `guid` key kind: generate with `UUIDString( UUIDInit )`, stored lower-case `TEXT`

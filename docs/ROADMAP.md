@@ -13,6 +13,7 @@ The generated app talks directly to a SQLite database.
 | ↳ Entity definitions: recommendations + designer adjustments (`Design.json`) | done — awaiting build |
 | 2. Form and List XIB parts per entity | done — awaiting build |
 | ↳ Separate Generate XIBs / XIB / Binding Code / App; generated binding code | done — awaiting build |
+| ↳ Generated app is an FB project (groups, `.main`) with starting templates: EventHandlers, Menus, Windows | done — awaiting build |
 | 3. App shell: entity navigator + List + Form, SQLite data layer (query builder packaged), per-entity event handlers (FB event model) | next |
 | 4. Crumb trail and page stack | |
 | 5. Related lists in tabs (master-detail), drill-in (`_tableViewDoubleAction`) | |
