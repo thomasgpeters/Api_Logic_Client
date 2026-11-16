@@ -9,7 +9,7 @@ Check them with:
 
 ```bash
 python3 tools/fblint.py --headers ../FutureBasic_Documentation/Toolboxes/Headers src
-python3 tools/fblint.py ~/ApiLogicClient/"<project>"     # a generated project
+python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspace/<project>     # a generated project
 ```
 
 ## Functions

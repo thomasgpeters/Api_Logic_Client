@@ -10,8 +10,8 @@
 | Generate Binding Code | ⌘B | `<Entity> Binding.incl` for every entity |
 | Generate App | ⌘G | all of the above + `Model.json`, `<project>.fb`, runtime copies |
 
-Output: `~/ApiLogicClient/<project>/` (becoming a user-chosen workspace — see
-`docs/design/Generator App Design.md`). Every entity's model entry is always built
+Output: `~/Library/Application Support/Api_Logic_Client/workspace/<project>/` (the workspace — see `docs/design/Generator App Design.md`;
+*Model → Show Workspace in Finder* opens it). Every entity's model entry is always built
 (tags and sizes are needed by binding code and `Model.json`); only the requested
 files are written.
 

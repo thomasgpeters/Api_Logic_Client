@@ -37,7 +37,7 @@ mode work without extra code).
 
 One concern per file, aptly named — in `src/` and in what the generator emits.
 
-Generated output goes to `~/ApiLogicClient/<project>/` (becoming a user-chosen workspace; settings in Application Support, secrets in the Keychain — see `docs/design/Generator App Design.md`). macOS only.
+Generated output goes to the workspace, `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; settings will live in `~/Library/Application Support/Api_Logic_Client/`, secrets in the Keychain (see `docs/design/Generator App Design.md`). The app bundle is never written to. macOS only.
 
 ## Related repositories
 - **thomasgpeters/FutureBasic_Documentation** (private) — the FB reference. See References.

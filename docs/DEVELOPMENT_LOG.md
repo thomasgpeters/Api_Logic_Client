@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-16 — Workspace in Application Support
+
+- Projects now live in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`
+  (was `~/ApiLogicClient/<project>/`; the earlier plan of a user-chosen folder under
+  `~/Documents` is dropped). Settings will share the same Application Support folder.
+- `~/Library` is hidden in Finder, so *Model → Show Workspace in Finder* reveals the
+  current project (or the workspace) with `WorkspaceActivateFileViewerSelectingURLs`.
+- Application Support is found with `FileManagerURLForDirectory( NSApplicationSupportDirectory, NSUserDomainMask )`.
+
 ## 2026-11-16 — Repository layout and documentation
 
 - `1802bb0` Repository restructured: `src/Generator` (FB project), `src/Runtime`,

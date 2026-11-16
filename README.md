@@ -18,7 +18,7 @@ lists in tabs, drill-in with a crumb trail.
    `Design.json` and survive regeneration.
 3. **Generate** — each step on its own, or all at once:
    *Generate XIBs* · *Generate XIB for Selected Entity* · *Generate Binding Code* ·
-   *Generate App*. Output goes to `~/ApiLogicClient/<project>/`.
+   *Generate App*. Output goes to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`.
 4. **Open `<project>.fb` in FutureBasic**, build, and keep editing: generated code is
    plain, readable FB, and hand-written code lives in hook files regeneration never
    touches.
@@ -40,6 +40,31 @@ Api_Logic_Client/
 ├── tools/            ← fblint.py, sqlite_model.py
 └── samples/          ← Northwind metadata
 ```
+
+## Where the app keeps its files
+
+The app bundle is never written to. Everything the generator creates lives in
+its Application Support folder (*Model → Show Workspace in Finder* opens it;
+`~/Library` is hidden in Finder):
+
+```
+~/Library/Application Support/Api_Logic_Client/
+├── Settings.plist                 (planned) settings: git, GitHub, ALS/APIs, AI/LLMs, SMTP
+└── workspace/
+    └── <project>/                 one folder per project
+        ├── <project>.fb           generated main program (regenerated)
+        ├── <Entity>Form.xib       generated Form part per entity (regenerated)
+        ├── <Entity>List.xib       generated List part per entity (regenerated)
+        ├── <Entity> Binding.incl  generated binding code per entity (regenerated)
+        ├── Model.json             the model the app reads at run time (regenerated)
+        ├── Model Tags.incl        tag constants for your own code (regenerated)
+        ├── *.incl                 runtime files copied from src/Runtime (regenerated)
+        ├── Design.json            the designer's adjustments (kept)
+        ├── <Entity> Hooks.incl    (planned) your hand-written code, never overwritten
+        └── Database/              (planned) the SQLite file and schema
+```
+
+Secrets (tokens, API keys, passwords) go in the macOS Keychain, never in a file.
 
 ## Documentation
 
