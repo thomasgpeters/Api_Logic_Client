@@ -35,6 +35,12 @@ Generated output goes to `~/ApiLogicClient/<project>/`.
   the record/view pattern generated apps should follow, and the test bed for
   FB 7.1.x fixes. Its `Database/` folder builds `contacts.sqlite` from
   `schema.sql`/`seed.sql` or from an ALS model (`build_db.py --als`).
+- **thomasgpeters/Domain-Driven-Design-Book** (private, read-only here) — the
+  author's book on AI-assisted, domain-driven development. Its principles
+  govern the generator: the model is the source of truth and generated code is
+  disposable (§20.4), ubiquitous language (§2.2), the layer dependency rule
+  (§5.3), Lite tier first then an infrastructure rewrite (§5.1, §10.1).
+  See `docs/App Shell Design.md` → Principles.
 - `futurebasic-apis` — outdated (pre-7.0.35); don't rely on it.
 
 ## FB code rules (summary — full list with sources in `docs/FB Coding Rules.md`)

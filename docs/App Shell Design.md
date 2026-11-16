@@ -4,6 +4,39 @@ The generator turns any ALS model into a **generic base app**: one shell, many
 entities, built from embeddable XIB parts. The author then edits and extends
 the generated app, so the output must be readable, modular, and safe to regenerate.
 
+## Principles
+
+From *Building Production Software with AI — A Domain-Driven Approach*
+(the author's book; repository `Domain-Driven-Design-Book`, read-only here):
+
+- **The model is the source of truth; generated code is disposable.** The
+  generator re-expresses one model (SQLite schema, later ALS `admin.yaml`)
+  as FB code. Review the generator and the model, not every generated file;
+  trust the output unless a check fails (fblint, generated-SQL checks,
+  the author's build). (Book §20.4, §2.7)
+- **Ubiquitous language.** Entity and attribute names come from the model
+  unchanged: table `Customer` is `Customer` in function names, tags
+  (`_customerCompanyName`), XIB files, labels and SQL. No synonyms, no
+  renaming in generated code. Relationship names follow the model
+  (`OrderList`). (Book §2.2)
+- **Dependency rule, by include order.** FB has no imports, so the layers
+  live in separate files and `data.fbproj`/include order enforces direction:
+  domain → application → infrastructure → ui. (Book §5.3)
+
+  | Layer | Generated / runtime files | Knows about |
+  |---|---|---|
+  | domain | `Model.json`, `Model Tags.incl`, `<Entity> Hooks.incl` (rules, validation) | nothing below |
+  | application | `App Data.incl` — list / get / related / insert / update / upsert / delete per entity | domain |
+  | infrastructure | `SQLite Data.incl` (lite) — later `ALS Client.incl` | implements the application's data interface |
+  | ui | XIB parts, `App Shell.incl` (navigator, crumbs, tabs), `ALS Binding.incl` | application, domain |
+
+- **Lite first, then rewrite the infrastructure.** The lite edition (SQLite
+  direct) mirrors the book's Lite tier; adding ALS replaces only the
+  infrastructure file, behind the same data interface. The UI and the hooks
+  survive. (Book §5.1, §10.1)
+- **Hand-written code lives in hook files** that regeneration never touches,
+  so the author's edits and invariants are never lost.
+
 ## Screen
 
 ```
