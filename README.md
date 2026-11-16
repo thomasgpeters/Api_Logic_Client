@@ -56,7 +56,7 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
 ├── Recent Projects.json           the Welcome view's Recent Projects (newest first)
 └── workspace/
     └── <project>/                 one folder per project: the generator's settings for it
-        ├── Project.json           name, model source, base URL, user name (no passwords)
+        ├── Project.json           name, model source, base URL, user name, About text (no passwords)
         ├── Design.json            the designer's adjustments (kept)
         ├── Database/              (planned) the SQLite file and schema
         └── FBapp/                 the generated FutureBasic app - open <project>.fbeproj
@@ -69,6 +69,7 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
             ├── <Entity>List.xib       generated List part per entity (regenerated)
             ├── <Entity> Binding.incl  generated binding code per entity (regenerated)
             ├── Model.json             the model the app reads at run time (regenerated)
+            ├── Credits.rtf            the About text, shown in the app's About box (regenerated)
             ├── Model Tags.incl        tag constants for your own code (regenerated)
             ├── *.incl                 runtime files copied from src/Runtime (regenerated)
             └── <Entity> Hooks.incl    (planned) your hand-written code, never overwritten

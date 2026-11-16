@@ -10,6 +10,7 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Regex Title split (`StringByReplacingOccurrencesOfStringWithOptions`, `$1 $2`)
 - [ ] `SQLite Access.incl` `cln` declarations compile and link (`-lsqlite3`)
 - [ ] Generate XIBs / XIB / Binding Code / App write the expected files; generated XIBs open in Xcode
+- [ ] Project Settings (⌘;): counter, 250 limit, Done saves; generated app's About box shows `Credits.rtf`
 - [ ] Welcome view: Open Project… button and Recent Projects table; double-click opens (see `features/PROJECTS_FEATURE.md`)
 - [ ] FBE bundles the `../Runtime` and `../Templates` folders as resources of the generator
 - [ ] Generated `<project>.fbeproj` opens in FB with its groups and builds; `nibview` in `Windows.incl` places each Form part
@@ -44,6 +45,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Product name (sets the bundle id; the Application Support folder is `Api_Logic_Client` until then) — ideas: Lexicon, Keel, Foundry, ModelWorks
 - [x] Workspace in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; *Show Workspace in Finder*
 - [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
+- [x] Project Settings view; About text (≤ 250 chars) deployed as `Credits.rtf` — `features/ABOUT_BOX_FEATURE.md`
+- [ ] More project settings: version, copyright, bundle id, app icon, theme
 - [x] Open Project (⇧⌘O) and Recent Projects on the Welcome view — `features/PROJECTS_FEATURE.md`
 - [ ] `.alcproj` document type: double-click a project in Finder; Open Recent via NSDocumentController
 - [ ] Settings window; `Settings.plist` in Application Support; secrets in the Keychain

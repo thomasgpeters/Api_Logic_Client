@@ -6,18 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Open Project and Recent Projects (`c54948a`)
+## 2026-11-16 — About box text; Project Settings view
 
-- *Model → Open Project…* (⇧⌘O) opens a project's `Project.json` and reopens its
-  model from `source`; if the file moved, *Locate…* saves the new path.
-- Recent Projects (`Recent Projects.json` in Application Support, newest first, max 10)
-  on the Welcome view: double-click opens; *Model → Recent Projects* goes back to it;
-  *Clear Recent Projects*. The row dictionaries use the column identifiers as keys.
-- Model loading refactored: `LoadSQLiteModel` / `LoadMetadataModel` / `LoadModelFile`
-  share `ProjectModelLoaded` (settings, design, save, recent list) — the menu commands and
-  Open Project use the same path.
-- FB: `alert` as a function returns `NSAlertFirstButtonReturn`… (no `sheetFlag`);
-  `_tableViewDoubleAction` + `TableViewClickedRow` need no setup.
-- Merged `origin/main` (PR #5) into the branch.
+- Generated apps show the designer's About text (≤ 250 characters) in the standard
+  macOS About box: FB's About menu item opens it, and it shows the bundle's
+  `Credits.rtf` — written by Generate App with `AttributedStringRTFFromRange`, listed
+  in `data.fbproj`, removed when there is no text. Also `"about"` in `Model.json`.
+- Generator: new Project Settings view (`ProjectSettingsView.xib`, *Model → Project
+  Settings…* ⌘;) with the About text, a live `n / 250` counter and Done; saved as
+  `"about"` in `Project.json`.
 
 ---
