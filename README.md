@@ -8,7 +8,8 @@ lists in tabs, drill-in with a crumb trail.
 
 ## How it works
 
-1. **Open a model** — *Model → Open SQLite Database…* (⌘D) reads tables, columns,
+1. **Open a project or a model** — *Model → Open Project…* (⇧⌘O) or double-click one of
+   the Recent Projects on the Welcome view; or *Model → Open SQLite Database…* (⌘D) reads tables, columns,
    keys and relationships straight from the database. A saved ALS
    `/metadata?include=attributes` response (e.g. `samples/Northwind/metadata.json`)
    also works.
@@ -52,6 +53,7 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
 ```
 ~/Library/Application Support/Api_Logic_Client/
 ├── Settings.plist                 (planned) settings: git, GitHub, ALS/APIs, AI/LLMs, SMTP
+├── Recent Projects.json           the Welcome view's Recent Projects (newest first)
 └── workspace/
     └── <project>/                 one folder per project: the generator's settings for it
         ├── Project.json           name, model source, base URL, user name (no passwords)

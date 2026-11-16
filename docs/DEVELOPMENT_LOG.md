@@ -6,14 +6,18 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Project folder holds settings; the app goes in `FBapp/` (`38a6447`)
+## 2026-11-16 — Open Project and Recent Projects
 
-- `workspace/<project>/` is the project: `Project.json` (name, model source, base URL,
-  user name — never passwords), `Design.json`, later `Database/` and `.git/`.
-- The generated FutureBasic app goes in `workspace/<project>/FBapp/`, named after the
-  project as typed (without the heading's " Project").
-- New `Project Workspace.incl` (one concern: folders + `Project.json`), moved out of
-  `Project Actions.incl`. Opening a model reloads saved connection fields that are empty,
-  then saves; Generate saves first.
+- *Model → Open Project…* (⇧⌘O) opens a project's `Project.json` and reopens its
+  model from `source`; if the file moved, *Locate…* saves the new path.
+- Recent Projects (`Recent Projects.json` in Application Support, newest first, max 10)
+  on the Welcome view: double-click opens; *Model → Recent Projects* goes back to it;
+  *Clear Recent Projects*. The row dictionaries use the column identifiers as keys.
+- Model loading refactored: `LoadSQLiteModel` / `LoadMetadataModel` / `LoadModelFile`
+  share `ProjectModelLoaded` (settings, design, save, recent list) — the menu commands and
+  Open Project use the same path.
+- FB: `alert` as a function returns `NSAlertFirstButtonReturn`… (no `sheetFlag`);
+  `_tableViewDoubleAction` + `TableViewClickedRow` need no setup.
+- Merged `origin/main` (PR #5) into the branch.
 
 ---

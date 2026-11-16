@@ -22,7 +22,8 @@ mode work without extra code).
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
-  - `Project Actions.incl` — model loading, entity definitions, design load/save, generate commands.
+  - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
+  - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
   of the generator via `../Runtime/…`): `ALS Client.incl`, `ALS Binding.incl`,
   `ALS App.incl`, `Binding Support.incl`.
