@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — First clean build and run of the generator; warnings cleaned up
+## 2026-11-16 — First clean build and run of the generator; warnings cleaned up (`e5afb36`)
 
 - The generator translates, compiles, links and runs. Remaining clang warnings:
   - `-lsqlite3: 'linker' input unused` on every file — FB passes Compiler Options to each
