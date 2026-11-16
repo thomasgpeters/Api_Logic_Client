@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Project folder holds settings; the app goes in `FBapp/`
+## 2026-11-16 — Project folder holds settings; the app goes in `FBapp/` (`38a6447`)
 
 - `workspace/<project>/` is the project: `Project.json` (name, model source, base URL,
   user name — never passwords), `Design.json`, later `Database/` and `.git/`.
