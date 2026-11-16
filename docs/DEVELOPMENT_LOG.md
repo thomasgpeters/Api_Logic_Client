@@ -6,17 +6,13 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — New Project from a SQLite database (`72d9bfe`)
+## 2026-11-16 — Each project keeps its own copy of the database
 
-- *Create Project* now opens a New Project view (`NewProjectView.xib`, `New Project.incl`):
-  name, *Choose…* a SQLite database, a summary of its tables and views, *Create*. The ALS
-  server form stays one button away (*API Logic Server instead…*).
-- Create clears the connection and About fields, then uses the shared
-  `LoadSQLiteModel` path (Project.json, Design.json, Recent Projects); an existing name
-  offers *Open It*.
-- XIB: key equivalents for Return/Escape are stored base64 (`DQ`, `Gw`) — `&#13;`/`&#27;`
-  are not valid XML.
-- fblint: build-order check — a `local fn` used before its definition in `data.fbproj`
-  order (it caught `ShowdProjectCreateView`, defined in the later `EventHandlers.incl`).
+- The SQLite database is copied into `workspace/<project>/Database/` (plus `-wal`/`-shm`)
+  before the model is read; `Project.json`'s `source` is the copy. Done in
+  `LoadSQLiteModel` → `ProjectLocalDatabase`, so New Project, *Open SQLite Database…* and
+  Open Project (older projects) all do it. Existing copy: Keep / Replace / Cancel.
+- Why: a self-contained project folder, for the planned backup and restore.
+- `ProjectFolderURLNamed( name )` names the folder from a typed name (`<name> Project`).
 
 ---

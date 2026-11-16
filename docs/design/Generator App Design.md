@@ -31,7 +31,7 @@ until a product name is chosen.
     ├── <Project>/             one project = one git repository (Project Workspace.incl)
     │   ├── Project.json           settings: name, model source, base URL, user name - never passwords
     │   ├── Design.json            the designer's adjustments
-    │   ├── Database/              the SQLite file (lite edition) and schema (planned)
+    │   ├── Database/              the project's copy of its SQLite database - the model source
     │   ├── .git/                  (planned)
     │   └── FBapp/                 the generated FutureBasic app
     │       ├── <Project>.fbeproj      FB project: Settings2.plist (template, kept) + data.fbproj (regenerated)

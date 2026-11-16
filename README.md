@@ -59,7 +59,7 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
     └── <project>/                 one folder per project: the generator's settings for it
         ├── Project.json           name, model source, base URL, user name, About text (no passwords)
         ├── Design.json            the designer's adjustments (kept)
-        ├── Database/              (planned) the SQLite file and schema
+        ├── Database/              the project's own copy of its SQLite database (+ -wal/-shm)
         └── FBapp/                 the generated FutureBasic app - open <project>.fbeproj
             ├── <project>.fbeproj      the FB project: data.fbproj (regenerated), Settings2.plist (kept)
             ├── <project>.main         main program: connection, handler registration, start (regenerated)

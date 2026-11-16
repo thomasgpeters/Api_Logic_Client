@@ -50,6 +50,9 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
 - [x] Project Settings view; About text (≤ 250 chars) deployed as `Credits.rtf` — `features/ABOUT_BOX_FEATURE.md`
 - [ ] More project settings: version, copyright, bundle id, app icon, theme
+- [x] Each project keeps its own copy of the database in `<project>/Database/`
+- [ ] Project backup and restore (zip the project folder; restore into the workspace)
+- [ ] Generated app uses the project's database copy (lite data source, step 3)
 - [x] Open Project (⇧⌘O) and Recent Projects on the Welcome view — `features/PROJECTS_FEATURE.md`
 - [ ] `.alcproj` document type: double-click a project in Finder; Open Recent via NSDocumentController
 - [ ] Settings window; `Settings.plist` in Application Support; secrets in the Keychain
