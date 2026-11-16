@@ -94,15 +94,15 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Ideas
 
-### LogicBank for FutureBasic
-Re-engineer [LogicBank](https://github.com/valhuber/LogicBank), the declarative
-rules engine behind API Logic Server, for FutureBasic, and fork LogicBank Studio
-so rules can be written and managed in FB syntax.
+### Logic for FutureBasic — engine + Imagery Logic Studio
+Rewrite of [LogicBank](https://github.com/valhuber/LogicBank) (Val Huber) for FutureBasic:
+**FB code is the rules**, a runtime **Logic Engine** enforces them on every save, and an
+**Imagery Logic Studio** built into Api Logic Client authors them. Full design and plan:
+`design/Logic Engine Design.md`; phases in `ROADMAP.md` → Phase 5.
 
-- **Goal:** rules declared in FB (sum, count, formula, constraint, copy, parent
-  check, events) run in the FB app, against SQLite or ALS — the SQLite apps gain the
-  declarative behaviour ALS has on the server (e.g. maintaining `Customer.Balance`).
-- **LogicBank Studio fork:** author, view and edit rules in FB syntax.
-- **Open questions:** rule syntax in FB; client-side only or alongside ALS rules;
-  dependency tracking and ordering without SQLAlchemy events; generated rule stubs
-  per entity.
+- [x] Study the Python edition (rule types, per-row sequence, delta adjustment, chaining, formula dependencies)
+- [x] Confirm FB can call rules by address (`@fn` + `def fn … using`)
+- [ ] Ask Val Huber about licensing (LICENSE: Apache 2.0 + Commons Clause; setup.py: BSD) — clean-room until then
+- [ ] Engine core, aggregates, copy/cascade/events (needs the shell's SQLite data layer)
+- [ ] Studio: Rules page, `Rules.json`, generated rule files, validation, Explain
+- [ ] Import ALS `logic/declare_logic.py`

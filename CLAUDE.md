@@ -32,7 +32,7 @@ mode work without extra code).
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (bundled as the `../Templates` folder): `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`. `Windows.incl` is generated from the model the same way (only when missing).
-- `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git).
+- `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`.
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
 - `docs/features/` — one `<NAME>_FEATURE.md` per feature (how it works, where, decisions, verification).

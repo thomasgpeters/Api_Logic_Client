@@ -6,15 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Responsive generator window; Hello menu removed (`6632828`)
+## 2026-11-16 — Logic for FutureBasic: design (engine + Imagery Logic Studio)
 
-- Window: minimum content size 1000 × 620. Entity list from the top edge to the +/−
-  buttons, height follows the window. Heading moved right of the list and stretches.
-- Every page view is sized to the area beside the list (`FitPageView`, after the toolbar
-  is set — the toolbar changes the content area) and resizes in both directions; the
-  page XIBs' autoresizing masks pin and stretch their controls.
-- Removed the Hello demo menu (`SayHello`, `_textLabel`, `_pushBtn`); Model is menu 2,
-  Help menu 3.
-- See `features/RESPONSIVE_LAYOUT_FEATURE.md`.
+- Studied LogicBank's Python source (`logic_row.py`, `aggregate.py`, `rule_bank_setup.py`,
+  `formula.py`): before_flush hook; per-row sequence (early events, defaults, parents,
+  copy, formulas in dependency order with pruning, parent aggregates, constraints,
+  cascade, events); sums/counts **adjusted by delta**, never re-queried; one parent write
+  per role; chaining through parents; dependencies scanned from `row.X` in rule text.
+- FB can be the rule language: rule functions registered with `@fn`, called through
+  `def fn … using <address>`; `def fn` prototypes allow forward references.
+- Design: `design/Logic Engine Design.md` — `Logic Engine.incl` runtime, rules as
+  generated/hand-editable `<Entity> Rules.incl` with explicit dependencies (found by the
+  Studio at generation time), Imagery Logic Studio as a Rules page with `Rules.json`.
+- Licensing: LogicBank's LICENSE is Apache 2.0 + Commons Clause (no selling), its
+  setup.py says BSD. Clean-room from behaviour; recommended asking Val Huber.
 
 ---
