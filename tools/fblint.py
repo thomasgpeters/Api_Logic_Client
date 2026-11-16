@@ -90,6 +90,7 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
     text = text.replace('\r\n', '\n').replace('\r', '\n')
 
     current = None            # (name, returns_type, def_line)
+    blocks = []               # open block statements: (kind, line)
     for no, line in code_lines(text):
         if re.match(r'(?i)^\s*cln\b', line):
             continue
@@ -108,6 +109,36 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
                        f'use _windowContentViewTag for the window\'s content view')
 
         code_only = strip_strings_and_comments(line)
+        # block balance: if/end if, select/end select, for/next, while/wend, do/until
+        st = code_only.strip()
+        for stmt in [p.strip() for p in st.split(' : ')] if st else []:
+            low = stmt.lower()
+            opener = None
+            if re.match(r'if\b', low) and not re.search(r'\bthen\b', low): opener = 'if'
+            elif re.match(r'select\b', low): opener = 'select'
+            elif re.match(r'for\b', low): opener = 'for'
+            elif re.match(r'while\b', low): opener = 'while'
+            elif re.match(r'do\s*$', low): opener = 'do'
+            closer = None
+            if re.match(r'end\s+if\b', low): closer = 'if'
+            elif re.match(r'end\s+select\b', low): closer = 'select'
+            elif re.match(r'next\b', low): closer = 'for'
+            elif re.match(r'wend\b', low): closer = 'while'
+            elif re.match(r'until\b', low): closer = 'do'
+            if opener: blocks.append((opener, no))
+            if closer:
+                if not blocks or blocks[-1][0] != closer:
+                    expect = f'{blocks[-1][0]} from line {blocks[-1][1]}' if blocks else 'nothing open'
+                    report(no, f'"{stmt}" closes no open {closer} block ({expect})')
+                    if blocks and any(b[0] == closer for b in blocks):
+                        while blocks and blocks[-1][0] != closer: blocks.pop()
+                        blocks.pop()
+                else:
+                    blocks.pop()
+        if re.match(r'\s*end\s+fn\b', line) or FN_DEF.match(line):
+            for kind, bno in blocks:
+                report(bno, f'{kind} block is not closed before the end of the fn')
+            blocks = []
         if re.match(r'\s*for\s+\w+\s+in\s+(fn\b|@\[)', code_only):
             report(no, 'for ... in needs an array variable, not an expression - assign it first')
         if fb_keywords:

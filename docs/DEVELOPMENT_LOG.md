@@ -6,14 +6,11 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Project folder holds settings; the app goes in `FBapp/` (`38a6447`)
+## 2026-11-16 — Translator: extra `end if` in XIB Generator.incl (`d176e45`)
 
-- `workspace/<project>/` is the project: `Project.json` (name, model source, base URL,
-  user name — never passwords), `Design.json`, later `Database/` and `.git/`.
-- The generated FutureBasic app goes in `workspace/<project>/FBapp/`, named after the
-  project as typed (without the heading's " Project").
-- New `Project Workspace.incl` (one concern: folders + `Project.json`), moved out of
-  `Project Actions.incl`. Opening a model reloads saved connection fields that are empty,
-  then saves; Generate saves first.
+- `XibGenerateProject` closed four `if` blocks where three were open; FB reports a stray
+  `end if` as "Unknown variable, command or Toolbox name … 'if'". Removed it.
+- fblint now checks block balance per fn (`if`/`select`/`for`/`while`/`do`); it reports
+  this line on the old file and nothing else in Api_Logic_Client or Test_Xib_View.
 
 ---

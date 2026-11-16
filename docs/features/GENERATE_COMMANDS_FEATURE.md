@@ -40,6 +40,7 @@ An FB project, laid out like Test_Xib_View:
 | `Windows.incl` | only if missing | generated: `BuildWindows` = `ALSBuildWindow` + a `nibview` per Form part; the runtime loads parts added later |
 | `<Entity>Form.xib`, `<Entity>List.xib` | yes | |
 | `<Entity> Binding.incl`, `Model Tags.incl`, `Model.json` | yes | |
+| `Credits.rtf` | yes | the About text from Project Settings; the standard About box shows it — `ABOUT_BOX_FEATURE.md` |
 | runtime `.incl` files | yes | our own code only — never FB toolbox files |
 
 Start-up: `ALSAppStart` (load `Model.json`) → `BuildMenus` → `BuildWindows` → `ALSAppReady`.
