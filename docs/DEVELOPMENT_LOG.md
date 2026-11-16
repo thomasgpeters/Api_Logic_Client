@@ -6,13 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Each project keeps its own copy of the database (`ea167ff`)
+## 2026-11-16 — Responsive generator window; Hello menu removed
 
-- The SQLite database is copied into `workspace/<project>/Database/` (plus `-wal`/`-shm`)
-  before the model is read; `Project.json`'s `source` is the copy. Done in
-  `LoadSQLiteModel` → `ProjectLocalDatabase`, so New Project, *Open SQLite Database…* and
-  Open Project (older projects) all do it. Existing copy: Keep / Replace / Cancel.
-- Why: a self-contained project folder, for the planned backup and restore.
-- `ProjectFolderURLNamed( name )` names the folder from a typed name (`<name> Project`).
+- Window: minimum content size 1000 × 620. Entity list from the top edge to the +/−
+  buttons, height follows the window. Heading moved right of the list and stretches.
+- Every page view is sized to the area beside the list (`FitPageView`, after the toolbar
+  is set — the toolbar changes the content area) and resizes in both directions; the
+  page XIBs' autoresizing masks pin and stretch their controls.
+- Removed the Hello demo menu (`SayHello`, `_textLabel`, `_pushBtn`); Model is menu 2,
+  Help menu 3.
+- See `features/RESPONSIVE_LAYOUT_FEATURE.md`.
 
 ---

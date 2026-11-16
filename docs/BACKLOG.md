@@ -12,6 +12,7 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] `SQLite Access.incl` `cln` declarations compile and link (`-lsqlite3`)
 - [ ] Generate XIBs / XIB / Binding Code / App write the expected files; generated XIBs open in Xcode
 - [ ] New Project view: Choose… shows the tables; Create opens the definitions
+- [ ] Resizing: window minimum 1000 × 620; entity list follows the height; pages fill and stretch — `features/RESPONSIVE_LAYOUT_FEATURE.md`
 - [ ] Project Settings (⌘;): counter, 250 limit, Done saves; generated app's About box shows `Credits.rtf`
 - [ ] Welcome view: Open Project… button and Recent Projects table; double-click opens (see `features/PROJECTS_FEATURE.md`)
 - [ ] FBE bundles the `../Runtime` and `../Templates` folders as resources of the generator
@@ -64,6 +65,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Move to the FB 7.1.5 NS type names (`ArrayRef`, `DictionaryRef`, …) for CocoaUI calls
 
 ## Look and feel
+
+- [ ] Generated apps: resizable shell window; Form fields stretch, List tables fill (same masks as the generator)
 
 - [ ] Theme files: CSS-like named styles (colors with light/dark values, fonts, corner radius, shadows) applied to parts; light, dark, colorful, base
 - [ ] `Toast.incl` — in-app toast (visual effect view + fade)
