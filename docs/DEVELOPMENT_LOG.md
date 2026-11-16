@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Each project keeps its own copy of the database
+## 2026-11-16 — Each project keeps its own copy of the database (`ea167ff`)
 
 - The SQLite database is copied into `workspace/<project>/Database/` (plus `-wal`/`-shm`)
   before the model is read; `Project.json`'s `source` is the copy. Done in
