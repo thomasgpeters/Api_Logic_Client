@@ -32,6 +32,6 @@ so rules can be written and managed in FB syntax.
 
 ## Tooling
 
-- [ ] Refresh `futurebasic-apis` from the FB 7.1.5 install: it still has
-      `TextLabel.incl`, which FB removed in 7.0.35. Consider making it private:
-      the toolboxes carry no redistribution license.
+- [ ] Retire or make private `futurebasic-apis`: it is outdated (pre-7.0.35) and
+      superseded by FutureBasic_Documentation, and the toolboxes carry no
+      redistribution license.

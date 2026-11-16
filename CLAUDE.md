@@ -19,7 +19,7 @@ client, and logic binding the API to the UI. Northwind is only the test model.
   `ALS Binding.incl` (record ↔ controls via Model.json field maps),
   `ALS App.incl` (master-detail window, requests, events).
 - `Samples/Northwind/metadata.json` — sample `/metadata` response.
-- `docs/` — `FB Reference Index.md`, `BACKLOG.md` and other notes.
+- `docs/` — `FB Documentation Map.md`, `FB Reference Index.md`, `BACKLOG.md`.
 
 Generated output goes to `~/ApiLogicClient/<project>/`.
 
@@ -27,18 +27,23 @@ Generated output goes to `~/ApiLogicClient/<project>/`.
 - FB source files use classic-Mac **CR** line endings. Preserve them
   (convert to LF to edit, back to CR before committing). XIB/JSON use LF.
 - Logging is gated on `isLoggingOn`.
+- FB 7.1.4+: any fn that returns a value must declare a return type
+  (`local fn Name(...) as Type`); untyped functions are `void`.
 - Never copy FB toolbox files into generated projects — they are FB-team code
   with no redistribution license; generated apps use the user's FB install.
 
 ## References
-- **FB language reference**:
-  https://www.brilorsoftware.com/fb/documentation/FBHelp/FBHelp.htm.
-  `docs/FB Reference Index.md` maps every keyword to its page. Fetch single
-  pages on demand (the site has bot protection; don't crawl it). Needs the
-  `Api_Logic_Client` cloud environment, which allows brilorsoftware.com.
-- Cocoa toolboxes (exact `fn` wrapper names/signatures; statement syntax in the
-  header comments) and ~570 examples:
-  https://github.com/thomasgpeters/futurebasic-apis (`CocoaUI/*.incl`, `FB Examples/`).
-  Verify toolbox calls there rather than from memory.
+- **Primary: https://github.com/thomasgpeters/FutureBasic_Documentation**
+  (private, ~54 MB): the current FB reference manual (`FBHelp/`), all toolbox
+  headers (`Toolboxes/Headers/`) and 578 examples (`FBExamples/`). Clone it
+  beside this repo and read it in chunks; `docs/FB Documentation Map.md` says
+  where things are. Verify toolbox calls against its headers, not memory.
+- `docs/FB Reference Index.md` maps keywords to reference pages (same page names
+  locally). The online manual is the fallback:
+  https://www.brilorsoftware.com/fb/documentation/FBHelp/FBHelp.htm (bot
+  protection; fetch single pages only; needs the `Api_Logic_Client` environment).
+- FB release notes (breaking changes):
+  https://www.brilorsoftware.com/fb/pdfs/releasenotes.pdf.
 - https://github.com/thomasgpeters/Test_Xib_View — the author's earlier
   SQLite + XIB app pattern.
+- `futurebasic-apis` is outdated (pre-7.0.35); don't rely on it.
