@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — LogicBank license history; product decision
+## 2026-11-16 — LogicBank license history; product decision (`d6293bf`)
 
 - LogicBank's `LICENSE` was BSD from 2020 until **2026-05-29** (`a475a9c`, "minor logging,
   license"), when Val Huber replaced it with **Apache 2.0 + Commons Clause**; releases
