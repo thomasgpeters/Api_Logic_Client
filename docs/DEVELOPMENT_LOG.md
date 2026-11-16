@@ -6,14 +6,11 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — About box text; Project Settings view (`11f0ec0`)
+## 2026-11-16 — Translator: extra `end if` in XIB Generator.incl
 
-- Generated apps show the designer's About text (≤ 250 characters) in the standard
-  macOS About box: FB's About menu item opens it, and it shows the bundle's
-  `Credits.rtf` — written by Generate App with `AttributedStringRTFFromRange`, listed
-  in `data.fbproj`, removed when there is no text. Also `"about"` in `Model.json`.
-- Generator: new Project Settings view (`ProjectSettingsView.xib`, *Model → Project
-  Settings…* ⌘;) with the About text, a live `n / 250` counter and Done; saved as
-  `"about"` in `Project.json`.
+- `XibGenerateProject` closed four `if` blocks where three were open; FB reports a stray
+  `end if` as "Unknown variable, command or Toolbox name … 'if'". Removed it.
+- fblint now checks block balance per fn (`if`/`select`/`for`/`while`/`do`); it reports
+  this line on the old file and nothing else in Api_Logic_Client or Test_Xib_View.
 
 ---

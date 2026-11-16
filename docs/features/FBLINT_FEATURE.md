@@ -25,3 +25,11 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
 Validated against real failures: it flags the causes of all 67 original Test_Xib_View
 build errors, and every error class in the generator's first build (keywords,
 `for … in`, argument counts, runtime files compiled as resources). Not yet checked: statement syntax (e.g. `tableview`'s `columnWidths`).
+
+## Block balance
+
+`if`/`end if` (an `if` with no `then` opens a block), `select`/`end select`, `for`/`next`,
+`while`/`wend`, `do`/`until` must balance within each fn. A stray closer is reported
+with the block it met, e.g. `"end if" closes no open if block (for from line 447)`; an
+unclosed opener is reported at its own line. Added after an extra `end if` in
+`XIB Generator.incl` stopped the translator ("Unknown variable … 'if'").
