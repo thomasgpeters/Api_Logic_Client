@@ -8,7 +8,8 @@ lists in tabs, drill-in with a crumb trail.
 
 ## How it works
 
-1. **Open a project or a model** — *Model → Open Project…* (⇧⌘O) or double-click one of
+1. **Create a project from a SQLite database** — *Create Project* on the Welcome view: choose
+   the database, check the tables it found, name the project. Or **open a project or a model** — *Model → Open Project…* (⇧⌘O) or double-click one of
    the Recent Projects on the Welcome view; or *Model → Open SQLite Database…* (⌘D) reads tables, columns,
    keys and relationships straight from the database. A saved ALS
    `/metadata?include=attributes` response (e.g. `samples/Northwind/metadata.json`)

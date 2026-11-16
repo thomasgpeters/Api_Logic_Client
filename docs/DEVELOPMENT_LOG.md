@@ -6,14 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — First clean build and run of the generator; warnings cleaned up (`e5afb36`)
+## 2026-11-16 — New Project from a SQLite database
 
-- The generator translates, compiles, links and runs. Remaining clang warnings:
-  - `-lsqlite3: 'linker' input unused` on every file — FB passes Compiler Options to each
-    compile step. Added `-Wno-unused-command-line-argument` to the generator's
-    `Settings2.plist` (the template for generated apps already had it).
-  - `SQLite Model.incl`: `CFMutableArrayRef` variables assigned from
-    `DictionaryObjectForKey` ("discards qualifiers") — cast; unused `pkIndex` removed.
-- Both rules added to `FB Coding Rules.md`.
+- *Create Project* now opens a New Project view (`NewProjectView.xib`, `New Project.incl`):
+  name, *Choose…* a SQLite database, a summary of its tables and views, *Create*. The ALS
+  server form stays one button away (*API Logic Server instead…*).
+- Create clears the connection and About fields, then uses the shared
+  `LoadSQLiteModel` path (Project.json, Design.json, Recent Projects); an existing name
+  offers *Open It*.
+- XIB: key equivalents for Return/Escape are stored base64 (`DQ`, `Gw`) — `&#13;`/`&#27;`
+  are not valid XML.
+- fblint: build-order check — a `local fn` used before its definition in `data.fbproj`
+  order (it caught `ShowdProjectCreateView`, defined in the later `EventHandlers.incl`).
 
 ---

@@ -11,6 +11,7 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Regex Title split (`StringByReplacingOccurrencesOfStringWithOptions`, `$1 $2`)
 - [ ] `SQLite Access.incl` `cln` declarations compile and link (`-lsqlite3`)
 - [ ] Generate XIBs / XIB / Binding Code / App write the expected files; generated XIBs open in Xcode
+- [ ] New Project view: Choose… shows the tables; Create opens the definitions
 - [ ] Project Settings (⌘;): counter, 250 limit, Done saves; generated app's About box shows `Credits.rtf`
 - [ ] Welcome view: Open Project… button and Recent Projects table; double-click opens (see `features/PROJECTS_FEATURE.md`)
 - [ ] FBE bundles the `../Runtime` and `../Templates` folders as resources of the generator
@@ -43,6 +44,7 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 ## Generator app (see `design/Generator App Design.md`)
 
 - [x] Model from a SQLite database — `SQLite Model.incl`
+- [x] New Project view: a project starts from a SQLite database — `features/NEW_PROJECT_FEATURE.md`
 - [ ] Product name (sets the bundle id; the Application Support folder is `Api_Logic_Client` until then) — ideas: Lexicon, Keel, Foundry, ModelWorks
 - [x] Workspace in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; *Show Workspace in Finder*
 - [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
