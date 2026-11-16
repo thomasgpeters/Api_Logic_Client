@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Translator: extra `end if` in XIB Generator.incl
+## 2026-11-16 — Translator: extra `end if` in XIB Generator.incl (`d176e45`)
 
 - `XibGenerateProject` closed four `if` blocks where three were open; FB reports a stray
   `end if` as "Unknown variable, command or Toolbox name … 'if'". Removed it.
