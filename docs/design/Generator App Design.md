@@ -29,7 +29,9 @@ until a product name is chosen.
 ├── Settings.plist             (planned)
 └── workspace/
     ├── <Project>/             one generated app = one git repository
-    │   ├── <Project>.fb           generated (regenerated)
+    │   ├── <Project>.fbeproj      FB project: Settings2.plist (template, kept) + data.fbproj (regenerated)
+    │   ├── <Project>.main         main program (regenerated, kept short)
+    │   ├── EventHandlers.incl, Menus.incl, Windows.incl   starting templates, created only if missing
     │   ├── Model.json, *.xib, …   generated (regenerated)
     │   ├── <Entity> Binding.incl  generated (regenerated)
     │   ├── Design.json            the designer's adjustments

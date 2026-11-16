@@ -114,7 +114,7 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
             declared = [d for d in re.findall(r'\b(\w+)\s+as\s+\w', code_only) if d.lower() != 'dim']
             dm = re.match(r'\s*(?:[A-Z]\w*Ref|long|BOOL|double|NSInteger|NSUInteger|SInt64|SInt32|ptr|CGRect|CGFloat|CFRange)\s+(.*)$', code_only)
             if dm and not re.search(r'\blocal\s+fn\b', code_only):
-                declared += [re.match(r'\s*(\w+)', part).group(1) for part in dm.group(1).split(',') if re.match(r'\s*\w+', part)]
+                declared += [re.match(r'\s*(\w+)', part).group(1) for part in split_args(dm.group(1)) if re.match(r'\s*\w+', part)]
             fm = re.match(r'\s*for\s+(\w+)\s+in\b', code_only)
             if fm: declared.append(fm.group(1))
             for name in declared:

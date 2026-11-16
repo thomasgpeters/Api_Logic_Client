@@ -19,9 +19,9 @@ lists in tabs, drill-in with a crumb trail.
 3. **Generate** — each step on its own, or all at once:
    *Generate XIBs* · *Generate XIB for Selected Entity* · *Generate Binding Code* ·
    *Generate App*. Output goes to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`.
-4. **Open `<project>.fb` in FutureBasic**, build, and keep editing: generated code is
-   plain, readable FB, and hand-written code lives in hook files regeneration never
-   touches.
+4. **Open `<project>.fbeproj` in FutureBasic**, build, and keep editing: generated code is
+   plain, readable FB; `EventHandlers.incl`, `Menus.incl` and `Windows.incl` start from
+   templates and are yours — regeneration never touches them.
 
 ## Repository layout
 
@@ -30,7 +30,8 @@ Api_Logic_Client/
 ├── README.md · CLAUDE.md · .gitignore
 ├── src/
 │   ├── Generator/    ← open "Api Logic Client.fbeproj" here in the FB editor
-│   └── Runtime/      ← FB code copied into generated apps
+│   ├── Runtime/      ← FB code copied into generated apps (regenerated)
+│   └── Templates/    ← starting files for generated apps (copied only when missing)
 ├── docs/
 │   ├── design/       ← App Shell Design, Generator App Design
 │   ├── reference/    ← FB Coding Rules, FB Documentation Map, FB Reference Index
@@ -52,7 +53,11 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
 ├── Settings.plist                 (planned) settings: git, GitHub, ALS/APIs, AI/LLMs, SMTP
 └── workspace/
     └── <project>/                 one folder per project
-        ├── <project>.fb           generated main program (regenerated)
+        ├── <project>.fbeproj      the FB project: data.fbproj (regenerated), Settings2.plist (kept)
+        ├── <project>.main         main program: connection, handler registration, start (regenerated)
+        ├── EventHandlers.incl     DoAppEvent / DoMenu / DoDialog (starting template, kept)
+        ├── Menus.incl             BuildMenus (starting template, kept)
+        ├── Windows.incl           BuildWindows + nibview per Form part (starting template, kept)
         ├── <Entity>Form.xib       generated Form part per entity (regenerated)
         ├── <Entity>List.xib       generated List part per entity (regenerated)
         ├── <Entity> Binding.incl  generated binding code per entity (regenerated)

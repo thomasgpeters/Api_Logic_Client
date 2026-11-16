@@ -25,6 +25,9 @@ mode work without extra code).
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
   of the generator via `../Runtime/…`): `ALS Client.incl`, `ALS Binding.incl`,
   `ALS App.incl`, `Binding Support.incl`.
+- `src/Templates/` — starting files for generated apps, copied only when missing
+  (bundled as the `../Templates` folder): `Project/Settings2.plist`, `App/EventHandlers.incl`,
+  `App/Menus.incl`. `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`.
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
