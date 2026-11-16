@@ -102,6 +102,10 @@ def lint_file(path, is_project_file, known_toolbox, local_fns):
             report(no, '#build is not supported in projects - use Build Settings')
         for rx, msg in DEPRECATED:
             if rx.search(line): report(no, msg)
+        wm = re.search(r'\b(View\w+)\(\s*(_\w*(?:[Ww]indow|[Ww]nd)\w*)\s*[,)]', strip_strings_and_comments(line))
+        if wm and 'ContentView' not in wm.group(2):
+            report(no, f'{wm.group(1)} takes a view tag, but {wm.group(2)} looks like a window tag - '
+                       f'use _windowContentViewTag for the window\'s content view')
 
         m = FN_DEF.match(line)
         if m:

@@ -52,8 +52,13 @@ python3 tools/fblint.py ~/ApiLogicClient/"<project>"     # a generated project
 9. **Cast CF types where a header takes `ObjectRef`**, e.g.
    `fn ObjectClassName( (ObjectRef)dta )` — otherwise clang warns
    "incompatible pointer types … to parameter of type 'id'".
-10. **`alert` button titles are an array:** `@[@"Delete", @"Cancel"]`.
-11. **Don't use `end` to quit a Cocoa app** — it calls `exit(0)` without cleanup.
+10. **`View…` functions take a view tag, never a window tag.** For a window's
+    content view use `_windowContentViewTag` (it refers to the current output
+    window). Passing `_window` fails at run time: "Invalid tag. Control 1 does
+    not exist in window 1. (ViewSetAutoresizesSubviews)".
+    *Source: `CocoaUI/Window.incl`.*
+11. **`alert` button titles are an array:** `@[@"Delete", @"Cancel"]`.
+12. **Don't use `end` to quit a Cocoa app** — it calls `exit(0)` without cleanup.
     *Source: `end.html`.*
 
 ## Deprecated — don't write these
@@ -69,5 +74,5 @@ python3 tools/fblint.py ~/ApiLogicClient/"<project>"     # a generated project
 
 ## Files
 
-12. **FB source uses CR line endings**; XIB and JSON use LF. The generator
+13. **FB source uses CR line endings**; XIB and JSON use LF. The generator
     converts its FB output to CR (`AppWriteSource`).
