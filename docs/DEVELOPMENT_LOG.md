@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — Open Project and Recent Projects
+## 2026-11-16 — Open Project and Recent Projects (`c54948a`)
 
 - *Model → Open Project…* (⇧⌘O) opens a project's `Project.json` and reopens its
   model from `source`; if the file moved, *Locate…* saves the new path.
