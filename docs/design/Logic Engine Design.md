@@ -199,6 +199,27 @@ substantially from the software (consulting and hosting included). Its `setup.py
 - LogicBank Studio: check its license separately before borrowing any UI or ideas from it
   beyond what is public.
 
+**Which license is current (checked in the repository history, 2026-11-16):**
+
+| When | Commit / release | `LICENSE` |
+|---|---|---|
+| 2020-10-11 | initial commit | BSD 3-clause, © 2020 Val Huber |
+| 2025-02-17 | release 1.30.00 | BSD |
+| 2026-04-29 | `96a8485` (version 1.31.01), last BSD commit | BSD |
+| **2026-05-29** | **`a475a9c` "minor logging, license" (Val Huber)** | **Apache 2.0 + Commons Clause** — replaced the BSD text |
+| 2026-07-22, 2026-08-23 | releases 1.32.00, 1.33.00; current version 1.34.04 | Apache 2.0 + Commons Clause |
+
+`setup.py` (last changed 2022) and `pyproject.toml` (BSD classifier since 2025-08-17) were
+not updated with the license: stale metadata. **The current license is Apache 2.0 + Commons
+Clause.** Releases up to 1.31.01 were published under BSD, and a license change is not
+retroactive for copies already released — but we are not using LogicBank's code either way.
+
+**Decision (author, 2026-11-16):** build clean-room; the product is **LogicBank for
+FutureBasic**; make Val Huber an offer — a percentage, with a written proposal. The
+proposal should also cover **the name**: "LogicBank" is Val's project name, and even the old
+BSD text withheld using the author's name to promote derived products, so the product
+name needs his agreement.
+
 ## 5. Plan
 
 1. **Engine core** — rule bank, LogicRow, insert/update/delete sequence, formulas with

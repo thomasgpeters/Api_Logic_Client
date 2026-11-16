@@ -102,7 +102,8 @@ Rewrite of [LogicBank](https://github.com/valhuber/LogicBank) (Val Huber) for Fu
 
 - [x] Study the Python edition (rule types, per-row sequence, delta adjustment, chaining, formula dependencies)
 - [x] Confirm FB can call rules by address (`@fn` + `def fn … using`)
-- [ ] Ask Val Huber about licensing (LICENSE: Apache 2.0 + Commons Clause; setup.py: BSD) — clean-room until then
+- [x] License check: current is Apache 2.0 + Commons Clause (since 2026-05-29, `a475a9c`); BSD in setup.py/pyproject is stale
+- [ ] Proposal to Val Huber: percentage offer + use of the name "LogicBank for FutureBasic" (author) — clean-room until then
 - [ ] Engine core, aggregates, copy/cascade/events (needs the shell's SQLite data layer)
 - [ ] Studio: Rules page, `Rules.json`, generated rule files, validation, Explain
 - [ ] Import ALS `logic/declare_logic.py`
