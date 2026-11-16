@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — About box text; Project Settings view
+## 2026-11-16 — About box text; Project Settings view (`11f0ec0`)
 
 - Generated apps show the designer's About text (≤ 250 characters) in the standard
   macOS About box: FB's About menu item opens it, and it shows the bundle's
