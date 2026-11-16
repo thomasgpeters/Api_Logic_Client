@@ -1,34 +1,44 @@
 # Api Logic Client
 
-A **FutureBasic** (FBE, macOS/Cocoa) app — not C++/Wt. It introspects an
-API Logic Server (ALS) app via `/metadata?include=attributes` and generates
-a FutureBasic app from that model: an ALS connection layer plus XIB screens.
-Northwind (`example_proj.json`) is the first target model.
+A **FutureBasic** (FBE, macOS/Cocoa) generator — not C++/Wt. It reads an
+API Logic Server (ALS) project's model (`/metadata?include=attributes`) and
+generates a complete FutureBasic app for it: XIB screens, an ALS JSON:API
+client, and logic binding the API to the UI. Northwind is only the test model.
 
-## Layout
-- `Api Logic Client.fbeproj/data.fbproj` — build order. New `.incl` files must
-  be added here, *before* any file that calls them (FB needs definition before use).
-- `My Globals.glbl` — constants and globals.
-- `API Interface.incl` — ALS connectivity (login → bearer token, metadata fetch).
-- `Project Actions.incl` — model loading (`InitProject`), browsing, `BuildProjectXIBs`,
-  `OpenMetadataFile` (load a saved metadata JSON, no server needed).
-- `XIB Generator.incl` — type → control mapping, writes `<Resource>View.xib`
-  and `Generated Tags.glbl` to `~/ApiLogicClient/<project>/`.
-- `Button/Label/TextField/View/Window.xib` — single-control XIB templates.
+## Repo layout
+- `Generator/` — the FB project (`Api Logic Client.fbeproj`). Self-contained so
+  the relative paths in `data.fbproj` keep working.
+  - `data.fbproj` is the build order: an `.incl` must come *before* any file
+    that calls it (FB needs definition before use).
+  - `API Interface.incl` — ALS connectivity for the generator itself (metadata fetch).
+  - `Project Actions.incl` — model loading (`InitProject`, `OpenMetadataFile`), `BuildProjectXIBs`.
+  - `XIB Generator.incl` — type → control mapping; `<Resource>View.xib`, `Model Tags.incl`, model entries.
+  - `App Generator.incl` — the pipeline: `Model.json`, `<project>.fb`, runtime copies.
+- `Runtime/` — our FB code copied into every generated app (bundled as
+  resources of the generator): `ALS Client.incl` (JSON:API client),
+  `ALS Binding.incl` (record ↔ controls via Model.json field maps),
+  `ALS App.incl` (master-detail window, requests, events).
+- `Samples/Northwind/metadata.json` — sample `/metadata` response.
+- `docs/` — `FB Reference Index.md` and other notes.
+
+Generated output goes to `~/ApiLogicClient/<project>/`.
 
 ## Conventions
-- Source files use classic-Mac **CR** line endings. Preserve them
-  (convert to LF to edit, back to CR before committing).
+- FB source files use classic-Mac **CR** line endings. Preserve them
+  (convert to LF to edit, back to CR before committing). XIB/JSON use LF.
 - Logging is gated on `isLoggingOn`.
+- Never copy FB toolbox files into generated projects — they are FB-team code
+  with no redistribution license; generated apps use the user's FB install.
 
 ## References
-- **FB language reference** (statements, functions, types, directives):
+- **FB language reference**:
   https://www.brilorsoftware.com/fb/documentation/FBHelp/FBHelp.htm.
   `docs/FB Reference Index.md` maps every keyword to its page. Fetch single
   pages on demand (the site has bot protection; don't crawl it). Needs the
   `Api_Logic_Client` cloud environment, which allows brilorsoftware.com.
-- Cocoa toolboxes (exact `fn` wrapper names/signatures) and ~570 examples:
+- Cocoa toolboxes (exact `fn` wrapper names/signatures; statement syntax in the
+  header comments) and ~570 examples:
   https://github.com/thomasgpeters/futurebasic-apis (`CocoaUI/*.incl`, `FB Examples/`).
   Verify toolbox calls there rather than from memory.
-- A separate SQLite-backed FB app shows the record → view pattern
-  (`Get…Record` / `Populate…View`) the generated apps should follow.
+- https://github.com/thomasgpeters/Test_Xib_View — the author's earlier
+  SQLite + XIB app pattern.
