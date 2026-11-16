@@ -31,7 +31,12 @@ so rules can be written and managed in FB syntax.
 
 ## App shell (current direction — see docs/App Shell Design.md)
 
-- [ ] List XIB part per entity (table, one column per attribute)
+- [x] List XIB part per entity (table, one column per attribute)
+- [x] Entity definitions with recommendations; designer adjustments in Design.json
+- [x] Separate commands: Generate XIBs / XIB / Binding Code / App
+- [x] Generated `<Entity> Binding.incl` (record ↔ Form, records → List)
+- [ ] Theme files (CSS-like named styles applied to parts; light/dark/colorful/base)
+- [ ] Python reference for Type Mapping (definitions report) to check the FB rules
 - [ ] Shell: entity navigator + List part + Scalar part, wired to ALS
 - [ ] Crumb trail and page stack (drill-in replaces the page; back via crumbs)
 - [ ] Relationships in Model.json → related-list tabs (master-detail) and drill-in

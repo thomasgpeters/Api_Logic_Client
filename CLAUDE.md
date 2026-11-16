@@ -19,12 +19,15 @@ mode work without extra code).
   - `Project Actions.incl` — model loading (`InitProject`, `OpenMetadataFile`), `BuildProjectXIBs`.
   - `SQLite Access.incl` — our own minimal SQLite declarations (open read-only, prepare, step, columns).
   - `SQLite Model.incl` — the model from a SQLite file: columns, keys (`keyKind`), relationships.
-  - `XIB Generator.incl` — type → control mapping; `<Resource>View.xib`, `Model Tags.incl`, model entries.
-  - `App Generator.incl` — the pipeline: `Model.json`, `<project>.fb`, runtime copies.
+  - `Type Mapping.incl` — the rules: control kind, FB type, size, Title, widths, plus the designer's adjustments (`design` per attribute, saved in `Design.json`).
+  - `XIB Generator.incl` — Form and List parts per entity; `<Resource>View.xib`, `Model Tags.incl`, model entries.
+  - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
+  - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
 - `Runtime/` — our FB code copied into every generated app (bundled as
   resources of the generator): `ALS Client.incl` (JSON:API client),
   `ALS Binding.incl` (record ↔ controls via Model.json field maps),
-  `ALS App.incl` (master-detail window, requests, events).
+  `ALS App.incl` (master-detail window, requests, events), `Binding Support.incl`
+  (helpers for generated binding code).
 - `Samples/Northwind/metadata.json` — sample `/metadata` response.
 - `docs/` — `Generator App Design.md` (the generator app: workspace, settings, git), `App Shell Design.md` (the generated app's UI), `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `BACKLOG.md`.
 - `tools/fblint.py` — checks FB sources (and generated projects) against the coding rules.

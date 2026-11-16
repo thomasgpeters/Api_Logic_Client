@@ -70,12 +70,67 @@ From *Building Production Software with AI — A Domain-Driven Approach*
   `Customers › ALFKI › Orders › 10643`. Clicking a crumb returns to that page and
   record; choosing an entity in the navigator starts a new trail.
 
+## Designer workflow (generator)
+
+1. **Open** a model — *Model → Open SQLite Database…* (or ALS metadata JSON).
+2. **Review the entity definitions.** Selecting an entity shows its summary (key,
+   key kind, relationships ↑ toone / ↓ tomany) and one row per attribute: Name,
+   **Title** (field label *and* column heading), Data Type, FB Type, Size, Key
+   (PK / FK → parent), Required, Default, Form Control, Form Width, List Width,
+   Adjusted.
+3. **Adjust.** Title, FB Type, Form Control, Form Width and List Width are
+   editable; an edit is kept as the designer's adjustment (empty = back to the
+   recommendation) in `<project>/Design.json` and re-applied whenever the model is
+   opened. The *Adjusted* column shows what was changed.
+4. **Generate**, each on its own:
+
+   | Command | Writes |
+   |---|---|
+   | Generate XIBs | every entity's `<Entity>Form.xib` and `<Entity>List.xib` |
+   | Generate XIB for Selected Entity | the selected entity's two parts |
+   | Generate Binding Code | `<Entity> Binding.incl` for every entity |
+   | Generate App | all of it, plus `Model.json`, `Model Tags.incl`, `<project>.fb`, runtime |
+
+All rules and adjustments live in `Generator/Type Mapping.incl`; the XIB and
+binding generators read attributes only through it, so what the designer sees is
+what gets generated.
+
+## Code organisation
+
+- **One concern per file, aptly named** — in the generator (`SQLite Access`,
+  `SQLite Model`, `Type Mapping`, `XIB Generator`, `Binding Generator`,
+  `App Generator`) and in generated apps (`<Entity> Binding.incl`,
+  `<Entity> Hooks.incl`, runtime files).
+- **FB's event model, procedurally.** One `on dialog` / `on menu` handler routes
+  events by tag range to per-entity procedures (selection, `_tableViewDoubleAction`
+  for drill-in, cell edits, buttons). No imitation of objects; entity behaviour is
+  a set of named procedures next to its binding code and hooks.
+
+## Styling and themes
+
+XIBs and AppKit do not understand CSS. What macOS offers — all reachable from FB:
+
+- **System (catalog) colors** in generated XIBs (`labelColor`,
+  `controlBackgroundColor`, …) already follow light/dark mode and the accent color.
+- **Appearances**: `AppearanceNamed` with `AppSetAppearance`, `WindowSetAppearance`,
+  `ViewSetAppearance` force light, dark or vibrant per app, window or view.
+- **Named colors** from an asset catalog (`ColorNamed`; FB builds `Assets.xcassets`)
+  with light/dark variants.
+- **Dynamic colors** computed at run time (`ColorWithName` with a provider callback).
+- **Fonts and text colors** per control (`FontWithName`, `ControlSetFont`,
+  `TextFieldSetTextColor`).
+
+A CSS-like layer is therefore possible: a **theme file** (JSON) of named styles —
+colors with light/dark values, fonts, sizes — and selectors by control kind, entity,
+or tag range, applied when a part is loaded. Themes (light, dark, colorful, base)
+become files the user switches; the XIBs stay plain. Not built yet (backlog).
+
 ## Generated parts (per entity)
 
 | Part | File | Contents |
 |---|---|---|
-| List | `<Entity>List.xib` | scroll view + table, one column per attribute (identifier = attribute name) |
-| Scalar | `<Entity>Form.xib` | label + control per attribute (existing generator) |
+| List | `<Entity>List.xib` | scroll view + view-based table, one column per attribute (identifier = attribute name, heading = Title); tags 20000 + index·10 (+1 scroll, +2 table) |
+| Scalar | `<Entity>Form.xib` | Title + control per attribute |
 | Related list | built from the child entity's list columns | one per relationship, inside the tab view |
 
 Each part is a self-contained custom view with its own tag range, so parts can be
