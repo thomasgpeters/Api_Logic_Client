@@ -6,6 +6,25 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-16 — First generator build: 100+ translator errors
+
+- **Runtime files compiled into the generator.** `resources "../Runtime/x.incl"`
+  is translated as source; `ALS Client.incl`'s `end globals` then ended the implicit
+  global scope, so every global in `My Globals.glbl` (`isLoggingOn`, `projectName`,
+  `gXibNextID`, …) became "unknown". Fix: `resources "../Runtime"` — a folder resource
+  is copied, not compiled (as `Api_Logic_Client.xcodeproj` already was);
+  `BundleURLForResource( …, @"incl", @"Runtime" )`.
+- **FB keywords as names:** `record`, `text`, `resources` → `aRecord`,
+  `textValue`, `resourceDict` (also in generated binding code).
+- **`for x in`** needs an array variable, not `fn …` or `@[ … ]`.
+- **Overloads:** `#if 0 // ERROR_PARAM` blocks hold planned `@err` signatures; the
+  active `FileManagerRemoveItemAtURL( url )` / `FileManagerCopyItemAtURL( src, dst )`
+  have none.
+- fblint learned all four (keyword list, active-declaration argument counts, `for … in`,
+  source files as resources); it reproduces the build's error classes on the old code.
+
+---
+
 ## 2026-11-16 — Workspace in Application Support
 
 - Projects now live in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`

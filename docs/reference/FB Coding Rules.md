@@ -90,6 +90,22 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
 20. **A CF dictionary cannot hold NULL** (`CFDictionaryAddValue( d, key, NULL )`
     crashes with CFType callbacks) — pass `@""` or leave the key out.
 
+21. **Never name a variable or parameter after an FB keyword.** `record`, `text`,
+    `resources`, `date`, `time`, `mode`, `window`, `button`, `line` are keywords
+    (`Toolboxes/Headers/Key Words`, 350 of them); as names they fail with "Bad factor
+    in expression" or "Bad name" wherever FB parses them. Use `aRecord`, `textValue`,
+    `resourceDict`.
+22. **`for x in` needs an array variable.** `for word in fn Split(…)` and
+    `for key in @[ … ]` fail ("Arithmetic variable expected"); assign the array first.
+23. **Toolbox overloads: use the active declaration.** Headers keep planned
+    signatures inside `#if 0` blocks (e.g. `ERROR_PARAM` versions with `@err`);
+    only the `#else` branch is compiled. `FileManagerRemoveItemAtURL( url )` and
+    `FileManagerCopyItemAtURL( src, dst )` take no error parameter today.
+24. **FB source listed as a resource is compiled.** A `.incl` in a project's
+    `resources` lines is translated as part of the app — and a `begin globals …
+    end globals` in it ends the implicit global scope, so every later global becomes
+    "unknown". Bundle such files as a folder (`resources "../Runtime"`).
+
 ## Deprecated — don't write these
 
 | Don't | Use | Since |
