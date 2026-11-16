@@ -5,7 +5,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Verify on a Mac (first build of recent work)
 
-- [ ] Generator builds; ⌘D opens `nw/database/db.sqlite`; entity summaries and definitions show
+- [x] Generator builds and runs (2026-11-16)
+- [ ] ⌘D opens `nw/database/db.sqlite`; entity summaries and definitions show
 - [ ] Editing Title / widths in the definitions table (`_tableViewCellTextDidEndEditing`); `Design.json` written and re-applied
 - [ ] Regex Title split (`StringByReplacingOccurrencesOfStringWithOptions`, `$1 $2`)
 - [ ] `SQLite Access.incl` `cln` declarations compile and link (`-lsqlite3`)

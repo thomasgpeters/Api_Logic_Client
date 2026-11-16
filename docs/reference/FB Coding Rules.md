@@ -106,6 +106,15 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
     end globals` in it ends the implicit global scope, so every later global becomes
     "unknown". Bundle such files as a folder (`resources "../Runtime"`).
 
+- **Mutable variables from getters need a cast.** `fn DictionaryObjectForKey` and
+  `fn ArrayObjectAtIndex` return `CFTypeRef` (`const void *`); assigning one to a
+  `CFMutableArrayRef` / `CFMutableDictionaryRef` variable makes clang warn "discards
+  qualifiers". Cast — `list = (CFMutableArrayRef)fn DictionaryObjectForKey( d, @"k" )` —
+  or declare the variable `CFArrayRef` when it is only read.
+- **`-lsqlite3` in Compiler Options** is passed to every compile step too; add
+  `-Wno-unused-command-line-argument` to the same field (as Test_Xib_View does) or each
+  source file warns "'linker' input unused".
+
 ## Deprecated — don't write these
 
 | Don't | Use | Since |

@@ -11,10 +11,10 @@
 	<key>ClearLogEachTime</key>
 	<integer>1</integer>
 	<key>CompilerOptions</key>
-	<string>-lsqlite3</string>
+	<string>-lsqlite3 -Wno-unused-command-line-argument</string>
 	<key>CompilerOptionsArray</key>
 	<array>
-		<string>-lsqlite3</string>
+		<string>-lsqlite3 -Wno-unused-command-line-argument</string>
 		<string>-m64 -DDECARBONATE</string>
 	</array>
 	<key>DebugLevel</key>
