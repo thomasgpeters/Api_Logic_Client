@@ -17,7 +17,7 @@ Files use CR line endings; read them with `tr '\r' '\n' < file`.
 ## `FBHelp/` — the language reference (358 pages)
 
 `FBHelp/Resources/English.lproj/pgs/<page>.html`. These are the same pages as
-the online manual, so `docs/FB Reference Index.md` (keyword → page) works
+the online manual, so `docs/reference/FB Reference Index.md` (keyword → page) works
 here too: use the page name from its links.
 
 | Need | Page |

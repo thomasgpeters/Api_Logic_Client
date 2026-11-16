@@ -3,3 +3,4 @@
 Api Logic Client*.app/
 build_temp_Api_Logic_Client/
 
+__pycache__/

@@ -11,7 +11,7 @@
 	<key>ClearLogEachTime</key>
 	<integer>1</integer>
 	<key>CompilerOptions</key>
-	<string>None</string>
+	<string>-lsqlite3</string>
 	<key>CompilerOptionsArray</key>
 	<array>
 		<string>-lsqlite3</string>
