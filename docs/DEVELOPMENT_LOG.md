@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — New Project from a SQLite database
+## 2026-11-16 — New Project from a SQLite database (`72d9bfe`)
 
 - *Create Project* now opens a New Project view (`NewProjectView.xib`, `New Project.incl`):
   name, *Choose…* a SQLite database, a summary of its tables and views, *Create*. The ALS
