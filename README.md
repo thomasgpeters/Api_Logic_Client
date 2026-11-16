@@ -18,7 +18,7 @@ lists in tabs, drill-in with a crumb trail.
    `Design.json` and survive regeneration.
 3. **Generate** — each step on its own, or all at once:
    *Generate XIBs* · *Generate XIB for Selected Entity* · *Generate Binding Code* ·
-   *Generate App*. Output goes to `~/ApiLogicClient/<project>/`.
+   *Generate App*. Output goes to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`.
 4. **Open `<project>.fb` in FutureBasic**, build, and keep editing: generated code is
    plain, readable FB, and hand-written code lives in hook files regeneration never
    touches.

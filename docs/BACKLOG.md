@@ -38,8 +38,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 ## Generator app (see `design/Generator App Design.md`)
 
 - [x] Model from a SQLite database — `SQLite Model.incl`
-- [ ] Product name (sets the Application Support folder and bundle id) — ideas: Lexicon, Keel, Foundry, ModelWorks
-- [ ] Workspace folder (user-chosen) replaces `~/ApiLogicClient`
+- [ ] Product name (sets the bundle id; the Application Support folder is `Api_Logic_Client` until then) — ideas: Lexicon, Keel, Foundry, ModelWorks
+- [x] Workspace in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; *Show Workspace in Finder*
 - [ ] Settings window; `Settings.plist` in Application Support; secrets in the Keychain
 - [ ] Git via `/usr/bin/git` (NSTask): init/commit on generation, status, push/pull
 - [ ] GitHub REST (create repo, pull requests) and generic Git remotes

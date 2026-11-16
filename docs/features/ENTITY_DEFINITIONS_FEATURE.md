@@ -30,7 +30,7 @@ Selecting an entity shows a summary — `Customer — key Id (assigned) — Orde
 
 An edit is stored in the attribute's `design` dictionary (`title`, `fbType`,
 `formControl`, `formWidth`, `listWidth`); clearing a cell returns to the
-recommendation. All adjustments are saved to `~/ApiLogicClient/<project>/Design.json`:
+recommendation. All adjustments are saved to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/Design.json`:
 
 ```json
 { "Customer": { "CompanyName": { "title": "Company", "listWidth": "180" } } }

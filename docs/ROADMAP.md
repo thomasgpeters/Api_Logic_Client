@@ -27,7 +27,7 @@ The generated app talks directly to a SQLite database.
 
 ## Phase 3 — Generator app
 
-- Product name; workspace folder; Settings window (Application Support + Keychain).
+- Workspace in Application Support — done. Product name; Settings window (Application Support + Keychain).
 - Git (init/commit on generation, status, push/pull) and GitHub (create repo, PRs).
 - Settings for ALS/APIs, AI/LLM providers, SMTP notifications.
 

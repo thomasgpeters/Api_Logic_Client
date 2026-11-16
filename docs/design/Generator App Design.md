@@ -6,29 +6,37 @@ in `App Shell Design.md`.
 
 ## Where things live
 
-The app bundle is immutable: nothing is ever written inside `<App>.app`.
+The app bundle is immutable: nothing is ever written inside the `.app`.
+Everything the app creates lives in its Application Support folder,
+`~/Library/Application Support/Api_Logic_Client/`.
 
 | What | Where | Notes |
 |---|---|---|
 | Runtime templates, XIB templates | inside the app bundle (`Contents/Resources`) | read-only, versioned with the app |
-| Settings | `~/Library/Application Support/<App>/Settings.plist` | non-secret configuration (below) |
+| **Workspace** | `~/Library/Application Support/Api_Logic_Client/workspace/` | one folder per project; *Model → Show Workspace in Finder* opens it (`~/Library` is hidden in Finder) |
+| Settings | `~/Library/Application Support/Api_Logic_Client/Settings.plist` | non-secret configuration (below) |
 | Secrets | macOS **Keychain** (`Security/SecItem.incl`) | API keys, tokens, passwords — never in a file |
-| Logs, caches | `~/Library/Application Support/<App>/Logs`, `Caches` | safe to delete |
-| **Workspace** | a folder the user chooses (default `~/Documents/<App> Workspace`) | all projects the user works on |
+| Logs, caches | `~/Library/Application Support/Api_Logic_Client/Logs`, `Caches` | safe to delete |
 
-Today the generator writes to `~/ApiLogicClient/<project>/`; that becomes the workspace.
+In code: `AppSupportFolderURL`, `ProjectFolderURL`, `ShowWorkspaceInFinder`
+(`src/Generator/Project Actions.incl`). The folder name is `Api_Logic_Client`
+until a product name is chosen.
 
 ### Workspace layout
 
 ```
-<Workspace>/
-├── <Project>/                 one generated app = one git repository
-│   ├── <Project>.fb           generated (regenerated)
-│   ├── Model.json, *.xib, …   generated (regenerated)
-│   ├── <Entity> Hooks.incl    hand-edited, created only if missing
-│   ├── Database/              the SQLite file (lite edition) and schema
-│   └── .git/
-└── …
+~/Library/Application Support/Api_Logic_Client/
+├── Settings.plist             (planned)
+└── workspace/
+    ├── <Project>/             one generated app = one git repository
+    │   ├── <Project>.fb           generated (regenerated)
+    │   ├── Model.json, *.xib, …   generated (regenerated)
+    │   ├── <Entity> Binding.incl  generated (regenerated)
+    │   ├── Design.json            the designer's adjustments
+    │   ├── <Entity> Hooks.incl    hand-edited, created only if missing (planned)
+    │   ├── Database/              the SQLite file (lite edition) and schema (planned)
+    │   └── .git/                  (planned)
+    └── …
 ```
 
 ## Settings (Application Support)
@@ -38,7 +46,7 @@ plist refers to by name.
 
 | Group | Settings | Secret (Keychain) |
 |---|---|---|
-| Workspace | folder path, recent projects | — |
+| Workspace | recent projects | — |
 | Git | user name, email, default branch, remotes per project | — |
 | GitHub | account, default owner/organization, visibility for new repos | personal access token |
 | Generic Git | remote URL, auth method (HTTPS / SSH key path) | HTTPS password or token |
