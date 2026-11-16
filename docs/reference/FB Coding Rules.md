@@ -8,7 +8,7 @@ real build failure or the current reference.
 Check them with:
 
 ```bash
-python3 tools/fblint.py --headers ../FutureBasic_Documentation/Toolboxes/Headers Generator Runtime
+python3 tools/fblint.py --headers ../FutureBasic_Documentation/Toolboxes/Headers src
 python3 tools/fblint.py ~/ApiLogicClient/"<project>"     # a generated project
 ```
 

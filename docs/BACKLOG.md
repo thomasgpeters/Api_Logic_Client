@@ -18,7 +18,7 @@ so rules can be written and managed in FB syntax.
   - How rule dependencies are tracked and ordered without SQLAlchemy events.
   - Whether the generator emits rule stubs per resource from the ALS model.
 
-## Generator app (see docs/Generator App Design.md)
+## Generator app (see docs/design/Generator App Design.md)
 
 - [x] Model from a SQLite database (tables, keys, keyKind, relationships) — `SQLite Model.incl`
 - [ ] Product name (sets the Application Support folder and bundle id)
@@ -29,7 +29,7 @@ so rules can be written and managed in FB syntax.
 - [ ] Settings groups for ALS/APIs, AI/LLM providers, SMTP notifications
 - [ ] Optional `admin.yaml` hints (labels, user_key, relationship names)
 
-## App shell (current direction — see docs/App Shell Design.md)
+## App shell (current direction — see docs/design/App Shell Design.md)
 
 - [x] List XIB part per entity (table, one column per attribute)
 - [x] Entity definitions with recommendations; designer adjustments in Design.json
@@ -42,6 +42,12 @@ so rules can be written and managed in FB syntax.
 - [ ] Relationships in Model.json → related-list tabs (master-detail) and drill-in
 - [ ] Per-entity and app hook files, created only if missing (hand edits survive regeneration)
 - [ ] Optional: open related records in a modal dialog instead of replacing the page
+
+## Controls (see docs/controls/Controls Catalog.md)
+
+- [ ] `Toast.incl` — in-app toast (visual effect view + fade)
+- [ ] Carousel prototype in Test_Xib_View (collection view + Quick Look thumbnails)
+- [ ] Form Control choices: Image, PDF, Tokens, Thumbnails
 
 ## Generator / runtime
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-fblint - check FutureBasic sources against the rules in docs/FB Coding Rules.md.
+fblint - check FutureBasic sources against the rules in docs/reference/FB Coding Rules.md.
 
 Run it on this repo's FB code and on every generated project before a build:
 
-    python3 tools/fblint.py Generator Runtime
+    python3 tools/fblint.py src
     python3 tools/fblint.py ~/ApiLogicClient/"Northwind Project"
-    python3 tools/fblint.py --headers ../FutureBasic_Documentation/Toolboxes/Headers Generator Runtime
+    python3 tools/fblint.py --headers ../FutureBasic_Documentation/Toolboxes/Headers src
 
 Arguments are files or folders (.incl, .glbl, .main, .fb, .bas are checked).
 With --headers, every `fn Name` / `Name(` call must exist in the toolbox headers

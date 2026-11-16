@@ -1,6 +1,6 @@
 # Generator App — Design
 
-The generator itself (this repo's `Generator/` project; product name to be
+The generator itself (this repo's `src/Generator/` project; product name to be
 decided) is a **macOS-only** FutureBasic app. The generated apps are described
 in `App Shell Design.md`.
 

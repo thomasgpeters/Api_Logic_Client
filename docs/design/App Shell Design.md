@@ -91,7 +91,7 @@ From *Building Production Software with AI — A Domain-Driven Approach*
    | Generate Binding Code | `<Entity> Binding.incl` for every entity |
    | Generate App | all of it, plus `Model.json`, `Model Tags.incl`, `<project>.fb`, runtime |
 
-All rules and adjustments live in `Generator/Type Mapping.incl`; the XIB and
+All rules and adjustments live in `src/Generator/Type Mapping.incl`; the XIB and
 binding generators read attributes only through it, so what the designer sees is
 what gets generated.
 
@@ -150,7 +150,7 @@ list without tag clashes.
 
 **Source of relationships** — lite edition: SQLite foreign keys (see below).
 ALS edition, still open: `/metadata?include=attributes`
-(see `Samples/Northwind/metadata.json`) carries no relationships. Candidates:
+(see `samples/Northwind/metadata.json`) carries no relationships. Candidates:
 the ALS model's own relationship info if `/metadata` can include it, the
 JSON:API `relationships` member of a fetched record (names + related-resource
 links, but not the target type or keys), or ALS's Swagger/OpenAPI document.

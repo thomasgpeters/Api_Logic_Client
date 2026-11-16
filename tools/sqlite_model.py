@@ -4,7 +4,7 @@ sqlite_model.py - reference implementation of the generator's SQLite model reade
 
 Reads a SQLite database's own structure and prints the model the generator builds
 from it (the same shape as Model.json "resources"), so the FutureBasic
-implementation in Generator/SQLite Model.incl can be checked against it.
+implementation in src/Generator/SQLite Model.incl can be checked against it.
 
     python3 tools/sqlite_model.py path/to/db.sqlite              # JSON model
     python3 tools/sqlite_model.py path/to/db.sqlite --summary    # one line per entity
