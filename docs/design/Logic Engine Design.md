@@ -230,6 +230,14 @@ name needs his agreement.
 3. **Copy, parent check, cascade** (delete / nullify / prevent), events.
 4. **Studio** — Rules page, `Rules.json`, rule generation, validation, Explain.
 5. **ALS import** of `declare_logic.py`; test bench; allocate / copy-children extensions.
+**Acceptance tests (behaviour, not code):** LogicBank's repository has about 30 example
+scenarios under `examples/` (`sum_dequalify`, `sum_null_values`, `multi_relns`,
+`insert_parent`, `cascade_delete_multi_parent`, `referential_integrity`,
+`payment_allocation`, `copy_children`, `concurrent_adjust`, …) and a Northwind test suite
+(`examples/nw/tests`: add order, ship order, change an order's customer, delete customer,
+…). Each becomes an FB test against the project's SQLite copy, with the expected values
+taken from the scenario's description, written by us.
+
 6. A Python reference (`tools/logic_reference.py`) running the same rules on the same
    SQLite file, to check the FB engine's results — the way `sqlite_model.py` checks the
    model reader.
