@@ -28,7 +28,9 @@ mode work without extra code).
 - `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`.
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
-- `docs/BACKLOG.md` — ideas and open items.
+- `docs/features/` — one `<NAME>_FEATURE.md` per feature (how it works, where, decisions, verification).
+- `docs/ROADMAP.md` (phases), `docs/BACKLOG.md` (open items), `docs/DEVELOPMENT_LOG.md`
+  (what was done and learned, newest first, with commits).
 - `tools/` — `fblint.py` (checks FB sources and generated projects against the coding rules),
   `sqlite_model.py` (reference implementation of the SQLite model reader).
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
@@ -102,7 +104,10 @@ These apply to hand-written code **and to everything the generator emits**.
   and give such commands in separate code blocks.
 - Fix root causes in the shared pattern too: a bug found in Test_Xib_View
   usually exists in `src/Generator/` or `src/Runtime/` (and vice versa).
-- Ideas and open items go in `docs/BACKLOG.md`.
+- Keep the docs current with each change: add or update the feature's
+  `docs/features/<NAME>_FEATURE.md`, add a `docs/DEVELOPMENT_LOG.md` entry (newest
+  first, with commit hashes and discoveries), tick or add `docs/BACKLOG.md` items,
+  and move `docs/ROADMAP.md` status.
 
 ## References
 - **Primary: https://github.com/thomasgpeters/FutureBasic_Documentation**
