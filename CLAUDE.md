@@ -24,7 +24,7 @@ mode work without extra code).
   `ALS Binding.incl` (record ↔ controls via Model.json field maps),
   `ALS App.incl` (master-detail window, requests, events).
 - `Samples/Northwind/metadata.json` — sample `/metadata` response.
-- `docs/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `BACKLOG.md`.
+- `docs/` — `App Shell Design.md` (the generated app's UI), `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `BACKLOG.md`.
 - `tools/fblint.py` — checks FB sources (and generated projects) against the coding rules.
 
 Generated output goes to `~/ApiLogicClient/<project>/`.

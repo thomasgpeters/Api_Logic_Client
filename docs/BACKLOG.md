@@ -18,6 +18,15 @@ so rules can be written and managed in FB syntax.
   - How rule dependencies are tracked and ordered without SQLAlchemy events.
   - Whether the generator emits rule stubs per resource from the ALS model.
 
+## App shell (current direction — see docs/App Shell Design.md)
+
+- [ ] List XIB part per entity (table, one column per attribute)
+- [ ] Shell: entity navigator + List part + Scalar part, wired to ALS
+- [ ] Crumb trail and page stack (drill-in replaces the page; back via crumbs)
+- [ ] Relationships in Model.json → related-list tabs (master-detail) and drill-in
+- [ ] Per-entity and app hook files, created only if missing (hand edits survive regeneration)
+- [ ] Optional: open related records in a modal dialog instead of replacing the page
+
 ## Generator / runtime
 
 - [ ] Paging in the generated records table (currently the first `gALSPageLimit` = 100 records).
