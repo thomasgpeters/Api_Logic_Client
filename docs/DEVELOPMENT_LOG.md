@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-23 — Data runtime: SQLite records for the shell and the rules engine
+## 2026-11-23 — Data runtime: SQLite records for the shell and the rules engine (`5e2f173`)
 
 - New runtime layer, copied into every generated app first: `Data SQLite.incl` (our own
   SQLite declarations; opens read-write and never creates a file; nested transactions),
