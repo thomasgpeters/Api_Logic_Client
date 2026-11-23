@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-23 — LogicBank for FutureBasic: engine core
+## 2026-11-23 — LogicBank for FutureBasic: engine core (`52d1727`)
 
 - `Logic Rules.incl` (LogicFormula / LogicConstraint / LogicActivate: name checks,
   dependency order, cycles), `Logic Row.incl` (LogicValue / LogicDouble / LogicOldValue /
