@@ -11,6 +11,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Regex Title split (`StringByReplacingOccurrencesOfStringWithOptions`, `$1 $2`)
 - [ ] `SQLite Access.incl` `cln` declarations compile and link (`-lsqlite3`)
 - [ ] Generate XIBs / XIB / Binding Code / App write the expected files; generated XIBs open in Xcode
+- [ ] New Project view: Choose… shows the tables; Create opens the definitions
+- [ ] Resizing: window minimum 1000 × 620; entity list follows the height; pages fill and stretch — `features/RESPONSIVE_LAYOUT_FEATURE.md`
 - [ ] Project Settings (⌘;): counter, 250 limit, Done saves; generated app's About box shows `Credits.rtf`
 - [ ] Welcome view: Open Project… button and Recent Projects table; double-click opens (see `features/PROJECTS_FEATURE.md`)
 - [ ] FBE bundles the `../Runtime` and `../Templates` folders as resources of the generator
@@ -43,11 +45,15 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 ## Generator app (see `design/Generator App Design.md`)
 
 - [x] Model from a SQLite database — `SQLite Model.incl`
+- [x] New Project view: a project starts from a SQLite database — `features/NEW_PROJECT_FEATURE.md`
 - [ ] Product name (sets the bundle id; the Application Support folder is `Api_Logic_Client` until then) — ideas: Lexicon, Keel, Foundry, ModelWorks
 - [x] Workspace in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; *Show Workspace in Finder*
 - [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
 - [x] Project Settings view; About text (≤ 250 chars) deployed as `Credits.rtf` — `features/ABOUT_BOX_FEATURE.md`
 - [ ] More project settings: version, copyright, bundle id, app icon, theme
+- [x] Each project keeps its own copy of the database in `<project>/Database/`
+- [ ] Project backup and restore (zip the project folder; restore into the workspace)
+- [ ] Generated app uses the project's database copy (lite data source, step 3)
 - [x] Open Project (⇧⌘O) and Recent Projects on the Welcome view — `features/PROJECTS_FEATURE.md`
 - [ ] `.alcproj` document type: double-click a project in Finder; Open Recent via NSDocumentController
 - [ ] Settings window; `Settings.plist` in Application Support; secrets in the Keychain
@@ -59,6 +65,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Move to the FB 7.1.5 NS type names (`ArrayRef`, `DictionaryRef`, …) for CocoaUI calls
 
 ## Look and feel
+
+- [ ] Generated apps: resizable shell window; Form fields stretch, List tables fill (same masks as the generator)
 
 - [ ] Theme files: CSS-like named styles (colors with light/dark values, fonts, corner radius, shadows) applied to parts; light, dark, colorful, base
 - [ ] `Toast.incl` — in-app toast (visual effect view + fade)
@@ -86,15 +94,16 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Ideas
 
-### LogicBank for FutureBasic
-Re-engineer [LogicBank](https://github.com/valhuber/LogicBank), the declarative
-rules engine behind API Logic Server, for FutureBasic, and fork LogicBank Studio
-so rules can be written and managed in FB syntax.
+### Logic for FutureBasic — engine + Imagery Logic Studio
+Rewrite of [LogicBank](https://github.com/valhuber/LogicBank) (Val Huber) for FutureBasic:
+**FB code is the rules**, a runtime **Logic Engine** enforces them on every save, and an
+**Imagery Logic Studio** built into Api Logic Client authors them. Full design and plan:
+`design/Logic Engine Design.md`; phases in `ROADMAP.md` → Phase 5.
 
-- **Goal:** rules declared in FB (sum, count, formula, constraint, copy, parent
-  check, events) run in the FB app, against SQLite or ALS — the SQLite apps gain the
-  declarative behaviour ALS has on the server (e.g. maintaining `Customer.Balance`).
-- **LogicBank Studio fork:** author, view and edit rules in FB syntax.
-- **Open questions:** rule syntax in FB; client-side only or alongside ALS rules;
-  dependency tracking and ordering without SQLAlchemy events; generated rule stubs
-  per entity.
+- [x] Study the Python edition (rule types, per-row sequence, delta adjustment, chaining, formula dependencies)
+- [x] Confirm FB can call rules by address (`@fn` + `def fn … using`)
+- [x] License check: current is Apache 2.0 + Commons Clause (since 2026-05-29, `a475a9c`); BSD in setup.py/pyproject is stale
+- [ ] Proposal to Val Huber: percentage offer + use of the name "LogicBank for FutureBasic" (author) — clean-room until then
+- [ ] Engine core, aggregates, copy/cascade/events (needs the shell's SQLite data layer)
+- [ ] Studio: Rules page, `Rules.json`, generated rule files, validation, Explain
+- [ ] Import ALS `logic/declare_logic.py`

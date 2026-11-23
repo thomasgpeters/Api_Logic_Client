@@ -8,7 +8,8 @@ lists in tabs, drill-in with a crumb trail.
 
 ## How it works
 
-1. **Open a project or a model** — *Model → Open Project…* (⇧⌘O) or double-click one of
+1. **Create a project from a SQLite database** — *Create Project* on the Welcome view: choose
+   the database, check the tables it found, name the project. Or **open a project or a model** — *Model → Open Project…* (⇧⌘O) or double-click one of
    the Recent Projects on the Welcome view; or *Model → Open SQLite Database…* (⌘D) reads tables, columns,
    keys and relationships straight from the database. A saved ALS
    `/metadata?include=attributes` response (e.g. `samples/Northwind/metadata.json`)
@@ -58,7 +59,7 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
     └── <project>/                 one folder per project: the generator's settings for it
         ├── Project.json           name, model source, base URL, user name, About text (no passwords)
         ├── Design.json            the designer's adjustments (kept)
-        ├── Database/              (planned) the SQLite file and schema
+        ├── Database/              the project's own copy of its SQLite database (+ -wal/-shm)
         └── FBapp/                 the generated FutureBasic app - open <project>.fbeproj
             ├── <project>.fbeproj      the FB project: data.fbproj (regenerated), Settings2.plist (kept)
             ├── <project>.main         main program: connection, handler registration, start (regenerated)

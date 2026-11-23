@@ -6,14 +6,12 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-16 — First clean build and run of the generator; warnings cleaned up (`e5afb36`)
+## 2026-11-16 — LogicBank license history; product decision (`d6293bf`)
 
-- The generator translates, compiles, links and runs. Remaining clang warnings:
-  - `-lsqlite3: 'linker' input unused` on every file — FB passes Compiler Options to each
-    compile step. Added `-Wno-unused-command-line-argument` to the generator's
-    `Settings2.plist` (the template for generated apps already had it).
-  - `SQLite Model.incl`: `CFMutableArrayRef` variables assigned from
-    `DictionaryObjectForKey` ("discards qualifiers") — cast; unused `pkIndex` removed.
-- Both rules added to `FB Coding Rules.md`.
+- LogicBank's `LICENSE` was BSD from 2020 until **2026-05-29** (`a475a9c`, "minor logging,
+  license"), when Val Huber replaced it with **Apache 2.0 + Commons Clause**; releases
+  1.32.00 and 1.33.00 ship under it. The BSD in `setup.py`/`pyproject.toml` is stale.
+- Author's decision: clean-room build, product name **LogicBank for FutureBasic**, and a
+  proposal to Val (a percentage; the name needs his agreement too).
 
 ---

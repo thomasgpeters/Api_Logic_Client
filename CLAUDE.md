@@ -22,6 +22,7 @@ mode work without extra code).
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
+  - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
   - `Project Settings.incl` — the Project Settings view (`ProjectSettingsView.xib`): the About text (≤ 250 chars) deployed as the app's `Credits.rtf`.
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
@@ -31,7 +32,7 @@ mode work without extra code).
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (bundled as the `../Templates` folder): `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`. `Windows.incl` is generated from the model the same way (only when missing).
-- `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git).
+- `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`.
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
 - `docs/features/` — one `<NAME>_FEATURE.md` per feature (how it works, where, decisions, verification).

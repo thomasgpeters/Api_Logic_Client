@@ -266,6 +266,34 @@ def toolbox_names(headers):
     return names
 
 
+def build_order_problems(proj):
+    """FB needs a local fn defined before any line that calls it, in data.fbproj order."""
+    folder = os.path.dirname(os.path.dirname(proj))
+    text = open(proj, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
+    order = [os.path.join(folder, m) for m in re.findall(r'^\s*include\s+"([^"]+)"', text, re.M)]
+    order = [f for f in order if os.path.exists(f)]
+    sources = {}
+    for f in order:
+        sources[f] = open(f, 'rb').read().decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n')
+    project_fns = set()
+    for f in order:
+        project_fns |= {n.lower() for n in re.findall(r'^\s*(?:\w+\s+)?local\s+fn\s+(\w+)', sources[f], re.M)}
+    defined, problems = set(), []
+    for f in order:
+        for no, line in code_lines(sources[f]):
+            m = FN_DEF.match(line)
+            if m:
+                defined.add(m.group(3).lower()); continue
+            code = strip_strings_and_comments(line)
+            names = re.findall(r'(?:\bfn|@fn)\s+(\w+)', code)
+            call = re.match(r'\s*([A-Za-z]\w+)\s*\(', code)
+            if call: names.append(call.group(1))
+            for n in names:
+                if n.lower() in project_fns and n.lower() not in defined:
+                    problems.append(f'{f}:{no}: {n} is called before it is defined - move its file earlier in data.fbproj (or the fn up)')
+    return problems
+
+
 def main(argv):
     headers = None
     if '--headers' in argv:
@@ -290,6 +318,7 @@ def main(argv):
     for a in argv:
         for proj in glob.glob(os.path.join(a, '**', 'data.fbproj'), recursive=True) if os.path.isdir(a) else []:
             text = open(proj, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
+            problems += build_order_problems(proj)
             for no, line in enumerate(text.split('\n'), 1):
                 if re.match(r'\s*resources\s+"[^"]*\.(incl|glbl|bas)"', line):
                     problems.append(f'{proj}:{no}: an FB source file listed as a resource is compiled into the app - bundle its folder instead')

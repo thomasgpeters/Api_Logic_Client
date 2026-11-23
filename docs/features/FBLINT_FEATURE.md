@@ -33,3 +33,10 @@ build errors, and every error class in the generator's first build (keywords,
 with the block it met, e.g. `"end if" closes no open if block (for from line 447)`; an
 unclosed opener is reported at its own line. Added after an extra `end if` in
 `XIB Generator.incl` stopped the translator ("Unknown variable … 'if'").
+
+## Build order
+
+For each `data.fbproj`, the `include` files are read in order: a `local fn` called (or
+taken as `@fn`) before its definition is reported — FB needs definition before use.
+Added after `New Project.incl` called `ShowdProjectCreateView` from the later
+`EventHandlers.incl`.

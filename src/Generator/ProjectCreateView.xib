@@ -11,18 +11,18 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="c22-O7-iKe">
             <rect key="frame" x="0.0" y="0.0" width="684" height="416"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <box boxType="custom" cornerRadius="4" title="Box" id="UkJ-R5-zc1">
                     <rect key="frame" x="20" y="20" width="644" height="376"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <view key="contentView" id="N5i-31-sSM">
                         <rect key="frame" x="1" y="1" width="642" height="374"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button fixedFrame="YES" tag="205" translatesAutoresizingMaskIntoConstraints="NO" id="cm6-bb-za6">
                                 <rect key="frame" x="539" y="13" width="90" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <buttonCell key="cell" type="bevel" title="Create" bezelStyle="regularSquare" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5Ox-cL-xxM">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -33,7 +33,7 @@ DQ
                             </button>
                             <button fixedFrame="YES" tag="204" translatesAutoresizingMaskIntoConstraints="NO" id="zED-t0-9bk">
                                 <rect key="frame" x="13" y="13" width="90" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ely-m5-GmZ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -44,7 +44,7 @@ Gw
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wqG-RU-zCV">
                                 <rect key="frame" x="100" y="246" width="90" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Project Name:" id="f9h-DV-lcm">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -53,7 +53,7 @@ Gw
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" tag="200" translatesAutoresizingMaskIntoConstraints="NO" id="58z-NG-kSp">
                                 <rect key="frame" x="203" y="244" width="337" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="7Sj-o3-bSe">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -62,7 +62,7 @@ Gw
                             </textField>
                             <box fixedFrame="YES" title="Api Logic Project " translatesAutoresizingMaskIntoConstraints="NO" id="o2C-dg-jgz">
                                 <rect key="frame" x="103" y="73" width="437" height="142"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="pBh-TA-r0d">
                                     <rect key="frame" x="3" y="3" width="431" height="124"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -126,7 +126,7 @@ Gw
                             </box>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vvD-dp-JRr">
                                 <rect key="frame" x="273" y="305" width="204" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="API Xib Generator" id="g9l-YR-smA">
                                     <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -135,7 +135,7 @@ Gw
                             </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w3H-Bz-E9k">
                                 <rect key="frame" x="168" y="287" width="79" height="70"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="vyn-xb-8bA">
                                     <imageReference key="image" image="cloud" catalog="system" symbolScale="large"/>
                                 </imageCell>
