@@ -33,10 +33,13 @@ mode work without extra code).
     kept identical to Test_Xib_View's), `Data Model.incl` (Model.json entities),
     `Data Records.incl` (fetch / parent / children / insert / update / delete). The rules
     engine builds on it.
+  - LogicBank for FutureBasic (clean-room) — `Logic Rules.incl` (declare, activate, order),
+    `Logic Row.incl` (what a rule reads), `Logic Engine.incl` (LogicInsert / LogicUpdate /
+    LogicDelete). Rules are FB functions registered with `@fn` and called through a C cast.
   - `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl`, `Binding Support.incl`.
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (bundled as the `../Templates` folder): `Project/Settings2.plist`, `App/EventHandlers.incl`,
-  `App/Menus.incl`. `Windows.incl` is generated from the model the same way (only when missing).
+  `App/Menus.incl`, `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`.
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
@@ -44,7 +47,9 @@ mode work without extra code).
 - `docs/ROADMAP.md` (phases), `docs/BACKLOG.md` (open items), `docs/DEVELOPMENT_LOG.md`
   (what was done and learned, newest first, with commits).
 - `tools/` — `fblint.py` (checks FB sources and generated projects against the coding rules),
-  `sqlite_model.py` (reference implementation of the SQLite model reader).
+  `sqlite_model.py` (reference implementation of the SQLite model reader),
+  `logic_reference.py` (reference logic engine + acceptance scenarios: `--test <db.sqlite>`),
+  `make_logic_test.py` (builds the FB test project for the same scenarios, to run on a Mac).
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 
 One concern per file, aptly named — in `src/` and in what the generator emits.

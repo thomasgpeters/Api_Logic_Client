@@ -107,6 +107,8 @@ Rewrite of [LogicBank](https://github.com/valhuber/LogicBank) (Val Huber) for Fu
 - [x] Confirm FB can call rules by address (`@fn` + `def fn … using`)
 - [x] License check: current is Apache 2.0 + Commons Clause (since 2026-05-29, `a475a9c`); BSD in setup.py/pyproject is stale
 - [ ] Proposal to Val Huber: percentage offer + use of the name "LogicBank for FutureBasic" (author) — clean-room until then
-- [ ] Engine core, aggregates, copy/cascade/events (needs the shell's SQLite data layer)
+- [x] Engine core: formulas (order, pruning), constraints, transactions — `features/LOGIC_ENGINE_FEATURE.md`
+- [ ] Run `tools/make_logic_test.py` on a Mac: the 17 FB scenarios pass
+- [ ] Aggregates (sum/count, delta, re-parenting, chaining), parent references, copy, cascade, events
 - [ ] Studio: Rules page, `Rules.json`, generated rule files, validation, Explain
 - [ ] Import ALS `logic/declare_logic.py`

@@ -104,8 +104,9 @@ fn LogicConstraint( @"Customer", @fn CustomerCreditCheck, @"Balance %@ exceeds c
   does the work.
 - **Formulas, constraints, where-conditions and events are FB functions** taking a
   `LogicRowRef` and returning a value / BOOL. They are registered by address (`@fn`) and
-  called by the engine through `def fn … using` (verified in FB's reference:
-  `def fn using <address>` calls "a local fn … as returned by the @fn function").
+  called by the engine through a one-line `cln` cast to a C function pointer — the
+  convention FB uses for `@fn` callbacks to Cocoa (`def fn … using` also exists, but needs a
+  global pointer per call site, unsafe when saves chain).
 - **Dependencies are explicit** (`@[ @"Quantity", @"UnitPrice" ]`). The Studio fills them
   in by scanning the function body for `fn LogicValue/LogicDouble/… ( row, @"X" )` — the
   same trick as LogicBank's `row.X` scan, but done once at generation time, so the

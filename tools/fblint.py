@@ -139,7 +139,7 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
             for kind, bno in blocks:
                 report(bno, f'{kind} block is not closed before the end of the fn')
             blocks = []
-        if re.match(r'\s*for\s+\w+\s+in\s+(fn\b|@\[)', code_only):
+        if re.match(r'\s*for\s+\w+\s+in\s+(\(\s*\w+\s*\)\s*)?(fn\b|@\[)', code_only):
             report(no, 'for ... in needs an array variable, not an expression - assign it first')
         if fb_keywords:
             declared = [d for d in re.findall(r'\b(\w+)\s+as\s+\w', code_only) if d.lower() != 'dim']
