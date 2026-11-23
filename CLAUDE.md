@@ -27,8 +27,13 @@ mode work without extra code).
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
-  of the generator via `../Runtime/…`): `ALS Client.incl`, `ALS Binding.incl`,
-  `ALS App.incl`, `Binding Support.incl`.
+  of the generator via `../Runtime/…`; the list is `AppRuntimeFiles` in `App Generator.incl`):
+  - data runtime — `Data SQLite.incl` (our SQLite declarations, transactions), the author's
+    DataObject query builder (`DataObject.glbl`, `DataObject_Super.incl`, `DataObject.incl`,
+    kept identical to Test_Xib_View's), `Data Model.incl` (Model.json entities),
+    `Data Records.incl` (fetch / parent / children / insert / update / delete). The rules
+    engine builds on it.
+  - `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl`, `Binding Support.incl`.
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (bundled as the `../Templates` folder): `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`. `Windows.incl` is generated from the model the same way (only when missing).

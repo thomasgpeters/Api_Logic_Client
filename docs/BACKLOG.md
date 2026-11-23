@@ -36,8 +36,11 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Data layer
 
+- [x] Data runtime: SQLite records layer in `src/Runtime` (the shell and the rules engine sit on it) — `features/DATA_RUNTIME_FEATURE.md`
+- [ ] Verify on a Mac: generated app opens its database; Test_Xib_View still works with the updated builder
+
 - [ ] UPSERT in the query builder (`ON CONFLICT ( key ) DO UPDATE SET … = excluded.…`; SQLite 3.24+)
-- [ ] Quote every identifier in generated SQL (`"Order"`, `"Union"` are reserved words)
+- [x] Quote every identifier in generated SQL (`"Order"`, `"Union"` are reserved words) — query builder `QuoteSQLName`
 - [ ] INSERT omits identity keys and returns `last_insert_rowid()`; omit empty columns so defaults apply
 - [ ] Generator offers `build_db.py`-style database creation for generated apps
 - [ ] Computed columns (`Customer.Balance`, `OrderCount`) are not maintained in the lite edition — see Rules
@@ -62,7 +65,7 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Settings groups for ALS/APIs, AI/LLM providers, SMTP notifications
 - [ ] Optional `admin.yaml` hints (titles, `user_key`, relationship names)
 - [ ] Generator's own ALS fetch uses the Create Project form's base URL and credentials (still hard-coded host and `admin`/`p`), and waits for login before fetching
-- [ ] Move to the FB 7.1.5 NS type names (`ArrayRef`, `DictionaryRef`, …) for CocoaUI calls
+- [ ] Move to FB's current type names (`StringRef`, `DictionaryRef`, …) and Cocoa wrappers everywhere — done in the data runtime and query builder; generator and ALS runtime still use the CF names
 
 ## Look and feel
 
