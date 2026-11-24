@@ -49,6 +49,15 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Click a rule symbol to open it on the Rules page (once the Rules page exists)
 - [ ] ALS projects: relationships from the metadata (ALS `/metadata` lists them per resource)
 
+## Installing the Studio
+
+- [x] Runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`), copied from
+      the repository folder on first launch; *Model > Update Runtime and Templates* (`Studio Library.incl`)
+- [ ] Installer for a release: the Studio app plus the runtime and templates, put into
+      `~/Library/Application Support/Api_Logic_Client/workspace/` (a `.pkg` with a per-user
+      postinstall, or a first-launch copy from the installer's disk image), so users need no repository
+- [ ] Preferences (⌘,): the repository / library folder, the workspace location
+
 ## Parked: Enterprise edition — revisit after the Lite release (author, 2026-11-24)
 
 Everything needed to pick this up again is in `design/Editions and Licensing.md` (the editions,
