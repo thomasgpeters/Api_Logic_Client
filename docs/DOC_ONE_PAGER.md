@@ -18,6 +18,25 @@ What sets it apart is the rules engine inside every app it makes. Totals, formul
 what happens on delete are declared once, and the engine enforces them on every save, in one
 transaction, whichever screen or code made the change.
 
+## The big picture
+
+```mermaid
+flowchart LR
+    M["<b>A data model</b><br/>SQLite database<br/>or API Logic Server project"]
+    S["<b>Imagery LogicBank Studio</b><br/>on your Mac<br/>model diagram · screen design<br/>business rules · branding"]
+    P["<b>A FutureBasic project</b><br/>XIB screens and bindings · app shell<br/>data runtime · LogicBank for FutureBasic<br/>your own files, never overwritten"]
+    A["<b>Your Mac app</b><br/>native Cocoa · light and dark<br/>rules enforced on every save"]
+    M --> S --> P -->|build in FutureBasic| A
+    A -.->|reads and writes, through the rules| M
+    style S fill:#112850,color:#ffffff,stroke:#112850
+```
+
+The app works on the same database. Every save passes through the rules engine in one
+transaction. Change the model or the rules in the Studio, then generate again; your own code stays.
+
+Also as a designed page and a PDF to share: [`DOC_ONE_PAGER.html`](DOC_ONE_PAGER.html),
+[`DOC_ONE_PAGER.pdf`](DOC_ONE_PAGER.pdf).
+
 ## How it works
 
 1. **Open a model.** Choose a SQLite file (or connect to an API Logic Server). The Studio reads

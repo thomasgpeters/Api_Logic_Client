@@ -11,6 +11,10 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 - `docs/DOC_ONE_PAGER.md`: what the Studio is, for the FB community — how it works, what a
   generated app has, rules declared once (with what one save does), what stays yours, needs and
   status. Also published as a designed page (claude.ai artifact) with the same text.
+- The big picture added (data model → Studio → FutureBasic project → Mac app, and the loop back
+  to the database through the rules); the page widened to fill the screen and made responsive.
+- `docs/DOC_ONE_PAGER.html` (the page, standalone) and `docs/DOC_ONE_PAGER.pdf` (two Letter pages,
+  printed from it with headless Chromium) for sharing.
 
 ---
 
