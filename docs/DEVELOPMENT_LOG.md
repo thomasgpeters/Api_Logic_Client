@@ -17,6 +17,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   Generation and the ERD read from there. The Studio's project lists neither folder.
 - Still listed: `Api_Logic_Client.xcodeproj` (the author's, a folder too) — the next suspect if FB
   still crashes.
+- It still crashed; `Api_Logic_Client.xcodeproj` (listed since the first commit, used by nothing in
+  the Studio) is taken off the build list, so the project lists only files, like a fresh FB project.
 
 ---
 
