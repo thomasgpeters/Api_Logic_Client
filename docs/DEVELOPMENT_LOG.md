@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — One-pager: the SQL Generator (author)
+
+- `docs/DOC_ONE_PAGER.md` / `.html` / `.pdf`: a section on the SQL Generator (the DataObject
+  query builder): FB code describing a two-table query with a join and a filter, the exact SQL
+  `GenerateSelectSQL` writes for it (quoted names, `?` placeholders, the values apart), and what it
+  guarantees: SELECT / INSERT / UPDATE / DELETE, parameterized, names quoted, no UPDATE or DELETE
+  without a filter. "Data, done properly" names it. PDF reprinted (still two pages); the published
+  page republished (new link: https://claude.ai/artifact/4h8NeeASNMggnnztHuicky).
+
 ## 2026-11-24 — Crumb trail rebuilt from buttons
 
 - The `NSPathControl` trail highlighted when clicked but did nothing (author): the item handed
