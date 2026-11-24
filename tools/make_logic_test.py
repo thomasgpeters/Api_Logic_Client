@@ -212,8 +212,9 @@ end fn = item
 
 void local fn RunAggregateScenarios
 DictionaryRef        o0, c0, a0, o1, c1, o2, c2, c3, r0, o9
-MutableDictionaryRef item, upd, shippedItem
+MutableDictionaryRef item, upd, shippedItem, newOrder, firstItem, upItem
 NumberRef            itemId
+long                 newId
 BOOL                 ok, shipped, moved, back
 
 gLogicRules = NULL
@@ -272,6 +273,67 @@ ok = fn LogicInsert( @"OrderDetail", shippedItem )
 fn Check( @"aggregates: parent reference: a detail on a shipped order takes its ShippedDate", ok && fn ObjectIsEqual( fn DictionaryObjectForKey( shippedItem, @"ShippedDate" ), fn DictionaryObjectForKey( o9, @"ShippedDate" ) ), fn LogicMessage )
 fn Check( @"aggregates: detail on a shipped order: AmountTotal +10, Balance unchanged (where not met)", fn Num( fn OrderRow( 10692 ), @"AmountTotal" ) == fn Num( o9, @"AmountTotal" ) + 10.0 && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
 fn LogicDelete( @"OrderDetail", @{ @"Id":fn DictionaryObjectForKey( shippedItem, @"Id" ) } )
+
+// LB-41: derived totals belong to the rules
+upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 10643 ), @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithDouble( 99999.0 ), @"AmountTotal" )
+MutableDictionarySetObjectForKey( upd, @"x", @"ShipName" )
+ok = fn LogicUpdate( @"Order", upd, NULL )
+fn Check( @"aggregates: LB-41: a client write to Order.AmountTotal keeps the stored value", ok && fn Num( fn OrderRow( 10643 ), @"AmountTotal" ) == fn Num( o2, @"AmountTotal" ) && fn StringIsEqual( fn DictionaryObjectForKey( fn OrderRow( 10643 ), @"ShipName" ), @"x" ) && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+fn OrderChange( 10643, @"ShipName", fn DictionaryObjectForKey( o2, @"ShipName" ) )
+upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, @"ALFKI", @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithDouble( 0.0 ), @"Balance" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 0 ), @"UnpaidOrderCount" )
+ok = fn LogicUpdate( @"Customer", upd, NULL )
+fn Check( @"aggregates: LB-41: a client write to Customer.Balance / UnpaidOrderCount keeps the stored values", ok && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+
+newOrder = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( newOrder, @"ALFKI", @"CustomerId" )
+MutableDictionarySetObjectForKey( newOrder, fn NumberWithInteger( 1 ), @"EmployeeId" )
+MutableDictionarySetObjectForKey( newOrder, fn NumberWithDouble( 500.0 ), @"AmountTotal" )
+MutableDictionarySetObjectForKey( newOrder, fn NumberWithInteger( 7 ), @"OrderDetailCount" )
+ok = fn LogicInsert( @"Order", newOrder )
+if ( ok == NO )
+fn Check( @"aggregates: new order: the rest of its scenarios could not run", NO, fn LogicMessage )
+else
+newId = fn NumberIntegerValue( fn DictionaryObjectForKey( newOrder, @"Id" ) )
+fn Check( @"aggregates: LB-41: a new order starts with AmountTotal 0 and OrderDetailCount 0", fn Num( fn OrderRow( newId ), @"AmountTotal" ) == 0.0 && fn Num( fn OrderRow( newId ), @"OrderDetailCount" ) == 0.0, @"" )
+fn Check( @"aggregates: new unshipped order: Customer.UnpaidOrderCount +1, Balance unchanged", fn Num( fn CustomerRow( @"ALFKI" ), @"UnpaidOrderCount" ) == fn Num( c2, @"UnpaidOrderCount" ) + 1.0 && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c2, @"Balance" ), @"" )
+firstItem = fn DetailOn( newId, 3 )
+ok = fn LogicInsert( @"OrderDetail", firstItem )
+fn Check( @"aggregates: first detail of the new order: AmountTotal 30, Balance +30", ok && fn Num( fn OrderRow( newId ), @"AmountTotal" ) == 30.0 && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c2, @"Balance" ) + 30.0, fn LogicMessage )
+
+// upsert: Studio's fourth operation
+upItem = fn DetailOn( newId, 2 )
+MutableDictionarySetObjectForKey( upItem, fn NumberWithInteger( 42 ), @"ProductId" )
+MutableDictionarySetObjectForKey( upItem, fn NumberWithDouble( 5.0 ), @"UnitPrice" )
+ok = fn LogicUpsert( @"OrderDetail", upItem )
+fn Check( @"aggregates: upsert without a key inserts (Amount 10, order 40)", ok && fn DictionaryObjectForKey( upItem, @"Id" ) != NULL && fn Num( fn OrderRow( newId ), @"AmountTotal" ) == 40.0, fn LogicMessage )
+upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, fn DictionaryObjectForKey( upItem, @"Id" ), @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 4 ), @"Quantity" )
+ok = fn LogicUpsert( @"OrderDetail", upd )
+fn Check( @"aggregates: upsert with an existing key updates (Amount 20, order 50)", ok && fn Num( fn OrderRow( newId ), @"AmountTotal" ) == 50.0 && fn ArrayCount( fn DataFetch( @"OrderDetail", @{ @"OrderId":fn NumberWithInteger( newId ) }, NULL ) ) == 2, fn LogicMessage )
+upd = fn DetailOn( newId, 1 )
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 999999 ), @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 42 ), @"ProductId" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithDouble( 1.0 ), @"UnitPrice" )
+ok = fn LogicUpsert( @"OrderDetail", upd )
+fn Check( @"aggregates: upsert with an unknown key inserts it (order 51)", ok && fn DataFetchOne( @"OrderDetail", @{ @"Id":fn NumberWithInteger( 999999 ) } ) != NULL && fn Num( fn OrderRow( newId ), @"AmountTotal" ) == 51.0, fn LogicMessage )
+upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, fn DictionaryObjectForKey( upItem, @"Id" ), @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 10000 ), @"Quantity" )
+ok = fn LogicUpsert( @"OrderDetail", upd )
+fn Check( @"aggregates: upsert update over the credit limit is refused, nothing changed", ok == NO && fn StringContainsString( fn LogicMessage, @"exceeds credit limit" ) && fn Num( fn OrderRow( newId ), @"AmountTotal" ) == 51.0, fn LogicMessage )
+
+fn LogicDelete( @"OrderDetail", @{ @"Id":fn NumberWithInteger( 999999 ) } )
+fn LogicDelete( @"OrderDetail", @{ @"Id":fn DictionaryObjectForKey( upItem, @"Id" ) } )
+fn LogicDelete( @"OrderDetail", @{ @"Id":fn DictionaryObjectForKey( firstItem, @"Id" ) } )
+ok = fn LogicDelete( @"Order", @{ @"Id":fn NumberWithInteger( newId ) } )
+fn Check( @"aggregates: delete the new order: the customer is back as before", ok && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+end if
 
 ok = fn LogicDelete( @"OrderDetail", @{ @"Id":itemId } )
 fn Check( @"aggregates: delete detail: Order and Balance back to the start", ok && fn Num( fn OrderRow( 10643 ), @"AmountTotal" ) == fn Num( o0, @"AmountTotal" ) && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c0, @"Balance" ), fn LogicMessage )

@@ -234,7 +234,7 @@ checked and found sound. Where each stands in the FB engine (2026-11-24):
 | LB-20/26 concurrent writers / stale parents lose adjustments | `BEGIN IMMEDIATE` takes SQLite's write lock; the parent is read inside the transaction |
 | LB-24 `error_msg` evaluated as an f-string (code execution) | plain `{Attr}` text replacement |
 | LB-25 re-parenting through the relationship object is missed | rows carry foreign keys only; re-parenting is a foreign-key change, detected |
-| **LB-41 derived sum/count columns are writable by clients** | **open: a client can write `Order.AmountTotal`; later adjustments build on it. Fix: keep the stored value on client saves, start aggregates at 0 on insert** |
+| LB-41 derived sum/count columns are writable by clients | fixed 2026-11-24: a new row starts its sums and counts at 0; a save from the app keeps their stored values (only the engine's chained parent saves change them) |
 | LB-31 constraints run on delete | constraints do not run on delete |
 | LB-32/33 typos accepted at activation (wrong child role) | activation checks every entity, attribute, child list and parent reference |
 | LB-15 no recursion guard | chains deeper than 20 are refused |

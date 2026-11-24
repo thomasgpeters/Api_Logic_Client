@@ -202,6 +202,18 @@ class Logic:
         self.entity_rules(child)['aggregates'].append(resolved)
         return True
 
+    def derived(self, entity):
+        # the entity's sum / count attributes: maintained by the engine only (LB-41)
+        return {a['attr']: a['kind'] for a in self.rules.get(entity, {}).get('declared', [])}
+
+    def protect_derived(self, entity, record, old, chained):
+        for attr, kind in self.derived(entity).items():
+            if old is None:                       # a new parent has no children yet
+                record[attr] = 0 if kind == 'count' else 0.0
+            elif not chained and record.get(attr) != old.get(attr):
+                record[attr] = old.get(attr)      # a client may not write a derived total
+                self.log.append(f'{entity}.{attr} is derived by the rules: kept the stored value')
+
     def rules_of(self, entity, kind):
         return self.rules.get(entity, {}).get(kind, [])
 
@@ -389,6 +401,7 @@ class Logic:
         self.message = ''
         if not self.ready() or not self.data.begin():
             return False
+        self.protect_derived(entity, record, None, False)
         lr = self.new_row(entity, record, None, 'insert', self.nest)
         self.nest += 1
         ok = self.row_logic(lr) and self.data.insert(entity, record)
@@ -412,11 +425,19 @@ class Logic:
             return False
         for c in self.data.columns(entity):
             record.setdefault(c, old[c])
+        self.protect_derived(entity, record, old, chained)
         lr = self.new_row(entity, record, old, 'update', self.nest)
         self.nest += 1
         ok = self.row_logic(lr) and self.data.update(entity, record, key_values) == 1
         self.nest -= 1
         return self.data.end(ok)
+
+    def upsert(self, entity, record):
+        # update when a row with the record's key exists, else insert (an empty generated key inserts)
+        key_values = self.data.key_values(entity, record)
+        if key_values and all(v is not None for v in key_values.values()) and self.data.fetch_one(entity, key_values) is not None:
+            return self.update(entity, record, key_values)
+        return self.insert(entity, record)
 
     def delete(self, entity, key_values):
         self.message = ''
@@ -583,6 +604,47 @@ def aggregate_scenarios(path):
     check('detail on a shipped order: AmountTotal +10, Balance unchanged (where not met)',
           order(10692)['AmountTotal'] == o9['AmountTotal'] + 10 and cust('ALFKI') == c2, logic.message)
     logic.delete('OrderDetail', {'Id': shipped_item['Id']})
+
+    # LB-41: derived totals belong to the rules
+    ok = logic.update('Order', {'Id': 10643, 'AmountTotal': 99999, 'ShipName': 'x'})
+    check('LB-41: a client write to Order.AmountTotal keeps the stored value', ok and order(10643)['AmountTotal'] == o2['AmountTotal']
+          and order(10643)['ShipName'] == 'x' and cust('ALFKI') == c2, order(10643)['AmountTotal'])
+    logic.update('Order', {'Id': 10643, 'ShipName': o2['ShipName']})
+    ok = logic.update('Customer', {'Id': 'ALFKI', 'Balance': 0, 'UnpaidOrderCount': 0})
+    check('LB-41: a client write to Customer.Balance / UnpaidOrderCount keeps the stored values', ok and cust('ALFKI') == c2, cust('ALFKI'))
+
+    new_order = {'CustomerId': 'ALFKI', 'EmployeeId': 1, 'AmountTotal': 500, 'OrderDetailCount': 7}
+    ok = logic.insert('Order', new_order)
+    no = order(new_order['Id']) if ok else None
+    check('LB-41: a new order starts with AmountTotal 0 and OrderDetailCount 0', ok and no['AmountTotal'] == 0 and no['OrderDetailCount'] == 0, no or logic.message)
+    if not ok:
+        check('new order: the rest of its scenarios could not run', False, logic.message)
+    else:
+        check('new unshipped order: Customer.UnpaidOrderCount +1, Balance unchanged',
+              cust('ALFKI')['UnpaidOrderCount'] == c2['UnpaidOrderCount'] + 1 and cust('ALFKI')['Balance'] == c2['Balance'])
+        first = {'OrderId': new_order['Id'], 'ProductId': 11, 'UnitPrice': 10.0, 'Quantity': 3, 'Discount': 0.0}
+        ok = logic.insert('OrderDetail', first)
+        check('first detail of the new order: AmountTotal 30, Balance +30', ok and order(new_order['Id'])['AmountTotal'] == 30
+              and cust('ALFKI')['Balance'] == c2['Balance'] + 30, logic.message)
+
+        # upsert: Studio's fourth operation
+        up = {'OrderId': new_order['Id'], 'ProductId': 42, 'UnitPrice': 5.0, 'Quantity': 2, 'Discount': 0.0}
+        ok = logic.upsert('OrderDetail', up)
+        check('upsert without a key inserts (Amount 10, order 40)', ok and up.get('Id') is not None and order(new_order['Id'])['AmountTotal'] == 40, logic.message)
+        ok = logic.upsert('OrderDetail', {'Id': up['Id'], 'Quantity': 4})
+        check('upsert with an existing key updates (Amount 20, order 50)', ok and order(new_order['Id'])['AmountTotal'] == 50
+              and len(data.fetch('OrderDetail', {'OrderId': new_order['Id']})) == 2, logic.message)
+        ok = logic.upsert('OrderDetail', {'Id': 999999, 'OrderId': new_order['Id'], 'ProductId': 42, 'UnitPrice': 1.0, 'Quantity': 1, 'Discount': 0.0})
+        check('upsert with an unknown key inserts it (order 51)', ok and data.fetch_one('OrderDetail', {'Id': 999999}) is not None
+              and order(new_order['Id'])['AmountTotal'] == 51, logic.message)
+        ok = logic.upsert('OrderDetail', {'Id': up['Id'], 'Quantity': 10000})
+        check('upsert update over the credit limit is refused, nothing changed', not ok and 'exceeds credit limit' in logic.message
+              and order(new_order['Id'])['AmountTotal'] == 51, logic.message)
+
+        for detail_id in (999999, up['Id'], first['Id']):
+            logic.delete('OrderDetail', {'Id': detail_id})
+        ok = logic.delete('Order', {'Id': new_order['Id']})
+        check('delete the new order: the customer is back as before', ok and cust('ALFKI') == c2, (cust('ALFKI'), c2))
 
     ok = logic.delete('OrderDetail', {'Id': item['Id']})
     check('delete detail: Order and Balance back to the start', ok and order(10643) == o0 and cust('ALFKI') == c0, (order(10643), cust('ALFKI')))

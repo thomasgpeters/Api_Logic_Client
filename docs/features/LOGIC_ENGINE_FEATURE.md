@@ -24,7 +24,9 @@ end fn
 
 The generated `.main` calls `DeclareRules` (in `Rules.incl`, the developer's file) and
 then `LogicActivate`. Saves go through `LogicInsert( entity, record )`,
-`LogicUpdate( entity, record, keyValues )`, `LogicDelete( entity, keyValues )`;
+`LogicUpdate( entity, record, keyValues )`, `LogicDelete( entity, keyValues )`,
+`LogicUpsert( entity, record )` (update when a row with the record's key exists, else insert —
+Imagery LogicBank Studio's fourth test operation);
 `LogicMessage` says why the last one failed.
 
 ## What the engine does
@@ -77,6 +79,10 @@ fn LogicCount( @"Customer", @"UnpaidOrderCount", @"OrderList", @fn OrderIsUnship
 - **Parent references** in formulas: `fn LogicParentValue( logicRow, @"Order", @"ShippedDate" )`,
   declared as `@"Order.ShippedDate"` in `dependsOn` (checked at activation); the parent is
   read once per save; the formula runs on insert and when the row moves to another parent.
+- **Sums and counts belong to the rules** (fix for LogicBank audit LB-41): a new row starts
+  them at 0 (it has no children yet), and a save from the app keeps their stored values —
+  only the engine's own chained parent saves change them, so adjustments always build on a
+  value the rules made.
 - Not yet: a parent attribute change cascading to its children's formulas (step 3, with copy).
 
 The adjustment assumes the stored sums are right to begin with (as Northwind's are). A
@@ -92,12 +98,14 @@ recompute command for existing data is a backlog item.
   insert → order total, count, customer balance; quantity change; credit limit failing a
   chained save with nothing changed; ship / unship (where transitions); re-parent over the
   limit (fails), re-parent a shipped order, re-parent with room (both customers adjusted);
-  a parent reference on a shipped order; delete back to the start.
+  a parent reference on a shipped order; delete back to the start. LB-41 and upsert (10): client
+  writes to totals kept out, a new order starting at 0, insert / update / unknown-key insert /
+  over-the-limit refusal by upsert, a new order deleted with the customer restored. 46 in all.
 - **Every rule is needed:** `python3 tools/logic_reference.py --prove <db.sqlite>` runs the suite
   once per rule with that rule left out; each must make a scenario fail (as Imagery LogicBank
   Studio's rule lifecycle expects of a rule's tests). 10 rules, all proven.
 - **On a Mac (FB):** `python3 tools/make_logic_test.py <Northwind db.sqlite> ~/Desktop/LogicTest`
-  builds an FB project from the real runtime files with the same 36 scenarios in FB; open
+  builds an FB project from the real runtime files with the same 46 scenarios in FB; open
   `Logic Test.fbeproj`, build, run, read PASS / FAIL in the NSLog window.
 
 ## Next (roadmap step 3)

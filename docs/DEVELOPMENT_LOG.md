@@ -6,17 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — Studio's test concept; LogicBank audit mapped; every rule proven (`132d5f3`)
+## 2026-11-24 — LB-41 fix (derived totals belong to the rules); LogicUpsert
 
-- Imagery LogicBank Studio attached read-only. Its rule lifecycle: a test case per operation
-  (insert, update, delete, upsert), each run as given rows → change → accepted with the
-  expected state or rejected with the expected message → clean up; a rule passes when all four
-  pass (`TestRunner.h`, `GOVERNANCE.md`).
-- The converse, now in `tools/logic_reference.py --prove`: leave each rule out, a scenario must
-  fail. All 10 rules proven. The reference's data layer now returns failure on a database
-  error (as `DataInsert` does) instead of raising — found by leaving the Quantity rule out.
-- Studio's `docs/upstream/` audit of LogicBank 1.34.3 (44 findings) mapped against our engine
-  in `design/Logic Engine Design.md` §4a; open for us: LB-41 (derived columns writable by
-  clients), LB-40 (rounding), LB-42 (cycles through aggregates), LB-27/30 (step 3).
+- `LogicProtectDerived`: on insert, sums and counts start at 0; on a save from the app, their
+  stored values are kept (logged); only chained parent saves change them. Closes LogicBank
+  audit LB-41 for our engine.
+- `LogicUpsert( entity, record )`: update when a row with the record's key exists, else
+  insert — Studio's fourth test operation.
+- 10 new scenarios (46 in all, Python and FB); `--prove`: 10 rules, all proven, with more
+  scenarios per rule. Scenarios that depend on a failed step now fail instead of crashing
+  under `--prove`.
 
 ---
