@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — LB-41 fix (derived totals belong to the rules); LogicUpsert
+## 2026-11-24 — LB-41 fix (derived totals belong to the rules); LogicUpsert (`71e4707`)
 
 - `LogicProtectDerived`: on insert, sums and counts start at 0; on a save from the app, their
   stored values are kept (logged); only chained parent saves change them. Closes LogicBank
