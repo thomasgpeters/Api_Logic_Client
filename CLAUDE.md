@@ -1,4 +1,8 @@
-# Api Logic Client
+# Api Logic Client — Imagery LogicBank Studio for FutureBasic
+
+The product's name is **Imagery LogicBank Studio for FutureBasic** (shown in the app; `Branding.incl`).
+The repository, the FB project file and the Application Support folder keep the name
+Api_Logic_Client until the author renames them (backlog).
 
 A **FutureBasic** (FBE, macOS/Cocoa) generator. It reads an API Logic Server
 (ALS) project's model (`/metadata?include=attributes`) and generates a complete
@@ -14,16 +18,20 @@ mode work without extra code).
 - `src/Generator/` — the FB project (`Api Logic Client.fbeproj`): open it in the FB
   editor. Its `data.fbproj` (inside the `.fbeproj` bundle) is the build order: an
   `.incl` must come *before* any file that calls it (FB needs definition before use).
+  - `Branding.incl` — the product name and the Imagery logo (`ImageryLogo` follows light/dark); `imagery_logo.png` / `imagery_logo_white.png` are the canonical files, never edited.
   - `API Interface.incl` — ALS connectivity for the generator itself (metadata fetch).
   - `SQLite Access.incl` — our own minimal SQLite declarations (open read-only, prepare, step, columns).
   - `SQLite Model.incl` — the model from a SQLite file: columns, keys (`keyKind`), relationships.
   - `Type Mapping.incl` — the rules: control kind, FB type, size, Title, widths, plus the designer's adjustments (`design` per attribute, saved in `Design.json`).
   - `XIB Generator.incl` — Form and List parts per entity; `Model Tags.incl`; model entries.
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
+  - `Edition.incl` — which edition the Studio generates (this repo: Lite only; the paid build replaces this file). `docs/design/Editions and Licensing.md`.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
-  - `Project Settings.incl` — the Project Settings view (`ProjectSettingsView.xib`): the About text (≤ 250 chars) deployed as the app's `Credits.rtf`.
+  - `Project Settings.incl` — the Project Settings view (`ProjectSettingsView.xib`): the About text (≤ 250 chars, the app's `Credits.rtf`) and branding (logo, tag-line, copyright for the app shell).
+  - `Rules Bridge.incl` — runs the bundled `tools/rules_bridge.py` (Task toolbox, `/usr/bin/python3`): Import / Export Rules (declare_logic.py), `Studio Rules.incl` on Generate App.
+  - `ERD Generator.incl` — Model > Show Model Diagram: `<project>/Model ERD.html` from the `Templates/ERD` page, the model and `Rules.json`.
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
@@ -36,13 +44,18 @@ mode work without extra code).
   - LogicBank for FutureBasic (clean-room) — `Logic Rules.incl` (declare, activate, order),
     `Logic Row.incl` (what a rule reads), `Logic Engine.incl` (LogicInsert / LogicUpdate /
     LogicDelete). Rules are FB functions registered with `@fn` and called through a C cast.
-  - `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl`, `Binding Support.incl`.
+  - `App Data Lite.incl` — the app's data interface (list / save / remove / login, answers in `AppDataDone`), Lite edition: SQLite + the rules engine.
+  - `App Shell.incl` — the generated app's frame: nav bar, header, footer, pages, theme menu (`features/APP_SHELL_FEATURE.md`).
+  - `Binding Support.incl`. `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` are no longer copied into apps: the start of the Enterprise runtime, to move to its private repository.
 - `src/Templates/` — starting files for generated apps, copied only when missing
-  (bundled as the `../Templates` folder): `Project/Settings2.plist`, `App/EventHandlers.incl`,
-  `App/Menus.incl`, `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
+  (bundled as the `../Templates` folder): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
+  `App/Menus.incl`, `App/Theme.incl` (the colours), `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
-- `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`.
+- `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
+- `docs/design/architecture.svg` — the end-to-end diagram, drawn by `tools/make_architecture_svg.py` (edit the script, not the SVG).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
+- `docs/DOC_ONE_PAGER.md` — the one-page introduction (keep it true with the user guide).
+- `docs/USER_GUIDE.md` — the user guide (keep it true when what a user sees or can do changes).
 - `docs/features/` — one `<NAME>_FEATURE.md` per feature (how it works, where, decisions, verification).
 - `docs/ROADMAP.md` (phases), `docs/BACKLOG.md` (open items), `docs/DEVELOPMENT_LOG.md`
   (what was done and learned, newest first, with commits).
@@ -50,6 +63,9 @@ mode work without extra code).
   `sqlite_model.py` (reference implementation of the SQLite model reader),
   `logic_reference.py` (reference logic engine + acceptance scenarios: `--test <db.sqlite>`),
   `make_logic_test.py` (builds the FB test project for the same scenarios, to run on a Mac),
+  `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
+  `check_erd_page.py` (test: the model diagram page in headless Chromium),
+  `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 
@@ -70,6 +86,11 @@ Generated apps go to `~/Library/Application Support/Api_Logic_Client/workspace/<
   (§5.3), Lite tier first then an infrastructure rewrite (§5.1, §10.1).
   See `docs/design/App Shell Design.md` → Principles.
 - `futurebasic-apis` — outdated (pre-7.0.35); don't rely on it.
+
+## Tools are FutureBasic
+The Studio's features and tools are written in FB (author, 2026-11-24). Python in `tools/` is
+for references and tests that must run here, where FB cannot (`logic_reference.py`,
+`sqlite_model.py`, `check_erd_page.py`, `fblint.py`); `rules_bridge.py` is to be ported (backlog).
 
 ## FB code rules (summary — full list with sources in `docs/reference/FB Coding Rules.md`)
 These apply to hand-written code **and to everything the generator emits**.

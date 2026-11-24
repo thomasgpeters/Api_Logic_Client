@@ -2,8 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="22146" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22146"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
-        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+                <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner"/>
@@ -21,23 +20,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jd8-dr-AVM">
-                                <rect key="frame" x="273" y="305" width="204" height="31"/>
+                                <rect key="frame" x="185" y="316" width="440" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="API Xib Generator" id="ozt-Mt-1Er">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Imagery LogicBank Studio" id="ozt-Mt-1Er">
                                     <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2b5-Zu-B9c">
-                                <rect key="frame" x="168" y="287.5" width="79" height="70"/>
+                            <imageView tag="103" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2b5-Zu-B9c">
+                                <rect key="frame" x="40" y="246" width="130" height="112"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="soX-aB-HfM">
-                                    <imageReference key="image" image="cloud" catalog="system" symbolScale="large"/>
                                 </imageCell>
-                                <symbolConfiguration key="symbolConfiguration" scale="large" weight="ultraLight">
-                                    <nil key="locale"/>
-                                </symbolConfiguration>
                             </imageView>
                             <button tag="100" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U7Q-Or-sjM">
                                 <rect key="frame" x="190" y="174" width="121" height="32"/>
@@ -165,16 +160,16 @@ DQ
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EoE-7x-HhO">
                                 <rect key="frame" x="99" y="26" width="444" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <textFieldCell key="cell" alignment="center" title="Copyright - Imagery Business System, LLC" id="epu-pb-PBi">
+                                <textFieldCell key="cell" alignment="center" title="© 2026 Imagery Business Systems, LLC" id="epu-pb-PBi">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WJX-xe-tmh">
-                                <rect key="frame" x="207" y="237" width="228" height="39"/>
+                                <rect key="frame" x="187" y="266" width="430" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" alignment="center" title="Using API responses to generate Xib files" id="Ba7-l6-qFA">
+                                <textFieldCell key="cell" alignment="left" title="for FutureBasic: business rules and native Mac apps from your data model" id="Ba7-l6-qFA">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -187,7 +182,4 @@ DQ
             <point key="canvasLocation" x="93" y="219"/>
         </customView>
     </objects>
-    <resources>
-        <image name="cloud" catalog="system" width="22" height="16"/>
-    </resources>
 </document>

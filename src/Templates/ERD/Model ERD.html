@@ -1,0 +1,470 @@
+<!doctype html>
+<!--
+  Model ERD.html - the project's entity-relationship diagram
+
+  Written by Imagery LogicBank Studio for FutureBasic (ERD Generator.incl) into the project
+  folder: Model > Show Model Diagram. The generator puts the model (the same resources it
+  generates the app from) and the project's Rules.json into ERD_DATA below; everything else
+  happens here, in the browser, with no network.
+
+  Developer notes
+  - ERD_DATA = { title, generated, resources: { <Entity>: { kind, keyKind, attributes [{ name,
+    type, notnull, pk }], relationships [{ name, direction, resource, fks, parentKeys }] } },
+    rules: [ Rules.json rules ] }
+  - Sections: THEMES (CSS variables), MODEL (resources -> entities and relationships),
+    LAYOUT (parents left of children), DRAW (SVG), INTERACTION (drag, open / close, zoom,
+    select, search), EXPORT (SVG file).
+  - Positions and open / closed entities are remembered in this browser (localStorage).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model Diagram</title>
+<style>
+/* ---------------------------------------------------------------- THEMES */
+:root, :root[data-theme="light"] {
+  --bg: #f4f6fa; --grid: #e3e8f0; --panel: #ffffff; --panel-line: #d6dde8; --text: #1b2430; --muted: #6b7785;
+  --box: #ffffff; --box-line: #c7d0dd; --head: #112850; --head-text: #ffffff; --head-sub: #aebbd3; --view-head: #4a5a72;
+  --row-alt: #f6f8fb; --pk: #b7791f; --fk: #2b6cb0; --line: #5b6b84; --line-hot: #e8590c; --select: #e8590c;
+  --formula: #2563eb; --sum: #059669; --count: #0d9488; --copy: #7c3aed; --constraint: #ea580c;
+  --parentCheck: #dc2626; --deleteAction: #be123c; --event: #ca8a04; --sym-text: #ffffff;
+  --button: #ffffff; --button-line: #c7d0dd;
+}
+:root[data-theme="dark"] {
+  --bg: #161a20; --grid: #20262f; --panel: #1e242c; --panel-line: #313945; --text: #e4e9f0; --muted: #94a0b0;
+  --box: #232a33; --box-line: #3a4452; --head: #1d3c78; --head-text: #ffffff; --head-sub: #9fb3d8; --view-head: #4a5568;
+  --row-alt: #262e38; --pk: #f6c453; --fk: #79b4ff; --line: #8b9ab0; --line-hot: #ff922b; --select: #ff922b;
+  --button: #262e38; --button-line: #3a4452;
+}
+:root[data-theme="colorful"] {
+  --bg: #fff8ef; --grid: #fde7cc; --panel: #ffffff; --panel-line: #f3d3b0; --text: #2b1d3a; --muted: #7d6a8a;
+  --box: #ffffff; --box-line: #f0c6a0; --head: #6d28d9; --head-text: #ffffff; --head-sub: #e2d4ff; --view-head: #0e7490;
+  --row-alt: #fff3e6; --pk: #c2410c; --fk: #0369a1; --line: #a855f7; --line-hot: #db2777; --select: #db2777;
+  --button: #ffffff; --button-line: #f0c6a0;
+}
+:root[data-theme="base"] {
+  --bg: #ffffff; --grid: #ffffff; --panel: #ffffff; --panel-line: #000000; --text: #000000; --muted: #555555;
+  --box: #ffffff; --box-line: #000000; --head: #ffffff; --head-text: #000000; --head-sub: #555555; --view-head: #eeeeee;
+  --row-alt: #ffffff; --pk: #000000; --fk: #000000; --line: #000000; --line-hot: #000000; --select: #000000;
+  --formula: #444; --sum: #444; --count: #444; --copy: #444; --constraint: #444; --parentCheck: #444; --deleteAction: #444; --event: #444;
+  --button: #ffffff; --button-line: #000000;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --bg: #161a20; --grid: #20262f; --panel: #1e242c; --panel-line: #313945; --text: #e4e9f0; --muted: #94a0b0;
+    --box: #232a33; --box-line: #3a4452; --head: #1d3c78; --head-text: #ffffff; --head-sub: #9fb3d8; --view-head: #4a5568;
+    --row-alt: #262e38; --pk: #f6c453; --fk: #79b4ff; --line: #8b9ab0; --line-hot: #ff922b; --select: #ff922b;
+    --button: #262e38; --button-line: #3a4452;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+  font: 13px -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, sans-serif; }
+body { display: flex; flex-direction: column; overflow: hidden; }
+header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel);
+  border-bottom: 1px solid var(--panel-line); flex-wrap: wrap; }
+header h1 { font-size: 15px; margin: 0 12px 0 0; white-space: nowrap; }
+header .count { color: var(--muted); margin-right: auto; white-space: nowrap; }
+button, select, input { font: inherit; color: var(--text); background: var(--button); border: 1px solid var(--button-line);
+  border-radius: 6px; padding: 4px 10px; }
+button { cursor: pointer; }
+input[type=search] { width: 180px; }
+main { flex: 1; display: flex; min-height: 0; }
+#canvas { flex: 1; position: relative; min-width: 0; }
+svg#erd { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+svg#erd.panning { cursor: grabbing; }
+aside { width: 300px; background: var(--panel); border-left: 1px solid var(--panel-line); overflow: auto; padding: 12px; }
+aside h2 { font-size: 14px; margin: 0 0 4px; }
+aside h3 { font-size: 12px; margin: 14px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+aside .hint { color: var(--muted); }
+aside ul { list-style: none; padding: 0; margin: 0; }
+aside li { padding: 4px 0; border-bottom: 1px solid var(--panel-line); }
+aside li .sym { display: inline-block; width: 18px; height: 18px; border-radius: 9px; text-align: center; line-height: 18px;
+  color: var(--sym-text); font-weight: 700; font-size: 11px; margin-right: 6px; }
+aside li.off { opacity: .45; }
+aside code { font: 11px Menlo, monospace; }
+#legend { position: absolute; left: 12px; bottom: 12px; background: var(--panel); border: 1px solid var(--panel-line);
+  border-radius: 8px; padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 4px 12px; max-width: 520px; }
+#legend span { white-space: nowrap; }
+#legend .sym { display: inline-block; width: 16px; height: 16px; border-radius: 8px; text-align: center; line-height: 16px;
+  color: var(--sym-text); font-weight: 700; font-size: 10px; margin-right: 4px; }
+#tip { position: fixed; pointer-events: none; background: var(--panel); border: 1px solid var(--panel-line);
+  border-radius: 6px; padding: 6px 8px; max-width: 360px; display: none; box-shadow: 0 4px 14px rgba(0,0,0,.18); z-index: 5; }
+@media (max-width: 760px) { aside { display: none; } #legend { display: none; } }
+</style>
+<style id="svg-css">
+/* the diagram's own classes - also written into an exported SVG, with the colours resolved */
+.grid { stroke: var(--grid); }
+.box { fill: var(--box); stroke: var(--box-line); }
+.entity.selected .box { stroke: var(--select); stroke-width: 2.5; }
+.entity.dim { opacity: .3; }
+.head { fill: var(--head); cursor: move; }
+.entity.view .head { fill: var(--view-head); }
+.name { fill: var(--head-text); font: 600 14px -apple-system, Helvetica, sans-serif; pointer-events: none; }
+.sub { fill: var(--head-sub); font: 10px -apple-system, Helvetica, sans-serif; pointer-events: none; }
+.toggle { fill: var(--head-text); cursor: pointer; font: 12px -apple-system, sans-serif; }
+.rowalt { fill: var(--row-alt); }
+.attr { fill: var(--text); font: 12px Menlo, monospace; }
+.attr.hit { font-weight: 700; fill: var(--select); }
+.type { fill: var(--muted); font: 10px Menlo, monospace; }
+.pk { fill: var(--pk); font: 700 9px -apple-system, sans-serif; }
+.fk { fill: var(--fk); font: 700 9px -apple-system, sans-serif; }
+.rel { fill: none; stroke: var(--line); stroke-width: 1.4; }
+.rel.optional { stroke-dasharray: 5 4; }
+.rel.hot { stroke: var(--line-hot); stroke-width: 2.4; }
+.rel.dim { opacity: .2; }
+.relname { fill: var(--muted); font: 10px -apple-system, sans-serif; }
+.sym-text { fill: var(--sym-text); font: 700 10px -apple-system, sans-serif; pointer-events: none; }
+.off { opacity: .35; }
+.k-formula { fill: var(--formula); } .k-sum { fill: var(--sum); } .k-count { fill: var(--count); }
+.k-copy { fill: var(--copy); } .k-constraint { fill: var(--constraint); } .k-parentCheck { fill: var(--parentCheck); }
+.k-deleteAction { fill: var(--deleteAction); } .k-rowEvent, .k-commitEvent { fill: var(--event); }
+.title { fill: var(--text); font: 700 18px -apple-system, Helvetica, sans-serif; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Model Diagram</h1>
+  <span class="count" id="count"></span>
+  <input type="search" id="search" placeholder="Find entity or attribute" aria-label="Find">
+  <button id="expand" title="Show every entity's attributes">Expand All</button>
+  <button id="collapse" title="Show entity names only">Collapse All</button>
+  <button id="arrange" title="Put every entity back in its first place">Arrange</button>
+  <button id="fit" title="Fit the diagram to the window">Fit</button>
+  <select id="theme" aria-label="Theme">
+    <option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option>
+    <option value="colorful">Colorful</option><option value="base">Base</option>
+  </select>
+  <button id="export" title="Save the diagram as you see it">Export SVG</button>
+</header>
+<main>
+  <div id="canvas">
+    <svg id="erd" xmlns="http://www.w3.org/2000/svg"><g id="world"><g id="edges"></g><g id="boxes"></g></g></svg>
+    <div id="legend"></div>
+  </div>
+  <aside id="side"><h2>Entities and relationships</h2>
+    <p class="hint">Drag an entity by its header. The triangle opens and closes it. Click an entity to see its
+    relationships and rules. Drag the background to move around; scroll to zoom.</p></aside>
+</main>
+<div id="tip"></div>
+<script>
+"use strict";
+const ERD_DATA = /*__ERD_DATA__*/null;
+
+/* ---------------------------------------------------------------- MODEL */
+const G = { boxW: 250, headH: 32, rowH: 20, pad: 8, colGap: 130, rowGap: 36 };
+const KINDS = {   // rule kind -> symbol and name (the legend, the boxes and the side panel)
+  formula: ["ƒ", "formula"], sum: ["Σ", "sum"], count: ["#", "count"], copy: ["⇣", "copy from parent"],
+  constraint: ["✓", "constraint"], parentCheck: ["!", "parent required"], deleteAction: ["⊘", "delete action"],
+  rowEvent: ["⚡", "row event"], commitEvent: ["⚡", "commit event"] };
+const SVGNS = "http://www.w3.org/2000/svg";
+
+function lambdaText(src, key) {   // the readable Python of an imported rule, when there is one
+  const i = (src || "").indexOf(key);
+  return i < 0 ? "" : src.slice(i + key.length).replace(/\)\s*$/, "").trim();
+}
+function ruleText(r) {
+  const where = lambdaText(r.source, "where=lambda row:") || r.where || "";
+  const w = where ? " where " + where : "";
+  switch (r.kind) {
+    case "formula": return r.attr + " = " + (lambdaText(r.source, "lambda row:") || r.expression || "");
+    case "sum": return r.attr + " = sum of " + r.list + "." + r.childAttr + w;
+    case "count": return r.attr + " = count of " + r.list + w;
+    case "copy": return r.attr + " = " + r.role + "." + r.parentAttr + " when the row is added (kept if the parent changes)";
+    case "constraint": return r.message || r.condition || "constraint";
+    case "parentCheck": return "a " + r.role + " is required";
+    case "deleteAction": return "deleting a " + r.entity + ": " + r.action + " its " + r.list;
+    case "rowEvent": return "after each change: " + (r.note || "FB code");
+    case "commitEvent": return "after the commit: " + (r.note || "FB code");
+  }
+  return r.kind || "rule";
+}
+function attributesOf(res) {      // SQLite resources carry [{name, type, notnull, pk}]; ALS ones may differ
+  const a = res.attributes || res.fields || [];
+  if (Array.isArray(a)) return a.map(x => typeof x === "string" ? { name: x } : x);
+  return Object.keys(a).map(k => Object.assign({ name: k }, a[k]));
+}
+function buildModel(data) {
+  const res = data.resources || {}, names = Object.keys(res).sort();
+  const rules = (data.rules || []).filter(r => res[r.entity]);
+  const entities = {}, relationships = [];
+  for (const n of names) {
+    const r = res[n], fks = {};
+    for (const rel of r.relationships || [])
+      if (rel.direction === "toone") for (const c of rel.fks || []) (fks[c] = fks[c] || []).push(rel.name);
+    const attrs = attributesOf(r).map(a => ({ name: a.name, type: String(a.type || "").toUpperCase().replace(/\s*\(.*$/, ""),
+      size: (String(a.type || "").match(/\((.*)\)/) || [])[1] || "",
+      pk: !!Number(a.pk) || a.pk === true, notnull: !!a.notnull, fk: fks[a.name] || [], rules: [] }));
+    entities[n] = { name: n, kind: r.kind || "table", keyKind: r.keyKind || "", attributes: attrs, rules: [], res: r };
+  }
+  rules.forEach((r, i) => {
+    const e = entities[r.entity], k = KINDS[r.kind] || ["?", r.kind];
+    const mark = { id: r.id || "rule-" + i, kind: r.kind, symbol: k[0], label: k[1], enabled: r.enabled !== false,
+      text: ruleText(r), note: r.note || "" };
+    let target = null;
+    if (["formula", "sum", "count", "copy"].includes(r.kind)) target = e.attributes.find(a => a.name === r.attr);
+    if (r.kind === "parentCheck") {
+      const rel = (e.res.relationships || []).find(x => x.name === r.role);
+      if (rel && rel.fks) target = e.attributes.find(a => a.name === rel.fks[0]);
+    }
+    if (target) target.rules.push(mark);
+    e.rules.push(mark);
+  });
+  for (const n of names) for (const rel of entities[n].res.relationships || []) {
+    if (rel.direction !== "toone" || !entities[rel.resource]) continue;
+    const parent = entities[rel.resource];
+    const list = (parent.res.relationships || []).find(x => x.direction === "tomany" && x.resource === n &&
+      JSON.stringify(x.fks) === JSON.stringify(rel.fks));
+    const listName = list ? list.name : "";
+    const checked = rules.some(r => r.kind === "parentCheck" && r.entity === n && r.role === rel.name);
+    const action = rules.find(r => r.kind === "deleteAction" && r.entity === parent.name && r.list === listName);
+    const optional = (rel.fks || []).some(c => { const a = entities[n].attributes.find(x => x.name === c); return !a || !a.notnull; });
+    relationships.push({ id: n + "." + rel.name, child: n, parent: parent.name, role: rel.name, list: listName,
+      fks: rel.fks || [], parentKeys: rel.parentKeys || [], optional: optional && !checked,
+      deleteAction: action ? { action: action.action, enabled: action.enabled !== false } : null });
+  }
+  return { entities, relationships, rules };
+}
+
+/* ---------------------------------------------------------------- LAYOUT */
+function boxHeight(e, open) { return G.headH + (open ? e.attributes.length * G.rowH + G.pad : 0); }
+function arrange(M) {             // parents left of their children: layers by longest path, barycentre order
+  const names = Object.keys(M.entities).sort(), up = {}, down = {};
+  names.forEach(n => { up[n] = new Set(); down[n] = new Set(); });
+  M.relationships.forEach(r => { if (r.child !== r.parent) { up[r.child].add(r.parent); down[r.parent].add(r.child); } });
+  const rank = {}, state = {};
+  function visit(n) {             // depth-first; an edge back to the path (a cycle) is ignored
+    if (state[n] === 2) return rank[n];
+    state[n] = 1; let best = 0;
+    for (const p of [...up[n]].sort()) if (state[p] !== 1) best = Math.max(best, visit(p) + 1);
+    state[n] = 2; rank[n] = best; return best;
+  }
+  names.forEach(visit);
+  const layers = {}, loners = [], order = {};
+  names.forEach((n, i) => { order[n] = i; if (up[n].size || down[n].size) (layers[rank[n]] = layers[rank[n]] || []).push(n); else loners.push(n); });
+  const keys = Object.keys(layers).map(Number).sort((a, b) => a - b);
+  for (let s = 0; s < 6; s++) for (const k of keys) {
+    const bary = n => { const near = [...up[n], ...down[n]].map(x => order[x]); return near.length ? near.reduce((a, b) => a + b) / near.length : order[n]; };
+    layers[k].sort((a, b) => bary(a) - bary(b)).forEach((n, i) => { order[n] = i; });
+  }
+  const pos = {}; let bottom = 0;
+  for (const k of keys) {
+    let y = 0;
+    for (const n of layers[k]) { pos[n] = { x: k * (G.boxW + G.colGap), y }; y += boxHeight(M.entities[n], true) + G.rowGap; }
+    bottom = Math.max(bottom, y);
+  }
+  const width = Math.max(4, keys.length) * (G.boxW + G.colGap);
+  let x = 0, y = bottom + G.rowGap * 2, rowH = 0;     // entities with no relationships: rows below
+  for (const n of loners) {
+    if (x + G.boxW > width) { x = 0; y += rowH + G.rowGap; rowH = 0; }
+    pos[n] = { x, y }; x += G.boxW + G.colGap / 2; rowH = Math.max(rowH, boxHeight(M.entities[n], true));
+  }
+  return pos;
+}
+
+/* ---------------------------------------------------------------- STATE */
+const M = buildModel(ERD_DATA || { resources: {}, rules: [] });
+const TITLE = (ERD_DATA && ERD_DATA.title) || "Model";
+const STORE = "erd:" + TITLE;
+const S = { pos: arrange(M), open: {}, selected: null, view: { x: 40, y: 40, k: 1 }, theme: "system" };
+Object.keys(M.entities).forEach(n => { S.open[n] = true; });
+try { const saved = JSON.parse(localStorage.getItem(STORE) || "null");
+  if (saved) { Object.assign(S.open, saved.open || {}); for (const n in saved.pos || {}) if (S.pos[n]) S.pos[n] = saved.pos[n];
+    if (saved.theme) S.theme = saved.theme; if (saved.view) S.view = saved.view; } } catch (e) { /* private window: start fresh */ }
+function remember() { try { localStorage.setItem(STORE, JSON.stringify({ pos: S.pos, open: S.open, theme: S.theme, view: S.view })); } catch (e) { } }
+
+/* ---------------------------------------------------------------- DRAW */
+const svg = document.getElementById("erd"), world = document.getElementById("world");
+const edgesG = document.getElementById("edges"), boxesG = document.getElementById("boxes");
+function el(name, attrs, parent, text) {
+  const n = document.createElementNS(SVGNS, name);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (text !== undefined) n.textContent = text;
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function symbol(parent, mark, cx, cy) {
+  const g = el("g", { class: mark.enabled ? "rule" : "rule off", "data-tip": mark.label + ": " + mark.text + (mark.enabled ? "" : " (switched off)") }, parent);
+  el("circle", { class: "k-" + mark.kind, cx, cy, r: 8 }, g);
+  el("text", { class: "sym-text", x: cx, y: cy + 3.5, "text-anchor": "middle" }, g, mark.symbol);
+}
+function anchorY(e, attr) {       // the row of an attribute, or the header when the entity is closed
+  const p = S.pos[e.name], i = e.attributes.findIndex(a => a.name === attr);
+  if (!S.open[e.name] || i < 0) return p.y + G.headH / 2;
+  return p.y + G.headH + G.pad / 2 + i * G.rowH + G.rowH / 2;
+}
+function edgeGeometry(r) {
+  const c = M.entities[r.child], p = M.entities[r.parent], pc = S.pos[r.child], pp = S.pos[r.parent];
+  const cy = anchorY(c, r.fks[0]);
+  const py = anchorY(p, r.parentKeys[0] || (p.attributes.find(a => a.pk) || {}).name);
+  if (r.child === r.parent) {
+    const x = pc.x + G.boxW;
+    return { d: `M${x},${cy} C${x + 70},${cy} ${x + 70},${py} ${x},${py}`, child: [x, cy, 1], parent: [x, py, 1], label: [x + 56, (cy + py) / 2] };
+  }
+  let x1, x2, dir;
+  if (pc.x + G.boxW / 2 >= pp.x + G.boxW / 2) { x1 = pp.x + G.boxW; x2 = pc.x; dir = 1; } else { x1 = pp.x; x2 = pc.x + G.boxW; dir = -1; }
+  const bend = Math.max(40, Math.abs(x2 - x1) / 2);
+  return { d: `M${x1},${py} C${x1 + dir * bend},${py} ${x2 - dir * bend},${cy} ${x2},${cy}`,
+    child: [x2, cy, -dir], parent: [x1, py, dir], label: [(x1 + x2) / 2, (py + cy) / 2 - 6] };
+}
+function drawEdge(r) {
+  const g = el("g", { class: "edge", "data-id": r.id, "data-tip": `${r.child} → ${r.parent} (role ${r.role}${r.list ? ", list " + r.list : ""})` +
+    `${r.optional ? " - optional" : " - required"}${r.deleteAction ? "; deleting a " + r.parent + ": " + r.deleteAction.action : ""}` }, edgesG);
+  const geo = edgeGeometry(r), [cx, cy, cd] = geo.child, [px, py, pd] = geo.parent;
+  const hot = S.selected && (S.selected === r.child || S.selected === r.parent);
+  const dim = S.selected && !hot;
+  const cls = "rel" + (r.optional ? " optional" : "") + (hot ? " hot" : "") + (dim ? " dim" : "");
+  el("path", { class: cls, d: geo.d }, g);
+  el("path", { class: cls.replace(" optional", ""), d: `M${cx + cd * 14},${cy} L${cx},${cy - 7} M${cx + cd * 14},${cy} L${cx},${cy} M${cx + cd * 14},${cy} L${cx},${cy + 7}` }, g);  // many
+  el("path", { class: cls.replace(" optional", ""), d: `M${px + pd * 10},${py - 7} L${px + pd * 10},${py + 7}` }, g);   // one
+  if (r.optional) el("circle", { class: "box " + cls, cx: px + pd * 20, cy: py, r: 4 }, g);                            // zero or one
+  if (hot || r.child === r.parent) el("text", { class: "relname", x: geo.label[0], y: geo.label[1], "text-anchor": "middle" }, g, r.role);
+  if (r.deleteAction) symbol(g, { kind: "deleteAction", symbol: "⊘", label: "delete action", enabled: r.deleteAction.enabled,
+    text: "deleting a " + r.parent + ": " + r.deleteAction.action + " its " + r.list }, px + pd * 34, py);
+}
+function drawEntity(e) {
+  const p = S.pos[e.name], open = S.open[e.name], h = boxHeight(e, open);
+  const q = (document.getElementById("search").value || "").trim().toLowerCase();
+  const hit = q && (e.name.toLowerCase().includes(q) || e.attributes.some(a => a.name.toLowerCase().includes(q)));
+  const near = !S.selected || S.selected === e.name ||
+    M.relationships.some(r => (r.child === S.selected && r.parent === e.name) || (r.parent === S.selected && r.child === e.name));
+  const g = el("g", { class: "entity" + (e.kind === "view" ? " view" : "") + (S.selected === e.name ? " selected" : "") +
+    ((!near || (q && !hit)) ? " dim" : ""), transform: `translate(${p.x},${p.y})`, "data-name": e.name }, boxesG);
+  el("rect", { class: "box", width: G.boxW, height: h, rx: 6 }, g);
+  el("path", { class: "head", d: open ? `M0,6 a6,6 0 0 1 6,-6 h${G.boxW - 12} a6,6 0 0 1 6,6 v${G.headH - 6} h-${G.boxW} z`
+    : `M0,6 a6,6 0 0 1 6,-6 h${G.boxW - 12} a6,6 0 0 1 6,6 v${G.headH - 12} a6,6 0 0 1 -6,6 h-${G.boxW - 12} a6,6 0 0 1 -6,-6 z`,
+    "data-drag": e.name, "data-tip": `${e.name}: ${e.kind}${e.keyKind ? ", key " + e.keyKind : ""}, ${e.attributes.length} attributes` }, g);
+  el("text", { class: "toggle", x: 9, y: 20, "data-toggle": e.name }, g, open ? "▾" : "▸");
+  el("text", { class: "name", x: 24, y: 20 }, g, e.name);
+  let bx = G.boxW - 14;               // entity-level rules in the header, right to left
+  for (const m of e.rules) if (["constraint", "rowEvent", "commitEvent"].includes(m.kind)) { symbol(g, m, bx, 16); bx -= 19; }
+  if (!open) { el("text", { class: "sub", x: bx - 2, y: 20, "text-anchor": "end" }, g, e.attributes.length + " attr"); return; }
+  e.attributes.forEach((a, i) => {
+    const y = G.headH + G.pad / 2 + i * G.rowH;
+    if (i % 2) el("rect", { class: "rowalt", x: 1, y, width: G.boxW - 2, height: G.rowH }, g);
+    const tip = `${a.name} ${a.type}${a.size ? "(" + a.size + ")" : ""}${a.pk ? ", primary key" : ""}${a.fk.length ? ", foreign key (" + a.fk.join(", ") + ")" : ""}${a.notnull ? ", required" : ""}`;
+    if (a.pk) el("text", { class: "pk", x: 8, y: y + 14 }, g, "PK");
+    else if (a.fk.length) el("text", { class: "fk", x: 8, y: y + 14 }, g, "FK");
+    el("text", { class: "attr" + (q && a.name.toLowerCase().includes(q) ? " hit" : ""), x: 30, y: y + 14, "data-tip": tip }, g, a.name);
+    el("text", { class: "type", x: G.boxW - 12 - 19 * a.rules.length, y: y + 14, "text-anchor": "end" }, g, a.type.slice(0, 9));
+    a.rules.forEach((m, j) => symbol(g, m, G.boxW - 14 - 19 * j, y + G.rowH / 2));
+  });
+}
+function draw() {
+  edgesG.textContent = ""; boxesG.textContent = "";
+  M.relationships.forEach(drawEdge);
+  Object.values(M.entities).forEach(drawEntity);
+  world.setAttribute("transform", `translate(${S.view.x},${S.view.y}) scale(${S.view.k})`);
+}
+function drawLegend() {
+  const L = document.getElementById("legend");
+  const items = [["formula"], ["sum"], ["count"], ["copy"], ["constraint"], ["parentCheck"], ["deleteAction"], ["rowEvent", "event"]];
+  L.innerHTML = items.map(([k, name]) => `<span><span class="sym" style="background:var(--${k === "rowEvent" ? "event" : k})">${KINDS[k][0]}</span>${name || KINDS[k][1]}</span>`).join("") +
+    `<span>— required · - - optional · crow's foot = many</span>`;
+}
+function showSide(name) {
+  const side = document.getElementById("side"), e = M.entities[name];
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  if (!e) { side.innerHTML = `<h2>${esc(TITLE)}</h2><p class="hint">${Object.keys(M.entities).length} entities, ${M.relationships.length} relationships, ${M.rules.length} rules.</p>` +
+    `<p class="hint">Drag an entity by its header. The triangle opens and closes it. Click an entity to see its relationships and rules. Drag the background to move around; scroll to zoom.</p>`; return; }
+  const parents = M.relationships.filter(r => r.child === name), kids = M.relationships.filter(r => r.parent === name && r.child !== name);
+  let h = `<h2>${esc(name)}</h2><p class="hint">${esc(e.kind)}${e.keyKind ? " · key " + esc(e.keyKind) : ""} · ${e.attributes.length} attributes</p>`;
+  h += `<h3>Rules</h3>` + (e.rules.length ? "<ul>" + e.rules.map(m => `<li class="${m.enabled ? "" : "off"}"><span class="sym k-${m.kind}" style="background:var(--${m.kind.endsWith("Event") ? "event" : m.kind})">${m.symbol}</span>` +
+    `${esc(m.label)}${m.enabled ? "" : " (off)"}<br><code>${esc(m.text)}</code></li>`).join("") + "</ul>" : `<p class="hint">none</p>`);
+  h += `<h3>Parents</h3>` + (parents.length ? "<ul>" + parents.map(r => `<li>${esc(r.role)} → <b>${esc(r.parent)}</b> <code>${esc(r.fks.join(", "))}</code>${r.optional ? " optional" : ""}</li>`).join("") + "</ul>" : `<p class="hint">none</p>`);
+  h += `<h3>Children</h3>` + (kids.length ? "<ul>" + kids.map(r => `<li>${esc(r.list || r.child)} → <b>${esc(r.child)}</b>${r.deleteAction ? " · on delete: " + esc(r.deleteAction.action) : ""}</li>`).join("") + "</ul>" : `<p class="hint">none</p>`);
+  h += `<h3>Attributes</h3><ul>` + e.attributes.map(a => `<li><code>${esc(a.name)}</code> <span class="hint">${esc(a.type)}${a.pk ? " · PK" : ""}${a.fk.length ? " · FK" : ""}${a.notnull ? " · required" : ""}</span></li>`).join("") + "</ul>";
+  side.innerHTML = h;
+}
+
+/* ---------------------------------------------------------------- INTERACTION */
+function toWorld(ev) { const r = svg.getBoundingClientRect(); return { x: (ev.clientX - r.left - S.view.x) / S.view.k, y: (ev.clientY - r.top - S.view.y) / S.view.k }; }
+let drag = null;
+svg.addEventListener("pointerdown", ev => {
+  const t = ev.target;
+  if (t.dataset.toggle) { S.open[t.dataset.toggle] = !S.open[t.dataset.toggle]; remember(); draw(); return; }
+  const box = t.closest && t.closest(".entity");
+  if (box) {
+    const name = box.dataset.name, w = toWorld(ev);
+    drag = { name, dx: w.x - S.pos[name].x, dy: w.y - S.pos[name].y, moved: false };
+  } else {
+    drag = { pan: true, sx: ev.clientX - S.view.x, sy: ev.clientY - S.view.y, moved: false };
+    svg.classList.add("panning");
+  }
+  svg.setPointerCapture(ev.pointerId);
+});
+svg.addEventListener("pointermove", ev => {
+  if (!drag) { tip(ev); return; }
+  drag.moved = true;
+  if (drag.pan) { S.view.x = ev.clientX - drag.sx; S.view.y = ev.clientY - drag.sy; world.setAttribute("transform", `translate(${S.view.x},${S.view.y}) scale(${S.view.k})`); return; }
+  const w = toWorld(ev);
+  S.pos[drag.name] = { x: Math.round(w.x - drag.dx), y: Math.round(w.y - drag.dy) };
+  draw();
+});
+svg.addEventListener("pointerup", () => {
+  if (drag && !drag.moved) { S.selected = drag.pan ? null : (S.selected === drag.name ? null : drag.name); showSide(S.selected); draw(); }
+  if (drag && drag.moved) remember();
+  drag = null; svg.classList.remove("panning");
+});
+svg.addEventListener("wheel", ev => {
+  ev.preventDefault();
+  const r = svg.getBoundingClientRect(), mx = ev.clientX - r.left, my = ev.clientY - r.top;
+  const k = Math.min(3, Math.max(0.15, S.view.k * Math.exp(-ev.deltaY * 0.0015)));
+  S.view.x = mx - (mx - S.view.x) * k / S.view.k; S.view.y = my - (my - S.view.y) * k / S.view.k; S.view.k = k;
+  world.setAttribute("transform", `translate(${S.view.x},${S.view.y}) scale(${S.view.k})`); remember();
+}, { passive: false });
+const tipBox = document.getElementById("tip");
+function tip(ev) {
+  const t = ev.target.closest && ev.target.closest("[data-tip]");
+  if (!t) { tipBox.style.display = "none"; return; }
+  tipBox.textContent = t.dataset.tip; tipBox.style.display = "block";
+  tipBox.style.left = Math.min(ev.clientX + 14, innerWidth - 370) + "px"; tipBox.style.top = (ev.clientY + 14) + "px";
+}
+svg.addEventListener("pointerleave", () => { tipBox.style.display = "none"; });
+function fit() {
+  const names = Object.keys(S.pos); if (!names.length) return;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  names.forEach(n => { const p = S.pos[n]; x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x + G.boxW + 80); y1 = Math.max(y1, p.y + boxHeight(M.entities[n], S.open[n])); });
+  const r = svg.getBoundingClientRect(), k = Math.min(1.2, Math.max(0.15, Math.min((r.width - 40) / (x1 - x0), (r.height - 40) / (y1 - y0))));
+  S.view = { k, x: 20 - x0 * k + ((r.width - 40) - (x1 - x0) * k) / 2, y: 20 - y0 * k };
+  draw(); remember();
+}
+function setAll(open) { Object.keys(S.open).forEach(n => { S.open[n] = open; }); remember(); draw(); }
+function applyTheme(t) { S.theme = t; document.documentElement.dataset.theme = t; document.getElementById("theme").value = t; remember(); }
+document.getElementById("expand").onclick = () => setAll(true);
+document.getElementById("collapse").onclick = () => setAll(false);
+document.getElementById("arrange").onclick = () => { S.pos = arrange(M); setAll(true); fit(); };
+document.getElementById("fit").onclick = fit;
+document.getElementById("theme").onchange = ev => applyTheme(ev.target.value);
+document.getElementById("search").oninput = draw;
+
+/* ---------------------------------------------------------------- EXPORT */
+document.getElementById("export").onclick = () => {
+  const css = getComputedStyle(document.documentElement);
+  const style = document.getElementById("svg-css").textContent.replace(/var\((--[\w-]+)\)/g, (_, v) => css.getPropertyValue(v).trim() || "#000");
+  const names = Object.keys(S.pos);
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  names.forEach(n => { const p = S.pos[n]; x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x + G.boxW + 90); y1 = Math.max(y1, p.y + boxHeight(M.entities[n], S.open[n])); });
+  x0 -= 30; y0 -= 60; x1 += 30; y1 += 30;
+  const bg = css.getPropertyValue("--bg").trim();
+  const text = `<svg xmlns="${SVGNS}" viewBox="${x0} ${y0} ${x1 - x0} ${y1 - y0}" width="${x1 - x0}" height="${y1 - y0}"><style>${style}</style>` +
+    `<rect x="${x0}" y="${y0}" width="${x1 - x0}" height="${y1 - y0}" fill="${bg}"/>` +
+    `<text class="title" x="${x0 + 30}" y="${y0 + 36}">${TITLE.replace(/&/g, "&amp;").replace(/</g, "&lt;")} - entities and relationships</text>` +
+    edgesG.outerHTML + boxesG.outerHTML + `</svg>`;
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type: "image/svg+xml" }));
+  a.download = TITLE + " ERD.svg"; document.body.appendChild(a); a.click(); a.remove();
+};
+
+/* ---------------------------------------------------------------- START */
+document.title = TITLE + " - Model Diagram";
+document.getElementById("title").textContent = TITLE + " - Model Diagram";
+document.getElementById("count").textContent = `${Object.keys(M.entities).length} entities · ${M.relationships.length} relationships · ${M.rules.length} rules`;
+let firstVisit = true; try { firstVisit = !localStorage.getItem(STORE); } catch (e) { }
+applyTheme(S.theme);
+drawLegend(); showSide(null); draw();
+if (firstVisit) fit();
+</script>
+</body>
+</html>

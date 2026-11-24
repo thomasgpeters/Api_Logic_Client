@@ -21,7 +21,10 @@ tools/run_tests.sh
 | `fblint` on `src/` (and Test_Xib_View beside this repo) | every FB file follows `reference/FB Coding Rules.md`: typed fns, comments, CR endings, toolbox names and argument counts, keywords as names, `for … in`, block balance, build order | `0 problems` |
 | `logic_reference.py --test` | the logic engine's behaviour, scenario by scenario, on a copy of Northwind (the Python reference follows the FB code function by function) | `70 scenarios, 0 failed` |
 | `logic_reference.py --prove` | every rule is really tested: each rule left out in turn makes a scenario fail | `20 rules, 0 not proven` |
+| `rules_bridge.py --test` | `declare_logic.py` → `Rules.json` (lambdas translated to FB, the rest switched off with its Python kept), `check`, FB generation lints with the runtime, export and the round trip back | `23 checks, 0 failed` |
 | `make_logic_test.py` + `fblint` | the FB test project assembles from the real runtime files and lints clean, build order included | `0 problems` |
+| `check_app_pages.py` | the `App Pages.incl` the generator writes (its `AppPagesSource` played for two entities) lints with the real runtime, templates and stand-in bindings | `0 failed` |
+| `check_erd_page.py` | the model diagram page, filled as `ERD Generator.incl` fills it, draws every entity, relationship and rule symbol, opens / closes, drags and selects with no script errors (headless Chromium; skipped without node + Playwright) | `0 failed` |
 
 Run any one of them alone:
 
@@ -62,6 +65,7 @@ into a session when something fails.
 | Resizing | drag the window | minimum 1000 × 620; list and pages stretch |
 | Generate App | ⌘G, open `FBapp/<project>.fbeproj`, build | builds; NSLog shows `Data: opened …` and `Logic: rules active` |
 | About box | run the generated app, About | the About text under name and version |
+| Model diagram | Model → Show Model Diagram (⇧⌘D) | the ERD opens in the browser; `features/MODEL_DIAGRAM_FEATURE.md` → Verify |
 | Test_Xib_View | build and run | persons list, add, save, delete (the shared query builder) |
 
 The feature pages (`features/*_FEATURE.md`) each end with their own "Verify on a Mac" list;

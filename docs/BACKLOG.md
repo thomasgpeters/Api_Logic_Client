@@ -24,7 +24,13 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [x] Entity definitions with recommendations; designer adjustments in `Design.json`
 - [x] Separate commands: Generate XIBs / XIB / Binding Code / App
 - [x] Generated `<Entity> Binding.incl`
-- [ ] Shell: entity navigator + List + Form, wired to SQLite (package the query builder as runtime files)
+- [x] Shell: entity navigator + List + Form, wired to SQLite — `features/APP_SHELL_FEATURE.md`
+- [x] Studio: branding form in Project Settings (logo well, tag-line, copyright)
+- [x] Generated code readable for FB developers: file headers, developer notes, `README.md` tour
+- [ ] Verify on a Mac: the shell (`features/APP_SHELL_FEATURE.md` → Verify)
+- [ ] Enterprise edition (roadmap, after Lite ships): `design/Editions and Licensing.md` → Roadmap
+- [x] Save / New / Delete / Refresh on a page, through the data interface (`App Data Lite.incl`) and the rules
+- [ ] Lite release: first Mac build of a generated app; fix what the Build Log shows; tag a release
 - [ ] Per-entity event handlers routed from one `on dialog` handler by tag range
 - [ ] Crumb trail and page stack (drill-in replaces the page; back via crumbs)
 - [ ] Related-list tabs (master-detail) and drill-in
@@ -33,6 +39,47 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Optional: open related records in a modal dialog instead of replacing the page
 - [ ] Form controls for assigned keys: editable on New, read-only after; identity keys read-only
 - [ ] `guid` key kind: generate with `UUIDString( UUIDInit )`, stored lower-case `TEXT`
+
+## Model diagram (`features/MODEL_DIAGRAM_FEATURE.md`)
+
+- [x] ERD page: entities, keys, relationships (crow's foot, optional), rule symbols; drag, open / close, select, find, themes, Export SVG
+- [x] *Model → Show Model Diagram* (`ERD Generator.incl`, FB)
+- [ ] Verify on a Mac (feature page → Verify)
+- [ ] Show the diagram inside the Studio (a WKWebView window) instead of the browser
+- [ ] Click a rule symbol to open it on the Rules page (once the Rules page exists)
+- [ ] ALS projects: relationships from the metadata (ALS `/metadata` lists them per resource)
+
+## Parked: Enterprise edition — revisit after the Lite release (author, 2026-11-24)
+
+Everything needed to pick this up again is in `design/Editions and Licensing.md` (the editions,
+the code split, what the License Server issues today, the licence options, the roadmap).
+Done already: the data interface `App Data` with its Lite implementation, and the edition hook
+`src/Generator/Edition.incl` (Lite only).
+
+When resuming, in this order:
+
+1. [ ] Choose the licence option — author: **A** portable checksum (SHA-256 on the License Server),
+       **B** signed licence file (the server signs, the Studio verifies with `SecKeyVerifySignature`),
+       or **C** online activation (breaks the no-dependency rule). Already decided: offline, Studio only.
+2. [ ] Create the private repository (e.g. `Api_Logic_Client_Enterprise`) and attach it to a session;
+       move `src/Runtime/ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` there.
+3. [ ] Its `Edition.incl` (replaces this repo's): `EditionEnterpriseAvailable` from the licence;
+       Enterprise runtime files, start-up (`gALSHost`, login paths), `EditionRulesInApp` = NO.
+4. [ ] `App Data Enterprise.incl`: list / save / remove / login over JSON:API; a request context per
+       call (URLSession `userData`); answers on the main thread (`dispatchmain`); records keep the
+       JSON:API id for Save and Delete.
+5. [ ] Sign-in window for the header's Log In; token for the session; Keychain for a remembered password.
+6. [ ] Generate App (Enterprise): export `Rules.json` to `declare_logic.py` for the server.
+7. [ ] Studio: an edition choice in Project Settings and a "Licence…" entry (Preferences).
+8. [ ] License Server (its own repository): product `imagery_logicbank_studio_fb`, bit 0 `enterprise`,
+       and the licence format chosen in step 1.
+9. [ ] The paid build: project file, release, distribution from the License Server.
+
+## Tools in FutureBasic (author, 2026-11-24)
+
+- [ ] Port `tools/rules_bridge.py` into the generator in FB: `Rules.json` check and `Studio Rules.incl`
+      generation first (plain FB), then `declare_logic.py` import / export (needs a small parser
+      for LogicBank's `Rule.*(...)` calls and their lambdas, written in FB)
 
 ## Data layer
 
@@ -47,9 +94,16 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Generator app (see `design/Generator App Design.md`)
 
+- [x] Add an Edit menu (`editmenu`) to the generator: Cut / Copy / Paste in its text fields
+- [x] Generate XIBs uses ⌘X, which is Cut on the Mac: moved to ⇧⌘X (author to confirm)
+- [ ] Preferences… (⌘,) does nothing yet
+- [x] Rules bridge in the generator: Import / Export Rules (declare_logic.py), Studio Rules.incl on Generate App — `features/RULES_BRIDGE_FEATURE.md`
+- [ ] The Rules page: list, editor (model-driven pop-ups), check — on `Rules.json`
+
 - [x] Model from a SQLite database — `SQLite Model.incl`
 - [x] New Project view: a project starts from a SQLite database — `features/NEW_PROJECT_FEATURE.md`
-- [ ] Product name (sets the bundle id; the Application Support folder is `Api_Logic_Client` until then) — ideas: Lexicon, Keel, Foundry, ModelWorks
+- [x] Product name: **Imagery LogicBank Studio for FutureBasic** — shown in the window title, Welcome view, server form and About box; Imagery logo (2026-11-24)
+- [ ] Rename the rest to the product name (author, later): the FB project and its `.main` (`Api Logic Client.fbeproj` → the built app's name in the Dock and menu bar), the bundle id, and the Application Support folder (`Api_Logic_Client` → new name, moving an existing workspace and Recent Projects over at first launch). The repository and folder names may stay.
 - [x] Workspace in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; *Show Workspace in Finder*
 - [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
 - [x] Project Settings view; About text (≤ 250 chars) deployed as `Credits.rtf` — `features/ABOUT_BOX_FEATURE.md`
@@ -83,6 +137,9 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Relationships from ALS (lookups, child tables)
 
 ## Tooling
+
+- [ ] `tools/xiblint.py`: unique ids, connections that resolve, tags unique per document, frames inside their superview, base64 key equivalents — run on every generated and hand-written XIB
+- [ ] On a Mac: `xcrun ibtool --errors --warnings --notices` on every XIB in `src/Generator` and a generated project (`docs/reference/XIB Reference.md` §5)
 
 - [ ] fblint: check statement syntax (e.g. `tableview`'s `columnWidths`)
 - [ ] Python reference for Type Mapping (definitions report) to check the FB rules

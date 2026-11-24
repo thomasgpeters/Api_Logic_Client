@@ -6,19 +6,86 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — LogicBank for FutureBasic: step 3 in FB (`f431fa6`)
+## 2026-11-24 — Editions: the Lite data interface; Enterprise on the roadmap
 
-- `Logic Rules.incl`: LogicCopy, LogicParentCheck, LogicDeleteAction, LogicRowEvent,
-  LogicCommitEvent; activation checks their relationships and builds cascades from
-  formulas' `Role.Attr` dependencies.
-- `Logic Engine.incl`: copy → parent check → formulas → adjust → constraints → row events →
-  write → cascade; delete actions (prevent / cascade / nullify) with the row read again
-  before its parents are adjusted (the double adjustment the reference scenarios found);
-  `LogicDeleteRow` prototyped; `LogicFinish` runs commit events once per row after the
-  outermost commit. Early exits now end through `LogicFinish` too (and `finish` in the
-  reference), so a rolled-back save never leaves commit events behind.
-- `ObjectRef` arguments cast everywhere in the runtime and tests; fblint now reports uncast
-  ones (parameter types from the headers).
-- FB test project: the 24 step 3 scenarios (70 in all, as in the reference).
+- Two editions (author): **Lite**, free and open source, SQLite in the app; **Enterprise**, paid,
+  three-tier over API Logic Server (open source, the same in both). Lite ships first; Enterprise is
+  roadmap (`design/Editions and Licensing.md`). Commits `b9c6565` and the docs follow-up.
+- Runtime: `App Data Lite.incl`, the app's data interface (`AppDataList`, `AppDataSave`,
+  `AppDataRemove`, `AppDataLogin`, `AppDataKeyValues`), answering through one handler so an
+  asynchronous server can sit behind the same calls. `App Shell.incl`: footer status line and page
+  actions (New, Save, Delete, Refresh), Records menu numbers, `ShellDoAppEvent`, `ShellShowLogin`.
+- Generator: `Edition.incl` (Lite-only hook the paid build replaces); `App Pages.incl` now drives
+  the actions through App Data (saves through the rules; a refused save shows the rule's message);
+  templates no longer call the old ALS runtime, which is no longer copied into apps; an ALS-sourced
+  project is refused for Generate App with the way to a Lite app.
+- `tools/check_app_pages.py` (test only): plays `AppPagesSource` for two entities and lints the
+  output with the runtime and templates; in `run_tests.sh`.
+- Licensing: decided offline and Studio-only; the check itself is open. Found in the License
+  Server: keys use C++ `std::hash` (not the same on a Mac) and a published salt, so the FB Studio
+  cannot verify them as they are. Options written up: portable checksum, signed licence file,
+  online activation.
+- `docs/LINKEDIN_POST.md`: the post, kept with the one-pager.
+
+---
+
+## 2026-11-24 — One-pager
+
+- `docs/DOC_ONE_PAGER.md`: what the Studio is, for the FB community — how it works, what a
+  generated app has, rules declared once (with what one save does), what stays yours, needs and
+  status. Also published as a designed page (claude.ai artifact) with the same text.
+- The big picture added (data model → Studio → FutureBasic project → Mac app, and the loop back
+  to the database through the rules); the page widened to fill the screen and made responsive.
+- `docs/DOC_ONE_PAGER.html` (the page, standalone) and `docs/DOC_ONE_PAGER.pdf` (two Letter pages,
+  printed from it with headless Chromium) for sharing.
+
+---
+
+## 2026-11-24 — Model diagram: an interactive ERD with the rules on it
+
+- *Model → Show Model Diagram* (⇧⌘D): `ERD Generator.incl` (FB) fills
+  `Templates/ERD/Model ERD.html` with the model as the generator holds it and the project's
+  `Rules.json`, writes `<project>/Model ERD.html` and opens it.
+- The page: crow's-foot ERD with PK / FK markers, optional relationships dashed, self
+  relationships looped; rule symbols (ƒ Σ # ⇣ ! ✓ ⚡ ⊘), faded when switched off; drag, open /
+  close, select (relationships highlighted, side panel with rules, parents, children,
+  attributes), find, zoom and pan, Arrange, five themes, Export SVG; state kept per project.
+- `tools/check_erd_page.py` (test only) fills the page the same way and drives it in headless
+  Chromium; added to `run_tests.sh`.
+- Decision (author): the Studio's tools are FutureBasic, not Python. A first Python generator for
+  the diagram was dropped before commit; `rules_bridge.py` is now a backlog item to port.
+- Northwind has no foreign key from Product to Supplier, so Supplier stands alone in the diagram —
+  the diagram shows the database as it is.
+
+---
+
+## 2026-11-24 — App shell: a common look for generated apps; branding in the Studio
+
+- `src/Runtime/App Shell.incl`: the frame of every generated (SQLite) app, built in code from
+  FB's per-control functions — a dark blue navigation bar of white, bold, icon buttons; a header
+  with the logo, app name, tag-line, theme menu (System / Light / Dark) and Log In; a footer with
+  the copyright; pages in a content view. `ShellDoDialog` handles navigation and the theme menu.
+- Templates: `Theme.incl` (yours: `ApplyTheme`, the colours); `EventHandlers.incl` rewritten with
+  developer notes, routing `ShellDoDialog` → `AppPagesDoDialog` → `DoLogin` → `ALSDoDialog`.
+- Generator: `App Pages.incl` (a page per entity: `nibview` List and Form into `_shellContent`,
+  `ShellAddNavItem` with an SF Symbol picked from the entity's name, `AppPageShown` fills the List
+  with `DataFetch`, a row fills the Form); `Windows.incl` for SQLite projects builds the shell;
+  `README.md` in `FBapp/` tours the project; the project file gains Pages, `Theme.incl`, `AppLogo.png`.
+- Studio: Project Settings has a logo well (paste / drag → `<project>/Branding/logo.png`), a
+  tag-line (≤ 80) and a copyright, saved in `Project.json`. An Edit menu (`editmenu`) so Paste
+  works; Generate XIBs moved from ⌘X to ⇧⌘X.
+- `fblint`: a template may declare fns the generator writes beside it (`// generated: Name`).
+- Learned: generated code is read by FB developers who never saw the generator — each file now
+  says what it is, whether it is regenerated, and where your own code goes.
+
+---
+
+## 2026-11-24 — User guide: FutureBasic's nib keywords
+
+- New §9 "Screens: FutureBasic's nib keywords": `nibwindow`, `nibview` (with `identifier`,
+  `origin`, `superviewTag`), `nibtoolbar`, `nibmenu`, `nibpopover`, each linked to FutureBasic's
+  reference page; the generated `Windows.incl` and the generator's own calls as examples; what
+  to know (tags, names, embedding with `superviewTag`, bottom-left origins, load once).
+  Later sections renumbered.
 
 ---

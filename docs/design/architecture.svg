@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 960" width="1560" height="960" role="img" aria-label="Imagery LogicBank Studio for FutureBasic architecture">
+<title>Imagery LogicBank Studio for FutureBasic — architecture</title>
+<style>
+  :root { --bg:#ffffff; --fg:#1d2430; --muted:#5a6473; --panel:#f4f6f9; --line:#c9d1dc; --accent:#2f5d8a;
+          --src:#e8f1fb; --mod:#ffffff; --tool:#eef7ef; --res:#f6f1e7; --file:#ffffff; --runtime:#e9eef7; --gen:#eaf6f0; --tmpl:#fbf1e6; --build:#eef0f3; --app:#e7f0fa; --person:#f7eef6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#16191d; --fg:#e6e9ee; --muted:#9aa3ae; --panel:#1e2329; --line:#3a434e; --accent:#8db6dd;
+            --src:#1d2b3a; --mod:#232a32; --tool:#1f2e24; --res:#2d281f; --file:#232a32; --runtime:#222b3a; --gen:#1f2f28; --tmpl:#33291f; --build:#262b31; --app:#1d2a38; --person:#2f2330; }
+  }
+  .bg { fill: var(--bg); }
+  text { font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif; fill: var(--fg); }
+  .h1 { font-size: 24px; font-weight: 600; }
+  .sub { font-size: 13px; fill: var(--muted); }
+  .col { font-size: 12px; font-weight: 600; letter-spacing: .08em; fill: var(--accent); }
+  .h3 { font-size: 14px; font-weight: 600; }
+  .h4 { font-size: 12.5px; font-weight: 600; }
+  .small { font-size: 11.5px; fill: var(--muted); }
+  .tiny { font-size: 10.5px; fill: var(--muted); }
+  .lbl { font-size: 10.5px; fill: var(--accent); }
+  rect { stroke: var(--line); stroke-width: 1; }
+  .panel { fill: var(--panel); }
+  .box, .mod, .file { fill: var(--mod); }
+  .src { fill: var(--src); } .tool { fill: var(--tool); } .res { fill: var(--res); } .person { fill: var(--person); }
+  .runtime { fill: var(--runtime); } .gen { fill: var(--gen); } .tmpl { fill: var(--tmpl); }
+  .build { fill: var(--build); } .app { fill: var(--app); stroke: var(--accent); stroke-width: 1.5; }
+  .step { fill: var(--mod); }
+  .arr, .arr2, .arr3 { fill: none; stroke: var(--accent); stroke-width: 1.4; }
+  .arr2 { stroke-dasharray: 5 3; }
+  .arr3 { stroke: var(--muted); stroke-dasharray: 2 3; }
+  .head { fill: var(--accent); }
+</style>
+<defs>
+  <marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="head"/></marker>
+  <marker id="tail" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="head"/></marker>
+</defs>
+<rect class="bg" x="0" y="0" width="1560" height="960" style="stroke:none"/>
+<text x="30" y="44" class="h1" text-anchor="start">Imagery LogicBank Studio for FutureBasic — architecture</text>
+<text x="30" y="70" class="sub" text-anchor="start">From a data model to a native Mac app with business rules: SQLite (lite edition) or API Logic Server → XIB parts, binding code, rules → a FutureBasic project built from the template and runtime.</text>
+<text x="30" y="112" class="col" text-anchor="start">SOURCES</text>
+<text x="300" y="112" class="col" text-anchor="start">THE GENERATOR (FB, MACOS)</text>
+<text x="850" y="112" class="col" text-anchor="start">WORKSPACE: &lt;PROJECT&gt;/</text>
+<text x="1150" y="112" class="col" text-anchor="start">GENERATED APP: FBAPP/</text>
+<rect x="30" y="130" width="230" height="96" rx="10" class="src"/>
+<text x="44" y="154" class="h3" text-anchor="start">SQLite database</text>
+<text x="44" y="176" class="small" text-anchor="start">the lite edition’s catalyst:</text>
+<text x="44" y="194" class="small" text-anchor="start">tables, keys, relationships</text>
+<text x="44" y="212" class="small" text-anchor="start">read straight from the file</text>
+<rect x="30" y="250" width="230" height="118" rx="10" class="src"/>
+<text x="44" y="274" class="h3" text-anchor="start">API Logic Server project</text>
+<text x="44" y="296" class="small" text-anchor="start">/metadata?include=attributes</text>
+<text x="44" y="314" class="small" text-anchor="start">logic/declare_logic.py</text>
+<text x="44" y="332" class="small" text-anchor="start">(LogicBank rules, Python)</text>
+<text x="44" y="350" class="small" text-anchor="start">JSON:API for the ALS edition</text>
+<rect x="30" y="392" width="230" height="78" rx="10" class="person"/>
+<text x="44" y="416" class="h3" text-anchor="start">The designer</text>
+<text x="44" y="438" class="small" text-anchor="start">Titles, widths, controls,</text>
+<text x="44" y="456" class="small" text-anchor="start">rules, About text, …</text>
+<rect x="300" y="124" width="520" height="640" rx="14" class="panel"/>
+<rect x="316" y="138" width="488" height="62" rx="10" class="mod"/>
+<text x="330" y="162" class="h3" text-anchor="start">Read the model</text>
+<text x="330" y="184" class="small" text-anchor="start">SQLite Model.incl  ·  API Interface.incl (ALS /metadata)</text>
+<rect x="316" y="214" width="488" height="82" rx="10" class="mod"/>
+<text x="330" y="238" class="h3" text-anchor="start">Entity definitions</text>
+<text x="330" y="260" class="small" text-anchor="start">Type Mapping.incl: FB type, size, control, Title, widths</text>
+<text x="330" y="278" class="small" text-anchor="start">designer’s adjustments → Design.json</text>
+<rect x="316" y="420" width="488" height="82" rx="10" class="mod"/>
+<text x="330" y="444" class="h3" text-anchor="start">Rules page</text>
+<text x="330" y="466" class="small" text-anchor="start">Rules.json: formula · constraint · sum · count · copy ·</text>
+<text x="330" y="484" class="small" text-anchor="start">parent check · delete action · row / commit event</text>
+<rect x="316" y="530" width="488" height="82" rx="10" class="mod"/>
+<text x="330" y="554" class="h3" text-anchor="start">App Generator.incl</text>
+<text x="330" y="576" class="small" text-anchor="start">the FB project: data.fbproj groups, &lt;project&gt;.main,</text>
+<text x="330" y="594" class="small" text-anchor="start">Model.json, Credits.rtf; runtime + templates copied</text>
+<rect x="316" y="310" width="238" height="92" rx="10" class="mod"/>
+<text x="330" y="334" class="h3" text-anchor="start">XIB Generator.incl</text>
+<text x="330" y="356" class="small" text-anchor="start">&lt;Entity&gt;Form.xib</text>
+<text x="330" y="374" class="small" text-anchor="start">&lt;Entity&gt;List.xib</text>
+<text x="330" y="392" class="small" text-anchor="start">Model Tags.incl</text>
+<rect x="566" y="310" width="238" height="92" rx="10" class="mod"/>
+<text x="580" y="334" class="h3" text-anchor="start">Binding Generator.incl</text>
+<text x="580" y="356" class="small" text-anchor="start">&lt;Entity&gt; Binding.incl</text>
+<text x="580" y="374" class="small" text-anchor="start">record ↔ Form</text>
+<text x="580" y="392" class="small" text-anchor="start">records → List</text>
+<rect x="566" y="640" width="238" height="108" rx="10" class="tool"/>
+<text x="580" y="664" class="h3" text-anchor="start">tools/rules_bridge.py</text>
+<text x="580" y="686" class="small" text-anchor="start">import / export declare_logic.py</text>
+<text x="580" y="704" class="small" text-anchor="start">check (names, cycles)</text>
+<text x="580" y="722" class="small" text-anchor="start">generate Studio Rules.incl</text>
+<text x="580" y="740" class="small" text-anchor="start">(python3, run by the generator)</text>
+<rect x="316" y="640" width="238" height="108" rx="10" class="res"/>
+<text x="330" y="664" class="h3" text-anchor="start">Bundled with the generator</text>
+<text x="330" y="686" class="small" text-anchor="start">src/Templates/  starting files</text>
+<text x="330" y="704" class="small" text-anchor="start">src/Runtime/  FB runtime</text>
+<text x="330" y="722" class="small" text-anchor="start">Branding.incl  name + logo</text>
+<text x="330" y="740" class="small" text-anchor="start">(never written to)</text>
+<path d="M 560 200 L 560 214" class="arr" marker-end="url(#head)"/>
+<path d="M 435 296 L 435 310" class="arr" marker-end="url(#head)"/>
+<path d="M 685 296 L 685 310" class="arr" marker-end="url(#head)"/>
+<path d="M 560 402 L 560 420" class="arr" marker-end="url(#head)"/>
+<path d="M 560 502 L 560 530" class="arr" marker-end="url(#head)"/>
+<path d="M 804 470 L 812 470 L 812 694 L 804 694" class="arr2" marker-end="url(#head)" marker-start="url(#tail)"/>
+<path d="M 435 640 L 435 612" class="arr" marker-end="url(#head)"/>
+<path d="M 260 168 L 316 168" class="arr" marker-end="url(#head)"/>
+<path d="M 260 290 L 290 290 L 290 175 L 316 175" class="arr" marker-end="url(#head)"/>
+<path d="M 260 340 L 282 340 L 282 774 L 685 774 L 685 748" class="arr2" marker-end="url(#head)" marker-start="url(#tail)"/>
+<text x="470" y="768" class="lbl" text-anchor="middle">declare_logic.py: import / export</text>
+<path d="M 260 430 L 296 430 L 296 250 L 316 250" class="arr" marker-end="url(#head)"/>
+<rect x="850" y="124" width="270" height="640" rx="14" class="panel"/>
+<rect x="866" y="140" width="238" height="74" rx="10" class="file"/>
+<text x="880" y="164" class="h3" text-anchor="start">Project.json</text>
+<text x="880" y="186" class="small" text-anchor="start">name, model source, base URL,</text>
+<text x="880" y="204" class="small" text-anchor="start">user name, About text</text>
+<rect x="866" y="222" width="238" height="56" rx="10" class="file"/>
+<text x="880" y="246" class="h3" text-anchor="start">Design.json</text>
+<text x="880" y="268" class="small" text-anchor="start">the designer’s adjustments</text>
+<rect x="866" y="286" width="238" height="74" rx="10" class="file"/>
+<text x="880" y="310" class="h3" text-anchor="start">Rules.json</text>
+<text x="880" y="332" class="small" text-anchor="start">the rules — source of truth</text>
+<text x="880" y="350" class="small" text-anchor="start">for the Rules page</text>
+<rect x="866" y="368" width="238" height="92" rx="10" class="file"/>
+<text x="880" y="392" class="h3" text-anchor="start">Database/&lt;db&gt;.sqlite</text>
+<text x="880" y="414" class="small" text-anchor="start">the project’s own copy</text>
+<text x="880" y="432" class="small" text-anchor="start">(+ -wal / -shm); backups:</text>
+<text x="880" y="450" class="small" text-anchor="start">one folder</text>
+<rect x="866" y="466" width="238" height="74" rx="10" class="file"/>
+<text x="880" y="490" class="h3" text-anchor="start">FBapp/</text>
+<text x="880" y="512" class="small" text-anchor="start">the generated FutureBasic</text>
+<text x="880" y="530" class="small" text-anchor="start">project (next column)</text>
+<text x="866" y="600" class="small" text-anchor="start">Recent Projects.json lives in</text>
+<text x="866" y="618" class="small" text-anchor="start">~/Library/Application Support/</text>
+<text x="866" y="636" class="small" text-anchor="start">Api_Logic_Client/</text>
+<path d="M 804 236 L 866 175" class="arr" marker-end="url(#head)"/>
+<text x="838" y="196" class="lbl" text-anchor="middle">saves</text>
+<path d="M 804 250 L 866 245" class="arr" marker-end="url(#head)"/>
+<path d="M 804 455 L 866 320" class="arr" marker-end="url(#head)"/>
+<path d="M 260 150 L 272 150 L 272 92 L 838 92 L 838 400 L 866 400" class="arr3" marker-end="url(#head)"/>
+<text x="640" y="86" class="lbl" text-anchor="middle">the database is copied into the project</text>
+<path d="M 804 570 L 866 500" class="arr" marker-end="url(#head)"/>
+<rect x="1150" y="124" width="380" height="640" rx="14" class="panel"/>
+<text x="1166" y="150" class="h3" text-anchor="start">FBapp/&lt;project&gt;.fbeproj — data.fbproj groups</text>
+<rect x="1166" y="164" width="348" height="108" rx="10" class="runtime"/>
+<text x="1180" y="188" class="h3" text-anchor="start">Runtime</text>
+<text x="1180" y="210" class="small" text-anchor="start">Data SQLite · DataObject query builder (author’s)</text>
+<text x="1180" y="228" class="small" text-anchor="start">Data Model · Data Records</text>
+<text x="1180" y="246" class="small" text-anchor="start">Logic Rules · Logic Row · Logic Engine</text>
+<text x="1180" y="264" class="small" text-anchor="start">ALS Client · ALS Binding · ALS App · Binding Support</text>
+<rect x="1166" y="282" width="348" height="72" rx="10" class="gen"/>
+<text x="1180" y="306" class="h3" text-anchor="start">Model · Bindings · Resources</text>
+<text x="1180" y="328" class="small" text-anchor="start">Model Tags.incl · &lt;Entity&gt; Binding.incl</text>
+<text x="1180" y="346" class="small" text-anchor="start">Model.json · &lt;Entity&gt;Form/List.xib · Credits.rtf</text>
+<rect x="1166" y="364" width="348" height="72" rx="10" class="gen"/>
+<text x="1180" y="388" class="h3" text-anchor="start">Rules</text>
+<text x="1180" y="410" class="small" text-anchor="start">Studio Rules.incl (generated: DeclareStudioRules)</text>
+<text x="1180" y="428" class="small" text-anchor="start">Rules.incl (yours: DeclareRules, never overwritten)</text>
+<rect x="1166" y="446" width="348" height="72" rx="10" class="tmpl"/>
+<text x="1180" y="470" class="h3" text-anchor="start">Controller · View · Main</text>
+<text x="1180" y="492" class="small" text-anchor="start">EventHandlers.incl · Menus.incl · Windows.incl</text>
+<text x="1180" y="510" class="small" text-anchor="start">&lt;project&gt;.main: DataOpen → rules → windows</text>
+<rect x="1166" y="534" width="14" height="14" rx="3" class="runtime"/>
+<text x="1188" y="546" class="small" text-anchor="start">copied from src/Runtime (regenerated)</text>
+<rect x="1166" y="556" width="14" height="14" rx="3" class="gen"/>
+<text x="1188" y="568" class="small" text-anchor="start">generated from the model / Rules.json</text>
+<rect x="1166" y="578" width="14" height="14" rx="3" class="tmpl"/>
+<text x="1188" y="590" class="small" text-anchor="start">starting templates: created once, yours</text>
+<path d="M 804 590 L 826 590 L 826 778 L 1136 778 L 1136 300 L 1166 300" class="arr" marker-end="url(#head)"/>
+<text x="980" y="772" class="lbl" text-anchor="middle">writes the parts, bindings, project and main</text>
+<path d="M 1104 490 L 1166 490" class="arr" marker-end="url(#head)"/>
+<rect x="1150" y="790" width="380" height="62" rx="10" class="build"/>
+<text x="1164" y="814" class="h3" text-anchor="start">FutureBasic builds it</text>
+<text x="1164" y="836" class="small" text-anchor="start">FBtoC → clang, links -lsqlite3 → &lt;project&gt;.app</text>
+<rect x="1150" y="868" width="380" height="78" rx="10" class="app"/>
+<text x="1164" y="892" class="h3" text-anchor="start">The Mac app</text>
+<text x="1164" y="914" class="small" text-anchor="start">XIB windows over the project’s SQLite copy;</text>
+<text x="1164" y="932" class="small" text-anchor="start">every save: LogicInsert / LogicUpdate / LogicDelete</text>
+<path d="M 1340 764 L 1340 790" class="arr" marker-end="url(#head)"/>
+<path d="M 1340 852 L 1340 868" class="arr" marker-end="url(#head)"/>
+<path d="M 1104 410 L 1128 410 L 1128 905 L 1150 905" class="arr3" marker-end="url(#head)"/>
+<rect x="30" y="790" width="1090" height="156" rx="14" class="panel"/>
+<text x="46" y="816" class="h3" text-anchor="start">Rules, end to end</text>
+<rect x="46" y="832" width="160" height="58" rx="8" class="step"/>
+<text x="126" y="855" class="h4" text-anchor="middle">declare_logic.py</text>
+<text x="126" y="874" class="tiny" text-anchor="middle">LogicBank (Python)</text>
+<path d="M 206 861 L 224 861" class="arr" marker-end="url(#head)"/>
+<rect x="224" y="832" width="160" height="58" rx="8" class="step"/>
+<text x="304" y="855" class="h4" text-anchor="middle">rules_bridge import</text>
+<text x="304" y="874" class="tiny" text-anchor="middle">lambdas → FB</text>
+<path d="M 384 861 L 402 861" class="arr" marker-end="url(#head)"/>
+<rect x="402" y="832" width="160" height="58" rx="8" class="step"/>
+<text x="482" y="855" class="h4" text-anchor="middle">Rules.json</text>
+<text x="482" y="874" class="tiny" text-anchor="middle">edited on the Rules page</text>
+<path d="M 562 861 L 580 861" class="arr" marker-end="url(#head)"/>
+<rect x="580" y="832" width="160" height="58" rx="8" class="step"/>
+<text x="660" y="855" class="h4" text-anchor="middle">rules_bridge generate</text>
+<text x="660" y="874" class="tiny" text-anchor="middle">Studio Rules.incl</text>
+<path d="M 740 861 L 758 861" class="arr" marker-end="url(#head)"/>
+<rect x="758" y="832" width="160" height="58" rx="8" class="step"/>
+<text x="838" y="855" class="h4" text-anchor="middle">LogicActivate</text>
+<text x="838" y="874" class="tiny" text-anchor="middle">names, order, cycles</text>
+<path d="M 918 861 L 936 861" class="arr" marker-end="url(#head)"/>
+<rect x="936" y="832" width="160" height="58" rx="8" class="step"/>
+<text x="1016" y="855" class="h4" text-anchor="middle">every save</text>
+<text x="1016" y="874" class="tiny" text-anchor="middle">formulas · sums · checks</text>
+<text x="46" y="920" class="small" text-anchor="start">Tests (tools/run_tests.sh): fblint · logic_reference (70 scenarios; --prove: every rule needed) · rules_bridge (23) · make_logic_test (the same 70 in FB, on a Mac) · ibtool (XIBs, on a Mac)</text>
+</svg>

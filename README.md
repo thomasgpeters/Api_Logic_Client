@@ -1,10 +1,14 @@
-# Api Logic Client
+# Imagery LogicBank Studio for FutureBasic
+
+*(repository: Api_Logic_Client)*
 
 A macOS FutureBasic app that turns a data model — a SQLite database today, an
 [API Logic Server](https://apilogicserver.github.io/Docs/) project next — into a
 native macOS FutureBasic app the developer keeps editing. One shell, many
 entities: an entity navigator, a List part and a Form part per entity, related
 lists in tabs, drill-in with a crumb trail.
+
+![Architecture: SQLite or API Logic Server → the generator → the project workspace → the generated FutureBasic app, with business rules end to end](docs/design/architecture.svg)
 
 ## How it works
 
@@ -85,6 +89,7 @@ Secrets (tokens, API keys, passwords) go in the macOS Keychain, never in a file.
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Where the project is going, phase by phase |
 | [`docs/BACKLOG.md`](docs/BACKLOG.md) | Open items and ideas |
 | [`docs/DEVELOPMENT_LOG.md`](docs/DEVELOPMENT_LOG.md) | What was done, what was learned, with commits |
+| [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) | **How to use the app** — projects, generation, business rules, ALS import / export |
 | [`docs/TESTING.md`](docs/TESTING.md) | Every test and how to run it: `tools/run_tests.sh`, and the checks on a Mac |
 | [`docs/features/`](docs/features/) | How each feature works |
 | [`docs/design/`](docs/design/) | The generated app's shell; the generator app (workspace, settings, git) |
