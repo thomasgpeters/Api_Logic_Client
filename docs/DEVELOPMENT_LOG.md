@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Crumb trail rebuilt from buttons
+
+- The `NSPathControl` trail highlighted when clicked but did nothing (author): the item handed
+  back by `PathControlClickedPathItem` is most likely not the object we stored, so the action was
+  never found. Replaced with up to four borderless buttons (symbol and title, sized to fit,
+  `_crumbButtonBase` 611-614) and chevron image views between them (621-623), made once in
+  `BuildSubViews` and titled, placed and shown by `StudioUpdateCrumbs`; the last crumb is bold.
+  Clicks are `_btnClick` -> `StudioCrumbClicked` (EventHandlers.incl, logged). The square-icon
+  workaround (`StudioCrumbImage`) went with the path control: a button keeps a symbol's proportions.
+
 ## 2026-11-24 — Crumb icons kept square; the entity line's placeholder
 
 - The path control draws each item's image in a square, so SF Symbols were squeezed (author's

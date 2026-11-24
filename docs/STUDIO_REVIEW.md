@@ -130,7 +130,8 @@ Tags get a range of their own (600–609) so they never collide with a view's co
 
 ## 2.5a Navigation (author, 2026-11-24: "a way to navigate back to the Project screen", "maybe a crumb train along the top")
 
-A crumb trail (`NSPathControl`, `_studioCrumbTrail`) along the top of the page area, the
+A crumb trail (borderless buttons 611-614, chevrons 621-623; an `NSPathControl` was tried first:
+its images were squeezed and its clicks did nothing) along the top of the page area, the
 heading under it: *Projects*, *Projects › New Project*, *Projects › API Logic Server*,
 *Projects › Northwind*, *Projects › Northwind › address* (an entity selected),
 *Projects › Northwind › Settings*. Projects goes to the Projects screen, the project's name to
