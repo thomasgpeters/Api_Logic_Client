@@ -15,7 +15,7 @@ developer's tool, not a user's).
 
 | Item | Tag | Status | Why |
 |---|---|---|---|
-| Project (hammer) | 205 | **dead** | nothing handles `_toolbarItemClick`; tag 205 is also the ALS form's Cancel button |
+| Project (hammer) | 205 | **dead** | nothing handles `_toolbarItemClick`; tag 205 is also the ALS form's Create button |
 | Object (puzzle piece) | 303 | **dead** | as above; tag 303 is also the Project Settings tag-line field |
 | Generate (arrow) | 500 | **dead** | as above |
 | Settings (gear) | 501 | **dead** | as above |
@@ -59,7 +59,7 @@ There is no **New Project** menu item (only the Welcome view's button) and no **
 | | Heading ("Northwind Project") | works |
 | Welcome | Create Project, Open Project…, Recent Projects (double-click) | works |
 | New Project | Choose…, Create, Cancel, Use an API Logic Server… | works |
-| ALS form (ProjectCreateView) | Create, Cancel | Create works; **Cancel is dead** (tag 205, unhandled) |
+| ALS form (ProjectCreateView) | Create, Cancel | Create works; **Cancel is dead** (tag 204, unhandled; the old toolbar's Project item also had 205, Create's tag) |
 | Entity definitions | Control, Form layout, Icon popups; attribute table (editable cells) | works; Form layout reported to revert (being traced) |
 | Project Settings | About text, app icon, symbol, tag-line, copyright, Done | works |
 
@@ -128,6 +128,24 @@ Tags get a range of their own (600–609) so they never collide with a view's co
 - File › Close quits the Studio (the main window is the only window): Close Project instead,
   and ⌘W only closes the window.
 
+## 2.6 The generated app's toolbar (author, 2026-11-24: "the generated app should also get a toolbar")
+
+Proposal, for the author: the page actions move from the footer into a toolbar, where macOS
+users look for them, and the footer keeps the copyright and the status line.
+
+| Item | Does | Enabled |
+|---|---|---|
+| New | an empty Form | always |
+| Save | the Form's record, through the rules | a record in the Form |
+| Delete | the chosen record | a record chosen in the List |
+| Refresh | the List again | always |
+| Search (a search field) | filters the List | always |
+| Theme | System / Light / Dark (today in the header) | always |
+| Log In | Enterprise only | when App Data needs it |
+
+With *Multiple windows* (App Shell Design, Window layouts) each entity window has the same
+toolbar, acting on its own entity.
+
 ## 3. Questions for the author
 
 1. The toolbar's **Project** and **Object** items: what did you mean them to do? The proposal
@@ -138,6 +156,7 @@ Tags get a range of their own (600–609) so they never collide with a view's co
 
 ## 4. Steps (each built and tried before the next)
 
-1. Menus regrouped (2.1); toolbar tags and handler (2.3); `StudioUpdateCommands` (2.2).
+1. Menus regrouped (2.1); toolbar tags and handler (2.3); `StudioUpdateCommands` (2.2) - **done,
+   to try on a Mac**; also the ALS form's Cancel (2.5), New Project and Close Project.
 2. Context menus (2.4).
 3. Small fixes (2.5); this page's inventory updated to "works" row by row.

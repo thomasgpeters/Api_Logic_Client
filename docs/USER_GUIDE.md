@@ -81,12 +81,12 @@ definitions.
 If a project with that name already exists, you are asked whether to **open it** instead.
 
 *Working with a running API Logic Server instead?* **API Logic Server instead…** on the New
-Project page opens the server form (base URL, user name, password). *Model → Open Metadata
+Project page opens the server form (base URL, user name, password). *Model → Open API Logic Server Metadata
 JSON…* (⌘J) reads a saved `/metadata?include=attributes` response.
 
 ## 5. The workspace and your project's files
 
-Everything lives in your Application Support folder — *Model → Show Workspace in Finder*
+Everything lives in your Application Support folder — *Help → Show Workspace in Finder*
 opens it (`~/Library` is hidden in Finder):
 
 ```
@@ -150,7 +150,7 @@ you regenerate. Clear a cell to go back to the recommendation.
 
 ## 7. Project settings
 
-*Model → Project Settings…* (⌘;) — what is deployed with the generated app beyond the model.
+*Project → Project Settings…* (⌘;) — what is deployed with the generated app beyond the model.
 - **About text**, up to 250 characters (a counter shows how many are left). It appears in the
   generated app's **About** box, under its name, icon and version.
 - **Branding** for the generated app's header and footer:
@@ -186,7 +186,7 @@ own app sits, into its own folder: `~/Library/Application Support/Imagery LogicB
 FutureBasic/workspace/Runtime` and `…/Templates`, creating the folders as needed. Only when it cannot
 find the repository does it ask you to choose the Api_Logic_Client folder you cloned (not a folder in
 Library). While the Studio runs from the repository it was built in, *Generate App* copies them from there
-every time, so an app always gets the runtime the Studio was built with. *Model → Update Runtime
+every time, so an app always gets the runtime the Studio was built with. *Generate → Update Runtime
 and Templates…* does the same on demand.
 
 
@@ -235,7 +235,7 @@ The app is generated as the **Lite** edition: free and open source. It opens the
 database itself and runs the business rules inside the app. A paid **Enterprise** edition, a
 three-tier app that talks to an API Logic Server, is planned (`design/Editions and Licensing.md`).
 
-A project whose model was read from an API Logic Server (*Open Metadata JSON*, or the ALS form)
+A project whose model was read from an API Logic Server (*Open API Logic Server Metadata JSON*, or the ALS form)
 can generate XIBs, bindings and the model diagram, but not a Lite app: create the project from the
 server's SQLite database instead (*New Project*), which gives the same model.
 
@@ -484,7 +484,7 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 ## 13. Opening projects again
 
-- **Welcome page:** double-click a recent project. *Model → Recent Projects* returns to it;
+- **Welcome page:** double-click a recent project. *Project → Recent Projects* returns to it;
   *Clear Recent Projects* empties the list.
 - **Open Project…** (⇧⌘O): choose a project's `Project.json` in the workspace.
 - If the project's database has moved, you are asked to locate it; the new place is remembered.
@@ -518,28 +518,39 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 Paste a Build Log or NSLog lines into a session when something is unclear.
 
-## 16. Menus and keyboard shortcuts
+## 16. Menus, toolbar and keyboard shortcuts
 
-| Menu | Command | Key |
-|---|---|---|
-| File | Close | ⌘W |
-| Edit | Undo · Cut · Copy · Paste · Select All | ⌘Z ⌘X ⌘C ⌘V ⌘A |
-| Model | Open Project… | ⇧⌘O |
-| | Recent Projects · Clear Recent Projects | |
-| | Project Settings… | ⌘; |
-| | Delete Project… | |
-| | Open SQLite Database… | ⌘D |
-| | Open Metadata JSON… | ⌘J |
-| | Generate XIBs | ⇧⌘X |
-| | Generate XIB for Selected Entity | ⌘E |
-| | Generate Binding Code | ⌘B |
-| | Generate App | ⌘G |
-| | Import Rules from declare_logic.py… · Export Rules to declare_logic.py… | |
-| | Show Workspace in Finder | |
-| | Show Model Diagram | ⇧⌘D |
-| | Update Runtime and Templates… | |
+A command is enabled only when what it works on is there: with no project open, only the
+commands that open or create one; *Generate XIB for …* needs an entity selected in the Objects
+list (and names it); the Control popup needs an attribute selected in the table.
 
-*Preferences…* (⌘,) does nothing yet.
+| Menu | Command | Key | Needs |
+|---|---|---|---|
+| Project | New Project… | ⌘N | |
+| | Open Project… | ⌘O | |
+| | Recent Projects · Clear Recent Projects | | |
+| | Close Project | ⇧⌘W | a project |
+| | Project Settings… | ⌘; | a project |
+| | Show Project in Finder | | a project |
+| | Delete Project… | | a project, or one selected in Recent Projects |
+| Edit | Undo · Cut · Copy · Paste · Select All | ⌘Z ⌘X ⌘C ⌘V ⌘A | |
+| Model | Open SQLite Database… | ⌘D | |
+| | Open API Logic Server Metadata… | ⌘J | |
+| | Show Model Diagram | ⇧⌘D | a project |
+| | Import Rules… · Export Rules… | | a project |
+| Generate | Generate App | ⌘G | a project |
+| | Generate XIBs | ⇧⌘X | a project |
+| | Generate XIB for *entity* | ⌘E | an entity selected |
+| | Generate Binding Code | ⌘B | a project |
+| | Show Generated App in Finder | | a project |
+| | Update Runtime and Templates… | | |
+| Window | Minimize · Zoom · Close | ⌘M · · ⌘W | |
+| Help | Imagery LogicBank Studio Help (this guide) | ⌘? | |
+| | Show Workspace in Finder | | |
+
+**Toolbar:** *Projects* (the Welcome view: new, open, recent), *Entities* (the open project's
+entity definitions), *Diagram* (Show Model Diagram), *Generate* (Generate App), *Settings*
+(Project Settings). All but Projects need a project.
 
 ## 17. What is not built yet
 

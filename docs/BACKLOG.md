@@ -27,7 +27,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [x] 3. Choices: Radio buttons, Dropdown (a value list in the Values column, or a foreign key's lookup table: the parent's key stored, a display column shown), Checkbox; `AppDataLookup`
 - [ ] Verify on a Mac: a foreign key's Dropdown lists the parent's rows and Save stores the key; a value list Dropdown; Radio buttons (one at a time); the Form layout popup keeps its choice (log lines "Form layout popup: item …")
 - [ ] Choose the lookup's display column (or several: "givenName surname"); show the display value in the List instead of the key
-- [ ] Studio review (author, 2026-11-24) - inventory and proposal in `STUDIO_REVIEW.md`: menus regrouped, toolbar wired (its tags collide with view controls today), commands enabled by state, context menus, small fixes
+- [ ] Studio review (author, 2026-11-24) - `STUDIO_REVIEW.md`: step 1 done (menus regrouped, toolbar rethought and wired, commands enabled by project / entity / attribute, New / Close Project, the ALS form's Cancel); step 2 context menus; step 3 small fixes (+ / − under Objects)
+- [ ] Generated app toolbar (author): New, Save, Delete, Refresh, Search, Theme, Log In - proposal in `STUDIO_REVIEW.md` 2.6
 - [ ] Users and roles in generated apps (author, 2026-11-24): sign-in, users, roles (e.g. Admin, Editor, Viewer) deciding who may see, edit or delete each entity; Lite: users in the app's SQLite database; Enterprise: the API Logic Server's. Then an audit trail (who changed which record, when)
 - [ ] Generated app window layouts, a project setting (`design/App Shell Design.md`, Window layouts): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one tab per entity (future)
 
@@ -71,7 +72,7 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 ## Installing the Studio
 
 - [x] Runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`), copied from
-      the repository folder on first launch; *Model > Update Runtime and Templates* (`Studio Library.incl`)
+      the repository folder on first launch; *Generate > Update Runtime and Templates* (`Studio Library.incl`)
 - [ ] Installer for a release: the Studio app plus the runtime and templates, put into
       `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/` (a `.pkg` with a per-user
       postinstall, or a first-launch copy from the installer's disk image), so users need no repository

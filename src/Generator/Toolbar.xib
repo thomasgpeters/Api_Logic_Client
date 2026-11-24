@@ -11,48 +11,51 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <toolbar implicitIdentifier="1EDAED16-18CC-4E92-8DB0-674E387EE6B5" explicitIdentifier="5000" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="hVU-XW-Gpx" userLabel="Main Toolbar">
             <allowedToolbarItems>
-                <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="Qva-YQ-mZn"/>
-                <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="IJy-mn-ipo"/>
-                <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="xoO-rQ-laA"/>
                 <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="RHh-fr-l3T"/>
                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="qIa-qk-Pa9"/>
-                <toolbarItem implicitItemIdentifier="A3068DEC-2E11-47B7-B61B-4415A19E3441" label="Project" paletteLabel="Project" tag="205" selectable="YES" id="2eO-zU-eHn">
+                <toolbarItem implicitItemIdentifier="8D2EDB89-905F-4627-8806-D3AF70321DF7" label="Projects" paletteLabel="Projects" tag="600" id="tb-prj-itm">
+                    <imageReference key="image" image="house" catalog="system" symbolScale="large"/>
+                    <size key="minSize" width="50" height="27"/>
+                    <size key="maxSize" width="60" height="27"/>
+                </toolbarItem>
+                <toolbarItem implicitItemIdentifier="3A32FE1E-1723-4002-B8F7-4DC2B102A677" label="Entities" paletteLabel="Entities" tag="601" id="tb-ent-itm">
+                    <imageReference key="image" image="tablecells" catalog="system" symbolScale="large"/>
+                    <size key="minSize" width="50" height="27"/>
+                    <size key="maxSize" width="60" height="27"/>
+                </toolbarItem>
+                <toolbarItem implicitItemIdentifier="9497FDA3-2A26-4CE2-A949-4F1667031265" label="Diagram" paletteLabel="Diagram" tag="602" id="tb-dgm-itm">
+                    <imageReference key="image" image="rectangle.connected.to.line.below" catalog="system" symbolScale="large"/>
+                    <size key="minSize" width="50" height="27"/>
+                    <size key="maxSize" width="60" height="27"/>
+                </toolbarItem>
+                <toolbarItem implicitItemIdentifier="D1D69654-BBEC-48C7-8E93-2702758995C0" label="Generate" paletteLabel="Generate" tag="603" id="tb-gen-itm">
                     <imageReference key="image" image="hammer" catalog="system" symbolScale="large"/>
-                    <size key="minSize" width="50.5" height="27"/>
-                    <size key="maxSize" width="50.5" height="27"/>
+                    <size key="minSize" width="50" height="27"/>
+                    <size key="maxSize" width="60" height="27"/>
                 </toolbarItem>
-                <toolbarItem implicitItemIdentifier="D7FD00B5-CDCE-4595-A8E7-D013CEA2283D" label="Object" paletteLabel="Object" tag="303" selectable="YES" id="h9C-ui-w99">
-                    <imageReference key="image" image="puzzlepiece.extension" catalog="system" symbolScale="large"/>
-                    <size key="minSize" width="34" height="27"/>
-                    <size key="maxSize" width="34" height="27"/>
-                </toolbarItem>
-                <toolbarItem implicitItemIdentifier="EB0E98F7-D7A0-4B9D-94C0-69D4ABFAD736" label="Generate" paletteLabel="Generate" tag="500" selectable="YES" id="Bia-FU-gCc">
-                    <imageReference key="image" image="arrowshape.turn.up.left.circle" catalog="system" symbolScale="large"/>
-                    <size key="minSize" width="50.5" height="27"/>
-                    <size key="maxSize" width="50.5" height="27"/>
-                </toolbarItem>
-                <toolbarItem implicitItemIdentifier="C0D9A131-53E7-4E44-8166-14E76805E7AD" label="Settings" paletteLabel="Settings" tag="501" id="qtW-i4-FSm">
+                <toolbarItem implicitItemIdentifier="7BAD39A3-63B2-4C8C-88AA-23578A0830F7" label="Settings" paletteLabel="Settings" tag="604" id="tb-set-itm">
                     <imageReference key="image" image="gearshape" catalog="system" symbolScale="large"/>
-                    <size key="minSize" width="50.5" height="27"/>
-                    <size key="maxSize" width="50.5" height="27"/>
+                    <size key="minSize" width="50" height="27"/>
+                    <size key="maxSize" width="60" height="27"/>
                 </toolbarItem>
             </allowedToolbarItems>
             <defaultToolbarItems>
-                <toolbarItem reference="2eO-zU-eHn"/>
-                <toolbarItem reference="h9C-ui-w99"/>
-                <toolbarItem reference="Bia-FU-gCc"/>
-                <toolbarItem reference="RHh-fr-l3T"/>
-                <toolbarItem reference="qtW-i4-FSm"/>
                 <toolbarItem reference="qIa-qk-Pa9"/>
-                <toolbarItem reference="xoO-rQ-laA"/>
+                <toolbarItem reference="tb-prj-itm"/>
+                <toolbarItem reference="tb-ent-itm"/>
+                <toolbarItem reference="tb-dgm-itm"/>
+                <toolbarItem reference="RHh-fr-l3T"/>
+                <toolbarItem reference="tb-gen-itm"/>
+                <toolbarItem reference="tb-set-itm"/>
             </defaultToolbarItems>
             <point key="canvasLocation" x="-165" y="-692"/>
         </toolbar>
     </objects>
     <resources>
-        <image name="arrowshape.turn.up.left.circle" catalog="system" width="19" height="19"/>
         <image name="gearshape" catalog="system" width="20" height="20"/>
         <image name="hammer" catalog="system" width="25" height="22"/>
-        <image name="puzzlepiece.extension" catalog="system" width="23" height="18"/>
+        <image name="house" catalog="system" width="22" height="20"/>
+        <image name="rectangle.connected.to.line.below" catalog="system" width="22" height="20"/>
+        <image name="tablecells" catalog="system" width="22" height="18"/>
     </resources>
 </document>

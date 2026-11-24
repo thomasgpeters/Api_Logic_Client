@@ -6,6 +6,22 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Studio review step 1: menus, toolbar, commands enabled by state
+
+- `Menus.incl` (moved before the other includes so every file can call it): Project / Edit /
+  Model / Generate / Window / Help; `StudioUpdateCommands` enables each menu item, toolbar item
+  and design popup from the state - a project, an entity selected (the Generate XIB item names
+  it), an attribute selected, a project selected in Recent Projects (Delete). Called at launch,
+  after every menu command, toolbar click and button, on table selection, when a model loads,
+  on Close and Delete.
+- `Toolbar.xib`: Projects, Entities, Diagram, Generate, Settings (tags 600-604, handled in
+  `_toolbarItemClick`); the old items were never implemented (author: they came from
+  Test_Xib_View) and shared tags with view controls.
+- New commands: New Project (⌘N), Close Project (⇧⌘W, `ProjectClose`, sharing
+  `ProjectResetToEmpty` with Delete), Show Project / Generated App / Workspace in Finder, Help
+  (the user guide from the repository, else GitHub). The ALS form's Cancel works.
+- Open One Xib is behind `STUDIO_DEBUG_MENU` (off). Docs follow the new menus.
+
 ## 2026-11-24 — Studio review: inventory and proposal
 
 - `docs/STUDIO_REVIEW.md`: every toolbar item, menu item and view control, with its status.
