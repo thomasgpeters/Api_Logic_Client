@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — LogicBank for FutureBasic: sums, counts, chaining
+## 2026-11-24 — LogicBank for FutureBasic: sums, counts, chaining (`8d99a8f`)
 
 - `LogicSum` / `LogicCount` (with a where function), declared on the parent and filed
   under the child at activation (child list → child entity + foreign key).
