@@ -24,7 +24,12 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [x] Entity definitions with recommendations; designer adjustments in `Design.json`
 - [x] Separate commands: Generate XIBs / XIB / Binding Code / App
 - [x] Generated `<Entity> Binding.incl`
-- [ ] Shell: entity navigator + List + Form, wired to SQLite (package the query builder as runtime files)
+- [x] Shell: entity navigator + List + Form, wired to SQLite — `features/APP_SHELL_FEATURE.md`
+- [x] Studio: branding form in Project Settings (logo well, tag-line, copyright)
+- [x] Generated code readable for FB developers: file headers, developer notes, `README.md` tour
+- [ ] Verify on a Mac: the shell (`features/APP_SHELL_FEATURE.md` → Verify)
+- [ ] Shell for ALS projects (today they keep the ALS runtime's window)
+- [ ] Save / New / Delete buttons on a page, through `LogicInsert` / `LogicUpdate` / `LogicDelete`
 - [ ] Per-entity event handlers routed from one `on dialog` handler by tag range
 - [ ] Crumb trail and page stack (drill-in replaces the page; back via crumbs)
 - [ ] Related-list tabs (master-detail) and drill-in
@@ -47,8 +52,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Generator app (see `design/Generator App Design.md`)
 
-- [ ] Add an Edit menu (`editmenu`) to the generator: Cut / Copy / Paste in its text fields
-- [ ] Generate XIBs uses ⌘X, which is Cut on the Mac: choose another key (author)
+- [x] Add an Edit menu (`editmenu`) to the generator: Cut / Copy / Paste in its text fields
+- [x] Generate XIBs uses ⌘X, which is Cut on the Mac: moved to ⇧⌘X (author to confirm)
 - [ ] Preferences… (⌘,) does nothing yet
 - [x] Rules bridge in the generator: Import / Export Rules (declare_logic.py), Studio Rules.incl on Generate App — `features/RULES_BRIDGE_FEATURE.md`
 - [ ] The Rules page: list, editor (model-driven pop-ups), check — on `Rules.json`

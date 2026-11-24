@@ -331,6 +331,9 @@ def main(argv):
         local_fns |= set(re.findall(r'^\s*(?:\w+\s+)?local\s+fn\s+(\w+)', s, re.M))
         local_fns |= set(re.findall(r'^\s*toolbox\s+(?:fn\s+)?(\w+)', s, re.M))
         local_fns |= set(re.findall(r'^\s*#define\s+(\w+)', s, re.M))
+        # a template may call fns the generator writes beside it: "// generated: Name, Name"
+        for g in re.findall(r'^\s*//\s*generated:\s*([\w ,]+)$', s, re.M):
+            local_fns |= {n.strip() for n in g.split(',') if n.strip()}
     local_fns = {n.lower() for n in local_fns}
     known = {n.lower() for n in toolbox_names(headers)} | {'nslog'} if headers else None
     fb_keywords = keywords(headers) if headers else set()

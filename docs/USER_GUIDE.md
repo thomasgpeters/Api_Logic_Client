@@ -126,8 +126,15 @@ you regenerate. Clear a cell to go back to the recommendation.
 ## 7. Project settings
 
 *Model → Project Settings…* (⌘;) — what is deployed with the generated app beyond the model.
-Today: the **About text**, up to 250 characters (a counter shows how many are left). It appears
-in the generated app's **About** box, under its name, icon and version. **Done** saves it.
+- **About text**, up to 250 characters (a counter shows how many are left). It appears in the
+  generated app's **About** box, under its name, icon and version.
+- **Branding** for the generated app's header and footer:
+  - **Logo** — paste (⌘V) or drag a picture into the well. It is kept as
+    `<project>/Branding/logo.png` and deployed as `FBapp/AppLogo.png`. Select it and press Delete to remove it.
+  - **Tag-line** — a short description under the app's name, up to 80 characters.
+  - **Copyright** — the footer's text (`© <app name>` when empty).
+
+**Done** saves everything in `Project.json`.
 
 ## 8. Generating the app
 
@@ -135,7 +142,7 @@ From the *Model* menu:
 
 | Command | Key | Writes into `FBapp/` |
 |---|---|---|
-| Generate XIBs | ⌘X | every entity's `<Entity>Form.xib` and `<Entity>List.xib`, and `Model Tags.incl` |
+| Generate XIBs | ⇧⌘X | every entity's `<Entity>Form.xib` and `<Entity>List.xib`, and `Model Tags.incl` |
 | Generate XIB for Selected Entity | ⌘E | the selected entity's two parts |
 | Generate Binding Code | ⌘B | `<Entity> Binding.incl` for every entity |
 | Generate App | ⌘G | all of the above, plus the project, the main program, `Model.json`, `Credits.rtf`, the runtime and the starting files |
@@ -147,8 +154,25 @@ Then open **`FBapp/<name>.fbeproj`** in FutureBasic and build it. The project is
 | Runtime | the data runtime, the query builder, LogicBank for FutureBasic, the ALS client | yes — copied fresh |
 | Model · Bindings · Resources | `Model Tags.incl`, `<Entity> Binding.incl`, `Model.json`, the XIBs, `Credits.rtf` | yes |
 | Rules | `Studio Rules.incl` (generated) and **`Rules.incl` (yours)** | `Rules.incl`: never |
-| Controller · View | **`EventHandlers.incl`, `Menus.incl`, `Windows.incl` (yours)** | never |
+| Pages | `App Pages.incl`: a page per entity (its List and Form), its navigation button | yes |
+| Controller · View | **`EventHandlers.incl`, `Theme.incl`, `Menus.incl`, `Windows.incl` (yours)** | never |
 | Main | `<name>.main`: settings, handlers, start-up | yes |
+
+`README.md` in `FBapp/` is a developer's tour of the generated project, file by file; every
+generated file starts with a comment saying what it does and whether it is regenerated.
+
+### 8.1 The app's look
+
+Every generated app has the same frame (`App Shell.incl`):
+
+- a **dark blue navigation bar** on the left, with a white, bold button and an icon per entity;
+- a **header** with your logo, the app's name and tag-line, and on the right the **theme menu**
+  (System / Light / Dark) and **Log In** (connect it to your sign-in in `EventHandlers.incl`, `DoLogin`);
+- a **footer** with the copyright;
+- the **page**: the entity's list on top, its form below — choose a row to see it in the form.
+
+Change the colours in `Theme.incl` (yours). Add pages of your own in `Windows.incl`, after
+`AppPagesBuild` (the file shows how). ALS projects keep the ALS runtime's window for now.
 
 When it runs, the app opens the project's database (`Data: opened …` in the NSLog window) and
 activates its rules (`Logic: rules active for N entities`).
@@ -383,9 +407,9 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 ## 12. Making the generated app your own
 
 - **Yours, never overwritten:** `EventHandlers.incl` (what happens on clicks and menus),
-  `Menus.incl`, `Windows.incl` (the window and where each part goes), `Rules.incl`, and the
+  `Menus.incl`, `Windows.incl` (the window and its pages), `Theme.incl` (the colours), `Rules.incl`, and the
   project's build settings. Delete one to get a fresh copy at the next *Generate App*.
-- **Regenerated:** the XIBs, bindings, `Model.json`, `Model Tags.incl`, `Studio Rules.incl`, the
+- **Regenerated:** `App Pages.incl`, `README.md`, the XIBs, bindings, `Model.json`, `Model Tags.incl`, `Studio Rules.incl`, the
   runtime and the main program — change the model, your adjustments or the rules instead.
 - `Model Tags.incl` names every view and control tag, for your own code.
 
@@ -425,20 +449,19 @@ Paste a Build Log or NSLog lines into a session when something is unclear.
 | Menu | Command | Key |
 |---|---|---|
 | File | Close | ⌘W |
+| Edit | Undo · Cut · Copy · Paste · Select All | ⌘Z ⌘X ⌘C ⌘V ⌘A |
 | Model | Open Project… | ⇧⌘O |
 | | Recent Projects · Clear Recent Projects | |
 | | Project Settings… | ⌘; |
 | | Open SQLite Database… | ⌘D |
 | | Open Metadata JSON… | ⌘J |
-| | Generate XIBs | ⌘X |
+| | Generate XIBs | ⇧⌘X |
 | | Generate XIB for Selected Entity | ⌘E |
 | | Generate Binding Code | ⌘B |
 | | Generate App | ⌘G |
 | | Import Rules from declare_logic.py… · Export Rules to declare_logic.py… | |
 | | Show Workspace in Finder | |
 
-**Known issues:** the generator has no **Edit** menu yet, so Cut / Copy / Paste may not work in
-its text fields, and *Generate XIBs* uses ⌘X, which is Cut everywhere else on the Mac.
 *Preferences…* (⌘,) does nothing yet.
 
 ## 17. What is not built yet
