@@ -121,6 +121,9 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
   `CFDataRef` → `DataRef`, mutable ones alike); they are aliases, so old code still builds.
   Prefer `DictionaryObjectForKey`, `MutableArrayAddObject`, … over `CFDictionaryGetValue`,
   `CFArrayAppendValue`, …; `CFRelease` only what a `CF…Create` call returned.
+- **`ObjectRef` parameters need a cast** (`fn ObjectIsEqual( (ObjectRef)a, (ObjectRef)b )`): a CF
+  value passed uncast makes clang warn. fblint reads the parameter types from the headers and
+  reports every uncast argument.
 - **Cocoa collections refuse NULL.** `MutableDictionarySetObjectForKey( d, NULL, k )` raises
   an exception — guard optional values, or store `NSNull` for SQL NULL.
 

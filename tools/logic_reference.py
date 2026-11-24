@@ -581,7 +581,7 @@ class Logic:
         old = self.data.fetch_one(entity, key_values)
         if old is None:
             self.message = f'The {entity} no longer exists.'
-            self.data.end(False)
+            self.finish(False)
             return False
         for c in self.data.columns(entity):
             record.setdefault(c, old[c])
@@ -611,7 +611,7 @@ class Logic:
         old = self.data.fetch_one(entity, key_values)
         if old is None:
             self.message = f'The {entity} no longer exists.'
-            self.data.end(False)
+            self.finish(False)
             return False
         lr = self.new_row(entity, dict(old), old, 'delete', self.nest)
         self.nest += 1

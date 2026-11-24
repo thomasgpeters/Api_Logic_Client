@@ -81,6 +81,58 @@ fn LogicSum( @"Customer", @"Balance", @"OrderList", @"AmountTotal", @fn OrderIsU
 fn LogicCount( @"Customer", @"UnpaidOrderCount", @"OrderList", @fn OrderIsUnshipped )
 fn LogicConstraint( @"Customer", @fn CustomerCreditCheck, @"Customer balance ({row.Balance}) exceeds credit limit ({row.CreditLimit})" )
 end fn
+
+
+// ---- step 3: copy, parent check, cascades, delete actions, events
+
+begin globals
+MutableArrayRef gOrderRowEvents       // "verb|Id" of each Order row event
+MutableArrayRef gOrderCommitEvents    // "verb|Id" of each Order commit event
+end globals
+
+
+local fn EventLabel( logicRow as LogicRowRef ) as StringRef
+end fn = fn StringWithFormat( @"%@|%@", fn DictionaryObjectForKey( logicRow, @"verb" ), fn LogicString( logicRow, @"Id" ) )
+
+
+void local fn OrderRowEvent( logicRow as LogicRowRef )
+MutableArrayAddObject( gOrderRowEvents, fn EventLabel( logicRow ) )
+end fn
+
+
+void local fn OrderCommitEvent( logicRow as LogicRowRef )
+MutableArrayAddObject( gOrderCommitEvents, fn EventLabel( logicRow ) )
+end fn
+
+
+// a row event that changes the row: the save must fail (LB-11)
+void local fn SneakyDetailEvent( logicRow as LogicRowRef )
+fn LogicSetValue( logicRow, @"Discount", fn NumberWithDouble( 0.5 ) )
+end fn
+
+
+void local fn DeclareStep3Rules
+fn LogicCopy( @"OrderDetail", @"UnitPrice", @"Product", @"UnitPrice" )
+fn LogicFormula( @"OrderDetail", @"Amount", @fn OrderDetailAmount, @[ @"Quantity", @"UnitPrice" ] )
+fn LogicFormula( @"OrderDetail", @"ShippedDate", @fn OrderDetailShippedDate, @[ @"Order.ShippedDate" ] )
+fn LogicSum( @"Order", @"AmountTotal", @"OrderDetailList", @"Amount", NULL )
+fn LogicSum( @"Customer", @"Balance", @"OrderList", @"AmountTotal", @fn OrderIsUnshipped )
+fn LogicConstraint( @"Customer", @fn CustomerCreditCheck, @"Customer balance ({row.Balance}) exceeds credit limit ({row.CreditLimit})" )
+fn LogicParentCheck( @"OrderDetail", @"Product", @"Product {ProductId} does not exist" )
+fn LogicParentCheck( @"Order", @"Customer", @"Customer {CustomerId} does not exist" )
+fn LogicDeleteAction( @"Order", @"OrderDetailList", @"cascade", NULL )
+fn LogicDeleteAction( @"Customer", @"OrderList", @"prevent", @"Customer {Id} still has orders" )
+fn LogicDeleteAction( @"Order", @"OrderList", @"nullify", NULL )            // orders cloned from this one
+fn LogicDeleteAction( @"Product", @"OrderDetailList", @"nullify", NULL )    // ProductId is required: must fail
+fn LogicRowEvent( @"Order", @fn OrderRowEvent )
+fn LogicCommitEvent( @"Order", @fn OrderCommitEvent )
+end fn
+
+
+void local fn DeclareMeddlerRules
+fn LogicFormula( @"OrderDetail", @"Amount", @fn OrderDetailAmount, @[ @"Quantity", @"UnitPrice" ] )
+fn LogicRowEvent( @"OrderDetail", @fn SneakyDetailEvent )
+end fn
 '''
 
 MAIN = r'''/*
@@ -160,7 +212,7 @@ MutableDictionarySetObjectForKey( upd, @"ALFKI", @"Id" )
 MutableDictionarySetObjectForKey( upd, fn NumberWithDouble( fn NumberDoubleValue( fn DictionaryObjectForKey( customer, @"CreditLimit" ) ) + 1.0 ), @"Balance" )
 fn Check( @"credit-limit constraint fails the update", fn LogicUpdate( @"Customer", upd, NULL ) == NO, @"" )
 fn Check( @"credit-limit message", fn StringHasPrefix( fn LogicMessage, @"Customer balance (" ) && fn StringContainsString( fn LogicMessage, @"exceeds credit limit" ), fn LogicMessage )
-fn Check( @"failed update leaves the stored row", fn ObjectIsEqual( fn DictionaryObjectForKey( fn DataFetchOne( @"Customer", @{ @"Id":@"ALFKI" } ), @"Balance" ), fn DictionaryObjectForKey( customer, @"Balance" ) ), @"" )
+fn Check( @"failed update leaves the stored row", fn ObjectIsEqual( (ObjectRef)fn DictionaryObjectForKey( fn DataFetchOne( @"Customer", @{ @"Id":@"ALFKI" } ), @"Balance" ), (ObjectRef)fn DictionaryObjectForKey( customer, @"Balance" ) ), @"" )
 
 // nested transaction: an inner failure rolls back the outer work
 fn DataBegin
@@ -241,23 +293,23 @@ fn Check( @"aggregates: change quantity: Order +30, Balance +30", ok && fn Num( 
 
 ok = fn LogicInsert( @"OrderDetail", fn DetailOn( 10643, 1000 ) )
 fn Check( @"aggregates: credit limit: the chained constraint fails the detail insert", ok == NO && fn StringContainsString( fn LogicMessage, @"exceeds credit limit" ), fn LogicMessage )
-fn Check( @"aggregates: credit limit: nothing changed", fn ObjectIsEqual( fn OrderRow( 10643 ), o2 ) && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), @"" )
+fn Check( @"aggregates: credit limit: nothing changed", fn ObjectIsEqual( (ObjectRef)fn OrderRow( 10643 ), (ObjectRef)o2 ) && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ), @"" )
 
 ok = fn OrderChange( 10643, @"ShippedDate", @"2026-11-24" )
 c3 = fn CustomerRow( @"ALFKI" )
 fn Check( @"aggregates: ship the order: Balance - AmountTotal, UnpaidOrderCount -1 (where no longer met)", ok && fn Num( c3, @"Balance" ) == fn Num( c2, @"Balance" ) - fn Num( o2, @"AmountTotal" ) && fn Num( c3, @"UnpaidOrderCount" ) == fn Num( c2, @"UnpaidOrderCount" ) - 1.0, fn LogicMessage )
 ok = fn OrderChange( 10643, @"ShippedDate", fn DataNull )
-fn Check( @"aggregates: unship: back again", ok && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+fn Check( @"aggregates: unship: back again", ok && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ), fn LogicMessage )
 
 ok = fn OrderChange( 10643, @"CustomerId", @"ANATR" )
-fn Check( @"aggregates: re-parent over the new customer's credit limit fails (ANATR limit 1000)", ok == NO && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ) && fn ObjectIsEqual( fn CustomerRow( @"ANATR" ), a0 ), fn LogicMessage )
+fn Check( @"aggregates: re-parent over the new customer's credit limit fails (ANATR limit 1000)", ok == NO && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ) && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ANATR" ), (ObjectRef)a0 ), fn LogicMessage )
 
 shipped = fn OrderChange( 10643, @"ShippedDate", @"2026-11-24" )
 moved   = fn OrderChange( 10643, @"CustomerId", @"ANATR" )
 fn Check( @"aggregates: re-parent a shipped order: both balances unchanged (where not met), counts unchanged", shipped && moved && fn Num( fn CustomerRow( @"ANATR" ), @"Balance" ) == fn Num( a0, @"Balance" ) && fn Num( fn CustomerRow( @"ANATR" ), @"UnpaidOrderCount" ) == fn Num( a0, @"UnpaidOrderCount" ), fn LogicMessage )
 back = fn OrderChange( 10643, @"CustomerId", @"ALFKI" )
 if ( back ) then back = fn OrderChange( 10643, @"ShippedDate", fn DataNull )
-fn Check( @"aggregates: re-parent back and unship", back && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+fn Check( @"aggregates: re-parent back and unship", back && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ), fn LogicMessage )
 
 // test setup on the copy, outside the rules: room for the order under ANATR's limit
 fn DataExecute( @"UPDATE \"Customer\" SET \"CreditLimit\" = 5000 WHERE \"Id\" = 'ANATR'", NULL, NULL )
@@ -265,13 +317,13 @@ r0 = fn CustomerRow( @"ANATR" )
 ok = fn OrderChange( 10643, @"CustomerId", @"ANATR" )
 fn Check( @"aggregates: re-parent to ANATR (room under its limit): ALFKI -, ANATR +, counts move", ok && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c2, @"Balance" ) - fn Num( o2, @"AmountTotal" ) && fn Num( fn CustomerRow( @"ANATR" ), @"Balance" ) == fn Num( r0, @"Balance" ) + fn Num( o2, @"AmountTotal" ) && fn Num( fn CustomerRow( @"ANATR" ), @"UnpaidOrderCount" ) == fn Num( r0, @"UnpaidOrderCount" ) + 1.0, fn LogicMessage )
 ok = fn OrderChange( 10643, @"CustomerId", @"ALFKI" )
-fn Check( @"aggregates: re-parent back from ANATR", ok && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ) && fn Num( fn CustomerRow( @"ANATR" ), @"Balance" ) == fn Num( r0, @"Balance" ), fn LogicMessage )
+fn Check( @"aggregates: re-parent back from ANATR", ok && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ) && fn Num( fn CustomerRow( @"ANATR" ), @"Balance" ) == fn Num( r0, @"Balance" ), fn LogicMessage )
 
 o9 = fn OrderRow( 10692 )
 shippedItem = fn DetailOn( 10692, 1 )
 ok = fn LogicInsert( @"OrderDetail", shippedItem )
-fn Check( @"aggregates: parent reference: a detail on a shipped order takes its ShippedDate", ok && fn ObjectIsEqual( fn DictionaryObjectForKey( shippedItem, @"ShippedDate" ), fn DictionaryObjectForKey( o9, @"ShippedDate" ) ), fn LogicMessage )
-fn Check( @"aggregates: detail on a shipped order: AmountTotal +10, Balance unchanged (where not met)", fn Num( fn OrderRow( 10692 ), @"AmountTotal" ) == fn Num( o9, @"AmountTotal" ) + 10.0 && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+fn Check( @"aggregates: parent reference: a detail on a shipped order takes its ShippedDate", ok && fn ObjectIsEqual( (ObjectRef)fn DictionaryObjectForKey( shippedItem, @"ShippedDate" ), (ObjectRef)fn DictionaryObjectForKey( o9, @"ShippedDate" ) ), fn LogicMessage )
+fn Check( @"aggregates: detail on a shipped order: AmountTotal +10, Balance unchanged (where not met)", fn Num( fn OrderRow( 10692 ), @"AmountTotal" ) == fn Num( o9, @"AmountTotal" ) + 10.0 && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ), fn LogicMessage )
 fn LogicDelete( @"OrderDetail", @{ @"Id":fn DictionaryObjectForKey( shippedItem, @"Id" ) } )
 
 // LB-41: derived totals belong to the rules
@@ -280,14 +332,14 @@ MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 10643 ), @"Id" )
 MutableDictionarySetObjectForKey( upd, fn NumberWithDouble( 99999.0 ), @"AmountTotal" )
 MutableDictionarySetObjectForKey( upd, @"x", @"ShipName" )
 ok = fn LogicUpdate( @"Order", upd, NULL )
-fn Check( @"aggregates: LB-41: a client write to Order.AmountTotal keeps the stored value", ok && fn Num( fn OrderRow( 10643 ), @"AmountTotal" ) == fn Num( o2, @"AmountTotal" ) && fn StringIsEqual( fn DictionaryObjectForKey( fn OrderRow( 10643 ), @"ShipName" ), @"x" ) && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+fn Check( @"aggregates: LB-41: a client write to Order.AmountTotal keeps the stored value", ok && fn Num( fn OrderRow( 10643 ), @"AmountTotal" ) == fn Num( o2, @"AmountTotal" ) && fn StringIsEqual( fn DictionaryObjectForKey( fn OrderRow( 10643 ), @"ShipName" ), @"x" ) && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ), fn LogicMessage )
 fn OrderChange( 10643, @"ShipName", fn DictionaryObjectForKey( o2, @"ShipName" ) )
 upd = fn MutableDictionaryNew
 MutableDictionarySetObjectForKey( upd, @"ALFKI", @"Id" )
 MutableDictionarySetObjectForKey( upd, fn NumberWithDouble( 0.0 ), @"Balance" )
 MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 0 ), @"UnpaidOrderCount" )
 ok = fn LogicUpdate( @"Customer", upd, NULL )
-fn Check( @"aggregates: LB-41: a client write to Customer.Balance / UnpaidOrderCount keeps the stored values", ok && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+fn Check( @"aggregates: LB-41: a client write to Customer.Balance / UnpaidOrderCount keeps the stored values", ok && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ), fn LogicMessage )
 
 newOrder = fn MutableDictionaryNew
 MutableDictionarySetObjectForKey( newOrder, @"ALFKI", @"CustomerId" )
@@ -332,7 +384,7 @@ fn LogicDelete( @"OrderDetail", @{ @"Id":fn NumberWithInteger( 999999 ) } )
 fn LogicDelete( @"OrderDetail", @{ @"Id":fn DictionaryObjectForKey( upItem, @"Id" ) } )
 fn LogicDelete( @"OrderDetail", @{ @"Id":fn DictionaryObjectForKey( firstItem, @"Id" ) } )
 ok = fn LogicDelete( @"Order", @{ @"Id":fn NumberWithInteger( newId ) } )
-fn Check( @"aggregates: delete the new order: the customer is back as before", ok && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+fn Check( @"aggregates: delete the new order: the customer is back as before", ok && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c2 ), fn LogicMessage )
 end if
 
 ok = fn LogicDelete( @"OrderDetail", @{ @"Id":itemId } )
@@ -340,10 +392,157 @@ fn Check( @"aggregates: delete detail: Order and Balance back to the start", ok 
 end fn
 
 
+local fn ProductRow( productId as long ) as DictionaryRef
+end fn = fn DataFetchOne( @"Product", @{ @"Id":fn NumberWithInteger( productId ) } )
+
+
+local fn DetailRow( detailId as CFTypeRef ) as DictionaryRef
+end fn = fn DataFetchOne( @"OrderDetail", @{ @"Id":detailId } )
+
+
+// a detail without a UnitPrice: the copy rule supplies it
+local fn PlainDetail( orderId as long, productId as long, quantity as long ) as MutableDictionaryRef
+MutableDictionaryRef item = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( item, fn NumberWithInteger( orderId ), @"OrderId" )
+MutableDictionarySetObjectForKey( item, fn NumberWithInteger( productId ), @"ProductId" )
+MutableDictionarySetObjectForKey( item, fn NumberWithInteger( quantity ), @"Quantity" )
+MutableDictionarySetObjectForKey( item, fn NumberWithDouble( 0.0 ), @"Discount" )
+end fn = item
+
+
+local fn Labels( a as StringRef, b as StringRef ) as ArrayRef
+if ( b == NULL ) then exit fn = @[ a ]
+end fn = @[ a, b ]
+
+
+void local fn RunStep3Scenarios
+DictionaryRef        o0, c0, moved
+MutableDictionaryRef item, upd, badItem, newOrder, firstItem, secondItem, cloneOrder
+ArrayRef             details, sorted, expected
+DictionaryRef        detail
+double               p11, p42
+long                 newId, cloneId
+BOOL                 ok, allShipped, noneShipped, cascadeFound
+CFTypeRef            itemId
+
+gLogicRules = NULL
+gOrderRowEvents = fn MutableArrayNew
+gOrderCommitEvents = fn MutableArrayNew
+fn DeclareStep3Rules
+fn Check( @"step 3: activate", fn LogicActivate, @"" )
+cascadeFound = NO
+details = fn LogicRulesOf( @"Order", @"cascades" )
+for detail in details
+if ( fn StringIsEqual( fn DictionaryObjectForKey( detail, @"child" ), @"OrderDetail" ) && fn ArrayContainsObject( fn DictionaryObjectForKey( detail, @"attrs" ), @"ShippedDate" ) ) then cascadeFound = YES
+next
+fn Check( @"step 3: a cascade is known for Order.ShippedDate", cascadeFound, @"" )
+
+o0 = fn OrderRow( 10643 ) : c0 = fn CustomerRow( @"ALFKI" )
+p11 = fn Num( fn ProductRow( 11 ), @"UnitPrice" ) : p42 = fn Num( fn ProductRow( 42 ), @"UnitPrice" )
+
+item = fn PlainDetail( 10643, 11, 2 )
+ok = fn LogicInsert( @"OrderDetail", item )
+itemId = fn DictionaryObjectForKey( item, @"Id" )
+fn Check( @"step 3: copy on insert: UnitPrice from Product 11, Amount 2 x price", ok && fn Num( item, @"UnitPrice" ) == p11 && fn Num( item, @"Amount" ) == 2.0 * p11, fn LogicMessage )
+fn Check( @"step 3: the copied amount reaches the order and the customer", fn Num( fn OrderRow( 10643 ), @"AmountTotal" ) == fn Num( o0, @"AmountTotal" ) + 2.0 * p11 && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c0, @"Balance" ) + 2.0 * p11, @"" )
+fn Check( @"step 3: commit event: once for the order the save changed (chained)", fn ObjectIsEqual( (ObjectRef)gOrderCommitEvents, (ObjectRef)@[ @"update|10643" ] ), fn ObjectDescription( (ObjectRef)gOrderCommitEvents ) )
+
+upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 11 ), @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithDouble( p11 + 100.0 ), @"UnitPrice" )
+ok = fn LogicUpdate( @"Product", upd, NULL )
+fn Check( @"step 3: a later price change is not copied (copy, not a reference)", ok && fn Num( fn DetailRow( itemId ), @"UnitPrice" ) == p11, fn LogicMessage )
+upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 11 ), @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithDouble( p11 ), @"UnitPrice" )
+fn LogicUpdate( @"Product", upd, NULL )
+
+upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, itemId, @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 42 ), @"ProductId" )
+ok = fn LogicUpdate( @"OrderDetail", upd, NULL )
+moved = fn DetailRow( itemId )
+fn Check( @"step 3: moved to Product 42: its price copied, Amount and totals follow", ok && fn Num( moved, @"UnitPrice" ) == p42 && fn Num( moved, @"Amount" ) == 2.0 * p42 && fn Num( fn OrderRow( 10643 ), @"AmountTotal" ) == fn Num( o0, @"AmountTotal" ) + 2.0 * p42, fn LogicMessage )
+
+badItem = fn PlainDetail( 10643, 99999, 1 )
+MutableDictionarySetObjectForKey( badItem, fn NumberWithDouble( 1.0 ), @"UnitPrice" )
+ok = fn LogicInsert( @"OrderDetail", badItem )
+fn Check( @"step 3: parent check: a detail for a missing product is refused", ok == NO && fn StringIsEqual( fn LogicMessage, @"Product 99999 does not exist" ), fn LogicMessage )
+ok = fn OrderChange( 10643, @"CustomerId", @"NOSUCH" )
+fn Check( @"step 3: parent check: an order moved to a missing customer is refused", ok == NO && fn StringIsEqual( fn LogicMessage, @"Customer NOSUCH does not exist" ), fn LogicMessage )
+
+MutableArrayRemoveAllObjects( gOrderCommitEvents )
+ok = fn OrderChange( 10643, @"ShippedDate", @"2026-11-24" )
+details = fn DataFetch( @"OrderDetail", @{ @"OrderId":fn NumberWithInteger( 10643 ) }, NULL )
+allShipped = ( fn ArrayCount( details ) > 0 )
+for detail in details
+if ( fn ObjectIsEqual( (ObjectRef)fn DictionaryObjectForKey( detail, @"ShippedDate" ), (ObjectRef)@"2026-11-24" ) == NO ) then allShipped = NO
+next
+fn Check( @"step 3: parent change cascades: every detail of the shipped order takes its ShippedDate", ok && allShipped, fn LogicMessage )
+fn Check( @"step 3: the cascade leaves the amounts alone; the balance drops by the order total (where)", fn Num( fn OrderRow( 10643 ), @"AmountTotal" ) == fn Num( o0, @"AmountTotal" ) + 2.0 * p42 && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c0, @"Balance" ) - fn Num( o0, @"AmountTotal" ), @"" )
+fn Check( @"step 3: commit event once for the top-level order save", fn ObjectIsEqual( (ObjectRef)gOrderCommitEvents, (ObjectRef)@[ @"update|10643" ] ), fn ObjectDescription( (ObjectRef)gOrderCommitEvents ) )
+ok = fn OrderChange( 10643, @"ShippedDate", fn DataNull )
+details = fn DataFetch( @"OrderDetail", @{ @"OrderId":fn NumberWithInteger( 10643 ) }, NULL )
+noneShipped = YES
+for detail in details
+if ( fn DataIsNull( fn DictionaryObjectForKey( detail, @"ShippedDate" ) ) == NO ) then noneShipped = NO
+next
+fn Check( @"step 3: unship cascades back", ok && noneShipped, fn LogicMessage )
+fn LogicDelete( @"OrderDetail", @{ @"Id":itemId } )
+fn Check( @"step 3: back to the start", fn ObjectIsEqual( (ObjectRef)fn OrderRow( 10643 ), (ObjectRef)o0 ) && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c0 ), @"" )
+
+ok = fn LogicDelete( @"Customer", @{ @"Id":@"ALFKI" } )
+fn Check( @"step 3: delete prevent: a customer with orders is kept", ok == NO && fn StringIsEqual( fn LogicMessage, @"Customer ALFKI still has orders" ) && fn ObjectIsEqual( (ObjectRef)fn CustomerRow( @"ALFKI" ), (ObjectRef)c0 ), fn LogicMessage )
+
+ok = fn LogicDelete( @"Product", @{ @"Id":fn NumberWithInteger( 42 ) } )
+fn Check( @"step 3: delete nullify on a required foreign key fails, and nothing changes", ok == NO && fn ProductRow( 42 ) != NULL && fn ArrayCount( fn DataFetch( @"OrderDetail", @{ @"ProductId":fn NumberWithInteger( 42 ) }, NULL ) ) > 0, fn LogicMessage )
+
+newOrder = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( newOrder, @"ALFKI", @"CustomerId" )
+MutableDictionarySetObjectForKey( newOrder, fn NumberWithInteger( 1 ), @"EmployeeId" )
+ok = fn LogicInsert( @"Order", newOrder )
+newId = fn NumberIntegerValue( fn DictionaryObjectForKey( newOrder, @"Id" ) )
+firstItem  = fn PlainDetail( newId, 11, 1 )
+secondItem = fn PlainDetail( newId, 42, 1 )
+cloneOrder = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( cloneOrder, @"ALFKI", @"CustomerId" )
+MutableDictionarySetObjectForKey( cloneOrder, fn NumberWithInteger( 1 ), @"EmployeeId" )
+MutableDictionarySetObjectForKey( cloneOrder, fn NumberWithInteger( newId ), @"CloneFromOrder" )
+if ( ok ) then ok = fn LogicInsert( @"OrderDetail", firstItem )
+if ( ok ) then ok = fn LogicInsert( @"OrderDetail", secondItem )
+if ( ok ) then ok = fn LogicInsert( @"Order", cloneOrder )
+cloneId = fn NumberIntegerValue( fn DictionaryObjectForKey( cloneOrder, @"Id" ) )
+fn Check( @"step 3: set-up: a new order with two details and a clone of it", ok && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c0, @"Balance" ) + p11 + p42, fn LogicMessage )
+MutableArrayRemoveAllObjects( gOrderRowEvents )
+MutableArrayRemoveAllObjects( gOrderCommitEvents )
+ok = fn LogicDelete( @"Order", @{ @"Id":fn NumberWithInteger( newId ) } )
+fn Check( @"step 3: delete cascade: the order's details are deleted with it", ok && fn OrderRow( newId ) == NULL && fn ArrayCount( fn DataFetch( @"OrderDetail", @{ @"OrderId":fn NumberWithInteger( newId ) }, NULL ) ) == 0, fn LogicMessage )
+fn Check( @"step 3: delete nullify: the clone stays, no longer pointing at the deleted order", ok && fn OrderRow( cloneId ) != NULL && fn DataIsNull( fn DictionaryObjectForKey( fn OrderRow( cloneId ), @"CloneFromOrder" ) ), @"" )
+fn Check( @"step 3: the customer is back as before (details and order removed)", fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c0, @"Balance" ), @"" )
+fn Check( @"step 3: row events ran on delete too (LB-12)", fn ArrayContainsObject( gOrderRowEvents, fn StringWithFormat( @"delete|%ld", newId ) ), fn ObjectDescription( (ObjectRef)gOrderRowEvents ) )
+sorted   = fn ArraySortedArrayUsingSelector( gOrderCommitEvents, @"compare:" )
+expected = fn ArraySortedArrayUsingSelector( fn Labels( fn StringWithFormat( @"delete|%ld", newId ), fn StringWithFormat( @"update|%ld", cloneId ) ), @"compare:" )
+fn Check( @"step 3: commit event once per order changed, after the commit", fn ObjectIsEqual( (ObjectRef)sorted, (ObjectRef)expected ), fn ObjectDescription( (ObjectRef)gOrderCommitEvents ) )
+fn LogicDelete( @"Order", @{ @"Id":fn NumberWithInteger( cloneId ) } )
+
+MutableArrayRemoveAllObjects( gOrderCommitEvents )
+ok = fn LogicInsert( @"OrderDetail", fn PlainDetail( 10643, 11, 1000 ) )
+fn Check( @"step 3: no commit event when the save rolls back", ok == NO && fn ArrayCount( gOrderCommitEvents ) == 0, fn ObjectDescription( (ObjectRef)gOrderCommitEvents ) )
+
+gLogicRules = NULL
+fn DeclareMeddlerRules
+fn LogicActivate
+item = fn DetailOn( 10643, 1 )
+ok = fn LogicInsert( @"OrderDetail", item )
+fn Check( @"step 3: LB-11: a row event that changes the row fails the save", ok == NO && fn StringContainsString( fn LogicMessage, @"A row event changed Discount" ), fn LogicMessage )
+end fn
+
+
 isLoggingOn = YES
 if ( fn DataOpen( NULL ) )
 fn RunScenarios
 fn RunAggregateScenarios
+fn RunStep3Scenarios
 NSLog( @"logic test: %ld scenarios, %ld failed", gTestsRun, gTestsFailed )
 end if
 HandleEvents

@@ -48,6 +48,6 @@ Design: `design/Logic Engine Design.md`. Needs the Phase 1 shell's data layer fi
 | 0. Data runtime (SQLite records, transactions) the engine sits on — `features/DATA_RUNTIME_FEATURE.md` | done — awaiting build |
 | 1. Logic Engine core (`Logic Rules` / `Logic Row` / `Logic Engine.incl`): rule set, LogicRow, formulas + constraints, transaction/rollback | done — Python reference passes; FB awaiting build |
 | 2. Aggregates: sum/count with where, delta adjustment, re-parenting, chaining; parent references | done — Python reference 36/36; FB awaiting build |
-| 3. Copy, parent check, cascade, events | |
+| 3. Copy, parent check, cascade, delete actions, events | done — Python reference 70/70, 20 rules proven; FB awaiting build |
 | 4. Imagery Logic Studio in the generator: Rules page, `Rules.json`, generated `<Entity> Rules.incl`, validation, Explain | |
 | 5. Import ALS `declare_logic.py`; test bench; allocate / copy-children | |

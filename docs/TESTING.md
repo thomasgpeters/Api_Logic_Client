@@ -45,7 +45,7 @@ python3 tools/make_logic_test.py ../FutureBasic_Documentation/nw/database/db.sql
 
 Open `~/Desktop/LogicTest/Logic Test.fbeproj` in FutureBasic, build and run. The NSLog window
 lists one `PASS` / `FAIL` line per scenario — the same scenarios as `logic_reference.py --test` —
-and ends with `logic test: 46 scenarios, 0 failed` (step 3's 24 are not in the FB project yet). It works on `~/Desktop/LogicTest/test.sqlite`,
+and ends with `logic test: 70 scenarios, 0 failed`. It works on `~/Desktop/LogicTest/test.sqlite`,
 a copy; run `make_logic_test.py` again for a fresh one. Paste the Build Log or the NSLog lines
 into a session when something fails.
 
