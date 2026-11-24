@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — LogicBank for FutureBasic: step 3 in FB
+## 2026-11-24 — LogicBank for FutureBasic: step 3 in FB (`f431fa6`)
 
 - `Logic Rules.incl`: LogicCopy, LogicParentCheck, LogicDeleteAction, LogicRowEvent,
   LogicCommitEvent; activation checks their relationships and builds cascades from
