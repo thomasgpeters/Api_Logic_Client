@@ -49,7 +49,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 - [x] Model from a SQLite database — `SQLite Model.incl`
 - [x] New Project view: a project starts from a SQLite database — `features/NEW_PROJECT_FEATURE.md`
-- [ ] Product name (sets the bundle id; the Application Support folder is `Api_Logic_Client` until then) — ideas: Lexicon, Keel, Foundry, ModelWorks
+- [x] Product name: **Imagery LogicBank Studio for FutureBasic** — shown in the window title, Welcome view, server form and About box; Imagery logo (2026-11-24)
+- [ ] Rename the rest to the product name (author, later): the FB project and its `.main` (`Api Logic Client.fbeproj` → the built app's name in the Dock and menu bar), the bundle id, and the Application Support folder (`Api_Logic_Client` → new name, moving an existing workspace and Recent Projects over at first launch). The repository and folder names may stay.
 - [x] Workspace in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; *Show Workspace in Finder*
 - [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
 - [x] Project Settings view; About text (≤ 250 chars) deployed as `Credits.rtf` — `features/ABOUT_BOX_FEATURE.md`

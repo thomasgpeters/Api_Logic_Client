@@ -1,4 +1,8 @@
-# Api Logic Client
+# Api Logic Client — Imagery LogicBank Studio for FutureBasic
+
+The product's name is **Imagery LogicBank Studio for FutureBasic** (shown in the app; `Branding.incl`).
+The repository, the FB project file and the Application Support folder keep the name
+Api_Logic_Client until the author renames them (backlog).
 
 A **FutureBasic** (FBE, macOS/Cocoa) generator. It reads an API Logic Server
 (ALS) project's model (`/metadata?include=attributes`) and generates a complete
@@ -14,6 +18,7 @@ mode work without extra code).
 - `src/Generator/` — the FB project (`Api Logic Client.fbeproj`): open it in the FB
   editor. Its `data.fbproj` (inside the `.fbeproj` bundle) is the build order: an
   `.incl` must come *before* any file that calls it (FB needs definition before use).
+  - `Branding.incl` — the product name and the Imagery logo (`ImageryLogo` follows light/dark); `imagery_logo.png` / `imagery_logo_white.png` are the canonical files, never edited.
   - `API Interface.incl` — ALS connectivity for the generator itself (metadata fetch).
   - `SQLite Access.incl` — our own minimal SQLite declarations (open read-only, prepare, step, columns).
   - `SQLite Model.incl` — the model from a SQLite file: columns, keys (`keyKind`), relationships.

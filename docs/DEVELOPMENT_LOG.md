@@ -6,19 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — LogicBank for FutureBasic: step 3 in FB (`f431fa6`)
+## 2026-11-24 — Imagery LogicBank Studio for FutureBasic: name and logo
 
-- `Logic Rules.incl`: LogicCopy, LogicParentCheck, LogicDeleteAction, LogicRowEvent,
-  LogicCommitEvent; activation checks their relationships and builds cascades from
-  formulas' `Role.Attr` dependencies.
-- `Logic Engine.incl`: copy → parent check → formulas → adjust → constraints → row events →
-  write → cascade; delete actions (prevent / cascade / nullify) with the row read again
-  before its parents are adjusted (the double adjustment the reference scenarios found);
-  `LogicDeleteRow` prototyped; `LogicFinish` runs commit events once per row after the
-  outermost commit. Early exits now end through `LogicFinish` too (and `finish` in the
-  reference), so a rolled-back save never leaves commit events behind.
-- `ObjectRef` arguments cast everywhere in the runtime and tests; fblint now reports uncast
-  ones (parameter types from the headers).
-- FB test project: the 24 step 3 scenarios (70 in all, as in the reference).
+- The product name is shown in the window title, the Welcome view (title and tagline), the
+  server form and the generator's own About box (`Credits.rtf`); the Welcome copyright line
+  is corrected ("Imagery Business Systems").
+- The canonical Imagery logos (byte-identical to Imagery LogicBank Studio's, checksums
+  0554a91d… and 8b4dcd39…) replace the "cloud" symbol. `Branding.incl`: `ImageryLogo`, one
+  image that draws the colour or the white logo for the current appearance, so it follows
+  light and dark mode by itself.
+- Author's decision: display name only for now; the project file, app bundle, bundle id and
+  Application Support folder are renamed later (backlog).
 
 ---

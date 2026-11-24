@@ -1,4 +1,6 @@
-# Api Logic Client
+# Imagery LogicBank Studio for FutureBasic
+
+*(repository: Api_Logic_Client)*
 
 A macOS FutureBasic app that turns a data model — a SQLite database today, an
 [API Logic Server](https://apilogicserver.github.io/Docs/) project next — into a
