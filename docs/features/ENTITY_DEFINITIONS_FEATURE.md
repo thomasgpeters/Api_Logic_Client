@@ -22,7 +22,7 @@ Selecting an entity shows a summary — `Customer — key Id (assigned) — Orde
 | Size | | `40 chars`, `10,2`, `64-bit`, `variable` |
 | Key | | `PK`, `FK → Customer`, `PK, FK → Order` |
 | Required, Default | | NOT NULL, column default |
-| Form Control | ✓ | Text field, Text area, Integer field, Decimal field, Date picker, Checkbox, Read-only text, Hidden |
+| Form Control | ✓ | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, Read-only text, Hidden — typed, or chosen in the Control popup |
 | Form Width, List Width | ✓ | points |
 | Adjusted | | which values the designer changed |
 
@@ -38,6 +38,15 @@ recommendation. All adjustments are saved to `~/Library/Application Support/Imag
 
 and re-applied whenever the model is opened. Every generator reads attributes only
 through `TypeMapAttribute…` functions, so what the designer sees is what gets generated.
+
+## Control popup
+
+Beside the Form layout popup (`_controlPopup`, created in `Windows.incl`). Selecting an attribute
+(`_tableViewSelectionDidChange` on the attribute table) rebuilds its items
+(`DisplayAttributeControl`): *Recommended: <control>* (`TypeMapRecommendedKind`), then every
+control in `TypeMapControlKinds` order. Choosing one stores its name as `formControl`
+(`DesignControlChosen` → `DesignSetAttributeValue`, shared with cell editing); *Recommended*
+clears it. The table keeps the attribute selected after the refresh.
 
 ## Form layout
 

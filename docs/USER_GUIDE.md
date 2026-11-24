@@ -116,13 +116,19 @@ Click an entity in the list. Its **attribute table** shows, for every column:
 | Size | text length or numeric size | |
 | Key | primary key and how it is made (identity, autoincrement, assigned) | |
 | Required / Default | from the database | |
-| **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Checkbox, **Read-only text**, **Hidden** | ✓ |
+| **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, **Read-only text**, **Hidden** | ✓ |
 | **Form Width** / **List Width** | in points | ✓ |
 | Adjusted | ✓ when you changed something | |
 
 Edit a cell and press Return: the change is saved to `Design.json` at once and kept every time
 you regenerate. Clear a cell to go back to the recommendation.
 
+- **Control** (the popup at the top, left of Form layout): select an attribute in the table, then
+  choose its control from the list. The first item, *Recommended: …*, goes back to what the
+  generator suggests for the column's type: DATE a date picker, DATETIME / TIMESTAMP a date and
+  time picker, TIME a time picker. You can still type a control's name in the Form Control cell.
+- Dates are stored as `1996-07-04`, times as `14:30:00`, dates with times as
+  `1996-07-04 14:30:00`: the forms SQLite's date and time functions read.
 - **Read-only text** shows a value without letting the user change it. A key the database
   makes for you (an `INTEGER PRIMARY KEY`, with or without `AUTOINCREMENT`) is read-only by
   default; a key you type yourself (a customer code, say) stays a text field.

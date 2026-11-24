@@ -6,6 +6,21 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Form designer 2: time and date-and-time pickers, the Control popup; nav heading
+
+- `Type Mapping.incl`: `_xibKindTime`, `_xibKindDateTime` ("Time picker", "Date and time picker");
+  DATETIME / TIMESTAMP recommend the date and time picker, TIME the time picker;
+  `TypeMapRecommendedKind` (before the designer's choice), `TypeMapControlKinds` (the popup's order).
+- `XIB Generator.incl`: one date-picker writer for the three, with their `datePickerElements`.
+- `Binding Support.incl` (runtime): `BindingShowTime` / `BindingTakeTime`, `BindingShowDateTime` /
+  `BindingTakeDateTime`; formatters are en_US_POSIX so a user's region never changes stored digits.
+- The Studio: the **Control** popup in the entity view (`_controlPopup`): its items are rebuilt
+  for the selected attribute, the first naming the recommendation; `DesignSetAttributeValue` is
+  shared with cell editing and keeps the row selected.
+- App shell: a **Business Objects** heading above the entity buttons (author), coloured by
+  `gThemeNavHeadingText` (Theme.incl template; NULL falls back to the buttons' colour).
+- fblint caught `DisplayAttributeControl` called before its definition; moved up.
+
 ## 2026-11-24 — Navigation items at the top of the bar (second fix)
 
 - The flipped scroll-view document (78be389) still left the navigation buttons at the bottom on

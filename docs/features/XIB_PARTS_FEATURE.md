@@ -28,6 +28,11 @@ regenerations. Constants for every tag go to `Model Tags.incl`
 - **Read-only text:** a selectable, non-editable field without a bezel. The default for a key
   the database generates (`SQLite Model.incl` marks it `"generated"`: keyKind identity or
   autoincrement); `<Entity>FormToRecord` does not read it back (the key travels in `gAppPageKeys`).
+- **Dates and times:** DATE → date picker (year, month, day); DATETIME / TIMESTAMP → date and time
+  picker (also hours and minutes); TIME → time picker (hours, minutes, seconds). One
+  `XibDatePickerElement` writes all three, with the matching `datePickerElements`. Bindings
+  (`Binding Support.incl`) store `yyyy-MM-dd`, `HH:mm:ss`, `yyyy-MM-dd HH:mm:ss` through an
+  en_US_POSIX formatter; a stored ISO `T` separator and a date-only value are read too.
 - **Type → control:** VARCHAR/CHAR → text field (width from length, capped);
   TEXT → one-line field, 280 wide (SQLite declares every string TEXT; the designer can choose Text
   area); CLOB / MEDIUMTEXT / LONGTEXT → text area; integer types → right-aligned field with integer formatter;

@@ -22,7 +22,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 - [x] 1. Form layout 1 / 2 / 3 columns per entity; Hidden fields; read-only text, the default for a key the database generates (`features/XIB_PARTS_FEATURE.md`)
 - [ ] Verify on a Mac: the Form layout popup in the entity view; a 3-column Form; a Hidden field; the read-only key on New / Save
-- [ ] 2. Date and time widgets: Time picker, Date and time picker (and the date / time formats they store); choose the control from a list in the Studio instead of typing its name (an attribute inspector beside the table)
+- [x] 2. Date and time widgets: Time picker, Date and time picker; the Control popup in the entity view (choose from a list; Recommended clears it)
+- [ ] Verify on a Mac: the Control popup follows the selected attribute; a TIME and a DATETIME column round-trip through Save
 - [ ] 3. Choices: Checkbox (any yes/no column), Radio buttons and Dropdown, from a value list the designer types in or, for a foreign key, the lookup table's rows (the parent's key stored, a display column shown); App Data gets a lookup call so the Enterprise edition can answer it from the server
 
 ## App shell — lite edition (see `design/App Shell Design.md`)
