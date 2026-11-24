@@ -28,7 +28,7 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Verify on a Mac: a foreign key's Dropdown lists the parent's rows and Save stores the key; a value list Dropdown; Radio buttons (one at a time); the Form layout popup keeps its choice (log lines "Form layout popup: item …")
 - [ ] Choose the lookup's display column (or several: "givenName surname"); show the display value in the List instead of the key
 - [ ] Studio audit (author, 2026-11-24): the toolbar (Project, Object, Generate, Settings) does nothing; context menus on list items; disable menu items that do not apply (no project: no Generate); regroup the menus
-- [ ] Generated app: one window with pages (today) or a window per entity (author, 2026-11-24) - a project setting
+- [ ] Generated app window layouts, a project setting (`design/App Shell Design.md`, Window layouts): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one tab per entity (future)
 
 ## App shell — lite edition (see `design/App Shell Design.md`)
 
