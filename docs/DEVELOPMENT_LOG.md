@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Crumb icons kept square; the entity line's placeholder
+
+- The path control draws each item's image in a square, so SF Symbols were squeezed (author's
+  screenshot). `StudioCrumbImage` draws the symbol centred in a 16-point square, proportions kept
+  (`ImageWithSize`, `ImageLockFocus`, `ImageDrawInRect`), as a template image.
+- With a project open and no entity chosen, the summary line showed the XIB's placeholder
+  "an object"; it now says "Choose an entity in the Objects list" (`StudioUpdateCommands`).
+
 ## 2026-11-24 — The Studio's crumb trail (author: "a way to navigate back to the Project screen")
 
 - `Menus.incl`: `StudioUpdateCrumbs` builds an `NSPathControl` trail from the visible view and the
