@@ -19,8 +19,8 @@ tools/run_tests.sh
 | Check | What it proves | Passing |
 |---|---|---|
 | `fblint` on `src/` (and Test_Xib_View beside this repo) | every FB file follows `reference/FB Coding Rules.md`: typed fns, comments, CR endings, toolbox names and argument counts, keywords as names, `for … in`, block balance, build order | `0 problems` |
-| `logic_reference.py --test` | the logic engine's behaviour, scenario by scenario, on a copy of Northwind (the Python reference follows the FB code function by function) | `46 scenarios, 0 failed` |
-| `logic_reference.py --prove` | every rule is really tested: each rule left out in turn makes a scenario fail | `10 rules, 0 not proven` |
+| `logic_reference.py --test` | the logic engine's behaviour, scenario by scenario, on a copy of Northwind (the Python reference follows the FB code function by function) | `70 scenarios, 0 failed` |
+| `logic_reference.py --prove` | every rule is really tested: each rule left out in turn makes a scenario fail | `20 rules, 0 not proven` |
 | `make_logic_test.py` + `fblint` | the FB test project assembles from the real runtime files and lints clean, build order included | `0 problems` |
 
 Run any one of them alone:
@@ -45,7 +45,7 @@ python3 tools/make_logic_test.py ../FutureBasic_Documentation/nw/database/db.sql
 
 Open `~/Desktop/LogicTest/Logic Test.fbeproj` in FutureBasic, build and run. The NSLog window
 lists one `PASS` / `FAIL` line per scenario — the same scenarios as `logic_reference.py --test` —
-and ends with `logic test: 46 scenarios, 0 failed`. It works on `~/Desktop/LogicTest/test.sqlite`,
+and ends with `logic test: 46 scenarios, 0 failed` (step 3's 24 are not in the FB project yet). It works on `~/Desktop/LogicTest/test.sqlite`,
 a copy; run `make_logic_test.py` again for a fresh one. Paste the Build Log or the NSLog lines
 into a session when something fails.
 

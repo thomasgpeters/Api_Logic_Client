@@ -157,10 +157,14 @@ class Logic:
         self.message = ''      # gLogicMessage
         self.nest = 0          # gLogicNest
         self.log = []
+        self.commit_queue = [] # gLogicCommitQueue: (event, row) to run after the outermost commit
+        self.cascade_role = None  # gLogicCascadeRole: set for one chained child update
 
     # Logic Rules.incl
     def entity_rules(self, entity):
-        return self.rules.setdefault(entity, {'formulas': [], 'constraints': [], 'aggregates': []})
+        return self.rules.setdefault(entity, {'formulas': [], 'constraints': [], 'aggregates': [], 'copies': [],
+                                              'parentChecks': [], 'deleteActions': [], 'rowEvents': [], 'commitEvents': [],
+                                              'cascades': []})
 
     def formula(self, entity, attr, fn, depends_on):
         if not declared(f'formula {entity}.{attr}'):
@@ -201,6 +205,37 @@ class Logic:
         resolved = dict(agg, child=child, role=role, fks=rel['fks'], parentKeys=rel['parentKeys'])
         self.entity_rules(child)['aggregates'].append(resolved)
         return True
+
+    def copy(self, entity, attr, role, parent_attr):
+        # copied from the parent on insert and when the row moves to another parent; not kept in step
+        if not declared(f'copy {entity}.{attr}'):
+            return
+        self.entity_rules(entity)['copies'].append({'entity': entity, 'attr': attr, 'role': role, 'parentAttr': parent_attr})
+        self.active = False
+
+    def parent_check(self, entity, role, message):
+        if not declared(f'parent check {entity}.{role}'):
+            return
+        self.entity_rules(entity)['parentChecks'].append({'entity': entity, 'role': role, 'message': message})
+        self.active = False
+
+    def delete_action(self, parent, list_name, action, message=None):
+        # what deleting the parent does to the children of a child list: prevent | cascade | nullify
+        if not declared(f'delete {action} {parent}.{list_name}'):
+            return
+        self.entity_rules(parent)['deleteActions'].append({'entity': parent, 'list': list_name, 'action': action,
+                                                           'message': message or f'{parent} has {list_name} rows'})
+        self.active = False
+
+    def row_event(self, entity, fn):
+        if not declared(f'row event {entity}'):
+            return
+        self.entity_rules(entity)['rowEvents'].append({'entity': entity, 'fn': fn})
+
+    def commit_event(self, entity, fn):
+        if not declared(f'commit event {entity}'):
+            return
+        self.entity_rules(entity)['commitEvents'].append({'entity': entity, 'fn': fn})
 
     def derived(self, entity):
         # the entity's sum / count attributes: maintained by the engine only (LB-41)
@@ -250,6 +285,44 @@ class Logic:
         for entity in list(self.rules):
             for agg in self.rules[entity].get('declared', []):
                 ok = self.resolve_aggregate(agg) and ok
+        for entity in list(self.rules):
+            self.entity_rules(entity)['cascades'] = []
+        for entity in list(self.rules):
+            for c in self.rules_of(entity, 'copies'):
+                rel = self.data.relationship(entity, c['role'])
+                if rel is None or rel['direction'] != 'toone' or c['attr'] not in self.data.columns(entity) \
+                        or c['parentAttr'] not in self.data.columns(rel['resource']):
+                    self.log.append(f"bad copy {entity}.{c['attr']}")
+                    ok = False
+            for c in self.rules_of(entity, 'parentChecks'):
+                rel = self.data.relationship(entity, c['role'])
+                if rel is None or rel['direction'] != 'toone':
+                    self.log.append(f"bad parent check {entity}.{c['role']}")
+                    ok = False
+            for d in self.rules_of(entity, 'deleteActions'):
+                rel = self.data.relationship(entity, d['list'])
+                if rel is None or rel['direction'] != 'tomany' or d['action'] not in ('prevent', 'cascade', 'nullify'):
+                    self.log.append(f"bad delete action {entity}.{d['list']}")
+                    ok = False
+            # parent attributes read by child formulas: a change on the parent cascades to the children
+            for f in self.rules_of(entity, 'formulas'):
+                for dep in f['dependsOn']:
+                    if '.' not in dep:
+                        continue
+                    role, attr = dep.split('.', 1)
+                    rel = self.data.relationship(entity, role)
+                    if rel is None:
+                        continue
+                    parent = rel['resource']
+                    lst = next((r['name'] for r in self.data.model[parent]['relationships']
+                                if r['direction'] == 'tomany' and r['resource'] == entity and r['fks'] == rel['fks']), None)
+                    cascades = self.entity_rules(parent)['cascades']
+                    entry = next((c for c in cascades if c['child'] == entity and c['role'] == role), None)
+                    if entry is None:
+                        entry = {'child': entity, 'role': role, 'list': lst, 'attrs': []}
+                        cascades.append(entry)
+                    if attr not in entry['attrs']:
+                        entry['attrs'].append(attr)
         for entity in list(self.rules):
             for kind in ('formulas', 'constraints'):
                 ok = all(self.check_names(r) for r in self.rules_of(entity, kind)) and ok
@@ -311,7 +384,7 @@ class Logic:
             return False
         for d in f['dependsOn']:
             if '.' in d:
-                if self.role_changed(lr, d.split('.')[0]):
+                if self.role_changed(lr, d.split('.')[0]) or lr.get('cascadeRole') == d.split('.')[0]:
                     return False
             elif self.changed(lr, d):
                 return False
@@ -326,6 +399,87 @@ class Logic:
             if v != lr['row'].get(f['attr']):
                 lr['row'][f['attr']] = v
                 self.logline(lr, f"formula {f['attr']} = {v}")
+
+    def run_copies(self, lr):
+        for c in self.rules_of(lr['entity'], 'copies'):
+            if self.role_changed(lr, c['role']):
+                parent = self.data.parent(lr['entity'], lr['row'], c['role'])
+                if parent is not None:                 # no parent: keep the row's own value
+                    lr['row'][c['attr']] = parent.get(c['parentAttr'])
+                    self.logline(lr, f"copy {c['attr']} = {lr['row'][c['attr']]}")
+
+    def run_parent_checks(self, lr):
+        for c in self.rules_of(lr['entity'], 'parentChecks'):
+            rel = self.data.relationship(lr['entity'], c['role'])
+            if all(lr['row'].get(fk) is None for fk in rel['fks']):
+                continue                               # an empty foreign key is allowed
+            if self.role_changed(lr, c['role']) and self.data.parent(lr['entity'], lr['row'], c['role']) is None:
+                self.message = self.format_message(lr, c['message'])
+                return False
+        return True
+
+    def run_row_events(self, lr):
+        before = dict(lr['row'])
+        for e in self.rules_of(lr['entity'], 'rowEvents'):
+            e['fn'](lr)
+        changed = [c for c in before if lr['row'].get(c) != before[c]]
+        if changed:                                    # LB-11: a change here would skip the rules
+            self.message = f"A row event changed {', '.join(changed)}: use a formula or a copy instead."
+            return False
+        for e in self.rules_of(lr['entity'], 'commitEvents'):
+            self.commit_queue.append((e['fn'], lr))     # the live row: an insert's generated key is set by commit time
+        return True
+
+    def cascade_children(self, lr):
+        # after the parent is written: children whose formulas read a changed parent attribute recompute
+        for c in self.rules_of(lr['entity'], 'cascades'):
+            if not any(self.changed(lr, a) for a in c['attrs']) or c['list'] is None:
+                continue
+            rel = self.data.relationship(lr['entity'], c['list'])
+            children = self.data.fetch(c['child'], {fk: lr['row'].get(pk) for fk, pk in zip(rel['fks'], rel['parentKeys'])})
+            for child in children:
+                keys = self.data.key_values(c['child'], child)
+                if not self.update(c['child'], dict(keys), keys, chained=True, cascade_role=c['role']):
+                    return False
+        return True
+
+    def run_delete_actions(self, lr):
+        for d in self.rules_of(lr['entity'], 'deleteActions'):
+            rel = self.data.relationship(lr['entity'], d['list'])
+            child_entity = rel['resource']
+            children = self.data.fetch(child_entity, {fk: lr['old'].get(pk) for fk, pk in zip(rel['fks'], rel['parentKeys'])})
+            if not children:
+                continue
+            if d['action'] == 'prevent':
+                self.message = self.format_message(lr, d['message'])
+                return False
+            for child in children:
+                keys = self.data.key_values(child_entity, child)
+                if d['action'] == 'cascade':
+                    ok = self.delete(child_entity, keys, chained=True)
+                else:
+                    ok = self.update(child_entity, dict(keys, **{fk: None for fk in rel['fks']}), keys, chained=True)
+                if not ok:
+                    if not self.message:
+                        self.message = f"Could not {'delete' if d['action'] == 'cascade' else 'update'} the {child_entity}."
+                    return False
+        return True
+
+    def finish(self, ok):
+        # end of a save: commit events run once the outermost transaction has committed
+        ok = self.data.end(ok)
+        if self.data.depth == 0:
+            queue, self.commit_queue = self.commit_queue, []
+            if ok:
+                # once per row and event, with the row's last state in the transaction (a delete wins)
+                last = {}
+                for fn, lr in queue:
+                    key = (id(fn), lr['entity'], tuple(sorted(self.data.key_values(lr['entity'], lr['row']).items())))
+                    last.pop(key, None)
+                    last[key] = (fn, lr)
+                for fn, lr in last.values():
+                    fn(lr)
+        return ok
 
     def run_constraints(self, lr):
         for c in self.rules_of(lr['entity'], 'constraints'):
@@ -388,8 +542,12 @@ class Logic:
         return True
 
     def row_logic(self, lr):
+        if lr.get('cascadeRole') is None:              # a cascade only recomputes formulas
+            self.run_copies(lr)
+        if not self.run_parent_checks(lr):
+            return False
         self.run_formulas(lr)
-        return self.adjust_parents(lr) and self.run_constraints(lr)
+        return self.adjust_parents(lr) and self.run_constraints(lr) and self.run_row_events(lr)
 
     def ready(self):
         if self.active:
@@ -405,10 +563,12 @@ class Logic:
         lr = self.new_row(entity, record, None, 'insert', self.nest)
         self.nest += 1
         ok = self.row_logic(lr) and self.data.insert(entity, record)
+        if not ok and not self.message:
+            self.message = f'Could not insert the {entity}.'
         self.nest -= 1
-        return self.data.end(ok)
+        return self.finish(ok)
 
-    def update(self, entity, record, key_values=None, chained=False):
+    def update(self, entity, record, key_values=None, chained=False, cascade_role=None):
         if not chained:
             self.message = ''
         if self.nest > 20:
@@ -427,10 +587,13 @@ class Logic:
             record.setdefault(c, old[c])
         self.protect_derived(entity, record, old, chained)
         lr = self.new_row(entity, record, old, 'update', self.nest)
+        lr['cascadeRole'] = cascade_role
         self.nest += 1
-        ok = self.row_logic(lr) and self.data.update(entity, record, key_values) == 1
+        ok = self.row_logic(lr) and self.data.update(entity, record, key_values) == 1 and self.cascade_children(lr)
+        if not ok and not self.message:
+            self.message = f'Could not update the {entity}.'
         self.nest -= 1
-        return self.data.end(ok)
+        return self.finish(ok)
 
     def upsert(self, entity, record):
         # update when a row with the record's key exists, else insert (an empty generated key inserts)
@@ -439,8 +602,9 @@ class Logic:
             return self.update(entity, record, key_values)
         return self.insert(entity, record)
 
-    def delete(self, entity, key_values):
-        self.message = ''
+    def delete(self, entity, key_values, chained=False):
+        if not chained:
+            self.message = ''
         if not self.ready():
             return False
         self.data.begin()
@@ -451,9 +615,17 @@ class Logic:
             return False
         lr = self.new_row(entity, dict(old), old, 'delete', self.nest)
         self.nest += 1
-        ok = self.adjust_parents(lr) and self.data.delete(entity, key_values) == 1
+        ok = self.run_delete_actions(lr)
+        if ok:
+            # the delete actions changed this row (deleted children adjusted its totals): read it again,
+            # or its parents would be adjusted by the totals it had before
+            old = self.data.fetch_one(entity, key_values)
+            lr = self.new_row(entity, dict(old), old, 'delete', self.nest - 1)
+            ok = self.adjust_parents(lr) and self.run_row_events(lr) and self.data.delete(entity, key_values) == 1
+        if not ok and not self.message:
+            self.message = f'Could not delete the {entity}.'
         self.nest -= 1
-        return self.data.end(ok)
+        return self.finish(ok)
 
 
 # ---------------------------------------------------------------- acceptance scenarios
@@ -524,6 +696,7 @@ def scenarios(path):
     inactive = Logic(data)
     check('saves refuse until rules are active', not inactive.insert('OrderDetail', dict(item)) and 'not active' in inactive.message)
     results += aggregate_scenarios(path)
+    results += step3_scenarios(path)
     return results
 
 
@@ -651,6 +824,124 @@ def aggregate_scenarios(path):
     return results
 
 
+def step3_scenarios(path):
+    # copy, parent check, parent changes cascading to children, delete actions, events
+    results = []
+
+    def check(name, cond, detail=''):
+        results.append(('step 3: ' + name, bool(cond), detail))
+
+    data = Data(path)
+    logic = Logic(data)
+    n = Logic.number
+    order_rows, order_commits = [], []
+    unshipped = lambda lr: lr['row'].get('ShippedDate') is None                                   # noqa: E731
+    logic.copy('OrderDetail', 'UnitPrice', 'Product', 'UnitPrice')
+    logic.formula('OrderDetail', 'Amount', lambda lr: n(lr, 'Quantity') * n(lr, 'UnitPrice'), ['Quantity', 'UnitPrice'])
+    logic.formula('OrderDetail', 'ShippedDate', lambda lr: logic.parent_value(lr, 'Order', 'ShippedDate'), ['Order.ShippedDate'])
+    logic.sum('Order', 'AmountTotal', 'OrderDetailList', 'Amount')
+    logic.sum('Customer', 'Balance', 'OrderList', 'AmountTotal', unshipped)
+    logic.constraint('Customer', lambda lr: n(lr, 'Balance') <= n(lr, 'CreditLimit'),
+                     'Customer balance ({row.Balance}) exceeds credit limit ({row.CreditLimit})')
+    logic.parent_check('OrderDetail', 'Product', 'Product {ProductId} does not exist')
+    logic.parent_check('Order', 'Customer', 'Customer {CustomerId} does not exist')
+    logic.delete_action('Order', 'OrderDetailList', 'cascade')
+    logic.delete_action('Customer', 'OrderList', 'prevent', 'Customer {Id} still has orders')
+    logic.delete_action('Order', 'OrderList', 'nullify')                     # orders cloned from this one
+    logic.delete_action('Product', 'OrderDetailList', 'nullify')             # ProductId is required: must fail
+    logic.row_event('Order', lambda lr: order_rows.append((lr['verb'], lr['row'].get('Id'))))
+    logic.commit_event('Order', lambda lr: order_commits.append((lr['verb'], lr['row'].get('Id'))))
+    check('activate', logic.activate(), logic.log)
+    check('a cascade is known for Order.ShippedDate', any(c['child'] == 'OrderDetail' and 'ShippedDate' in c['attrs']
+                                                          for c in logic.rules_of('Order', 'cascades')))
+
+    order = lambda oid: data.fetch_one('Order', {'Id': oid})                                     # noqa: E731
+    cust = lambda cid: data.fetch_one('Customer', {'Id': cid})                                   # noqa: E731
+    product = lambda pid: data.fetch_one('Product', {'Id': pid})                                 # noqa: E731
+    o0, c0 = order(10643), cust('ALFKI')
+    p11, p42 = product(11)['UnitPrice'], product(42)['UnitPrice']
+
+    item = {'OrderId': 10643, 'ProductId': 11, 'Quantity': 2, 'Discount': 0.0}
+    ok = logic.insert('OrderDetail', item)
+    check(f'copy on insert: UnitPrice from Product 11 ({p11}), Amount {2 * p11}', ok and item.get('UnitPrice') == p11 and item.get('Amount') == 2 * p11,
+          (item, logic.message))
+    check('the copied amount reaches the order and the customer', order(10643)['AmountTotal'] == o0['AmountTotal'] + 2 * p11
+          and cust('ALFKI')['Balance'] == c0['Balance'] + 2 * p11)
+    check('commit event: once for the order the save changed (chained)', order_commits == [('update', 10643)], order_commits)
+
+    ok = logic.update('Product', {'Id': 11, 'UnitPrice': p11 + 100})
+    check('a later price change is not copied (copy, not a reference)', ok and data.fetch_one('OrderDetail', {'Id': item['Id']})['UnitPrice'] == p11)
+    logic.update('Product', {'Id': 11, 'UnitPrice': p11})
+
+    ok = logic.update('OrderDetail', {'Id': item['Id'], 'ProductId': 42})
+    moved = data.fetch_one('OrderDetail', {'Id': item['Id']})
+    check(f'moved to Product 42: its price copied ({p42}), Amount and totals follow', ok and moved and moved.get('UnitPrice') == p42 and moved.get('Amount') == 2 * p42
+          and order(10643)['AmountTotal'] == o0['AmountTotal'] + 2 * p42, (moved, logic.message))
+
+    bad = {'OrderId': 10643, 'ProductId': 99999, 'Quantity': 1, 'Discount': 0.0, 'UnitPrice': 1.0}
+    ok = logic.insert('OrderDetail', bad)
+    check('parent check: a detail for a missing product is refused', not ok and logic.message == 'Product 99999 does not exist', logic.message)
+    ok = logic.update('Order', {'Id': 10643, 'CustomerId': 'NOSUCH'})
+    check('parent check: an order moved to a missing customer is refused', not ok and logic.message == 'Customer NOSUCH does not exist', logic.message)
+
+    order_commits.clear()
+    ok = logic.update('Order', {'Id': 10643, 'ShippedDate': '2026-11-24'})
+    details = data.fetch('OrderDetail', {'OrderId': 10643})
+    check('parent change cascades: every detail of the shipped order takes its ShippedDate', ok and details
+          and all(d['ShippedDate'] == '2026-11-24' for d in details), [d['ShippedDate'] for d in details])
+    check('the cascade leaves the amounts alone; the balance drops by the order total (where)',
+          order(10643)['AmountTotal'] == o0['AmountTotal'] + 2 * p42 and cust('ALFKI')['Balance'] == c0['Balance'] - o0['AmountTotal'])
+    check('commit event once for the top-level order save', order_commits == [('update', 10643)], order_commits)
+    ok = logic.update('Order', {'Id': 10643, 'ShippedDate': None})
+    check('unship cascades back', ok and all(d['ShippedDate'] is None for d in data.fetch('OrderDetail', {'OrderId': 10643})))
+    logic.delete('OrderDetail', {'Id': item['Id']})
+    check('back to the start', order(10643) == o0 and cust('ALFKI') == c0, (order(10643), cust('ALFKI')))
+
+    ok = logic.delete('Customer', {'Id': 'ALFKI'})
+    check('delete prevent: a customer with orders is kept', not ok and logic.message == 'Customer ALFKI still has orders'
+          and cust('ALFKI') == c0, logic.message)
+
+    ok = logic.delete('Product', {'Id': 42})
+    check('delete nullify on a required foreign key fails, and nothing changes', not ok and product(42) is not None
+          and data.fetch('OrderDetail', {'ProductId': 42}), logic.message)
+
+    new_order = {'CustomerId': 'ALFKI', 'EmployeeId': 1}
+    ok = logic.insert('Order', new_order)
+    first = {'OrderId': new_order.get('Id'), 'ProductId': 11, 'Quantity': 1, 'Discount': 0.0}
+    second = {'OrderId': new_order.get('Id'), 'ProductId': 42, 'Quantity': 1, 'Discount': 0.0}
+    clone = {'CustomerId': 'ALFKI', 'EmployeeId': 1, 'CloneFromOrder': new_order.get('Id')}
+    ok = ok and logic.insert('OrderDetail', first) and logic.insert('OrderDetail', second) and logic.insert('Order', clone)
+    check('set-up: a new order with two details and a clone of it', ok and cust('ALFKI')['Balance'] == c0['Balance'] + p11 + p42, logic.message)
+    order_rows.clear()
+    order_commits.clear()
+    ok = logic.delete('Order', {'Id': new_order.get('Id')})
+    check('delete cascade: the order\'s details are deleted with it', ok and order(new_order.get('Id')) is None
+          and not data.fetch('OrderDetail', {'OrderId': new_order.get('Id')}), logic.message)
+    check('delete nullify: the clone stays, no longer pointing at the deleted order',
+          ok and clone.get('Id') and order(clone['Id']) is not None and order(clone['Id'])['CloneFromOrder'] is None)
+    check('the customer is back as before (details and order removed)', cust('ALFKI')['Balance'] == c0['Balance'], cust('ALFKI'))
+    check('row events ran on delete too (LB-12)', ('delete', new_order.get('Id')) in order_rows, order_rows)
+    check('commit event once per order changed, after the commit', sorted(order_commits, key=str) == sorted(
+        [('delete', new_order.get('Id')), ('update', clone.get('Id'))], key=str), order_commits)
+    logic.delete('Order', {'Id': clone.get('Id')})
+
+    order_commits.clear()
+    big = {'OrderId': 10643, 'ProductId': 11, 'Quantity': 1000, 'Discount': 0.0}
+    ok = logic.insert('OrderDetail', big)
+    check('no commit event when the save rolls back', not ok and order_commits == [], order_commits)
+
+    meddler = Logic(data)
+    meddler.formula('OrderDetail', 'Amount', lambda lr: n(lr, 'Quantity') * n(lr, 'UnitPrice'), ['Quantity', 'UnitPrice'])
+
+    def sneaky(lr):
+        lr['row']['Discount'] = 0.5
+    meddler.row_event('OrderDetail', sneaky)
+    meddler.activate()
+    ok = meddler.insert('OrderDetail', {'OrderId': 10643, 'ProductId': 11, 'UnitPrice': 1.0, 'Quantity': 1, 'Discount': 0.0})
+    check('LB-11: a row event that changes the row fails the save', not ok and 'A row event changed Discount' in meddler.message, meddler.message)
+    return results
+
+
 def run(db):
     work = tempfile.mkdtemp()
     copy = os.path.join(work, 'db.sqlite')
@@ -673,7 +964,10 @@ def prove(db):
     for label in list(DECLARED):
         OMIT.clear()
         OMIT.add(label)
-        failed = [name for name, ok, _ in run(db) if not ok]
+        try:
+            failed = [name for name, ok, _ in run(db) if not ok]
+        except Exception as e:      # a scenario that cannot even run without the rule: also proof
+            failed = [f'a scenario crashed ({type(e).__name__}: {e})']
         if failed:
             print(f'PROVEN    {label}   ({len(failed)} scenarios fail without it, e.g. {failed[0]})')
         else:
