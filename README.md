@@ -8,6 +8,8 @@ native macOS FutureBasic app the developer keeps editing. One shell, many
 entities: an entity navigator, a List part and a Form part per entity, related
 lists in tabs, drill-in with a crumb trail.
 
+![Architecture: SQLite or API Logic Server → the generator → the project workspace → the generated FutureBasic app, with business rules end to end](docs/design/architecture.svg)
+
 ## How it works
 
 1. **Create a project from a SQLite database** — *Create Project* on the Welcome view: choose

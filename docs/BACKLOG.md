@@ -85,6 +85,9 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Tooling
 
+- [ ] `tools/xiblint.py`: unique ids, connections that resolve, tags unique per document, frames inside their superview, base64 key equivalents — run on every generated and hand-written XIB
+- [ ] On a Mac: `xcrun ibtool --errors --warnings --notices` on every XIB in `src/Generator` and a generated project (`docs/reference/XIB Reference.md` §5)
+
 - [ ] fblint: check statement syntax (e.g. `tableview`'s `columnWidths`)
 - [ ] Python reference for Type Mapping (definitions report) to check the FB rules
 - [ ] Retire or make private `futurebasic-apis`: outdated (pre-7.0.35), superseded by FutureBasic_Documentation, and the toolboxes carry no redistribution license

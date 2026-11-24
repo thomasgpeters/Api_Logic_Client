@@ -46,7 +46,8 @@ mode work without extra code).
   (bundled as the `../Templates` folder): `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`, `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
-- `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`.
+- `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
+- `docs/design/architecture.svg` — the end-to-end diagram, drawn by `tools/make_architecture_svg.py` (edit the script, not the SVG).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
 - `docs/features/` — one `<NAME>_FEATURE.md` per feature (how it works, where, decisions, verification).
 - `docs/ROADMAP.md` (phases), `docs/BACKLOG.md` (open items), `docs/DEVELOPMENT_LOG.md`
@@ -55,6 +56,7 @@ mode work without extra code).
   `sqlite_model.py` (reference implementation of the SQLite model reader),
   `logic_reference.py` (reference logic engine + acceptance scenarios: `--test <db.sqlite>`),
   `make_logic_test.py` (builds the FB test project for the same scenarios, to run on a Mac),
+  `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 
