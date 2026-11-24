@@ -22,7 +22,8 @@ Runs, in order:
     3. every rule proven                 (tools/logic_reference.py --prove)
     4. the rules bridge: declare_logic.py import / export, check, FB generation (tools/rules_bridge.py --test)
     5. the FB test project assembles and lints clean (tools/make_logic_test.py)
-    6. the model diagram page: filled as ERD Generator.incl fills it, drawn in headless Chromium
+    6. the generated App Pages.incl lints with the runtime and templates (tools/check_app_pages.py)
+    7. the model diagram page: filled as ERD Generator.incl fills it, drawn in headless Chromium
        when node + Playwright are installed (tools/check_erd_page.py)
 
 The FutureBasic_Documentation clone (default: beside this repository) provides the toolbox
@@ -67,6 +68,7 @@ run "rules bridge: declare_logic.py import / export, Rules.json check, FB genera
 work=$(mktemp -d)
 run "logic engine: the FB test project builds from the runtime and lints clean" sh -c "python3 '$here/tools/make_logic_test.py' '$db' '$work/LogicTest' >/dev/null && python3 '$here/tools/fblint.py' --headers '$headers' '$work/LogicTest'"
 rm -rf "$work"
+run "generated pages: App Pages.incl, as AppPagesSource writes it, lints with the runtime and templates" python3 "$here/tools/check_app_pages.py" "$docs"
 run "model diagram: the ERD page draws the model and rules, opens / closes, drags, selects" python3 "$here/tools/check_erd_page.py" "$db"
 
 echo

@@ -181,11 +181,26 @@ Every generated app has the same frame (`App Shell.incl`):
 - a **dark blue navigation bar** on the left, with a white, bold button and an icon per entity;
 - a **header** with your logo, the app's name and tag-line, and on the right the **theme menu**
   (System / Light / Dark) and **Log In** (connect it to your sign-in in `EventHandlers.incl`, `DoLogin`);
-- a **footer** with the copyright;
+- a **footer** with the copyright, a status line, and the page actions **New**, **Save**,
+  **Delete** and **Refresh** (also in the *Records* menu: ⌘N, ⌘S, ⌘R);
 - the **page**: the entity's list on top, its form below — choose a row to see it in the form.
 
 Change the colours in `Theme.incl` (yours). Add pages of your own in `Windows.incl`, after
-`AppPagesBuild` (the file shows how). ALS projects keep the ALS runtime's window for now.
+`AppPagesBuild` (the file shows how).
+
+Choosing a row shows it in the form. **Save** writes the form through the business rules: a
+refused save changes nothing and shows the rule's message. **New** empties the form; Save then
+adds the record. **Delete** asks first; the rules decide what happens to related records.
+
+### 8.2 Editions
+
+The app is generated as the **Lite** edition: free and open source. It opens the project's SQLite
+database itself and runs the business rules inside the app. A paid **Enterprise** edition, a
+three-tier app that talks to an API Logic Server, is planned (`design/Editions and Licensing.md`).
+
+A project whose model was read from an API Logic Server (*Open Metadata JSON*, or the ALS form)
+can generate XIBs, bindings and the model diagram, but not a Lite app: create the project from the
+server's SQLite database instead (*New Project*), which gives the same model.
 
 When it runs, the app opens the project's database (`Data: opened …` in the NSLog window) and
 activates its rules (`Logic: rules active for N entities`).
