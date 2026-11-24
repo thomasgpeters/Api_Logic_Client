@@ -49,7 +49,8 @@ mode work without extra code).
 - `tools/` — `fblint.py` (checks FB sources and generated projects against the coding rules),
   `sqlite_model.py` (reference implementation of the SQLite model reader),
   `logic_reference.py` (reference logic engine + acceptance scenarios: `--test <db.sqlite>`),
-  `make_logic_test.py` (builds the FB test project for the same scenarios, to run on a Mac).
+  `make_logic_test.py` (builds the FB test project for the same scenarios, to run on a Mac),
+  `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 
 One concern per file, aptly named — in `src/` and in what the generator emits.
@@ -108,9 +109,8 @@ These apply to hand-written code **and to everything the generator emits**.
 ## Workflow
 - **Nothing can be compiled here.** The author builds in FutureBasic on a Mac
   and pastes the Build Log or run-time alerts; treat those as the test results.
-  Before handing over FB changes, run:
-  `python3 tools/fblint.py --headers <FutureBasic_Documentation>/Toolboxes/Headers src`
-  (and on any other FB repo touched, e.g. Test_Xib_View).
+  Before handing over FB changes, run `tools/run_tests.sh` (lint, logic scenarios, every rule
+  proven, the FB test project) — `docs/TESTING.md` lists every test, also the Mac-only ones.
 - Work on branch `claude/dazzling-darwin-awec2o` in each repo; the author merges
   via pull requests. After a merge, bring the branch up to date by merging
   `origin/main` into it (force-pushing is not allowed), then push.
