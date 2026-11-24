@@ -459,6 +459,10 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
   *Clear Recent Projects* empties the list.
 - **Open Project…** (⇧⌘O): choose a project's `Project.json` in the workspace.
 - If the project's database has moved, you are asked to locate it; the new place is remembered.
+- **Delete Project…** (*Model* menu): the open project, or on the Welcome page the one selected in
+  Recent Projects, goes to the **Trash** after you confirm: its folder with the database copy,
+  settings, rules and generated app. The database you started from is not touched; drag the folder
+  back out of the Trash to restore it.
 
 ## 14. Checking your work
 
@@ -494,6 +498,7 @@ Paste a Build Log or NSLog lines into a session when something is unclear.
 | Model | Open Project… | ⇧⌘O |
 | | Recent Projects · Clear Recent Projects | |
 | | Project Settings… | ⌘; |
+| | Delete Project… | |
 | | Open SQLite Database… | ⌘D |
 | | Open Metadata JSON… | ⌘J |
 | | Generate XIBs | ⇧⌘X |
