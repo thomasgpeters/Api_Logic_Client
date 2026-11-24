@@ -32,7 +32,7 @@ The generated app talks directly to a SQLite database.
 - Git (init/commit on generation, status, push/pull) and GitHub (create repo, PRs).
 - Settings for ALS/APIs, AI/LLM providers, SMTP notifications.
 
-## Phase 4 — Enterprise edition (paid, after the Lite release)
+## Phase 4 — Enterprise edition (paid) — parked until the Lite release; resume list in `BACKLOG.md`
 
 Design: `design/Editions and Licensing.md`. A three-tier app over API Logic Server behind the same
 data interface as Lite (`App Data`); private repository; licence checked offline by the Studio only.

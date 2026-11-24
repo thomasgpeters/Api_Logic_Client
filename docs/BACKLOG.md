@@ -49,12 +49,31 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Click a rule symbol to open it on the Rules page (once the Rules page exists)
 - [ ] ALS projects: relationships from the metadata (ALS `/metadata` lists them per resource)
 
-## Editions and licensing (`design/Editions and Licensing.md`)
+## Parked: Enterprise edition — revisit after the Lite release (author, 2026-11-24)
 
-- [x] Data interface `App Data` (Lite: SQLite + rules); edition hook `src/Generator/Edition.incl` (Lite only)
-- [ ] Licence option: portable checksum, signed licence file, or online activation — author
-- [ ] Private Enterprise repository; move `ALS Client / Binding / App.incl` there
-- [ ] License Server: product `imagery_logicbank_studio_fb` and the licence format (its own repository)
+Everything needed to pick this up again is in `design/Editions and Licensing.md` (the editions,
+the code split, what the License Server issues today, the licence options, the roadmap).
+Done already: the data interface `App Data` with its Lite implementation, and the edition hook
+`src/Generator/Edition.incl` (Lite only).
+
+When resuming, in this order:
+
+1. [ ] Choose the licence option — author: **A** portable checksum (SHA-256 on the License Server),
+       **B** signed licence file (the server signs, the Studio verifies with `SecKeyVerifySignature`),
+       or **C** online activation (breaks the no-dependency rule). Already decided: offline, Studio only.
+2. [ ] Create the private repository (e.g. `Api_Logic_Client_Enterprise`) and attach it to a session;
+       move `src/Runtime/ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` there.
+3. [ ] Its `Edition.incl` (replaces this repo's): `EditionEnterpriseAvailable` from the licence;
+       Enterprise runtime files, start-up (`gALSHost`, login paths), `EditionRulesInApp` = NO.
+4. [ ] `App Data Enterprise.incl`: list / save / remove / login over JSON:API; a request context per
+       call (URLSession `userData`); answers on the main thread (`dispatchmain`); records keep the
+       JSON:API id for Save and Delete.
+5. [ ] Sign-in window for the header's Log In; token for the session; Keychain for a remembered password.
+6. [ ] Generate App (Enterprise): export `Rules.json` to `declare_logic.py` for the server.
+7. [ ] Studio: an edition choice in Project Settings and a "Licence…" entry (Preferences).
+8. [ ] License Server (its own repository): product `imagery_logicbank_studio_fb`, bit 0 `enterprise`,
+       and the licence format chosen in step 1.
+9. [ ] The paid build: project file, release, distribution from the License Server.
 
 ## Tools in FutureBasic (author, 2026-11-24)
 
