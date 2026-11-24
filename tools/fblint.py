@@ -76,7 +76,7 @@ def strip_strings_and_comments(line):
 FN_DEF = re.compile(r'^\s*(?:(void)\s+|(\w+)\s+)?local\s+fn\s+(\w+)(\s*\(.*?\))?(.*)$')
 
 
-def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=frozenset(), arity=None, object_params=None):
+def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=frozenset(), arity=None, object_params=None, global_names=None):
     raw = open(path, 'rb').read()
     try:
         text = raw.decode('utf-8')
@@ -149,6 +149,9 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
             fm = re.match(r'\s*for\s+(\w+)\s+in\b', code_only)
             if fm: declared.append(fm.group(1))
             for name in declared:
+                # a local that redeclares a global: "Redefined variable" (FB 7.0.38)
+                if current and name.lower() in (global_names or {}).get(os.path.dirname(path), set()) and not re.search(r'\blocal\s+fn\b|^\s*for\b', code_only):
+                    report(no, f'"{name}" is a global (begin globals / .glbl) - give the local another name')
                 if name.lower() in fb_keywords:
                     report(no, f'"{name}" is an FB keyword - rename the variable')
         if arity:
@@ -340,6 +343,22 @@ def main(argv):
         for g in re.findall(r'^\s*//\s*generated:\s*([\w ,]+)$', s, re.M):
             local_fns |= {n.strip() for n in g.split(',') if n.strip()}
     local_fns = {n.lower() for n in local_fns}
+    # global variable names: every declaration in a .glbl file and in begin globals ... end globals
+    global_names = {}                       # folder (one project) -> names
+    decl = re.compile(r'^\s*(?:[A-Z]\w*Ref|long|BOOL|double|NSInteger|NSUInteger|SInt64|SInt32|ptr|CGRect|CGFloat|CFRange|short|int|float|boolean|Str255)\s+(.*)$')
+    for p in files:
+        text = open(p, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
+        inside = p.endswith('.glbl')
+        for line in text.split('\n'):
+            code = line.split('//')[0]
+            if re.match(r'\s*begin\s+globals\b', code, re.I): inside = True; continue
+            if re.match(r'\s*end\s+globals\b', code, re.I): inside = p.endswith('.glbl'); continue
+            if inside:
+                m = decl.match(code)
+                if m and not re.search(r'\bfn\b', code):
+                    for part in split_args(m.group(1)):
+                        n = re.match(r'\s*(\w+)', part)
+                        if n: global_names.setdefault(os.path.dirname(p), set()).add(n.group(1).lower())
     known = {n.lower() for n in toolbox_names(headers)} | {'nslog'} if headers else None
     fb_keywords = keywords(headers) if headers else set()
     arity = toolbox_arity(headers) if headers else None
@@ -347,7 +366,7 @@ def main(argv):
     problems = []
     for p in files:
         # single-file programs (.fb/.bas) may use #build; project files may not
-        problems += lint_file(p, not p.endswith(('.fb', '.bas')), known, local_fns, fb_keywords, arity, object_params)
+        problems += lint_file(p, not p.endswith(('.fb', '.bas')), known, local_fns, fb_keywords, arity, object_params, global_names)
     for a in argv:
         for proj in glob.glob(os.path.join(a, '**', 'data.fbproj'), recursive=True) if os.path.isdir(a) else []:
             text = open(proj, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')

@@ -14,6 +14,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   `Api_Logic_Client` folder is moved over, and the paths in `Recent Projects.json` and each
   `Project.json` are rewritten (plain and JSON-escaped). Generated apps take the new path on their
   next Generate App.
+- FB: `Redefined variable … projectFolderURL` — a local named like a global (FB forbids it).
+  Renamed; `fblint` now reports a local that redeclares a global of the same project.
 
 ---
 
