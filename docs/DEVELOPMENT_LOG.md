@@ -20,6 +20,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   (hidden). It asked for the repository. Now the Studio finds the repository itself from its own
   app's location (FB builds it in `src/Generator`) and copies without asking; the panel remains a
   fallback, with clearer words. The Application Support folders are created as needed.
+- Welcome view: the logo and the heading drifted apart in a wide window (both floated with
+  flexible margins). The logo is anchored left; the heading and subtitle start beside it and stretch.
 
 ---
 
