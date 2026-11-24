@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Generated apps always get the Studio's own runtime
+
+- The generated app crashed again in `DataExecute` ("index 0 beyond bounds for empty array"):
+  the fix (23ced18) was in the repository, but not in the app. *Update Runtime and Templates*
+  copied from the **remembered** folder (`Studio Library.json`), which after the bisect pointed at
+  an older clone; Generate App copied only when the workspace had no runtime at all.
+- Now (`Studio Library.incl`): when the Studio runs from the repository it was built in,
+  `StudioLibraryReady` copies `src/Runtime` and `src/Templates` from there on every Generate App
+  (and at launch); *Update Runtime and Templates* also tries that repository first. The
+  remembered folder and the folder panel are only for a Studio that is not inside a repository.
+- Learned: a cache of our own code must never be preferred over the source the Studio was built
+  from; during development the two drift as soon as the author switches clones.
+
 ## 2026-11-24 — Delete Project
 
 - *Model > Delete Project…* (`ProjectDelete`, Project Actions.incl): the open project, or the one

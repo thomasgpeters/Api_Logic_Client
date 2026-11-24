@@ -42,7 +42,8 @@ mode work without extra code).
 - `src/Runtime/` — our FB code copied into every generated app. Not bundled into the Studio
   (author, 2026-11-24): `Studio Library.incl` copies `src/Runtime` and `src/Templates` into the
   workspace (`workspace/Runtime`, `workspace/Templates`) the first time they are needed, and on
-  *Model > Update Runtime and Templates*; generation copies from there. The list is `AppRuntimeFiles`:
+  *Model > Update Runtime and Templates*, and on every Generate App while the Studio runs from its
+  repository (so apps never get a stale runtime); generation copies from there. The list is `AppRuntimeFiles`:
   - data runtime — `Data SQLite.incl` (our SQLite declarations, transactions), the author's
     DataObject query builder (`DataObject.glbl`, `DataObject_Super.incl`, `DataObject.incl`,
     kept identical to Test_Xib_View's), `Data Model.incl` (Model.json entities),

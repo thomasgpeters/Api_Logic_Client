@@ -158,7 +158,9 @@ From the *Model* menu:
 own app sits, into its own folder: `~/Library/Application Support/Imagery LogicBank Studio for
 FutureBasic/workspace/Runtime` and `…/Templates`, creating the folders as needed. Only when it cannot
 find the repository does it ask you to choose the Api_Logic_Client folder you cloned (not a folder in
-Library). After pulling a newer version, choose *Model → Update Runtime and Templates…*.
+Library). While the Studio runs from the repository it was built in, *Generate App* copies them from there
+every time, so an app always gets the runtime the Studio was built with. *Model → Update Runtime
+and Templates…* does the same on demand.
 
 
 | Command | Key | Writes into `FBapp/` |
