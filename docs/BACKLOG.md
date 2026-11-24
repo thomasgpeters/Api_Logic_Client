@@ -130,7 +130,7 @@ When resuming, in this order:
 - [ ] Settings groups for ALS/APIs, AI/LLM providers, SMTP notifications
 - [ ] Optional `admin.yaml` hints (titles, `user_key`, relationship names)
 - [ ] Generator's own ALS fetch uses the Create Project form's base URL and credentials (still hard-coded host and `admin`/`p`), and waits for login before fetching
-- [ ] Move to FB's current type names (`StringRef`, `DictionaryRef`, …) and Cocoa wrappers everywhere — done in the data runtime and query builder; generator and ALS runtime still use the CF names
+- [x] ~~Move to FB's newer type names~~ — reversed 2026-11-24: FutureBasic 7.0.38 does not know `StringRef`, `URLRef`, …; everything uses the CF names (fblint enforces it)
 
 ## Look and feel
 

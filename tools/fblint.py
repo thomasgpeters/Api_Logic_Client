@@ -184,6 +184,9 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
         if current and re.match(r'\s*end\s+fn\b', line):
             current = None
 
+        # FutureBasic 7.0.38 (the author's) does not know the newer type names: use the CF ones
+        for tm in re.finditer(r'(?<![A-Za-z_])(StringRef|MutableStringRef|DictionaryRef|MutableDictionaryRef|ArrayRef|MutableArrayRef|DataRef|URLRef|NumberRef)\b', strip_strings_and_comments(line)):
+            report(no, f'{tm.group(1)} is unknown in FutureBasic 7.0.38 - use CF{tm.group(1)}')
         if known_toolbox is not None and not re.match(r'(?i)^\s*(toolbox|system|#define)\b', line):
             code = strip_strings_and_comments(line)
             names = re.findall(r'\bfn\s+(\w+)', code)
@@ -224,8 +227,10 @@ def keywords(headers):
     path = os.path.join(headers, 'Key Words')
     if not os.path.exists(path): return set()
     text = open(path, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
-    return {l.split('//')[0].strip().lower() for l in text.split('\n')
-            if re.fullmatch(r'[A-Za-z_]\w*', l.split('//')[0].strip())}
+    found = {l.split('//')[0].strip().lower() for l in text.split('\n')
+             if re.fullmatch(r'[A-Za-z_]\w*', l.split('//')[0].strip())}
+    # keywords the translator rejected as names that the list lacks (author's builds)
+    return found | {'width'}
 
 
 def active_lines(text):

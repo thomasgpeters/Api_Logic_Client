@@ -129,11 +129,11 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
   `-Wno-unused-command-line-argument` to the same field (as Test_Xib_View does) or each
   source file warns "'linker' input unused".
 
-- **New code uses FB's current type names and Cocoa wrappers.** The headers mark the CF
-  type names deprecated (`CFStringRef` → `StringRef`, `CFDictionaryRef` → `DictionaryRef`,
-  `CFArrayRef` → `ArrayRef`, `CFNumberRef` → `NumberRef`, `CFURLRef` → `URLRef`,
-  `CFDataRef` → `DataRef`, mutable ones alike); they are aliases, so old code still builds.
-  Prefer `DictionaryObjectForKey`, `MutableArrayAddObject`, … over `CFDictionaryGetValue`,
+- **Use the CF type names** (`CFStringRef`, `CFDictionaryRef`, `CFMutableArrayRef`, `CFURLRef`,
+  `CFDataRef`, `CFNumberRef`, …). The newer headers in FutureBasic_Documentation call them
+  deprecated in favour of `StringRef`, `DictionaryRef`, …, but the author's FutureBasic 7.0.38
+  does not know the newer names ("Unknown variable type … URLRef", 2026-11-24); the CF names
+  work in both. `fblint` reports the newer names. Prefer the Cocoa wrapper *functions* still: `DictionaryObjectForKey`, `MutableArrayAddObject`, … over `CFDictionaryGetValue`,
   `CFArrayAppendValue`, …; `CFRelease` only what a `CF…Create` call returned.
 - **`ObjectRef` parameters need a cast** (`fn ObjectIsEqual( (ObjectRef)a, (ObjectRef)b )`): a CF
   value passed uncast makes clang warn. fblint reads the parameter types from the headers and

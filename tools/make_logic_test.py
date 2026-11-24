@@ -86,12 +86,12 @@ end fn
 // ---- step 3: copy, parent check, cascades, delete actions, events
 
 begin globals
-MutableArrayRef gOrderRowEvents       // "verb|Id" of each Order row event
-MutableArrayRef gOrderCommitEvents    // "verb|Id" of each Order commit event
+CFMutableArrayRef gOrderRowEvents       // "verb|Id" of each Order row event
+CFMutableArrayRef gOrderCommitEvents    // "verb|Id" of each Order commit event
 end globals
 
 
-local fn EventLabel( logicRow as LogicRowRef ) as StringRef
+local fn EventLabel( logicRow as LogicRowRef ) as CFStringRef
 end fn = fn StringWithFormat( @"%@|%@", fn DictionaryObjectForKey( logicRow, @"verb" ), fn LogicString( logicRow, @"Id" ) )
 
 
@@ -146,7 +146,7 @@ long gTestsFailed
 end globals
 
 
-void local fn Check( testName as StringRef, passed as BOOL, detail as StringRef )
+void local fn Check( testName as CFStringRef, passed as BOOL, detail as CFStringRef )
 gTestsRun++
 if ( passed )
 NSLog( @"PASS  %@", testName )
@@ -161,8 +161,8 @@ local fn OrderDetailCount as long
 end fn = fn ArrayCount( fn DataFetch( @"OrderDetail", @{ @"OrderId":fn NumberWithInteger( 10248 ) }, NULL ) )
 
 
-local fn NewItem( quantity as long ) as MutableDictionaryRef
-MutableDictionaryRef item = fn MutableDictionaryNew
+local fn NewItem( quantity as long ) as CFMutableDictionaryRef
+CFMutableDictionaryRef item = fn MutableDictionaryNew
 MutableDictionarySetObjectForKey( item, fn NumberWithInteger( 10248 ), @"OrderId" )
 MutableDictionarySetObjectForKey( item, fn NumberWithInteger( 11 ), @"ProductId" )
 MutableDictionarySetObjectForKey( item, fn NumberWithDouble( 14.0 ), @"UnitPrice" )
@@ -172,9 +172,9 @@ end fn = item
 
 
 void local fn RunScenarios
-MutableDictionaryRef item, upd, stored, customer, extra
-ArrayRef             formulas
-NumberRef            itemId
+CFMutableDictionaryRef item, upd, stored, customer, extra
+CFArrayRef             formulas
+CFNumberRef            itemId
 long                 before
 BOOL                 inner, outer
 
@@ -236,36 +236,36 @@ fn Check( @"saves refuse until rules are active", fn LogicInsert( @"OrderDetail"
 end fn
 
 
-local fn OrderRow( orderId as long ) as DictionaryRef
+local fn OrderRow( orderId as long ) as CFDictionaryRef
 end fn = fn DataFetchOne( @"Order", @{ @"Id":fn NumberWithInteger( orderId ) } )
 
 
-local fn CustomerRow( customerId as StringRef ) as DictionaryRef
+local fn CustomerRow( customerId as CFStringRef ) as CFDictionaryRef
 end fn = fn DataFetchOne( @"Customer", @{ @"Id":customerId } )
 
 
-local fn Num( aRecord as DictionaryRef, attrName as StringRef ) as double
+local fn Num( aRecord as CFDictionaryRef, attrName as CFStringRef ) as double
 end fn = fn LogicNumberOf( fn DictionaryObjectForKey( aRecord, attrName ) )
 
 
-local fn OrderChange( orderId as long, attrName as StringRef, value as CFTypeRef ) as BOOL
-MutableDictionaryRef upd = fn MutableDictionaryNew
+local fn OrderChange( orderId as long, attrName as CFStringRef, value as CFTypeRef ) as BOOL
+CFMutableDictionaryRef upd = fn MutableDictionaryNew
 MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( orderId ), @"Id" )
 MutableDictionarySetObjectForKey( upd, value, attrName )
 end fn = fn LogicUpdate( @"Order", upd, NULL )
 
 
-local fn DetailOn( orderId as long, quantity as long ) as MutableDictionaryRef
-MutableDictionaryRef item = fn NewItem( quantity )
+local fn DetailOn( orderId as long, quantity as long ) as CFMutableDictionaryRef
+CFMutableDictionaryRef item = fn NewItem( quantity )
 MutableDictionarySetObjectForKey( item, fn NumberWithInteger( orderId ), @"OrderId" )
 MutableDictionarySetObjectForKey( item, fn NumberWithDouble( 10.0 ), @"UnitPrice" )
 end fn = item
 
 
 void local fn RunAggregateScenarios
-DictionaryRef        o0, c0, a0, o1, c1, o2, c2, c3, r0, o9
-MutableDictionaryRef item, upd, shippedItem, newOrder, firstItem, upItem
-NumberRef            itemId
+CFDictionaryRef        o0, c0, a0, o1, c1, o2, c2, c3, r0, o9
+CFMutableDictionaryRef item, upd, shippedItem, newOrder, firstItem, upItem
+CFNumberRef            itemId
 long                 newId
 BOOL                 ok, shipped, moved, back
 
@@ -392,17 +392,17 @@ fn Check( @"aggregates: delete detail: Order and Balance back to the start", ok 
 end fn
 
 
-local fn ProductRow( productId as long ) as DictionaryRef
+local fn ProductRow( productId as long ) as CFDictionaryRef
 end fn = fn DataFetchOne( @"Product", @{ @"Id":fn NumberWithInteger( productId ) } )
 
 
-local fn DetailRow( detailId as CFTypeRef ) as DictionaryRef
+local fn DetailRow( detailId as CFTypeRef ) as CFDictionaryRef
 end fn = fn DataFetchOne( @"OrderDetail", @{ @"Id":detailId } )
 
 
 // a detail without a UnitPrice: the copy rule supplies it
-local fn PlainDetail( orderId as long, productId as long, quantity as long ) as MutableDictionaryRef
-MutableDictionaryRef item = fn MutableDictionaryNew
+local fn PlainDetail( orderId as long, productId as long, quantity as long ) as CFMutableDictionaryRef
+CFMutableDictionaryRef item = fn MutableDictionaryNew
 MutableDictionarySetObjectForKey( item, fn NumberWithInteger( orderId ), @"OrderId" )
 MutableDictionarySetObjectForKey( item, fn NumberWithInteger( productId ), @"ProductId" )
 MutableDictionarySetObjectForKey( item, fn NumberWithInteger( quantity ), @"Quantity" )
@@ -410,16 +410,16 @@ MutableDictionarySetObjectForKey( item, fn NumberWithDouble( 0.0 ), @"Discount" 
 end fn = item
 
 
-local fn Labels( a as StringRef, b as StringRef ) as ArrayRef
+local fn Labels( a as CFStringRef, b as CFStringRef ) as CFArrayRef
 if ( b == NULL ) then exit fn = @[ a ]
 end fn = @[ a, b ]
 
 
 void local fn RunStep3Scenarios
-DictionaryRef        o0, c0, moved
-MutableDictionaryRef item, upd, badItem, newOrder, firstItem, secondItem, cloneOrder
-ArrayRef             details, sorted, expected
-DictionaryRef        detail
+CFDictionaryRef        o0, c0, moved
+CFMutableDictionaryRef item, upd, badItem, newOrder, firstItem, secondItem, cloneOrder
+CFArrayRef             details, sorted, expected
+CFDictionaryRef        detail
 double               p11, p42
 long                 newId, cloneId
 BOOL                 ok, allShipped, noneShipped, cascadeFound

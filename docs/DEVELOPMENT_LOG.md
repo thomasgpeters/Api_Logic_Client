@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — The crash is gone; FutureBasic 7.0.38's own errors fixed
+
+- With the folder resources off the build list (the Xcode project last), FutureBasic translates the
+  Studio again: no crash. Its errors: `width` used as a variable (an FB keyword); the newer type
+  names `URLRef`, `StringRef`, `DataRef`, `DictionaryRef`, `ArrayRef` unknown in FB 7.0.38; a `…` in
+  a string literal.
+- Fixed: `colWidth` in XIB Generator; every FB source (Studio, runtime, templates, generated code,
+  the FB logic test, Test_Xib_View) back to the CF names; the alert's `Locate...`. `fblint` now
+  reports the newer names and `width`. Learned: FutureBasic_Documentation's headers are newer than
+  the author's FB — a name the linter accepts can still be unknown to the translator.
+
+---
+
 ## 2026-11-24 — Runtime and templates in the workspace, not the Studio's bundle
 
 - The headers change (below) did not stop the crash. What every crashing version shares: the
