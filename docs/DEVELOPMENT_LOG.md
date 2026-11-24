@@ -6,7 +6,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — Studio's test concept; LogicBank audit mapped; every rule proven
+## 2026-11-24 — Studio's test concept; LogicBank audit mapped; every rule proven (`132d5f3`)
 
 - Imagery LogicBank Studio attached read-only. Its rule lifecycle: a test case per operation
   (insert, update, delete, upsert), each run as given rows → change → accepted with the
