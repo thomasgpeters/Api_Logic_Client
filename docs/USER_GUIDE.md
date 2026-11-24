@@ -550,6 +550,10 @@ list (and names it); the Control popup needs an attribute selected in the table.
 | Help | Imagery LogicBank Studio Help (this guide) | ⌘? | |
 | | Show Workspace in Finder | ⇧⌘K | |
 
+**Crumb trail:** along the top of the window, where you are — *Projects › Northwind › address*
+(or *› Settings*, *› New Project*). Click *Projects* to go back to the Projects screen, or the
+project's name to go back to its entity definitions.
+
 **Toolbar:** *Projects* (⌘1: the Welcome view, new, open, recent), *Entities* (⌘2: the open
 project's entity definitions), *Diagram* (Show Model Diagram), *Generate* (Generate App), *Settings*
 (Project Settings). All but Projects need a project.

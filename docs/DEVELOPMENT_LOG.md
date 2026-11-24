@@ -6,6 +6,18 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — The Studio's crumb trail (author: "a way to navigate back to the Project screen")
+
+- `Menus.incl`: `StudioUpdateCrumbs` builds an `NSPathControl` trail from the visible view and the
+  state (Projects › project › entity or Settings; › New Project; › API Logic Server), keeping an
+  action beside each item (`gStudioCrumbActions`); `StudioCrumbAction` reads the clicked one
+  (`PathControlClickedPathItem`, `_btnClick`). Projects -> the Projects screen, the project -> its
+  entity definitions.
+- `Windows.incl`: the trail at the top of the page area, the heading moved down under it
+  (`_crumbTrailHeight`; `_pageHeadingHeight` 60 -> 86 so the pages start below both).
+- A "< Projects" button beside the heading was written first and replaced by the trail before
+  committing (the author's suggestion).
+
 ## 2026-11-24 — Keyboard shortcuts for the Studio's commands (author)
 
 - `Menus.incl`: ⌘1 Recent Projects, ⌘2 Entity Definitions (a new Project menu item, the
