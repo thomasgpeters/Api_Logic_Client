@@ -284,6 +284,9 @@ def build_order_problems(proj):
             m = FN_DEF.match(line)
             if m:
                 defined.add(m.group(3).lower()); continue
+            proto = re.match(r'^\s*(?:\w+\s+)?def\s+fn\s+(\w+)', line)   # def fn prototype: callable from here on
+            if proto and not re.search(r'\busing\b', line):
+                defined.add(proto.group(1).lower()); continue
             code = strip_strings_and_comments(line)
             names = re.findall(r'(?:\bfn|@fn)\s+(\w+)', code)
             call = re.match(r'\s*([A-Za-z]\w+)\s*\(', code)

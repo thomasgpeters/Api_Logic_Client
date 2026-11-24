@@ -59,6 +59,28 @@ fn LogicFormula( @"OrderDetail", @"Amount", @fn OrderDetailAmount, @[ @"Quantity
 fn LogicConstraint( @"OrderDetail", @fn OrderDetailQuantityPositive, @"Quantity {Quantity} must be more than 0" )
 fn LogicConstraint( @"Customer", @fn CustomerCreditCheck, @"Customer balance ({row.Balance}) exceeds credit limit ({row.CreditLimit})" )
 end fn
+
+
+// ---- aggregates: the canonical check-credit logic (nw/logic/readme_logic.md)
+
+local fn OrderIsUnshipped( logicRow as LogicRowRef ) as BOOL
+end fn = fn LogicIsEmpty( logicRow, @"ShippedDate" )
+
+
+// OrderDetail.ShippedDate = Order.ShippedDate (a parent reference)
+local fn OrderDetailShippedDate( logicRow as LogicRowRef ) as CFTypeRef
+end fn = fn LogicParentValue( logicRow, @"Order", @"ShippedDate" )
+
+
+void local fn DeclareAggregateRules
+fn LogicFormula( @"OrderDetail", @"Amount", @fn OrderDetailAmount, @[ @"Quantity", @"UnitPrice" ] )
+fn LogicFormula( @"OrderDetail", @"ShippedDate", @fn OrderDetailShippedDate, @[ @"Order.ShippedDate" ] )
+fn LogicSum( @"Order", @"AmountTotal", @"OrderDetailList", @"Amount", NULL )
+fn LogicCount( @"Order", @"OrderDetailCount", @"OrderDetailList", NULL )
+fn LogicSum( @"Customer", @"Balance", @"OrderList", @"AmountTotal", @fn OrderIsUnshipped )
+fn LogicCount( @"Customer", @"UnpaidOrderCount", @"OrderList", @fn OrderIsUnshipped )
+fn LogicConstraint( @"Customer", @fn CustomerCreditCheck, @"Customer balance ({row.Balance}) exceeds credit limit ({row.CreditLimit})" )
+end fn
 '''
 
 MAIN = r'''/*
@@ -159,12 +181,109 @@ fn Check( @"unknown attribute is refused at activation", fn LogicCheckNames( @{ 
 gLogicActive = NO
 fn Check( @"saves refuse until rules are active", fn LogicInsert( @"OrderDetail", fn NewItem( 3 ) ) == NO && fn StringContainsString( fn LogicMessage, @"not active" ), fn LogicMessage )
 
-NSLog( @"logic test: %ld scenarios, %ld failed", gTestsRun, gTestsFailed )
+end fn
+
+
+local fn OrderRow( orderId as long ) as DictionaryRef
+end fn = fn DataFetchOne( @"Order", @{ @"Id":fn NumberWithInteger( orderId ) } )
+
+
+local fn CustomerRow( customerId as StringRef ) as DictionaryRef
+end fn = fn DataFetchOne( @"Customer", @{ @"Id":customerId } )
+
+
+local fn Num( aRecord as DictionaryRef, attrName as StringRef ) as double
+end fn = fn LogicNumberOf( fn DictionaryObjectForKey( aRecord, attrName ) )
+
+
+local fn OrderChange( orderId as long, attrName as StringRef, value as CFTypeRef ) as BOOL
+MutableDictionaryRef upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( orderId ), @"Id" )
+MutableDictionarySetObjectForKey( upd, value, attrName )
+end fn = fn LogicUpdate( @"Order", upd, NULL )
+
+
+local fn DetailOn( orderId as long, quantity as long ) as MutableDictionaryRef
+MutableDictionaryRef item = fn NewItem( quantity )
+MutableDictionarySetObjectForKey( item, fn NumberWithInteger( orderId ), @"OrderId" )
+MutableDictionarySetObjectForKey( item, fn NumberWithDouble( 10.0 ), @"UnitPrice" )
+end fn = item
+
+
+void local fn RunAggregateScenarios
+DictionaryRef        o0, c0, a0, o1, c1, o2, c2, c3, r0, o9
+MutableDictionaryRef item, upd, shippedItem
+NumberRef            itemId
+BOOL                 ok, shipped, moved, back
+
+gLogicRules = NULL
+fn DeclareAggregateRules
+fn Check( @"aggregates: activate", fn LogicActivate, @"" )
+fn Check( @"aggregates: filed under the child", fn ArrayCount( fn LogicRulesOf( @"Order", @"aggregates" ) ) == 2, @"" )
+
+o0 = fn OrderRow( 10643 ) : c0 = fn CustomerRow( @"ALFKI" ) : a0 = fn CustomerRow( @"ANATR" )
+item = fn DetailOn( 10643, 2 )
+ok = fn LogicInsert( @"OrderDetail", item )
+itemId = fn DictionaryObjectForKey( item, @"Id" )
+o1 = fn OrderRow( 10643 ) : c1 = fn CustomerRow( @"ALFKI" )
+fn Check( @"aggregates: insert detail: Order.AmountTotal +20", ok && fn Num( o1, @"AmountTotal" ) == fn Num( o0, @"AmountTotal" ) + 20.0, fn LogicMessage )
+fn Check( @"aggregates: insert detail: Order.OrderDetailCount +1", fn Num( o1, @"OrderDetailCount" ) == fn Num( o0, @"OrderDetailCount" ) + 1.0, @"" )
+fn Check( @"aggregates: insert detail: chained to Customer.Balance +20", fn Num( c1, @"Balance" ) == fn Num( c0, @"Balance" ) + 20.0, @"" )
+fn Check( @"aggregates: insert detail: parent reference (the order is unshipped)", fn DataIsNull( fn DictionaryObjectForKey( item, @"ShippedDate" ) ), @"" )
+
+upd = fn MutableDictionaryNew
+MutableDictionarySetObjectForKey( upd, itemId, @"Id" )
+MutableDictionarySetObjectForKey( upd, fn NumberWithInteger( 5 ), @"Quantity" )
+ok = fn LogicUpdate( @"OrderDetail", upd, NULL )
+o2 = fn OrderRow( 10643 ) : c2 = fn CustomerRow( @"ALFKI" )
+fn Check( @"aggregates: change quantity: Order +30, Balance +30", ok && fn Num( o2, @"AmountTotal" ) == fn Num( o1, @"AmountTotal" ) + 30.0 && fn Num( c2, @"Balance" ) == fn Num( c1, @"Balance" ) + 30.0, fn LogicMessage )
+
+ok = fn LogicInsert( @"OrderDetail", fn DetailOn( 10643, 1000 ) )
+fn Check( @"aggregates: credit limit: the chained constraint fails the detail insert", ok == NO && fn StringContainsString( fn LogicMessage, @"exceeds credit limit" ), fn LogicMessage )
+fn Check( @"aggregates: credit limit: nothing changed", fn ObjectIsEqual( fn OrderRow( 10643 ), o2 ) && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), @"" )
+
+ok = fn OrderChange( 10643, @"ShippedDate", @"2026-11-24" )
+c3 = fn CustomerRow( @"ALFKI" )
+fn Check( @"aggregates: ship the order: Balance - AmountTotal, UnpaidOrderCount -1 (where no longer met)", ok && fn Num( c3, @"Balance" ) == fn Num( c2, @"Balance" ) - fn Num( o2, @"AmountTotal" ) && fn Num( c3, @"UnpaidOrderCount" ) == fn Num( c2, @"UnpaidOrderCount" ) - 1.0, fn LogicMessage )
+ok = fn OrderChange( 10643, @"ShippedDate", fn DataNull )
+fn Check( @"aggregates: unship: back again", ok && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+
+ok = fn OrderChange( 10643, @"CustomerId", @"ANATR" )
+fn Check( @"aggregates: re-parent over the new customer's credit limit fails (ANATR limit 1000)", ok == NO && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ) && fn ObjectIsEqual( fn CustomerRow( @"ANATR" ), a0 ), fn LogicMessage )
+
+shipped = fn OrderChange( 10643, @"ShippedDate", @"2026-11-24" )
+moved   = fn OrderChange( 10643, @"CustomerId", @"ANATR" )
+fn Check( @"aggregates: re-parent a shipped order: both balances unchanged (where not met), counts unchanged", shipped && moved && fn Num( fn CustomerRow( @"ANATR" ), @"Balance" ) == fn Num( a0, @"Balance" ) && fn Num( fn CustomerRow( @"ANATR" ), @"UnpaidOrderCount" ) == fn Num( a0, @"UnpaidOrderCount" ), fn LogicMessage )
+back = fn OrderChange( 10643, @"CustomerId", @"ALFKI" )
+if ( back ) then back = fn OrderChange( 10643, @"ShippedDate", fn DataNull )
+fn Check( @"aggregates: re-parent back and unship", back && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+
+// test setup on the copy, outside the rules: room for the order under ANATR's limit
+fn DataExecute( @"UPDATE \"Customer\" SET \"CreditLimit\" = 5000 WHERE \"Id\" = 'ANATR'", NULL, NULL )
+r0 = fn CustomerRow( @"ANATR" )
+ok = fn OrderChange( 10643, @"CustomerId", @"ANATR" )
+fn Check( @"aggregates: re-parent to ANATR (room under its limit): ALFKI -, ANATR +, counts move", ok && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c2, @"Balance" ) - fn Num( o2, @"AmountTotal" ) && fn Num( fn CustomerRow( @"ANATR" ), @"Balance" ) == fn Num( r0, @"Balance" ) + fn Num( o2, @"AmountTotal" ) && fn Num( fn CustomerRow( @"ANATR" ), @"UnpaidOrderCount" ) == fn Num( r0, @"UnpaidOrderCount" ) + 1.0, fn LogicMessage )
+ok = fn OrderChange( 10643, @"CustomerId", @"ALFKI" )
+fn Check( @"aggregates: re-parent back from ANATR", ok && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ) && fn Num( fn CustomerRow( @"ANATR" ), @"Balance" ) == fn Num( r0, @"Balance" ), fn LogicMessage )
+
+o9 = fn OrderRow( 10692 )
+shippedItem = fn DetailOn( 10692, 1 )
+ok = fn LogicInsert( @"OrderDetail", shippedItem )
+fn Check( @"aggregates: parent reference: a detail on a shipped order takes its ShippedDate", ok && fn ObjectIsEqual( fn DictionaryObjectForKey( shippedItem, @"ShippedDate" ), fn DictionaryObjectForKey( o9, @"ShippedDate" ) ), fn LogicMessage )
+fn Check( @"aggregates: detail on a shipped order: AmountTotal +10, Balance unchanged (where not met)", fn Num( fn OrderRow( 10692 ), @"AmountTotal" ) == fn Num( o9, @"AmountTotal" ) + 10.0 && fn ObjectIsEqual( fn CustomerRow( @"ALFKI" ), c2 ), fn LogicMessage )
+fn LogicDelete( @"OrderDetail", @{ @"Id":fn DictionaryObjectForKey( shippedItem, @"Id" ) } )
+
+ok = fn LogicDelete( @"OrderDetail", @{ @"Id":itemId } )
+fn Check( @"aggregates: delete detail: Order and Balance back to the start", ok && fn Num( fn OrderRow( 10643 ), @"AmountTotal" ) == fn Num( o0, @"AmountTotal" ) && fn Num( fn CustomerRow( @"ALFKI" ), @"Balance" ) == fn Num( c0, @"Balance" ), fn LogicMessage )
 end fn
 
 
 isLoggingOn = YES
-if ( fn DataOpen( NULL ) ) then fn RunScenarios
+if ( fn DataOpen( NULL ) )
+fn RunScenarios
+fn RunAggregateScenarios
+NSLog( @"logic test: %ld scenarios, %ld failed", gTestsRun, gTestsFailed )
+end if
 HandleEvents
 '''
 

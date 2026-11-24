@@ -108,7 +108,9 @@ Rewrite of [LogicBank](https://github.com/valhuber/LogicBank) (Val Huber) for Fu
 - [x] License check: current is Apache 2.0 + Commons Clause (since 2026-05-29, `a475a9c`); BSD in setup.py/pyproject is stale
 - [ ] Proposal to Val Huber: percentage offer + use of the name "LogicBank for FutureBasic" (author) — clean-room until then
 - [x] Engine core: formulas (order, pruning), constraints, transactions — `features/LOGIC_ENGINE_FEATURE.md`
-- [ ] Run `tools/make_logic_test.py` on a Mac: the 17 FB scenarios pass
-- [ ] Aggregates (sum/count, delta, re-parenting, chaining), parent references, copy, cascade, events
+- [ ] Run `tools/make_logic_test.py` on a Mac: the 36 FB scenarios pass
+- [x] Aggregates (sum/count with where, delta, re-parenting, chaining), parent references
+- [ ] Copy, parent check, cascade of parent changes to children, delete cascade/nullify/prevent, events
+- [ ] Recompute command: rebuild stored sums/counts from the data (adjustment assumes they start right)
 - [ ] Studio: Rules page, `Rules.json`, generated rule files, validation, Explain
 - [ ] Import ALS `logic/declare_logic.py`

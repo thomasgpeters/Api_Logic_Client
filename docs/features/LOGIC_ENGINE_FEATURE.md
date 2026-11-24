@@ -1,4 +1,4 @@
-# Logic Engine (LogicBank for FutureBasic) — core
+# Logic Engine (LogicBank for FutureBasic) — core and aggregates
 
 **Where:** `src/Runtime/Logic Rules.incl` (declaring and activating rules),
 `Logic Row.incl` (what a rule reads), `Logic Engine.incl` (saves), on top of the data
@@ -27,11 +27,12 @@ then `LogicActivate`. Saves go through `LogicInsert( entity, record )`,
 `LogicUpdate( entity, record, keyValues )`, `LogicDelete( entity, keyValues )`;
 `LogicMessage` says why the last one failed.
 
-## What the core does
+## What the engine does
 
 | Step | Insert | Update | Delete |
 |---|---|---|---|
 | formulas, in dependency order | all | only those whose `dependsOn` changed (pruned otherwise) | — |
+| adjust parents (sums, counts) — chaining | yes | yes | yes |
 | constraints (first failure stops) | yes | yes | — |
 | write | `DataInsert` (generated key set in the record) | `DataUpdate` (by stored key) | `DataDelete` |
 
@@ -49,18 +50,53 @@ then `LogicActivate`. Saves go through `LogicInsert( entity, record )`,
   global pointer variable per call site, which is not safe once saves chain into saves; it
   has no examples in FB's 578.
 
+## Sums and counts (step 2)
+
+```
+local fn OrderIsUnshipped( logicRow as LogicRowRef ) as BOOL
+end fn = fn LogicIsEmpty( logicRow, @"ShippedDate" )
+
+fn LogicSum( @"Order", @"AmountTotal", @"OrderDetailList", @"Amount", NULL )
+fn LogicCount( @"Order", @"OrderDetailCount", @"OrderDetailList", NULL )
+fn LogicSum( @"Customer", @"Balance", @"OrderList", @"AmountTotal", @fn OrderIsUnshipped )
+fn LogicCount( @"Customer", @"UnpaidOrderCount", @"OrderList", @fn OrderIsUnshipped )
+```
+
+- **Declared on the parent, filed under the child.** The child list (the model's tomany
+  name, e.g. `OrderList`) gives the child entity and its foreign key; activation files the
+  rule under the child, because child saves are what change the parent.
+- **Adjusted, never re-queried.** A child save changes the parent by the difference it
+  makes: inserted +value (count +1), deleted −value, updated new − old; a where that starts
+  holding +new, stops holding −old; moved to another parent (foreign key changed): −old from
+  the old parent, +new to the new one. Empty values count as 0.
+- **One parent write per parent row**, with all its sums and counts together, made through
+  `LogicUpdateRow` — so the parent's formulas, its own parents and its constraints run
+  (chaining: `OrderDetail.Amount` → `Order.AmountTotal` → `Customer.Balance` → credit
+  check). A failure anywhere rolls the whole save back. A chain deeper than 20 is
+  refused as a rule loop.
+- **Parent references** in formulas: `fn LogicParentValue( logicRow, @"Order", @"ShippedDate" )`,
+  declared as `@"Order.ShippedDate"` in `dependsOn` (checked at activation); the parent is
+  read once per save; the formula runs on insert and when the row moves to another parent.
+- Not yet: a parent attribute change cascading to its children's formulas (step 3, with copy).
+
+The adjustment assumes the stored sums are right to begin with (as Northwind's are). A
+recompute command for existing data is a backlog item.
+
 ## Tests
 
 - **Here (Python):** `python3 tools/logic_reference.py --test <Northwind db.sqlite>` —
-  a reference engine that follows the FB code function by function; 17 scenarios on a
-  temporary copy: order, compute on insert, recompute on update, pruning, constraint and
-  message, rollback (also nested), credit limit, delete, cycle, unknown attribute, inactive.
-  All pass.
+  a reference engine that follows the FB code function by function; 36 scenarios on a
+  temporary copy, all passing. Core (17): order, compute on insert, recompute on update,
+  pruning, constraint and message, rollback (also nested), credit limit, delete, cycle,
+  unknown attribute, inactive. Aggregates (19), the canonical check-credit logic: detail
+  insert → order total, count, customer balance; quantity change; credit limit failing a
+  chained save with nothing changed; ship / unship (where transitions); re-parent over the
+  limit (fails), re-parent a shipped order, re-parent with room (both customers adjusted);
+  a parent reference on a shipped order; delete back to the start.
 - **On a Mac (FB):** `python3 tools/make_logic_test.py <Northwind db.sqlite> ~/Desktop/LogicTest`
-  builds an FB project from the real runtime files with the same 17 scenarios in FB; open
+  builds an FB project from the real runtime files with the same 36 scenarios in FB; open
   `Logic Test.fbeproj`, build, run, read PASS / FAIL in the NSLog window.
 
-## Next (roadmap step 2)
-Sums and counts (with where), adjusted by delta; re-parenting; one parent write per role;
-chaining (`OrderDetail.Amount` → `Order.AmountTotal` → `Customer.Balance` → credit check);
-parent references in formulas (`Role.Attr` dependencies).
+## Next (roadmap step 3)
+Copy from parent (on insert), parent check, cascading parent changes to children
+(attributes children copy or reference; delete: cascade / nullify / prevent), row events.

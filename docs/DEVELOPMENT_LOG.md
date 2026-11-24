@@ -6,20 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-23 — LogicBank for FutureBasic: engine core (`52d1727`)
+## 2026-11-24 — LogicBank for FutureBasic: sums, counts, chaining
 
-- `Logic Rules.incl` (LogicFormula / LogicConstraint / LogicActivate: name checks,
-  dependency order, cycles), `Logic Row.incl` (LogicValue / LogicDouble / LogicOldValue /
-  LogicChanged …), `Logic Engine.incl` (LogicInsert / LogicUpdate / LogicDelete: formulas
-  with pruning, constraints with `{Attr}` messages, one transaction, rollback).
-- Rules are called by address with a `cln` cast to a C function pointer — FB's `@fn` gives
-  "the address of a callback function"; `def fn … using` needs a global pointer per call
-  site (unsafe when saves chain) and has no examples in FB's 578. `@fn` takes the bare
-  name only (no quoted form).
-- Generated apps: Logic files in the runtime, starting template `Rules.incl` (Rules group),
-  `.main` calls DeclareRules + LogicActivate after DataOpen.
-- Tests: `tools/logic_reference.py` (Python, follows the FB code; 17 scenarios on Northwind,
-  all pass) and `tools/make_logic_test.py` (the same scenarios as an FB project for the Mac).
-- fblint: `for x in (Type)fn …` is now reported too.
+- `LogicSum` / `LogicCount` (with a where function), declared on the parent and filed
+  under the child at activation (child list → child entity + foreign key).
+- Child saves adjust parents by the difference they make (insert, delete, change, where
+  starting/stopping, re-parenting: both parents); one write per parent row, through
+  `LogicUpdateRow`, so parents run their own logic (chaining to `Customer.Balance` and the
+  credit check). Chains deeper than 20 are refused.
+- Parent references in formulas: `LogicParentValue` / `LogicParentDouble`, `Role.Attr` in
+  dependsOn (checked at activation; pruned unless the row moves to another parent).
+- FB: the update ↔ adjust-parents recursion needs a `def fn` prototype; fblint's build-order
+  check now counts prototypes as definitions.
+- Tests: 36 scenarios in `tools/logic_reference.py` (19 new, the canonical check-credit
+  logic on Northwind) — all pass; the FB test project (`make_logic_test.py`) has the same 36.
 
 ---
