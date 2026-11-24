@@ -129,6 +129,11 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
   `-Wno-unused-command-line-argument` to the same field (as Test_Xib_View does) or each
   source file warns "'linker' input unused".
 
+- **Counts are unsigned: `for i = 0 to (long)fn ArrayCount( x ) - 1`.** `ArrayCount`,
+  `DictionaryCount`, `StringLength` return `NSUInteger`; for an empty `x`, `0 - 1` wraps to a huge
+  number and the loop runs, reading item 0 of an empty array (the generated app's first run,
+  2026-11-24: `index 0 beyond bounds for empty array` in `DataExecute`). Cast to `long` first.
+  `fblint` reports the uncast form.
 - **Use the CF type names** (`CFStringRef`, `CFDictionaryRef`, `CFMutableArrayRef`, `CFURLRef`,
   `CFDataRef`, `CFNumberRef`, …). The newer headers in FutureBasic_Documentation call them
   deprecated in favour of `StringRef`, `DictionaryRef`, …, but the author's FutureBasic 7.0.38

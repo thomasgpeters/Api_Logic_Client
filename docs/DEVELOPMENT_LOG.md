@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — The first generated app builds and runs: an unsigned loop bound
+
+- The author generated an app (from Test_Xib_View's contacts database), opened it in FB, built it:
+  it compiled. At launch it stopped in `DataExecute` (`index 0 beyond bounds for empty array`):
+  `for i = 0 to fn ArrayCount( params ) - 1` with no parameters - `ArrayCount` is unsigned, so
+  `0 - 1` wraps and the loop runs. Eight such loops (runtime, Studio, logic engine) now cast to
+  `long`; `fblint` reports the uncast form; `FB Coding Rules.md` records it.
+
+---
+
 ## 2026-11-24 — The Studio's folder takes the product's name
 
 - The Studio builds and launches again (the author's screenshot: the first-launch prompt for the

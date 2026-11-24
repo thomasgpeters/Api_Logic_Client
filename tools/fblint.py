@@ -187,6 +187,9 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
         if current and re.match(r'\s*end\s+fn\b', line):
             current = None
 
+        # an unsigned count minus 1 wraps around when the count is 0: the loop runs ~forever
+        if re.search(r'\bto\s+fn\s+(ArrayCount|DictionaryCount|StringLength|DataLength|SetCount)\s*\(', strip_strings_and_comments(line)):
+            report(no, 'for ... to fn ArrayCount( x ) - 1: the count is unsigned, so an empty x loops on - write to (long)fn ArrayCount( x ) - 1')
         # FutureBasic 7.0.38 (the author's) does not know the newer type names: use the CF ones
         for tm in re.finditer(r'(?<![A-Za-z_])(StringRef|MutableStringRef|DictionaryRef|MutableDictionaryRef|ArrayRef|MutableArrayRef|DataRef|URLRef|NumberRef)\b', strip_strings_and_comments(line)):
             report(no, f'{tm.group(1)} is unknown in FutureBasic 7.0.38 - use CF{tm.group(1)}')
