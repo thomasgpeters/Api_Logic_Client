@@ -586,7 +586,9 @@ def main(argv):
         json.dump(model_json(db, work_db), f, indent=2)
     shutil.copy(os.path.join(ROOT, 'src', 'Templates', 'Project', 'Settings2.plist'),
                 os.path.join(out, 'Logic Test.fbeproj', 'Settings2.plist'))
-    project = ['include "NSLog.incl"', '// "Runtime" 1'] + [f'include "{n}"' for n in RUNTIME] + \
+    with open(os.path.join(out, 'App Headers.incl'), 'w', newline='') as f:   # FB's headers, from source
+        f.write('// App Headers.incl - FutureBasic\'s own headers, from your FB install\r\rinclude "NSLog.incl"\r')
+    project = ['// "Headers" 1', 'include "App Headers.incl"', '// "Runtime" 1'] + [f'include "{n}"' for n in RUNTIME] + \
               ['// "Tests" 1', 'include "Logic Test Rules.incl"', '// "Resources" 1', 'resources "Model.json"',
                '// "Main" 1', 'include "Logic Test.main"']
     with open(os.path.join(out, 'Logic Test.fbeproj', 'data.fbproj'), 'w', newline='') as f:

@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — The FB crash found: FB headers listed as project items
+
+- Bisecting in a fresh clone (the author's builds): every commit crashed, the 16 Nov one included;
+  so not a code change — the clone lacks something. The Studio's `data.fbproj` listed FB's own
+  headers (`Tlbx XML.incl`, `NSLog.incl`) as project items; FB looks for them beside the project,
+  finds nothing, and its translator scans a null text (the crash report's instruction bytes: a byte
+  read at 0 followed by character comparisons). FB's examples include them from source instead.
+- Fixed: the Studio's Headers group is empty and `My Globals.glbl` includes both headers; generated
+  apps and the FB logic test get an `App Headers.incl` that includes `NSLog.incl`. `fblint` reports
+  any project item that is not beside the project. `FB Coding Rules.md` rule 9.
+- The earlier SDK and tools changes stay (they match a fresh FB project and the no-Python rule).
+
+---
+
 ## 2026-11-24 — FutureBasic crashed building the Studio: the SDK in the build settings
 
 - The author's build of the Studio crashed FutureBasic 7.0.38 itself (a null read after a path,
