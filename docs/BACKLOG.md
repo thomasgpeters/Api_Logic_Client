@@ -77,7 +77,9 @@ When resuming, in this order:
 
 ## Tools in FutureBasic (author, 2026-11-24)
 
-- [ ] Port `tools/rules_bridge.py` into the generator in FB: `Rules.json` check and `Studio Rules.incl`
+- [x] No Python in the Studio's bundle (author, 2026-11-24): Rules Bridge.incl says "coming" for
+      Import / Export and writes an empty `Studio Rules.incl` until the port below
+- [ ] **Next:** port `tools/rules_bridge.py` into the generator in FB: `Rules.json` check and `Studio Rules.incl`
       generation first (plain FB), then `declare_logic.py` import / export (needs a small parser
       for LogicBank's `Rule.*(...)` calls and their lambdas, written in FB)
 

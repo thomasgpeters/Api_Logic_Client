@@ -30,10 +30,13 @@ mode work without extra code).
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
   - `Project Settings.incl` — the Project Settings view (`ProjectSettingsView.xib`): the About text (≤ 250 chars, the app's `Credits.rtf`) and branding (logo, tag-line, copyright for the app shell).
-  - `Rules Bridge.incl` — runs the bundled `tools/rules_bridge.py` (Task toolbox, `/usr/bin/python3`): Import / Export Rules (declare_logic.py), `Studio Rules.incl` on Generate App.
+  - `Rules Bridge.incl` — Import / Export Rules (declare_logic.py) and `Studio Rules.incl` on Generate App; until its port to FB it says "coming" and writes an empty `Studio Rules.incl`.
   - `ERD Generator.incl` — Model > Show Model Diagram: `<project>/Model ERD.html` from the `Templates/ERD` page, the model and `Rules.json`.
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
+- `src/CleanApp/` — a project the FB editor created (author, 2026-11-24): the reference for project
+  settings (`Settings2.plist`: SDK, architecture, minimum macOS). Keep the Studio's, the template's
+  and Test_Xib_View's settings in step with it; it is not built or changed by us.
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
   of the generator via `../Runtime/…`; the list is `AppRuntimeFiles` in `App Generator.incl`):
   - data runtime — `Data SQLite.incl` (our SQLite declarations, transactions), the author's
@@ -87,10 +90,12 @@ Generated apps go to `~/Library/Application Support/Api_Logic_Client/workspace/<
   See `docs/design/App Shell Design.md` → Principles.
 - `futurebasic-apis` — outdated (pre-7.0.35); don't rely on it.
 
-## Tools are FutureBasic
-The Studio's features and tools are written in FB (author, 2026-11-24). Python in `tools/` is
-for references and tests that must run here, where FB cannot (`logic_reference.py`,
-`sqlite_model.py`, `check_erd_page.py`, `fblint.py`); `rules_bridge.py` is to be ported (backlog).
+## Tools are FutureBasic; no Python in anything FB builds
+The Studio's features and tools are written in FB (author, 2026-11-24). **No Python artifact goes
+into the Studio's bundle or into a generated app** — no `.py` resource, no call to `python3`.
+Python in `tools/` is only for references and tests that run here, where FB cannot
+(`logic_reference.py`, `sqlite_model.py`, `rules_bridge.py`, `check_*.py`, `fblint.py`);
+`rules_bridge.py` is the reference for its FB port (backlog).
 
 ## FB code rules (summary — full list with sources in `docs/reference/FB Coding Rules.md`)
 These apply to hand-written code **and to everything the generator emits**.

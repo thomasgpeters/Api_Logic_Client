@@ -400,6 +400,10 @@ rule as it fires, indented by how far the save has chained.
 
 ## 11. Importing and exporting ALS rules (`declare_logic.py`)
 
+> **For now:** the Studio contains no Python, so these two commands say "coming" until they are
+> rewritten in FutureBasic, and *Generate App* writes an empty `Studio Rules.incl`: put the app's
+> rules in `Rules.incl`. The Terminal commands below work today, from this repository's folder.
+
 An ALS project's rules (LogicBank, in Python) can come in, and go back out:
 
 - *Model → Import Rules from declare_logic.py…* — choose the ALS project's `logic/declare_logic.py`.
@@ -407,8 +411,8 @@ An ALS project's rules (LogicBank, in Python) can come in, and go back out:
   were switched off (see below). *Generate App* then writes them into `Studio Rules.incl`.
 - *Model → Export Rules to declare_logic.py…* — writes the project's rules as LogicBank rules.
 
-Both run `rules_bridge.py`, which comes inside the app, with the Mac's `python3`. The same
-commands work from Terminal (in this repository's folder):
+They will be FutureBasic inside the Studio. The reference is `tools/rules_bridge.py`, which you
+can run from Terminal (in this repository's folder):
 
 ```bash
 python3 tools/rules_bridge.py import path/to/logic/declare_logic.py --model "<project>/Database/<db>.sqlite" --rules "<project>/Rules.json"
@@ -462,6 +466,7 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 | What you see | What to do |
 |---|---|
+| FutureBasic quits (crashes) when you build | a file listed in the project is missing beside it — FB's own headers (`NSLog.incl`, `Tlbx ….incl`) must be `include`d from a source file, not listed in the project (`tools/fblint.py` checks this). Also check *Build Settings*: the SDK must be one your Xcode has (see `src/CleanApp`). |
 | Translator or compiler errors after pulling | the FB editor rewrites files when it opens them; `git stash`, pull again, build. If the errors name lines that look already fixed, your copy is behind. |
 | `Data: the database is missing` | the project's `Database/` copy is gone; open the project and locate the database when asked. |
 | `The business rules are not active` | `LogicActivate` refused the rules: the alert and NSLog name the rule and attribute. |

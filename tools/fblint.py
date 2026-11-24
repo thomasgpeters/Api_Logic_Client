@@ -348,6 +348,12 @@ def main(argv):
             text = open(proj, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
             problems += build_order_problems(proj)
             for no, line in enumerate(text.split('\n'), 1):
+                # every file the project lists must be beside it: FB's own headers (NSLog.incl,
+                # Tlbx ....incl) listed here crash FutureBasic 7.0.38 - include them from source
+                im = re.match(r'\s*(include|resources)\s+"([^"]+)"', line)
+                if im and not os.path.exists(os.path.join(os.path.dirname(os.path.dirname(proj)), im.group(2))):
+                    problems.append(f'{proj}:{no}: {im.group(2)} is not beside the project - FB headers go in a source file '
+                                    f'(include "{im.group(2)}"), never in the project list (FutureBasic crashes)')
                 if re.match(r'\s*resources\s+"[^"]*\.(incl|glbl|bas)"', line):
                     problems.append(f'{proj}:{no}: an FB source file listed as a resource is compiled into the app - bundle its folder instead')
     for line in problems: print(line)

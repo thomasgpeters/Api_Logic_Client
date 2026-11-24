@@ -43,6 +43,20 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
 7. **Single-file programs bundle resources with `include resources "File.xib"`**
    and other source with `include "File.incl"` (paths relative to the including file).
    *Source: `include.html`.*
+8. **A project's Build Settings must name an SDK the Mac has** (`Settings2.plist`: `BaseSDK`,
+   `Architecture`, `MinDeployment`). With `BaseSDK` 13.1 on a Mac whose Xcode has only the 26.2
+   SDK, FutureBasic 7.0.38 *crashed* while building instead of reporting an error. Keep our
+   project settings like a project the FB editor creates today: `src/CleanApp` is that reference
+   (Apple Silicon, SDK 26.2, macOS 15.0, no precompiled header). When Xcode moves on, create a
+   new project in the FB editor and copy its values.
+   *Source: the author's build, 2026-11-24; `src/CleanApp/CleanApp.fbeproj/Settings2.plist`.*
+9. **FutureBasic's own headers are included from source, never listed in the project.**
+   `include "NSLog.incl"` / `include "Tlbx XML.incl"` at the top of the first source file (as FB's
+   examples do) makes FB find them in its Headers folder. Listed as project items in `data.fbproj`,
+   FB looks for the files beside the project; with no such file, FutureBasic 7.0.38's translator
+   *crashes* (reads a null text). A fresh clone has no such files, so it crashed at every commit.
+   `fblint` reports any project item that is not beside the project.
+   *Source: the author's builds of a fresh clone, 2026-11-24; FBExamples (`include "NSLog.incl"`).*
 
 ## Toolbox calls
 
