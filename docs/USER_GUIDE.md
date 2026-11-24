@@ -90,7 +90,7 @@ Everything lives in your Application Support folder — *Model → Show Workspac
 opens it (`~/Library` is hidden in Finder):
 
 ```
-~/Library/Application Support/Api_Logic_Client/
+~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/
 ├── Recent Projects.json           the Welcome page's list
 └── workspace/
     └── <name> Project/            one folder per project — back it up, and you have it all

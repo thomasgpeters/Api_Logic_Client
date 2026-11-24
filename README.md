@@ -24,7 +24,7 @@ lists in tabs, drill-in with a crumb trail.
    `Design.json` and survive regeneration.
 3. **Generate** — each step on its own, or all at once:
    *Generate XIBs* · *Generate XIB for Selected Entity* · *Generate Binding Code* ·
-   *Generate App*. Output goes to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/FBapp/`;
+   *Generate App*. Output goes to `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/FBapp/`;
    the project's own settings (`Project.json`, `Design.json`) stay in `<project>/`.
 4. **Open `FBapp/<project>.fbeproj` in FutureBasic**, build, and keep editing: generated code is
    plain, readable FB; `EventHandlers.incl`, `Menus.incl` and `Windows.incl` start from
@@ -56,7 +56,7 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
 `~/Library` is hidden in Finder):
 
 ```
-~/Library/Application Support/Api_Logic_Client/
+~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/
 ├── Settings.plist                 (planned) settings: git, GitHub, ALS/APIs, AI/LLMs, SMTP
 ├── Recent Projects.json           the Welcome view's Recent Projects (newest first)
 └── workspace/

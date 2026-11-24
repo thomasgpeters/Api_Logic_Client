@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — The Studio's folder takes the product's name
+
+- The Studio builds and launches again (the author's screenshot: the first-launch prompt for the
+  runtime and templates). The author: the location is `~/Library/Application Support/Imagery
+  LogicBank Studio for FutureBasic`. `APP_SUPPORT_FOLDER_NAME` changed; on first launch an existing
+  `Api_Logic_Client` folder is moved over, and the paths in `Recent Projects.json` and each
+  `Project.json` are rewritten (plain and JSON-escaped). Generated apps take the new path on their
+  next Generate App.
+
+---
+
 ## 2026-11-24 — The crash is gone; FutureBasic 7.0.38's own errors fixed
 
 - With the folder resources off the build list (the Xcode project last), FutureBasic translates the

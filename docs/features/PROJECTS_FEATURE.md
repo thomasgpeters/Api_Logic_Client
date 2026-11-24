@@ -25,7 +25,7 @@ the top of Recent Projects.
 **If the model file has moved**, an alert offers *Locate…*; the chosen file becomes the
 new `source`.
 
-**Recent Projects** — `~/Library/Application Support/Api_Logic_Client/Recent Projects.json`,
+**Recent Projects** — `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/Recent Projects.json`,
 newest first, at most 10, one entry per `Project.json` path:
 
 ```json

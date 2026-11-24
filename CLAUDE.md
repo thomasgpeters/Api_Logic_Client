@@ -1,8 +1,9 @@
 # Api Logic Client — Imagery LogicBank Studio for FutureBasic
 
 The product's name is **Imagery LogicBank Studio for FutureBasic** (shown in the app; `Branding.incl`).
-The repository, the FB project file and the Application Support folder keep the name
-Api_Logic_Client until the author renames them (backlog).
+The Studio's Application Support folder is `Imagery LogicBank Studio for FutureBasic` (author,
+2026-11-24; an old `Api_Logic_Client` folder is moved over on first launch). The repository and the
+FB project file keep the name Api_Logic_Client until the author renames them (backlog).
 
 A **FutureBasic** (FBE, macOS/Cocoa) generator. It reads an API Logic Server
 (ALS) project's model (`/metadata?include=attributes`) and generates a complete
@@ -77,7 +78,7 @@ mode work without extra code).
 
 One concern per file, aptly named — in `src/` and in what the generator emits.
 
-Generated apps go to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/FBapp/`; the project's settings (`Project.json`, `Design.json`) to `<project>/`; settings will live in `~/Library/Application Support/Api_Logic_Client/`, secrets in the Keychain (see `docs/design/Generator App Design.md`). The app bundle is never written to. macOS only.
+Generated apps go to `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/FBapp/`; the project's settings (`Project.json`, `Design.json`) to `<project>/`; settings will live in `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/`, secrets in the Keychain (see `docs/design/Generator App Design.md`). The app bundle is never written to. macOS only.
 
 ## Related repositories
 - **thomasgpeters/FutureBasic_Documentation** (private) — the FB reference. See References.
