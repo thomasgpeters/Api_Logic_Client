@@ -13,7 +13,8 @@ clone beside this repository: its toolbox headers (for the linter) and its North
 tools/run_tests.sh
 ```
 
-(or `tools/run_tests.sh <path to FutureBasic_Documentation>` when it is somewhere else)
+(or `tools/run_tests.sh <path to FutureBasic_Documentation>` when it is somewhere else;
+`--help` explains the options. Every tool in `tools/` takes `--help`.)
 
 | Check | What it proves | Passing |
 |---|---|---|

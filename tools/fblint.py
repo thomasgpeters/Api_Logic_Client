@@ -298,6 +298,9 @@ def build_order_problems(proj):
 
 
 def main(argv):
+    if argv and argv[0] in ('-h', '--help'):
+        print(__doc__)
+        return 0
     headers = None
     if '--headers' in argv:
         i = argv.index('--headers'); headers = argv[i + 1]; del argv[i:i + 2]

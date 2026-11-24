@@ -367,6 +367,9 @@ def cr(text):
 
 
 def main(argv):
+    if argv and argv[0] in ('-h', '--help'):
+        print(__doc__)
+        return 0
     if len(argv) != 2:
         print(__doc__)
         return 2

@@ -7,6 +7,32 @@
 # toolbox headers (for fblint) and the Northwind database (for the logic scenarios); the
 # database is only ever copied, never changed.
 set -u
+
+usage() {
+    cat <<'HELP'
+tools/run_tests.sh - every Api Logic Client check that runs without a Mac
+
+Usage:
+    tools/run_tests.sh [path to FutureBasic_Documentation]
+    tools/run_tests.sh --help
+
+Runs, in order:
+    1. fblint on src/ (and on Test_Xib_View when it is cloned beside this repository)
+    2. the logic engine's scenarios      (tools/logic_reference.py --test)
+    3. every rule proven                 (tools/logic_reference.py --prove)
+    4. the FB test project assembles and lints clean (tools/make_logic_test.py)
+
+The FutureBasic_Documentation clone (default: beside this repository) provides the toolbox
+headers and the Northwind database; the database is only ever copied, never changed.
+Exit status: 0 when everything passed, 1 when something failed, 2 when the clone is missing.
+More, including the checks on a Mac: docs/TESTING.md
+HELP
+}
+
+case "${1:-}" in
+    -h|--help|help) usage; exit 0 ;;
+esac
+
 here=$(cd "$(dirname "$0")/.." && pwd)
 docs=${1:-"$here/../FutureBasic_Documentation"}
 [ -d "$docs" ] || docs="$here/../futurebasic_documentation"
@@ -22,7 +48,7 @@ run() {
 }
 
 if [ ! -d "$headers" ] || [ ! -f "$db" ]; then
-    echo "FutureBasic_Documentation not found (looked in $docs) - pass its path as the first argument."
+    echo "FutureBasic_Documentation not found (looked in $docs) - pass its path as the first argument (see --help)."
     exit 2
 fi
 

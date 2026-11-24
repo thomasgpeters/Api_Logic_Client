@@ -685,6 +685,9 @@ def prove(db):
 
 
 def main(argv):
+    if argv and argv[0] in ('-h', '--help'):
+        print(__doc__)
+        return 0
     if len(argv) != 2 or argv[0] not in ('--test', '--prove'):
         print(__doc__)
         return 2
