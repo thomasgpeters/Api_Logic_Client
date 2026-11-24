@@ -18,6 +18,11 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   by the FB logic test) and Test_Xib_View (*TXV* `6fa70e2`); our `-lsqlite3` options kept.
 - `.gitignore`: every project's `build_temp_*/` and `*.app/`.
 - Learned: keep project settings like a fresh FB project (`FB Coding Rules.md` rule 8).
+- The SDK fix did not stop the crash (same place in FutureBasic). Next: the `tools` folder
+  resource (new since the last good build: `.py`, `.sh`, a local `__pycache__`). The author: no
+  Python in anything FB builds. Rules Bridge.incl no longer runs `python3`; Import / Export say
+  "coming" and Generate App writes an empty `Studio Rules.incl` until the FB port. Commits
+  `d6df05e` (tools by name) and the follow-up removing them.
 
 ---
 
