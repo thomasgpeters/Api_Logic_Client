@@ -17,7 +17,8 @@ regenerations. Constants for every tag go to `Model Tags.incl`
 ## Decisions
 
 - **Type → control:** VARCHAR/CHAR → text field (width from length, capped);
-  TEXT/CLOB → text area; integer types → right-aligned field with integer formatter;
+  TEXT → one-line field, 280 wide (SQLite declares every string TEXT; the designer can choose Text
+  area); CLOB / MEDIUMTEXT / LONGTEXT → text area; integer types → right-aligned field with integer formatter;
   FLOAT/DECIMAL/DOUBLE → 2-decimal formatter; DATE/TIMESTAMP → date picker;
   BOOL/BIT → checkbox. Long VARCHARs are *not* text areas (Northwind declares
   nearly everything `VARCHAR(8000)`).

@@ -6,6 +6,24 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — First generated app runs: navigation, fields, list
+
+The author's Northwind app built and ran (Address page). Three cosmetic faults, fixed:
+- **Navigation buttons at the bottom, on top of each other** (`App Shell.incl`). The flipped
+  navigation document was shorter than its scroll view, so it sat at the bottom; and FB's
+  buttons keep a flexible top margin, so each time the document grew for a new button the
+  earlier ones moved down onto it. Now the document is at least the scroll view's height and
+  grows with it, and buttons and the highlight have a fixed top margin (`NSViewMaxYMargin` in a
+  flipped view).
+- **Every text field a 90-point text area** (`Type Mapping.incl`): SQLite declares every string
+  `TEXT`, which mapped to a text area. `TEXT` is now a one-line field (280 wide); CLOB / MEDIUMTEXT /
+  LONGTEXT stay text areas, and the designer can still choose Text area per attribute.
+- **The list's first row under its header** (generated `<Entity> Binding.incl`): the list view is
+  resized when the page is laid out and kept its old scroll position; `<Entity>RecordsToList` now
+  scrolls to the first row after reloading.
+- Answered: the pages are XIBs (`<Entity>Form.xib`, `<Entity>List.xib`, loaded with `nibview`);
+  the frame around them (navigation, header, footer) is built in code by `App Shell.incl`.
+
 ## 2026-11-24 — Generated apps always get the Studio's own runtime
 
 - The generated app crashed again in `DataExecute` ("index 0 beyond bounds for empty array"):
