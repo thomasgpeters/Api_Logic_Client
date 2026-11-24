@@ -50,6 +50,10 @@ def read_model(path):
             single_int = len(keys) == 1 and next(a['type'] for a in attributes if a['name'] == keys[0]).upper() == 'INTEGER'
             if kind == 'table' and single_int and 'WITHOUT ROWID' not in sql_u:
                 key_kind = 'autoincrement' if 'AUTOINCREMENT' in sql_u else 'identity'
+        if key_kind in ('identity', 'autoincrement'):
+            for a in attributes:
+                if a['pk']:
+                    a['generated'] = True                  # the Form shows it read-only
         resources[name] = {'kind': kind, 'attributes': attributes, 'keys': keys,
                            'keyKind': key_kind, 'relationships': []}
         if kind != 'table':

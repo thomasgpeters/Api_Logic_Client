@@ -116,12 +116,20 @@ Click an entity in the list. Its **attribute table** shows, for every column:
 | Size | text length or numeric size | |
 | Key | primary key and how it is made (identity, autoincrement, assigned) | |
 | Required / Default | from the database | |
-| **Form Control** | text field, checkbox, date picker, … | ✓ |
+| **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Checkbox, **Read-only text**, **Hidden** | ✓ |
 | **Form Width** / **List Width** | in points | ✓ |
 | Adjusted | ✓ when you changed something | |
 
 Edit a cell and press Return: the change is saved to `Design.json` at once and kept every time
 you regenerate. Clear a cell to go back to the recommendation.
+
+- **Read-only text** shows a value without letting the user change it. A key the database
+  makes for you (an `INTEGER PRIMARY KEY`, with or without `AUTOINCREMENT`) is read-only by
+  default; a key you type yourself (a customer code, say) stays a text field.
+- **Hidden** leaves the attribute off the Form and the List. It is still in the database, and
+  a save leaves its value as it was.
+- **Form layout** (the popup at the top right): how many columns of fields the Form has —
+  *automatic* (1 up to 10 fields, 2 up to 24, then 3), or 1, 2 or 3. Generate XIBs to see it.
 
 ## 7. Project settings
 

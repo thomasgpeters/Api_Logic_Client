@@ -22,7 +22,7 @@ Selecting an entity shows a summary — `Customer — key Id (assigned) — Orde
 | Size | | `40 chars`, `10,2`, `64-bit`, `variable` |
 | Key | | `PK`, `FK → Customer`, `PK, FK → Order` |
 | Required, Default | | NOT NULL, column default |
-| Form Control | ✓ | Text field, Text area, Integer field, Decimal field, Date picker, Checkbox |
+| Form Control | ✓ | Text field, Text area, Integer field, Decimal field, Date picker, Checkbox, Read-only text, Hidden |
 | Form Width, List Width | ✓ | points |
 | Adjusted | | which values the designer changed |
 
@@ -38,6 +38,16 @@ recommendation. All adjustments are saved to `~/Library/Application Support/Imag
 
 and re-applied whenever the model is opened. Every generator reads attributes only
 through `TypeMapAttribute…` functions, so what the designer sees is what gets generated.
+
+## Form layout
+
+The popup at the top right of the entity view (`_formColumnsPopup`, created in `Windows.incl`):
+*Form: automatic*, *1 column*, *2 columns*, *3 columns*. The choice is the entity's own design
+(`DesignFormColumnsChosen`), saved in `Design.json` under `"@entity"`:
+
+```json
+{ "Customer": { "@entity": { "formColumns": "3" }, "Fax": { "formControl": "Hidden" } } }
+```
 
 ## Notes
 

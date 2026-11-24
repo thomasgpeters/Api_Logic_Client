@@ -16,6 +16,18 @@ regenerations. Constants for every tag go to `Model Tags.incl`
 
 ## Decisions
 
+- **Form layout:** 1, 2 or 3 columns (`TypeMapFormColumns`): the designer's choice (entity
+  `design.formColumns`, saved under `"@entity"` in `Design.json`), else 1 up to 10 shown fields,
+  2 up to 24, then 3. Rows are split evenly (ceil(fields / columns) per column); the label width is
+  the longest title (at most 150), the column width the widest field (fields capped at 200 in a
+  three-column Form). Tags follow the model's attribute order, so hiding a field renumbers nothing.
+- **Hidden** attributes are on neither the Form nor the List and have no tag; they stay in
+  `Model.json` (`"hidden": true`, tag 0) because the data runtime reads every column. Their
+  binding is not generated, so a save leaves them unchanged (`DataUpdate` sets only the columns
+  it is given).
+- **Read-only text:** a selectable, non-editable field without a bezel. The default for a key
+  the database generates (`SQLite Model.incl` marks it `"generated"`: keyKind identity or
+  autoincrement); `<Entity>FormToRecord` does not read it back (the key travels in `gAppPageKeys`).
 - **Type → control:** VARCHAR/CHAR → text field (width from length, capped);
   TEXT → one-line field, 280 wide (SQLite declares every string TEXT; the designer can choose Text
   area); CLOB / MEDIUMTEXT / LONGTEXT → text area; integer types → right-aligned field with integer formatter;

@@ -18,6 +18,13 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] FBE bundles the `../Runtime` and `../Templates` folders as resources of the generator
 - [ ] Generated `<project>.fbeproj` opens in FB with its groups and builds; `nibview` in `Windows.incl` places each Form part
 
+## Form designer (author, 2026-11-24; split into three features)
+
+- [x] 1. Form layout 1 / 2 / 3 columns per entity; Hidden fields; read-only text, the default for a key the database generates (`features/XIB_PARTS_FEATURE.md`)
+- [ ] Verify on a Mac: the Form layout popup in the entity view; a 3-column Form; a Hidden field; the read-only key on New / Save
+- [ ] 2. Date and time widgets: Time picker, Date and time picker (and the date / time formats they store); choose the control from a list in the Studio instead of typing its name (an attribute inspector beside the table)
+- [ ] 3. Choices: Checkbox (any yes/no column), Radio buttons and Dropdown, from a value list the designer types in or, for a foreign key, the lookup table's rows (the parent's key stored, a display column shown); App Data gets a lookup call so the Enterprise edition can answer it from the server
+
 ## App shell — lite edition (see `design/App Shell Design.md`)
 
 - [x] List XIB part per entity

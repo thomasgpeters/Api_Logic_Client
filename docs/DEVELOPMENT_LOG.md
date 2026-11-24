@@ -6,6 +6,24 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Form designer 1: layout columns, Hidden, read-only keys
+
+The author asked for a richer Form designer: 1 / 2 / 3-column forms, hidden fields, read-only
+keys, and widgets (time, date-and-time, checkbox, radio buttons, dropdowns from lookup tables or
+value lists). Split into three features (BACKLOG, *Form designer*); this is the first.
+- `Type Mapping.incl`: kinds `_xibKindReadOnly`, `_xibKindHidden` ("Read-only text", "Hidden" in
+  the Form Control column); a key the database generates is read-only by default;
+  `TypeMapFormColumns` (designer's choice or automatic), `TypeMapShownAttributes`.
+- `SQLite Model.incl` (and `tools/sqlite_model.py`): `"generated"` on the key column of an
+  identity / autoincrement table.
+- `XIB Generator.incl`: the Form lays out in 1-3 columns, labels as wide as the longest title,
+  Hidden attributes left out (tags keep model order), read-only fields without a bezel; the List
+  has no column for a Hidden attribute.
+- `Binding Generator.incl`: no code for Hidden fields; read-only fields are shown, not read back.
+- The Studio: a *Form layout* popup in the entity view (`Windows.incl`, `DesignFormColumnsChosen`),
+  saved under `"@entity"` in `Design.json` (`DesignSave` / `DesignLoad`).
+- An assigned key (typed by the user, e.g. a customer code) stays editable: a new record needs it.
+
 ## 2026-11-24 — First generated app runs: navigation, fields, list
 
 The author's Northwind app built and ran (Address page). Three cosmetic faults, fixed:
