@@ -52,6 +52,7 @@ mode work without extra code).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
 - `docs/design/architecture.svg` — the end-to-end diagram, drawn by `tools/make_architecture_svg.py` (edit the script, not the SVG).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
+- `docs/DOC_ONE_PAGER.md` — the one-page introduction (keep it true with the user guide).
 - `docs/USER_GUIDE.md` — the user guide (keep it true when what a user sees or can do changes).
 - `docs/features/` — one `<NAME>_FEATURE.md` per feature (how it works, where, decisions, verification).
 - `docs/ROADMAP.md` (phases), `docs/BACKLOG.md` (open items), `docs/DEVELOPMENT_LOG.md`

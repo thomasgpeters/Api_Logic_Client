@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — One-pager
+
+- `docs/DOC_ONE_PAGER.md`: what the Studio is, for the FB community — how it works, what a
+  generated app has, rules declared once (with what one save does), what stays yours, needs and
+  status. Also published as a designed page (claude.ai artifact) with the same text.
+
+---
+
 ## 2026-11-24 — Model diagram: an interactive ERD with the rules on it
 
 - *Model → Show Model Diagram* (⇧⌘D): `ERD Generator.incl` (FB) fills
