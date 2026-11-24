@@ -29,6 +29,7 @@ mode work without extra code).
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
   - `Project Settings.incl` — the Project Settings view (`ProjectSettingsView.xib`): the About text (≤ 250 chars) deployed as the app's `Credits.rtf`.
+  - `Rules Bridge.incl` — runs the bundled `tools/rules_bridge.py` (Task toolbox, `/usr/bin/python3`): Import / Export Rules (declare_logic.py), `Studio Rules.incl` on Generate App.
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
@@ -49,6 +50,7 @@ mode work without extra code).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
 - `docs/design/architecture.svg` — the end-to-end diagram, drawn by `tools/make_architecture_svg.py` (edit the script, not the SVG).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
+- `docs/USER_GUIDE.md` — the user guide (keep it true when what a user sees or can do changes).
 - `docs/features/` — one `<NAME>_FEATURE.md` per feature (how it works, where, decisions, verification).
 - `docs/ROADMAP.md` (phases), `docs/BACKLOG.md` (open items), `docs/DEVELOPMENT_LOG.md`
   (what was done and learned, newest first, with commits).

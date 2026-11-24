@@ -47,6 +47,12 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Generator app (see `design/Generator App Design.md`)
 
+- [ ] Add an Edit menu (`editmenu`) to the generator: Cut / Copy / Paste in its text fields
+- [ ] Generate XIBs uses ⌘X, which is Cut on the Mac: choose another key (author)
+- [ ] Preferences… (⌘,) does nothing yet
+- [x] Rules bridge in the generator: Import / Export Rules (declare_logic.py), Studio Rules.incl on Generate App — `features/RULES_BRIDGE_FEATURE.md`
+- [ ] The Rules page: list, editor (model-driven pop-ups), check — on `Rules.json`
+
 - [x] Model from a SQLite database — `SQLite Model.incl`
 - [x] New Project view: a project starts from a SQLite database — `features/NEW_PROJECT_FEATURE.md`
 - [x] Product name: **Imagery LogicBank Studio for FutureBasic** — shown in the window title, Welcome view, server form and About box; Imagery logo (2026-11-24)

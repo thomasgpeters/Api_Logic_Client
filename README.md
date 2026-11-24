@@ -89,6 +89,7 @@ Secrets (tokens, API keys, passwords) go in the macOS Keychain, never in a file.
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Where the project is going, phase by phase |
 | [`docs/BACKLOG.md`](docs/BACKLOG.md) | Open items and ideas |
 | [`docs/DEVELOPMENT_LOG.md`](docs/DEVELOPMENT_LOG.md) | What was done, what was learned, with commits |
+| [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) | **How to use the app** — projects, generation, business rules, ALS import / export |
 | [`docs/TESTING.md`](docs/TESTING.md) | Every test and how to run it: `tools/run_tests.sh`, and the checks on a Mac |
 | [`docs/features/`](docs/features/) | How each feature works |
 | [`docs/design/`](docs/design/) | The generated app's shell; the generator app (workspace, settings, git) |
