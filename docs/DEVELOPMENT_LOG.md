@@ -6,7 +6,21 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — The FB crash found: FB headers listed as project items
+## 2026-11-24 — Runtime and templates in the workspace, not the Studio's bundle
+
+- The headers change (below) did not stop the crash. What every crashing version shares: the
+  project listed two real folders outside the project as resources (`../Runtime`, `../Templates`,
+  added 16 Nov), something FB's project model (pseudo-folder groups, file items) does not have.
+- The author: they live in the workspace, not the bundle. `Studio Library.incl`: `workspace/Runtime`
+  and `workspace/Templates`, copied from the repository folder (chosen once, remembered in
+  `Studio Library.json`) the first time they are needed; *Model > Update Runtime and Templates*.
+  Generation and the ERD read from there. The Studio's project lists neither folder.
+- Still listed: `Api_Logic_Client.xcodeproj` (the author's, a folder too) — the next suspect if FB
+  still crashes.
+
+---
+
+## 2026-11-24 — The FB crash (not the cause): FB headers listed as project items
 
 - Bisecting in a fresh clone (the author's builds): every commit crashed, the 16 Nov one included;
   so not a code change — the clone lacks something. The Studio's `data.fbproj` listed FB's own

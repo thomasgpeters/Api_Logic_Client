@@ -153,6 +153,12 @@ Details: `features/MODEL_DIAGRAM_FEATURE.md`.
 
 From the *Model* menu:
 
+**On first launch** (and whenever they are missing), the Studio asks for your
+**Api_Logic_Client folder** (the repository) and copies its `src/Runtime` and `src/Templates` into the
+workspace (`workspace/Runtime`, `workspace/Templates`): every generated app is made from those.
+After pulling a newer version, choose *Model → Update Runtime and Templates…* to copy them again.
+
+
 | Command | Key | Writes into `FBapp/` |
 |---|---|---|
 | Generate XIBs | ⇧⌘X | every entity's `<Entity>Form.xib` and `<Entity>List.xib`, and `Model Tags.incl` |
@@ -495,6 +501,7 @@ Paste a Build Log or NSLog lines into a session when something is unclear.
 | | Import Rules from declare_logic.py… · Export Rules to declare_logic.py… | |
 | | Show Workspace in Finder | |
 | | Show Model Diagram | ⇧⌘D |
+| | Update Runtime and Templates… | |
 
 *Preferences…* (⌘,) does nothing yet.
 

@@ -25,6 +25,7 @@ mode work without extra code).
   - `Type Mapping.incl` — the rules: control kind, FB type, size, Title, widths, plus the designer's adjustments (`design` per attribute, saved in `Design.json`).
   - `XIB Generator.incl` — Form and List parts per entity; `Model Tags.incl`; model entries.
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
+  - `Studio Library.incl` — the runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`): installed from the repository folder, updated from the Model menu; also `AppSupportFolderURL`.
   - `Edition.incl` — which edition the Studio generates (this repo: Lite only; the paid build replaces this file). `docs/design/Editions and Licensing.md`.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
@@ -37,8 +38,10 @@ mode work without extra code).
 - `src/CleanApp/` — a project the FB editor created (author, 2026-11-24): the reference for project
   settings (`Settings2.plist`: SDK, architecture, minimum macOS). Keep the Studio's, the template's
   and Test_Xib_View's settings in step with it; it is not built or changed by us.
-- `src/Runtime/` — our FB code copied into every generated app (bundled as resources
-  of the generator via `../Runtime/…`; the list is `AppRuntimeFiles` in `App Generator.incl`):
+- `src/Runtime/` — our FB code copied into every generated app. Not bundled into the Studio
+  (author, 2026-11-24): `Studio Library.incl` copies `src/Runtime` and `src/Templates` into the
+  workspace (`workspace/Runtime`, `workspace/Templates`) the first time they are needed, and on
+  *Model > Update Runtime and Templates*; generation copies from there. The list is `AppRuntimeFiles`:
   - data runtime — `Data SQLite.incl` (our SQLite declarations, transactions), the author's
     DataObject query builder (`DataObject.glbl`, `DataObject_Super.incl`, `DataObject.incl`,
     kept identical to Test_Xib_View's), `Data Model.incl` (Model.json entities),
@@ -51,7 +54,7 @@ mode work without extra code).
   - `App Shell.incl` — the generated app's frame: nav bar, header, footer, pages, theme menu (`features/APP_SHELL_FEATURE.md`).
   - `Binding Support.incl`. `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` are no longer copied into apps: the start of the Enterprise runtime, to move to its private repository.
 - `src/Templates/` — starting files for generated apps, copied only when missing
-  (bundled as the `../Templates` folder): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
+  (from `workspace/Templates`, see above): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`, `App/Theme.incl` (the colours), `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
