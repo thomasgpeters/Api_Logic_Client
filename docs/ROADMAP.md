@@ -45,8 +45,9 @@ Design: `design/Logic Engine Design.md`. Needs the Phase 1 shell's data layer fi
 |---|---|
 | Study LogicBank (Python): rule types, per-row sequence, delta adjustment, chaining, dependencies | done (design doc) |
 | Licensing: current is Apache 2.0 + Commons Clause (2026-05-29); build clean-room; proposal to Val (percentage + name) | open — author |
-| 1. Logic Engine core (`src/Runtime/Logic Engine.incl`): rule bank, LogicRow, formulas + constraints, transaction/rollback | |
-| 2. Aggregates: sum/count with where, delta adjustment, re-parenting, chaining | |
-| 3. Copy, parent check, cascade, events | |
+| 0. Data runtime (SQLite records, transactions) the engine sits on — `features/DATA_RUNTIME_FEATURE.md` | done — awaiting build |
+| 1. Logic Engine core (`Logic Rules` / `Logic Row` / `Logic Engine.incl`): rule set, LogicRow, formulas + constraints, transaction/rollback | done — Python reference passes; FB awaiting build |
+| 2. Aggregates: sum/count with where, delta adjustment, re-parenting, chaining; parent references | done — Python reference 36/36; FB awaiting build |
+| 3. Copy, parent check, cascade, delete actions, events | done — Python reference 70/70, 20 rules proven; FB awaiting build |
 | 4. Imagery Logic Studio in the generator: Rules page, `Rules.json`, generated `<Entity> Rules.incl`, validation, Explain | |
 | 5. Import ALS `declare_logic.py`; test bench; allocate / copy-children | |

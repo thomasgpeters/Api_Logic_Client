@@ -36,8 +36,11 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## Data layer
 
+- [x] Data runtime: SQLite records layer in `src/Runtime` (the shell and the rules engine sit on it) — `features/DATA_RUNTIME_FEATURE.md`
+- [ ] Verify on a Mac: generated app opens its database; Test_Xib_View still works with the updated builder
+
 - [ ] UPSERT in the query builder (`ON CONFLICT ( key ) DO UPDATE SET … = excluded.…`; SQLite 3.24+)
-- [ ] Quote every identifier in generated SQL (`"Order"`, `"Union"` are reserved words)
+- [x] Quote every identifier in generated SQL (`"Order"`, `"Union"` are reserved words) — query builder `QuoteSQLName`
 - [ ] INSERT omits identity keys and returns `last_insert_rowid()`; omit empty columns so defaults apply
 - [ ] Generator offers `build_db.py`-style database creation for generated apps
 - [ ] Computed columns (`Customer.Balance`, `OrderCount`) are not maintained in the lite edition — see Rules
@@ -62,7 +65,7 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Settings groups for ALS/APIs, AI/LLM providers, SMTP notifications
 - [ ] Optional `admin.yaml` hints (titles, `user_key`, relationship names)
 - [ ] Generator's own ALS fetch uses the Create Project form's base URL and credentials (still hard-coded host and `admin`/`p`), and waits for login before fetching
-- [ ] Move to the FB 7.1.5 NS type names (`ArrayRef`, `DictionaryRef`, …) for CocoaUI calls
+- [ ] Move to FB's current type names (`StringRef`, `DictionaryRef`, …) and Cocoa wrappers everywhere — done in the data runtime and query builder; generator and ALS runtime still use the CF names
 
 ## Look and feel
 
@@ -104,6 +107,15 @@ Rewrite of [LogicBank](https://github.com/valhuber/LogicBank) (Val Huber) for Fu
 - [x] Confirm FB can call rules by address (`@fn` + `def fn … using`)
 - [x] License check: current is Apache 2.0 + Commons Clause (since 2026-05-29, `a475a9c`); BSD in setup.py/pyproject is stale
 - [ ] Proposal to Val Huber: percentage offer + use of the name "LogicBank for FutureBasic" (author) — clean-room until then
-- [ ] Engine core, aggregates, copy/cascade/events (needs the shell's SQLite data layer)
+- [x] Engine core: formulas (order, pruning), constraints, transactions — `features/LOGIC_ENGINE_FEATURE.md`
+- [ ] Run `tools/make_logic_test.py` on a Mac: the 70 FB scenarios pass
+- [x] Aggregates (sum/count with where, delta, re-parenting, chaining), parent references
+- [x] Copy, parent check, cascade of parent changes to children, delete cascade/nullify/prevent, events
+- [ ] Recompute command: rebuild stored sums/counts from the data (adjustment assumes they start right)
+- [x] LB-41: protect derived sum/count columns from client writes; aggregates start at 0 on insert
+- [ ] LB-42: detect dependency cycles through aggregates at activation (today: depth limit at run time)
+- [ ] LB-40: round sums to the column's scale (decide)
+- [x] Upsert (Studio's fourth operation): `LogicUpsert` — update when the row exists, else insert
+- [ ] Scenarios per rule and operation (insert / update / delete / upsert), as Studio tests rules; keep `--prove` at 0 unproven
 - [ ] Studio: Rules page, `Rules.json`, generated rule files, validation, Explain
 - [ ] Import ALS `logic/declare_logic.py`

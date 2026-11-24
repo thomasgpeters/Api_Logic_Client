@@ -27,11 +27,19 @@ mode work without extra code).
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
-  of the generator via `../Runtime/…`): `ALS Client.incl`, `ALS Binding.incl`,
-  `ALS App.incl`, `Binding Support.incl`.
+  of the generator via `../Runtime/…`; the list is `AppRuntimeFiles` in `App Generator.incl`):
+  - data runtime — `Data SQLite.incl` (our SQLite declarations, transactions), the author's
+    DataObject query builder (`DataObject.glbl`, `DataObject_Super.incl`, `DataObject.incl`,
+    kept identical to Test_Xib_View's), `Data Model.incl` (Model.json entities),
+    `Data Records.incl` (fetch / parent / children / insert / update / delete). The rules
+    engine builds on it.
+  - LogicBank for FutureBasic (clean-room) — `Logic Rules.incl` (declare, activate, order),
+    `Logic Row.incl` (what a rule reads), `Logic Engine.incl` (LogicInsert / LogicUpdate /
+    LogicDelete). Rules are FB functions registered with `@fn` and called through a C cast.
+  - `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl`, `Binding Support.incl`.
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (bundled as the `../Templates` folder): `Project/Settings2.plist`, `App/EventHandlers.incl`,
-  `App/Menus.incl`. `Windows.incl` is generated from the model the same way (only when missing).
+  `App/Menus.incl`, `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`.
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
@@ -39,7 +47,10 @@ mode work without extra code).
 - `docs/ROADMAP.md` (phases), `docs/BACKLOG.md` (open items), `docs/DEVELOPMENT_LOG.md`
   (what was done and learned, newest first, with commits).
 - `tools/` — `fblint.py` (checks FB sources and generated projects against the coding rules),
-  `sqlite_model.py` (reference implementation of the SQLite model reader).
+  `sqlite_model.py` (reference implementation of the SQLite model reader),
+  `logic_reference.py` (reference logic engine + acceptance scenarios: `--test <db.sqlite>`),
+  `make_logic_test.py` (builds the FB test project for the same scenarios, to run on a Mac),
+  `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 
 One concern per file, aptly named — in `src/` and in what the generator emits.
@@ -98,9 +109,8 @@ These apply to hand-written code **and to everything the generator emits**.
 ## Workflow
 - **Nothing can be compiled here.** The author builds in FutureBasic on a Mac
   and pastes the Build Log or run-time alerts; treat those as the test results.
-  Before handing over FB changes, run:
-  `python3 tools/fblint.py --headers <FutureBasic_Documentation>/Toolboxes/Headers src`
-  (and on any other FB repo touched, e.g. Test_Xib_View).
+  Before handing over FB changes, run `tools/run_tests.sh` (lint, logic scenarios, every rule
+  proven, the FB test project) — `docs/TESTING.md` lists every test, also the Mac-only ones.
 - Work on branch `claude/dazzling-darwin-awec2o` in each repo; the author merges
   via pull requests. After a merge, bring the branch up to date by merging
   `origin/main` into it (force-pushing is not allowed), then push.

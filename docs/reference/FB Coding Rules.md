@@ -115,6 +115,18 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
   `-Wno-unused-command-line-argument` to the same field (as Test_Xib_View does) or each
   source file warns "'linker' input unused".
 
+- **New code uses FB's current type names and Cocoa wrappers.** The headers mark the CF
+  type names deprecated (`CFStringRef` → `StringRef`, `CFDictionaryRef` → `DictionaryRef`,
+  `CFArrayRef` → `ArrayRef`, `CFNumberRef` → `NumberRef`, `CFURLRef` → `URLRef`,
+  `CFDataRef` → `DataRef`, mutable ones alike); they are aliases, so old code still builds.
+  Prefer `DictionaryObjectForKey`, `MutableArrayAddObject`, … over `CFDictionaryGetValue`,
+  `CFArrayAppendValue`, …; `CFRelease` only what a `CF…Create` call returned.
+- **`ObjectRef` parameters need a cast** (`fn ObjectIsEqual( (ObjectRef)a, (ObjectRef)b )`): a CF
+  value passed uncast makes clang warn. fblint reads the parameter types from the headers and
+  reports every uncast argument.
+- **Cocoa collections refuse NULL.** `MutableDictionarySetObjectForKey( d, NULL, k )` raises
+  an exception — guard optional values, or store `NSNull` for SQL NULL.
+
 ## Deprecated — don't write these
 
 | Don't | Use | Since |

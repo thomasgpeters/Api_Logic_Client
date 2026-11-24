@@ -76,7 +76,7 @@ def strip_strings_and_comments(line):
 FN_DEF = re.compile(r'^\s*(?:(void)\s+|(\w+)\s+)?local\s+fn\s+(\w+)(\s*\(.*?\))?(.*)$')
 
 
-def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=frozenset(), arity=None):
+def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=frozenset(), arity=None, object_params=None):
     raw = open(path, 'rb').read()
     try:
         text = raw.decode('utf-8')
@@ -139,7 +139,7 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
             for kind, bno in blocks:
                 report(bno, f'{kind} block is not closed before the end of the fn')
             blocks = []
-        if re.match(r'\s*for\s+\w+\s+in\s+(fn\b|@\[)', code_only):
+        if re.match(r'\s*for\s+\w+\s+in\s+(\(\s*\w+\s*\)\s*)?(fn\b|@\[)', code_only):
             report(no, 'for ... in needs an array variable, not an expression - assign it first')
         if fb_keywords:
             declared = [d for d in re.findall(r'\b(\w+)\s+as\s+\w', code_only) if d.lower() != 'dim']
@@ -163,6 +163,11 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
                         expected, variadic = arity[name]
                         if given != expected and not ( variadic and given >= expected ):
                             report(no, f'{cm.group(1)} takes {expected} argument(s) (per the headers); {given} given')
+                        # ObjectRef parameters: a CF value needs a cast, or clang warns (discards qualifiers)
+                        args = split_args(code_only[cm.end():j - 1])
+                        for i in (object_params or {}).get(name, []):
+                            if i < len(args) and not re.match(r'\(\s*ObjectRef\s*\)|NULL\b', args[i]):
+                                report(no, f'{cm.group(1)}: argument {i + 1} is an ObjectRef - cast it: (ObjectRef){args[i][:30]}')
         m = FN_DEF.match(line)
         if m:
             void, prefix_type, name, _params, tail = m.groups()
@@ -256,6 +261,19 @@ def toolbox_arity(headers):
     return arity
 
 
+def toolbox_object_params(headers):
+    """name -> indexes of its ObjectRef parameters (active declaration)."""
+    params = {}
+    for p in sorted(glob.glob(os.path.join(headers, '**', '*.incl'), recursive=True)):
+        s = active_lines(open(p, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n'))
+        for m in re.finditer(r'^\s*toolbox\s+(?:fn\s+)?(\w+)\s*\(([^)]*)\)', s, re.M):
+            name, plist = m.group(1).lower(), m.group(2).strip()
+            if name not in params:
+                parts = [] if plist in ('', 'void') else split_args(plist)
+                params[name] = [i for i, a in enumerate(parts) if re.match(r'\s*ObjectRef\b', a)]
+    return params
+
+
 def toolbox_names(headers):
     names = set()
     for p in glob.glob(os.path.join(headers, '**', '*.incl'), recursive=True):
@@ -284,6 +302,9 @@ def build_order_problems(proj):
             m = FN_DEF.match(line)
             if m:
                 defined.add(m.group(3).lower()); continue
+            proto = re.match(r'^\s*(?:\w+\s+)?def\s+fn\s+(\w+)', line)   # def fn prototype: callable from here on
+            if proto and not re.search(r'\busing\b', line):
+                defined.add(proto.group(1).lower()); continue
             code = strip_strings_and_comments(line)
             names = re.findall(r'(?:\bfn|@fn)\s+(\w+)', code)
             call = re.match(r'\s*([A-Za-z]\w+)\s*\(', code)
@@ -295,6 +316,9 @@ def build_order_problems(proj):
 
 
 def main(argv):
+    if argv and argv[0] in ('-h', '--help'):
+        print(__doc__)
+        return 0
     headers = None
     if '--headers' in argv:
         i = argv.index('--headers'); headers = argv[i + 1]; del argv[i:i + 2]
@@ -311,10 +335,11 @@ def main(argv):
     known = {n.lower() for n in toolbox_names(headers)} | {'nslog'} if headers else None
     fb_keywords = keywords(headers) if headers else set()
     arity = toolbox_arity(headers) if headers else None
+    object_params = toolbox_object_params(headers) if headers else None
     problems = []
     for p in files:
         # single-file programs (.fb/.bas) may use #build; project files may not
-        problems += lint_file(p, not p.endswith(('.fb', '.bas')), known, local_fns, fb_keywords, arity)
+        problems += lint_file(p, not p.endswith(('.fb', '.bas')), known, local_fns, fb_keywords, arity, object_params)
     for a in argv:
         for proj in glob.glob(os.path.join(a, '**', 'data.fbproj'), recursive=True) if os.path.isdir(a) else []:
             text = open(proj, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
