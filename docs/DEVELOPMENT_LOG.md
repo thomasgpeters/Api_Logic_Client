@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Studio review: inventory and proposal
+
+- `docs/STUDIO_REVIEW.md`: every toolbar item, menu item and view control, with its status.
+  Found: the toolbar is dead (no `_toolbarItemClick` handler) and its tags collide with view
+  controls (205 = the ALS form's Cancel, 303 = the tag-line field); Preferences and Help are
+  empty; the ALS form's Cancel and the Objects list's + / − do nothing; nothing is ever disabled.
+- Proposal: Project / Model / Generate / Window / Help menus, a state table for enabling,
+  a five-item toolbar with its own tag range, context menus on the Objects list, the attribute
+  table and Recent Projects. Waiting for the author's answers before changing anything.
+- FB facts for the work: `_toolbarItemClick` (Toolbar.incl), `ToolbarItemSetEnabled`,
+  `MenuSetAutoenablesItems` / `MenuItemSetEnabled`, a context menu is a `menu` not in the menu bar
+  attached with `ResponderSetMenu` / `ViewSetMenu` (FBExamples, View Contextual Menu).
+- Users and roles for generated apps (author) added to the backlog.
+
 ## 2026-11-24 — Form designer 3: Dropdowns, radio buttons, value lists; the Form layout popup
 
 - `SQLite Model.incl` (and `tools/sqlite_model.py`): a single-column foreign key gets

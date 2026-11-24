@@ -27,7 +27,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [x] 3. Choices: Radio buttons, Dropdown (a value list in the Values column, or a foreign key's lookup table: the parent's key stored, a display column shown), Checkbox; `AppDataLookup`
 - [ ] Verify on a Mac: a foreign key's Dropdown lists the parent's rows and Save stores the key; a value list Dropdown; Radio buttons (one at a time); the Form layout popup keeps its choice (log lines "Form layout popup: item …")
 - [ ] Choose the lookup's display column (or several: "givenName surname"); show the display value in the List instead of the key
-- [ ] Studio audit (author, 2026-11-24): the toolbar (Project, Object, Generate, Settings) does nothing; context menus on list items; disable menu items that do not apply (no project: no Generate); regroup the menus
+- [ ] Studio review (author, 2026-11-24) - inventory and proposal in `STUDIO_REVIEW.md`: menus regrouped, toolbar wired (its tags collide with view controls today), commands enabled by state, context menus, small fixes
+- [ ] Users and roles in generated apps (author, 2026-11-24): sign-in, users, roles (e.g. Admin, Editor, Viewer) deciding who may see, edit or delete each entity; Lite: users in the app's SQLite database; Enterprise: the API Logic Server's. Then an audit trail (who changed which record, when)
 - [ ] Generated app window layouts, a project setting (`design/App Shell Design.md`, Window layouts): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one tab per entity (future)
 
 ## App shell — lite edition (see `design/App Shell Design.md`)
