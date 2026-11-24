@@ -1,0 +1,1 @@
+// "Headers" 0// "Resources" 1resources "Info.plist"// "Globals" 0// "Includes" 1include "Menus.incl"include "Windows.incl"include "EventHandlers.incl"// "Main" 1include "CleanApp.main"
