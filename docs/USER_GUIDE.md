@@ -14,14 +14,15 @@
 6. [Entity definitions: reviewing and adjusting](#6-entity-definitions-reviewing-and-adjusting)
 7. [Project settings](#7-project-settings)
 8. [Generating the app](#8-generating-the-app)
-9. [Business rules](#9-business-rules)
-10. [Importing and exporting ALS rules](#10-importing-and-exporting-als-rules-declare_logicpy)
-11. [Making the generated app your own](#11-making-the-generated-app-your-own)
-12. [Opening projects again](#12-opening-projects-again)
-13. [Checking your work](#13-checking-your-work)
-14. [Troubleshooting](#14-troubleshooting)
-15. [Menus and keyboard shortcuts](#15-menus-and-keyboard-shortcuts)
-16. [What is not built yet](#16-what-is-not-built-yet)
+9. [Screens: FutureBasic's nib keywords](#9-screens-futurebasics-nib-keywords)
+10. [Business rules](#10-business-rules)
+11. [Importing and exporting ALS rules](#11-importing-and-exporting-als-rules-declare_logicpy)
+12. [Making the generated app your own](#12-making-the-generated-app-your-own)
+13. [Opening projects again](#13-opening-projects-again)
+14. [Checking your work](#14-checking-your-work)
+15. [Troubleshooting](#15-troubleshooting)
+16. [Menus and keyboard shortcuts](#16-menus-and-keyboard-shortcuts)
+17. [What is not built yet](#17-what-is-not-built-yet)
 
 ---
 
@@ -152,23 +153,89 @@ Then open **`FBapp/<name>.fbeproj`** in FutureBasic and build it. The project is
 When it runs, the app opens the project's database (`Data: opened …` in the NSLog window) and
 activates its rules (`Logic: rules active for N entities`).
 
-## 9. Business rules
+## 9. Screens: FutureBasic's nib keywords
+
+Every screen part the generator writes is a **XIB** — Interface Builder's file, which you can
+open and change in Xcode. FutureBasic compiles the XIBs listed in the project to nibs when it
+builds, and your FB code puts them on screen with its **nib keywords**. These are the calls to
+look for — and to use — in the generated project's `Windows.incl` and in your own code:
+
+| Keyword | What it loads | FutureBasic reference |
+|---|---|---|
+| `nibwindow tag, nibName [, identifier]` | a window | [nibwindow](https://www.brilorsoftware.com/fb/documentation/FBHelp/pgs/nibwindow.html) |
+| `nibview tag, nibName [, identifier [, origin [, superviewTag]]]` | a view — a Form or List part — into the window, or into another view | [nibview](https://www.brilorsoftware.com/fb/documentation/FBHelp/pgs/nibview.html) |
+| `nibtoolbar tag, nibName` | a toolbar | [nibtoolbar](https://www.brilorsoftware.com/fb/documentation/FBHelp/pgs/nibtoolbar.html) |
+| `nibmenu nibName` | a menu | [nibmenu](https://www.brilorsoftware.com/fb/documentation/FBHelp/pgs/nibmenu.html) |
+| `nibpopover tag, nibName` | a popover | [nibpopover](https://www.brilorsoftware.com/fb/documentation/FBHelp/pgs/nibpopover.html) |
+
+(The same pages are in FutureBasic's own help, and in the FutureBasic_Documentation repository
+under `FBHelp/Resources/English.lproj/pgs/`.)
+
+**In the generated app.** `Windows.incl` (yours, written once) builds the window, then loads
+each entity's Form part from its XIB with `nibview`, hidden until the entity is chosen:
+
+```
+void local fn BuildWindows( title as CFStringRef )
+long x = fn ALSPartX
+fn ALSBuildWindow( title )
+// each entity's Form part, from its generated XIB - hidden until the entity is selected
+nibview _CustomerView, @"CustomerForm", , ( x, _alsButtonBarH )
+ViewSetHidden( _CustomerView, YES )
+nibview _OrderView, @"OrderForm", , ( x, _alsButtonBarH )
+ViewSetHidden( _OrderView, YES )
+...
+end fn
+```
+
+**In the generator itself** — the same keywords, one part per XIB:
+
+```
+nibwindow _window, @"MainWindow"                    // Windows.incl: BuildWindow
+nibview _welcomeView, @"WelcomeView",, ( x, y )      // BuildSubViews: each page
+nibview _newProjectView, @"NewProjectView",, ( x, y )
+nibtoolbar _mainToolbar, @"Toolbar"
+```
+
+**What to know when you use them:**
+
+- **The tag you pass becomes the view's tag.** The controls inside keep the tags the XIB gives
+  them — the generated ones are named in `Model Tags.incl` (`_CustomerView`, `_CustomerCompanyName`,
+  …), so your code reads and fills them with `ControlStringValue`, `ControlSetObjectValue` and
+  the `<Entity> Binding.incl` functions. A tag must not be used by another control in the window.
+- **`nibName` is the XIB's name without `.xib`** (`@"CustomerForm"`), and the XIB must be listed
+  as a resource in the project (the generator lists every part it writes).
+- **`superviewTag`** puts the view inside another one — a tab, a pane, a box — instead of the
+  window's content view. This is how parts can be embedded, for example a List part in a tab of
+  its parent's Form.
+- **`identifier`** picks one view out of a XIB that holds several (the first view is loaded
+  without it).
+- **`origin`** is in the window's coordinates, measured from the **bottom left**.
+- **Load once, then show and hide** (`ViewSetHidden`): every load makes new copies of the views.
+  Change a view right after its `nib…` call — size it, fill it, hide it — as the generator does.
+- **Changing a part's layout:** open its XIB in Xcode. A regenerated part is rewritten, so
+  change the design (the entity definitions, §6) for anything the generator decides, and keep
+  hand-made screens in XIBs of your own.
+
+More about XIBs — what is inside one, frames and resizing, checking one with `ibtool` — is in
+`reference/XIB Reference.md`.
+
+## 10. Business rules
 
 Business rules are what keeps the data right whoever changes it: an order's total is the sum
 of its lines, a customer's balance may not exceed the credit limit, a line takes its price from
 the product. You **declare** them once; **LogicBank for FutureBasic** enforces them on every
 save.
 
-### 9.1 Where rules live
+### 10.1 Where rules live
 
 - **`Rules.incl`** in the generated project is yours: write rules in FB in its `DeclareRules`
   function. It is created once and never overwritten.
 - **`Studio Rules.incl`** is generated from the project's `Rules.json` every time you
-  *Generate App* (the rules imported from ALS, §10, and later the Rules page) — don't edit it;
+  *Generate App* (the rules imported from ALS, §11, and later the Rules page) — don't edit it;
   it is rewritten. Without a `Rules.json` it is an empty `DeclareStudioRules`.
 - The app's main program calls both, then `LogicActivate`.
 
-### 9.2 Saving through the rules
+### 10.2 Saving through the rules
 
 In your own code, save records with the engine instead of writing them directly:
 
@@ -183,7 +250,7 @@ A record is a mutable dictionary of column → value. Each save is **one transac
 rule refuses it, nothing is changed — not the row, not the totals it would have updated — and
 `LogicMessage` says why.
 
-### 9.3 The rules you can declare
+### 10.3 The rules you can declare
 
 A rule function takes the row being saved (`logicRow`) and reads it with
 `LogicDouble`, `LogicString`, `LogicValue`, `LogicIsEmpty`, `LogicOldValue`, `LogicChanged`,
@@ -265,7 +332,7 @@ fn LogicCommitEvent( @"Order", @fn OrderShipped )   // after the save has commit
 A row event that changes the row fails the save (the change would bypass the rules — use a
 formula or a copy). Commit events never run for a save that was rolled back.
 
-### 9.4 What happens on a save
+### 10.4 What happens on a save
 
 ```
 insert   copy → parent check → formulas → adjust parents → constraints → row events → write
@@ -279,13 +346,13 @@ roles, formulas that depend on each other in a circle — and refuses to start t
 alert, details in NSLog) if something is wrong. With `isLoggingOn`, the NSLog window shows each
 rule as it fires, indented by how far the save has chained.
 
-## 10. Importing and exporting ALS rules (`declare_logic.py`)
+## 11. Importing and exporting ALS rules (`declare_logic.py`)
 
 An ALS project's rules (LogicBank, in Python) can come in, and go back out:
 
 - *Model → Import Rules from declare_logic.py…* — choose the ALS project's `logic/declare_logic.py`.
   The rules go into the project's `Rules.json`; a message says how many came in and how many
-  were switched off (§ below). *Generate App* then writes them into `Studio Rules.incl`.
+  were switched off (see below). *Generate App* then writes them into `Studio Rules.incl`.
 - *Model → Export Rules to declare_logic.py…* — writes the project's rules as LogicBank rules.
 
 Both run `rules_bridge.py`, which comes inside the app, with the Mac's `python3`. The same
@@ -313,7 +380,7 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 - **Export** writes an unchanged imported rule exactly as it came, and translates edited ones from FB.
 - `--help` shows every option.
 
-## 11. Making the generated app your own
+## 12. Making the generated app your own
 
 - **Yours, never overwritten:** `EventHandlers.incl` (what happens on clicks and menus),
   `Menus.incl`, `Windows.incl` (the window and where each part goes), `Rules.incl`, and the
@@ -322,14 +389,14 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
   runtime and the main program — change the model, your adjustments or the rules instead.
 - `Model Tags.incl` names every view and control tag, for your own code.
 
-## 12. Opening projects again
+## 13. Opening projects again
 
 - **Welcome page:** double-click a recent project. *Model → Recent Projects* returns to it;
   *Clear Recent Projects* empties the list.
 - **Open Project…** (⇧⌘O): choose a project's `Project.json` in the workspace.
 - If the project's database has moved, you are asked to locate it; the new place is remembered.
 
-## 13. Checking your work
+## 14. Checking your work
 
 - **Without a Mac** (this repository): `tools/run_tests.sh` runs every check — the FB coding rules,
   the rules engine's 70 scenarios, the proof that every rule is needed, the rules bridge.
@@ -339,7 +406,7 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 `TESTING.md` describes every test.
 
-## 14. Troubleshooting
+## 15. Troubleshooting
 
 | What you see | What to do |
 |---|---|
@@ -353,7 +420,7 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 Paste a Build Log or NSLog lines into a session when something is unclear.
 
-## 15. Menus and keyboard shortcuts
+## 16. Menus and keyboard shortcuts
 
 | Menu | Command | Key |
 |---|---|---|
@@ -374,11 +441,11 @@ Paste a Build Log or NSLog lines into a session when something is unclear.
 its text fields, and *Generate XIBs* uses ⌘X, which is Cut everywhere else on the Mac.
 *Preferences…* (⌘,) does nothing yet.
 
-## 16. What is not built yet
+## 17. What is not built yet
 
 - **The Rules page** in the generator: the rules of `Rules.json` in a list, an editor with the
   model's entities and attributes to pick from, and checking. Until then, write rules in
-  `Rules.incl`, or import them (§10) and edit `Rules.json`.
+  `Rules.incl`, or import them (§11) and edit `Rules.json`.
 - **The app shell** for SQLite projects: an entity navigator, Lists and Forms reading and saving
   through the rules engine (the parts, bindings, data runtime and rules are ready).
 - **Renaming** the project file, the app bundle and the Application Support folder to the
