@@ -462,6 +462,7 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 | What you see | What to do |
 |---|---|
+| FutureBasic quits (crashes) when you build | check *Build Settings*: the SDK must be one your Xcode has. Our projects follow a fresh FB project (`src/CleanApp`); after an Xcode update, set the SDK to the one FB offers. |
 | Translator or compiler errors after pulling | the FB editor rewrites files when it opens them; `git stash`, pull again, build. If the errors name lines that look already fixed, your copy is behind. |
 | `Data: the database is missing` | the project's `Database/` copy is gone; open the project and locate the database when asked. |
 | `The business rules are not active` | `LogicActivate` refused the rules: the alert and NSLog name the rule and attribute. |

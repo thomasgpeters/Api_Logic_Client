@@ -6,6 +6,21 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — FutureBasic crashed building the Studio: the SDK in the build settings
+
+- The author's build of the Studio crashed FutureBasic 7.0.38 itself (a null read after a path,
+  `NSPathStore2`). A fresh project from the FB editor (`src/CleanApp`, added by the author) builds;
+  comparing the two: our `Settings2.plist` asked for `BaseSDK` 13.1 (and Intel, macOS 10.13, a
+  precompiled header, an old `-m64 -DDECARBONATE` option); the clean one has 26.2, Apple Silicon,
+  macOS 15.0. The 13.1 SDK is no longer in current Xcode — the likely cause, and why the same
+  project built on 2026-11-16.
+- Fixed in the Studio's project, the generated apps' template (`src/Templates/Project/`, also used
+  by the FB logic test) and Test_Xib_View (*TXV* `6fa70e2`); our `-lsqlite3` options kept.
+- `.gitignore`: every project's `build_temp_*/` and `*.app/`.
+- Learned: keep project settings like a fresh FB project (`FB Coding Rules.md` rule 8).
+
+---
+
 ## 2026-11-24 — Editions: the Lite data interface; Enterprise on the roadmap
 
 - Two editions (author): **Lite**, free and open source, SQLite in the app; **Enterprise**, paid,

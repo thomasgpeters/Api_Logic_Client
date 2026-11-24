@@ -34,6 +34,9 @@ mode work without extra code).
   - `ERD Generator.incl` — Model > Show Model Diagram: `<project>/Model ERD.html` from the `Templates/ERD` page, the model and `Rules.json`.
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
+- `src/CleanApp/` — a project the FB editor created (author, 2026-11-24): the reference for project
+  settings (`Settings2.plist`: SDK, architecture, minimum macOS). Keep the Studio's, the template's
+  and Test_Xib_View's settings in step with it; it is not built or changed by us.
 - `src/Runtime/` — our FB code copied into every generated app (bundled as resources
   of the generator via `../Runtime/…`; the list is `AppRuntimeFiles` in `App Generator.incl`):
   - data runtime — `Data SQLite.incl` (our SQLite declarations, transactions), the author's

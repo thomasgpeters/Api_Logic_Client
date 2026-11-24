@@ -3,22 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>Architecture</key>
-	<string>Intel</string>
+	<string>Apple Silicon</string>
 	<key>BaseSDK</key>
-	<string>13.1</string>
+	<string>26.2</string>
 	<key>CheckArrayBounds</key>
 	<integer>1</integer>
 	<key>ClearLogEachTime</key>
 	<integer>1</integer>
 	<key>CompilerOptions</key>
-	<string>-lsqlite3 -Wno-sometimes-uninitialized -Wno-unused-but-set-variable -Wno-unused-command-line-argument</string>
+	<string>-lsqlite3 -Wno-sometimes-uninitialized -Wno-unused-but-set-variable -Wno-unused-command-line-argument -Wincompatible-pointer-types-discards-qualifiers</string>
 	<key>CompilerOptionsArray</key>
 	<array>
-		<string>-lsqlite3 -Wno-sometimes-uninitialized -Wno-unused-but-set-variable -Wno-unused-command-line-argument</string>
-		<string>-m64 -DDECARBONATE</string>
+		<string>-lsqlite3 -Wno-sometimes-uninitialized -Wno-unused-but-set-variable -Wno-unused-command-line-argument -Wincompatible-pointer-types-discards-qualifiers</string>
 	</array>
 	<key>DebugLevel</key>
 	<integer>2</integer>
+	<key>FlattenNibs</key>
+	<integer>0</integer>
 	<key>FontSize</key>
 	<integer>12</integer>
 	<key>HideLogWindowAfterBuild</key>
@@ -26,7 +27,7 @@
 	<key>LogUNIXCommands</key>
 	<integer>0</integer>
 	<key>MinDeployment</key>
-	<string>10.12</string>
+	<string>15.0</string>
 	<key>Optimization</key>
 	<integer>2</integer>
 	<key>PutLineNumInfoInApp</key>
