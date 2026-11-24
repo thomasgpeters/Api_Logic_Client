@@ -112,5 +112,10 @@ Rewrite of [LogicBank](https://github.com/valhuber/LogicBank) (Val Huber) for Fu
 - [x] Aggregates (sum/count with where, delta, re-parenting, chaining), parent references
 - [ ] Copy, parent check, cascade of parent changes to children, delete cascade/nullify/prevent, events
 - [ ] Recompute command: rebuild stored sums/counts from the data (adjustment assumes they start right)
+- [ ] LB-41: protect derived sum/count columns from client writes; aggregates start at 0 on insert
+- [ ] LB-42: detect dependency cycles through aggregates at activation (today: depth limit at run time)
+- [ ] LB-40: round sums to the column's scale (decide)
+- [ ] Upsert (Studio's fourth operation): `LogicUpsert` — update when the row exists, else insert
+- [ ] Scenarios per rule and operation (insert / update / delete / upsert), as Studio tests rules; keep `--prove` at 0 unproven
 - [ ] Studio: Rules page, `Rules.json`, generated rule files, validation, Explain
 - [ ] Import ALS `logic/declare_logic.py`

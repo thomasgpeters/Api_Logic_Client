@@ -6,19 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — LogicBank for FutureBasic: sums, counts, chaining (`8d99a8f`)
+## 2026-11-24 — Studio's test concept; LogicBank audit mapped; every rule proven
 
-- `LogicSum` / `LogicCount` (with a where function), declared on the parent and filed
-  under the child at activation (child list → child entity + foreign key).
-- Child saves adjust parents by the difference they make (insert, delete, change, where
-  starting/stopping, re-parenting: both parents); one write per parent row, through
-  `LogicUpdateRow`, so parents run their own logic (chaining to `Customer.Balance` and the
-  credit check). Chains deeper than 20 are refused.
-- Parent references in formulas: `LogicParentValue` / `LogicParentDouble`, `Role.Attr` in
-  dependsOn (checked at activation; pruned unless the row moves to another parent).
-- FB: the update ↔ adjust-parents recursion needs a `def fn` prototype; fblint's build-order
-  check now counts prototypes as definitions.
-- Tests: 36 scenarios in `tools/logic_reference.py` (19 new, the canonical check-credit
-  logic on Northwind) — all pass; the FB test project (`make_logic_test.py`) has the same 36.
+- Imagery LogicBank Studio attached read-only. Its rule lifecycle: a test case per operation
+  (insert, update, delete, upsert), each run as given rows → change → accepted with the
+  expected state or rejected with the expected message → clean up; a rule passes when all four
+  pass (`TestRunner.h`, `GOVERNANCE.md`).
+- The converse, now in `tools/logic_reference.py --prove`: leave each rule out, a scenario must
+  fail. All 10 rules proven. The reference's data layer now returns failure on a database
+  error (as `DataInsert` does) instead of raising — found by leaving the Quantity rule out.
+- Studio's `docs/upstream/` audit of LogicBank 1.34.3 (44 findings) mapped against our engine
+  in `design/Logic Engine Design.md` §4a; open for us: LB-41 (derived columns writable by
+  clients), LB-40 (rounding), LB-42 (cycles through aggregates), LB-27/30 (step 3).
 
 ---

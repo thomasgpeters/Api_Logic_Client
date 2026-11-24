@@ -93,6 +93,9 @@ recompute command for existing data is a backlog item.
   chained save with nothing changed; ship / unship (where transitions); re-parent over the
   limit (fails), re-parent a shipped order, re-parent with room (both customers adjusted);
   a parent reference on a shipped order; delete back to the start.
+- **Every rule is needed:** `python3 tools/logic_reference.py --prove <db.sqlite>` runs the suite
+  once per rule with that rule left out; each must make a scenario fail (as Imagery LogicBank
+  Studio's rule lifecycle expects of a rule's tests). 10 rules, all proven.
 - **On a Mac (FB):** `python3 tools/make_logic_test.py <Northwind db.sqlite> ~/Desktop/LogicTest`
   builds an FB project from the real runtime files with the same 36 scenarios in FB; open
   `Logic Test.fbeproj`, build, run, read PASS / FAIL in the NSLog window.

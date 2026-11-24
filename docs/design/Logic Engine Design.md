@@ -221,6 +221,38 @@ proposal should also cover **the name**: "LogicBank" is Val's project name, and 
 BSD text withheld using the author's name to promote derived products, so the product
 name needs his agreement.
 
+## 4a. Lessons from the LogicBank audit (Imagery LogicBank Studio, `docs/upstream/`)
+
+The author's audit of LogicBank 1.34.3 lists 44 findings (10 P1) with repros, and what was
+checked and found sound. Where each stands in the FB engine (2026-11-24):
+
+| Finding | Our engine |
+|---|---|
+| LB-03/04/05/14 old row wrong, of varying shape | old row is always the stored row, read inside the transaction; one shape (a dictionary) |
+| LB-08 a failed constraint leaves the session half applied | the transaction rolls back (`DataEnd( NO )`); the caller's record may still hold derived values |
+| LB-16 the logic log writes every column (password hashes) | the log names derived values and adjustments only, never whole rows |
+| LB-20/26 concurrent writers / stale parents lose adjustments | `BEGIN IMMEDIATE` takes SQLite's write lock; the parent is read inside the transaction |
+| LB-24 `error_msg` evaluated as an f-string (code execution) | plain `{Attr}` text replacement |
+| LB-25 re-parenting through the relationship object is missed | rows carry foreign keys only; re-parenting is a foreign-key change, detected |
+| **LB-41 derived sum/count columns are writable by clients** | **open: a client can write `Order.AmountTotal`; later adjustments build on it. Fix: keep the stored value on client saves, start aggregates at 0 on insert** |
+| LB-31 constraints run on delete | constraints do not run on delete |
+| LB-32/33 typos accepted at activation (wrong child role) | activation checks every entity, attribute, child list and parent reference |
+| LB-15 no recursion guard | chains deeper than 20 are refused |
+| LB-21/22/23 the formula dependency scan misreads text | dependencies are explicit (`dependsOn`); the Studio's scan must be tested hard |
+| LB-38 edit then delete decrements by the new value | delete uses the stored row |
+| LB-40 rounding drift | open: sums are doubles; decide on rounding to the column's scale |
+| LB-42 cycles through an aggregate not detected | open: today stopped at run time by the depth limit; detect at activation |
+| LB-27/30 parent_check ignores settings; PREVENT is dead code | step 3 must implement parent check and delete prevent/nullify/cascade properly |
+
+## 4b. Proving each rule is tested
+
+Imagery LogicBank Studio gives every rule a test case for each of insert, update, delete and
+upsert; a rule passes when all four pass (`TestRunner`: given rows, the change, accepted with
+the expected state or rejected with the expected message, then clean up). The engine's own
+suites add the converse: **leave a rule out and some scenario must fail.**
+`tools/logic_reference.py --prove` runs the suite once per rule with that rule omitted and
+reports any rule whose removal goes unnoticed. Today: 10 rules, all proven.
+
 ## 5. Plan
 
 1. **Engine core** — rule bank, LogicRow, insert/update/delete sequence, formulas with

@@ -7,7 +7,12 @@ It follows the FB code function by function (same names, same order of work) on 
 same SQLite database, so a scenario that passes here describes what the FB engine must
 do. Clean-room: written from LogicBank's documented behaviour, not its code.
 
-    python3 tools/logic_reference.py --test <copy of a Northwind db.sqlite>
+    python3 tools/logic_reference.py --test  <copy of a Northwind db.sqlite>
+    python3 tools/logic_reference.py --prove <copy of a Northwind db.sqlite>
+
+--prove runs the scenarios once per rule with that one rule left out: each rule must make
+at least one scenario fail (otherwise nothing tests it). Imagery LogicBank Studio's rule
+lifecycle asks the same of a rule's insert / update / delete / upsert cases.
 
 The test works on a temporary copy and never changes the given file.
 """
@@ -21,6 +26,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sqlite_model  # noqa: E402
 
 NULL = None
+OMIT = set()        # --prove: rules left out ("formula OrderDetail.Amount", ...)
+DECLARED = []       # every rule declared, in order (for --prove)
+
+
+def declared(label):
+    if label not in DECLARED:
+        DECLARED.append(label)
+    return label not in OMIT
 
 
 def q(name):  # QuoteSQLName (DataObject_Super.incl)
@@ -107,8 +120,11 @@ class Data:
     def insert(self, entity, record):
         gen, keys = self.key_generated(entity), self.keys(entity)
         cols = [c for c in self.columns(entity) if c in record and not (gen and c in keys and record[c] is None)]
-        self.db.execute(f'INSERT INTO {q(entity)} ( {", ".join(q(c) for c in cols)} ) VALUES ( {", ".join("?" * len(cols))} )',
-                        [record[c] for c in cols])
+        try:
+            self.db.execute(f'INSERT INTO {q(entity)} ( {", ".join(q(c) for c in cols)} ) VALUES ( {", ".join("?" * len(cols))} )',
+                            [record[c] for c in cols])
+        except sqlite3.Error:      # as DataExecute: the statement failed, DataInsert returns NO
+            return False
         if gen and len(keys) == 1 and record.get(keys[0]) is None:
             record[keys[0]] = self.db.execute('select last_insert_rowid()').fetchone()[0]
         return True
@@ -116,13 +132,19 @@ class Data:
     def update(self, entity, record, key_values):
         cols = [c for c in self.columns(entity) if c in record]
         where = ' AND '.join(f'{q(k)} = ?' for k in key_values)
-        cur = self.db.execute(f'UPDATE {q(entity)} SET {", ".join(q(c) + " = ?" for c in cols)} WHERE {where}',
-                              [record[c] for c in cols] + list(key_values.values()))
+        try:
+            cur = self.db.execute(f'UPDATE {q(entity)} SET {", ".join(q(c) + " = ?" for c in cols)} WHERE {where}',
+                                  [record[c] for c in cols] + list(key_values.values()))
+        except sqlite3.Error:
+            return -1
         return cur.rowcount
 
     def delete(self, entity, key_values):
         where = ' AND '.join(f'{q(k)} = ?' for k in key_values)
-        return self.db.execute(f'DELETE FROM {q(entity)} WHERE {where}', list(key_values.values())).rowcount
+        try:
+            return self.db.execute(f'DELETE FROM {q(entity)} WHERE {where}', list(key_values.values())).rowcount
+        except sqlite3.Error:
+            return -1
 
 
 class Logic:
@@ -141,13 +163,19 @@ class Logic:
         return self.rules.setdefault(entity, {'formulas': [], 'constraints': [], 'aggregates': []})
 
     def formula(self, entity, attr, fn, depends_on):
+        if not declared(f'formula {entity}.{attr}'):
+            return
         self.entity_rules(entity)['formulas'].append({'entity': entity, 'attr': attr, 'fn': fn, 'dependsOn': depends_on or []})
         self.active = False
 
     def constraint(self, entity, fn, message):
+        if not declared(f'constraint {entity}: {message}'):
+            return
         self.entity_rules(entity)['constraints'].append({'entity': entity, 'fn': fn, 'message': message})
 
     def aggregate(self, kind, parent, parent_attr, list_name, child_attr, where):
+        if not declared(f'{kind} {parent}.{parent_attr}'):
+            return
         # declared on the parent; activation files it under the child (LogicResolveAggregate)
         self.entity_rules(parent).setdefault('declared', []).append(
             {'kind': kind, 'entity': parent, 'attr': parent_attr, 'list': list_name, 'childAttr': child_attr, 'where': where})
@@ -561,17 +589,46 @@ def aggregate_scenarios(path):
     return results
 
 
-def main(argv):
-    if len(argv) != 2 or argv[0] != '--test':
-        print(__doc__)
-        return 2
+def run(db):
     work = tempfile.mkdtemp()
     copy = os.path.join(work, 'db.sqlite')
-    shutil.copy(argv[1], copy)
+    shutil.copy(db, copy)
     try:
-        results = scenarios(copy)
+        return scenarios(copy)
     finally:
         shutil.rmtree(work)
+
+
+def prove(db):
+    # every rule must be needed: leave each one out in turn and expect a scenario to fail
+    OMIT.clear()
+    DECLARED.clear()
+    baseline = [name for name, ok, _ in run(db) if not ok]
+    if baseline:
+        print('the full rule set fails first:', baseline)
+        return 1
+    unproven = 0
+    for label in list(DECLARED):
+        OMIT.clear()
+        OMIT.add(label)
+        failed = [name for name, ok, _ in run(db) if not ok]
+        if failed:
+            print(f'PROVEN    {label}   ({len(failed)} scenarios fail without it, e.g. {failed[0]})')
+        else:
+            unproven += 1
+            print(f'UNPROVEN  {label}   (every scenario still passes without it)')
+    OMIT.clear()
+    print(f'logic_reference --prove: {len(DECLARED)} rules, {unproven} not proven by any scenario')
+    return 1 if unproven else 0
+
+
+def main(argv):
+    if len(argv) != 2 or argv[0] not in ('--test', '--prove'):
+        print(__doc__)
+        return 2
+    if argv[0] == '--prove':
+        return prove(argv[1])
+    results = run(argv[1])
     for name, ok, detail in results:
         print(('PASS  ' if ok else 'FAIL  ') + name + ('' if ok or detail == '' else f'   [{detail}]'))
     failed = sum(1 for _, ok, _ in results if not ok)
