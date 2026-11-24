@@ -123,7 +123,10 @@ Click an entity in the list. Its **attribute table** shows, for every column:
 Edit a cell and press Return: the change is saved to `Design.json` at once and kept every time
 you regenerate. Clear a cell to go back to the recommendation.
 
-- **Control** (the popup at the top, left of Form layout): select an attribute in the table, then
+- Under the entity's summary is a row of three popups: **Control**, **Form layout** and **Icon**.
+- **Icon**: the SF Symbol on the entity's button in the app's navigation bar (preview beside
+  the popup). *Icon: recommended* goes back to the generator's choice from the entity's name.
+- **Control**: select an attribute in the table, then
   choose its control from the list. The first item, *Recommended: …*, goes back to what the
   generator suggests for the column's type: DATE a date picker, DATETIME / TIMESTAMP a date and
   time picker, TIME a time picker. You can still type a control's name in the Form Control cell.
@@ -134,7 +137,7 @@ you regenerate. Clear a cell to go back to the recommendation.
   default; a key you type yourself (a customer code, say) stays a text field.
 - **Hidden** leaves the attribute off the Form and the List. It is still in the database, and
   a save leaves its value as it was.
-- **Form layout** (the popup at the top right): how many columns of fields the Form has —
+- **Form layout**: how many columns of fields the Form has —
   *automatic* (1 up to 10 fields, 2 up to 24, then 3), or 1, 2 or 3. Generate XIBs to see it.
 
 ## 7. Project settings
@@ -143,8 +146,10 @@ you regenerate. Clear a cell to go back to the recommendation.
 - **About text**, up to 250 characters (a counter shows how many are left). It appears in the
   generated app's **About** box, under its name, icon and version.
 - **Branding** for the generated app's header and footer:
-  - **Logo** — paste (⌘V) or drag a picture into the well. It is kept as
-    `<project>/Branding/logo.png` and deployed as `FBapp/AppLogo.png`. Select it and press Delete to remove it.
+  - **App icon** — paste (⌘V) or drag a picture into the well. It is kept as
+    `<project>/Branding/logo.png` and deployed as `FBapp/AppLogo.png`; the app shows it in its
+    header, its Dock icon and its About box. Select it and press Delete to remove it.
+    **Without a picture, the symbol:** an SF Symbol for the header instead (preview beside it).
   - **Tag-line** — a short description under the app's name, up to 80 characters.
   - **Copyright** — the footer's text (`© <app name>` when empty).
 
@@ -203,7 +208,7 @@ generated file starts with a comment saying what it does and whether it is regen
 Every generated app has the same frame (`App Shell.incl`):
 
 - a **dark blue navigation bar** on the left, with a white, bold button and an icon per entity;
-- a **header** with your logo, the app's name and tag-line, and on the right the **theme menu**
+- a **header** with the app icon, the app's name in large type centred on it (with the tag-line under it), and on the right the **theme menu**
   (System / Light / Dark) and **Log In** (connect it to your sign-in in `EventHandlers.incl`, `DoLogin`);
 - a **footer** with the copyright, a status line, and the page actions **New**, **Save**,
   **Delete** and **Refresh** (also in the *Records* menu: ⌘N, ⌘S, ⌘R);

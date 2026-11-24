@@ -6,6 +6,22 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — App and entity icons; a larger app name centred on the icon
+
+The author asked for the app's name in larger type, centred up and down beside the icon, and
+for the developer to choose icons for the app and for each entity.
+- App Shell: the name is 24-point bold, centred on the 52-point icon (with a tag-line, the two
+  lines together); a picture icon also becomes the Dock / About box icon (`AppSetIconImage`);
+  `ShellSetAppSymbol` puts the chosen SF Symbol in the header when there is no picture.
+- Type Mapping: `TypeMapIconChoices` (33 SF Symbols), `TypeMapRecommendedIcon` (moved from App
+  Generator's `AppNavSymbol`), `TypeMapEntityIcon` (designer's choice first). Model.json carries
+  each entity's `icon`; App Pages.incl uses it for the navigation button and defines `APP_SYMBOL`.
+- The Studio: the entity view has a design row under its summary - Control, Form layout, Icon
+  (with a preview); Project Settings' well is now the *app icon*, with a symbol popup and preview
+  for apps without a picture (`appSymbol` in Project.json).
+- fblint again caught functions used before their definition (Project Workspace builds before
+  Project Settings); moved.
+
 ## 2026-11-24 — Form designer 2: time and date-and-time pickers, the Control popup; nav heading
 
 - `Type Mapping.incl`: `_xibKindTime`, `_xibKindDateTime` ("Time picker", "Date and time picker");

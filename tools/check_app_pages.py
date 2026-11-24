@@ -40,7 +40,8 @@ def ev(e,env):
     if 'listNib' in e: return env['resource']['listNib']
     if 'DictionaryObjectForKey( resource, @"name" )' in e: return env['resource']['name']
     if 'TypeMapDefaultTitle' in e: return env['name']+'s'
-    if 'AppNavSymbol' in e: return 'person.2'
+    if '@"icon"' in e: return 'person.2'
+    if 'appSymbol' in e: return 'building.2'
     if 'tagline' in e: return 'Tag'
     if 'copyright' in e: return '(c) Co'
     raise Exception(e)

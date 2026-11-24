@@ -28,6 +28,10 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## App shell — lite edition (see `design/App Shell Design.md`)
 
+- [x] App icon (picture or SF Symbol) and an icon per entity, chosen in the Studio; the app name large, centred on the icon
+- [ ] Finder icon for the generated app: the icon picture as `AppIcon.icns` plus `#plist CFBundleIconFile @"AppIcon"` (FB help, Build System)
+- [ ] Verify on a Mac: the Icon popup and preview, the app symbol popup in Project Settings, the Dock icon from a picture
+
 - [ ] Navigation bar: scroll when there are more entities than fit (removed for now: the flipped scroll view left the items at the bottom)
 
 - [x] List XIB part per entity
