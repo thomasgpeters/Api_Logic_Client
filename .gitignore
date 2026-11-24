@@ -1,6 +1,8 @@
-
 .DS_Store
-Api Logic Client*.app/
-build_temp_Api_Logic_Client/
+
+# FutureBasic build output, for every project under src/ (the Studio, CleanApp, test projects):
+# FB writes build_temp_<Project>/ beside the project and builds <Project>.app
+build_temp_*/
+*.app/
 
 __pycache__/
