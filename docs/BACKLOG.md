@@ -28,8 +28,9 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [x] Studio: branding form in Project Settings (logo well, tag-line, copyright)
 - [x] Generated code readable for FB developers: file headers, developer notes, `README.md` tour
 - [ ] Verify on a Mac: the shell (`features/APP_SHELL_FEATURE.md` → Verify)
-- [ ] Shell for ALS projects (today they keep the ALS runtime's window)
-- [ ] Save / New / Delete buttons on a page, through `LogicInsert` / `LogicUpdate` / `LogicDelete`
+- [ ] Enterprise edition (roadmap, after Lite ships): `design/Editions and Licensing.md` → Roadmap
+- [x] Save / New / Delete / Refresh on a page, through the data interface (`App Data Lite.incl`) and the rules
+- [ ] Lite release: first Mac build of a generated app; fix what the Build Log shows; tag a release
 - [ ] Per-entity event handlers routed from one `on dialog` handler by tag range
 - [ ] Crumb trail and page stack (drill-in replaces the page; back via crumbs)
 - [ ] Related-list tabs (master-detail) and drill-in
@@ -47,6 +48,13 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Show the diagram inside the Studio (a WKWebView window) instead of the browser
 - [ ] Click a rule symbol to open it on the Rules page (once the Rules page exists)
 - [ ] ALS projects: relationships from the metadata (ALS `/metadata` lists them per resource)
+
+## Editions and licensing (`design/Editions and Licensing.md`)
+
+- [x] Data interface `App Data` (Lite: SQLite + rules); edition hook `src/Generator/Edition.incl` (Lite only)
+- [ ] Licence option: portable checksum, signed licence file, or online activation — author
+- [ ] Private Enterprise repository; move `ALS Client / Binding / App.incl` there
+- [ ] License Server: product `imagery_logicbank_studio_fb` and the licence format (its own repository)
 
 ## Tools in FutureBasic (author, 2026-11-24)
 

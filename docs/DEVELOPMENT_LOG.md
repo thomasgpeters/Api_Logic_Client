@@ -6,6 +6,29 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Editions: the Lite data interface; Enterprise on the roadmap
+
+- Two editions (author): **Lite**, free and open source, SQLite in the app; **Enterprise**, paid,
+  three-tier over API Logic Server (open source, the same in both). Lite ships first; Enterprise is
+  roadmap (`design/Editions and Licensing.md`). Commits `b9c6565` and the docs follow-up.
+- Runtime: `App Data Lite.incl`, the app's data interface (`AppDataList`, `AppDataSave`,
+  `AppDataRemove`, `AppDataLogin`, `AppDataKeyValues`), answering through one handler so an
+  asynchronous server can sit behind the same calls. `App Shell.incl`: footer status line and page
+  actions (New, Save, Delete, Refresh), Records menu numbers, `ShellDoAppEvent`, `ShellShowLogin`.
+- Generator: `Edition.incl` (Lite-only hook the paid build replaces); `App Pages.incl` now drives
+  the actions through App Data (saves through the rules; a refused save shows the rule's message);
+  templates no longer call the old ALS runtime, which is no longer copied into apps; an ALS-sourced
+  project is refused for Generate App with the way to a Lite app.
+- `tools/check_app_pages.py` (test only): plays `AppPagesSource` for two entities and lints the
+  output with the runtime and templates; in `run_tests.sh`.
+- Licensing: decided offline and Studio-only; the check itself is open. Found in the License
+  Server: keys use C++ `std::hash` (not the same on a Mac) and a published salt, so the FB Studio
+  cannot verify them as they are. Options written up: portable checksum, signed licence file,
+  online activation.
+- `docs/LINKEDIN_POST.md`: the post, kept with the one-pager.
+
+---
+
 ## 2026-11-24 — One-pager
 
 - `docs/DOC_ONE_PAGER.md`: what the Studio is, for the FB community — how it works, what a

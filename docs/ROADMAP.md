@@ -14,7 +14,7 @@ The generated app talks directly to a SQLite database.
 | 2. Form and List XIB parts per entity | done — awaiting build |
 | ↳ Separate Generate XIBs / XIB / Binding Code / App; generated binding code | done — awaiting build |
 | ↳ Generated app is an FB project (groups, `.main`) with starting templates: EventHandlers, Menus, Windows | done — awaiting build |
-| 3. App shell: entity navigator + List + Form, SQLite data layer (query builder packaged), per-entity event handlers (FB event model) | in progress — shell, pages and branding done (`features/APP_SHELL_FEATURE.md`); awaiting build |
+| 3. App shell: entity navigator + List + Form, SQLite data layer (query builder packaged), per-entity event handlers (FB event model) | in progress — shell, pages, branding, New / Save / Delete / Refresh through the rules done (`features/APP_SHELL_FEATURE.md`); awaiting build |
 | 4. Crumb trail and page stack | |
 | 5. Related lists in tabs (master-detail), drill-in (`_tableViewDoubleAction`) | |
 | 6. Hook files for hand-written code (created only if missing) | |
@@ -32,10 +32,17 @@ The generated app talks directly to a SQLite database.
 - Git (init/commit on generation, status, push/pull) and GitHub (create repo, PRs).
 - Settings for ALS/APIs, AI/LLM providers, SMTP notifications.
 
-## Phase 4 — API middleware edition
+## Phase 4 — Enterprise edition (paid, after the Lite release)
 
-- ALS JSON:API as a second data source behind the same data interface (the
-  existing ALS client as its starting point); login, paging, relationships.
+Design: `design/Editions and Licensing.md`. A three-tier app over API Logic Server behind the same
+data interface as Lite (`App Data`); private repository; licence checked offline by the Studio only.
+
+| Step | Status |
+|---|---|
+| Data interface `App Data` with the Lite implementation; edition hook `Edition.incl` | done — awaiting build |
+| Licence option (portable checksum / signed file / online) | open — author |
+| Private repository; `App Data Enterprise.incl`, sign-in, `declare_logic.py` export | |
+| License Server: FB Studio product and licence format | |
 
 ## Phase 5 — Rules
 

@@ -11,7 +11,7 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│            │ © 2026 Your Company, LLC                                     │  footer
+│            │ © 2026 Your Company   Saved.     [New][Save][Delete][Refresh]│  footer
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -19,8 +19,12 @@ Every app generated from a SQLite project opens in the same frame:
   current page is highlighted.
 - **Header:** the business logo, the app name and the tag-line on the left; the theme menu
   (System / Light / Dark) and **Log In** on the right.
-- **Footer:** the copyright.
+- **Footer:** the copyright, a status line ("Saved.", a refused save's reason), and the page
+  actions New, Save, Delete, Refresh (also the *Records* menu).
 - **Content:** a page per entity, its List above its Form. Choosing a row shows it in the Form.
+- **Data:** the pages call the app's data interface (`App Data Lite.incl`: `AppDataList`,
+  `AppDataSave`, `AppDataRemove`, answers in `AppDataDone`); saves go through the rules. The
+  Enterprise edition will replace only that file (`design/Editions and Licensing.md`).
 
 ## Where
 
@@ -51,8 +55,8 @@ without a copyright the footer says `© <app name>`.
   menu's Light / Dark / System (`AppSetAppearanceNamed`, `AppSetAppearance( NULL )`) just works.
 - **Readable output for the FB community.** Every generated file opens with what it is, whether
   it is regenerated, and developer notes; `README.md` explains the project group by group.
-- **ALS projects** keep the ALS runtime's master-detail window for now (`App Pages.incl` is still
-  generated, and harmless).
+- **ALS projects:** an app over an API Logic Server is the Enterprise edition (roadmap); in Lite,
+  Generate App explains how to make the project from the server's SQLite database.
 - **Generator Edit menu** (`editmenu`) added so the logo well takes Paste; *Generate XIBs* moved
   from ⌘X (Cut) to ⇧⌘X.
 
@@ -64,3 +68,5 @@ without a copyright the footer says `© <app name>`.
       tag-line, theme menu, Log In), footer; each nav button shows its page; a List's row fills the Form.
 - [ ] Theme menu: Light / Dark / System switch the window's appearance; the nav bar stays dark blue.
 - [ ] Resize: the nav bar keeps its width; header and footer stretch; the List grows.
+- [ ] New → fill in → Save adds a row; choose a row → change → Save updates it; a constraint's
+      message appears when a save is refused; Delete asks, then removes; Refresh re-reads.

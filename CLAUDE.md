@@ -25,6 +25,7 @@ mode work without extra code).
   - `Type Mapping.incl` — the rules: control kind, FB type, size, Title, widths, plus the designer's adjustments (`design` per attribute, saved in `Design.json`).
   - `XIB Generator.incl` — Form and List parts per entity; `Model Tags.incl`; model entries.
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
+  - `Edition.incl` — which edition the Studio generates (this repo: Lite only; the paid build replaces this file). `docs/design/Editions and Licensing.md`.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
@@ -43,8 +44,9 @@ mode work without extra code).
   - LogicBank for FutureBasic (clean-room) — `Logic Rules.incl` (declare, activate, order),
     `Logic Row.incl` (what a rule reads), `Logic Engine.incl` (LogicInsert / LogicUpdate /
     LogicDelete). Rules are FB functions registered with `@fn` and called through a C cast.
+  - `App Data Lite.incl` — the app's data interface (list / save / remove / login, answers in `AppDataDone`), Lite edition: SQLite + the rules engine.
   - `App Shell.incl` — the generated app's frame: nav bar, header, footer, pages, theme menu (`features/APP_SHELL_FEATURE.md`).
-  - `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl`, `Binding Support.incl`.
+  - `Binding Support.incl`. `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` are no longer copied into apps: the start of the Enterprise runtime, to move to its private repository.
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (bundled as the `../Templates` folder): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`, `App/Theme.incl` (the colours), `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
@@ -63,6 +65,7 @@ mode work without extra code).
   `make_logic_test.py` (builds the FB test project for the same scenarios, to run on a Mac),
   `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
   `check_erd_page.py` (test: the model diagram page in headless Chromium),
+  `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 
