@@ -20,7 +20,8 @@ Runs, in order:
     1. fblint on src/ (and on Test_Xib_View when it is cloned beside this repository)
     2. the logic engine's scenarios      (tools/logic_reference.py --test)
     3. every rule proven                 (tools/logic_reference.py --prove)
-    4. the FB test project assembles and lints clean (tools/make_logic_test.py)
+    4. the rules bridge: declare_logic.py import / export, check, FB generation (tools/rules_bridge.py --test)
+    5. the FB test project assembles and lints clean (tools/make_logic_test.py)
 
 The FutureBasic_Documentation clone (default: beside this repository) provides the toolbox
 headers and the Northwind database; the database is only ever copied, never changed.
@@ -59,6 +60,7 @@ if [ -d "$here/../Test_Xib_View" ] || [ -d "$here/../test_xib_view" ]; then
 fi
 run "logic engine: scenarios (Python reference)" python3 "$here/tools/logic_reference.py" --test "$db"
 run "logic engine: every rule proven (each rule left out must fail a scenario)" python3 "$here/tools/logic_reference.py" --prove "$db"
+run "rules bridge: declare_logic.py import / export, Rules.json check, FB generation" python3 "$here/tools/rules_bridge.py" --test "$db"
 
 work=$(mktemp -d)
 run "logic engine: the FB test project builds from the runtime and lints clean" sh -c "python3 '$here/tools/make_logic_test.py' '$db' '$work/LogicTest' >/dev/null && python3 '$here/tools/fblint.py' --headers '$headers' '$work/LogicTest'"

@@ -6,16 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-24 — Imagery LogicBank Studio for FutureBasic: name and logo
+## 2026-11-24 — Rules bridge: declare_logic.py import / export, Rules.json, FB generation
 
-- The product name is shown in the window title, the Welcome view (title and tagline), the
-  server form and the generator's own About box (`Credits.rtf`); the Welcome copyright line
-  is corrected ("Imagery Business Systems").
-- The canonical Imagery logos (byte-identical to Imagery LogicBank Studio's, checksums
-  0554a91d… and 8b4dcd39…) replace the "cloud" symbol. `Branding.incl`: `ImageryLogo`, one
-  image that draws the colour or the white logo for the current appearance, so it follows
-  light and dark mode by itself.
-- Author's decision: display name only for now; the project file, app bundle, bundle id and
-  Application Support folder are renamed later (backlog).
+- `tools/rules_bridge.py`: `import` reads LogicBank's `declare_logic.py` with Python's `ast`
+  and translates `lambda row:` rules into the engine's FB (attributes by model type:
+  `LogicDouble` / `LogicString`; `is None` → `LogicIsEmpty`; parent references; `and` / `or` /
+  `not`; child lists and parent roles found from the model). Rules it cannot translate
+  (Python functions, conditional expressions, events) arrive switched off with their Python
+  kept. `export` writes them back (unchanged imports as they came; edits translated from FB);
+  `check` validates names and cycles; `generate` writes the app's `Studio Rules.incl`.
+- Decision: Python owns import / export / generation — parsing Python is Python's job, and
+  every Mac that builds FB has `/usr/bin/python3` (Xcode command-line tools). The generator
+  runs it with FB's Task toolbox; the Rules page itself is FB.
+- Runtime: `LogicParentString` (text parent references).
+- 23 checks, all passing, in `run_tests.sh`.
 
 ---

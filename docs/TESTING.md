@@ -21,6 +21,7 @@ tools/run_tests.sh
 | `fblint` on `src/` (and Test_Xib_View beside this repo) | every FB file follows `reference/FB Coding Rules.md`: typed fns, comments, CR endings, toolbox names and argument counts, keywords as names, `for … in`, block balance, build order | `0 problems` |
 | `logic_reference.py --test` | the logic engine's behaviour, scenario by scenario, on a copy of Northwind (the Python reference follows the FB code function by function) | `70 scenarios, 0 failed` |
 | `logic_reference.py --prove` | every rule is really tested: each rule left out in turn makes a scenario fail | `20 rules, 0 not proven` |
+| `rules_bridge.py --test` | `declare_logic.py` → `Rules.json` (lambdas translated to FB, the rest switched off with its Python kept), `check`, FB generation lints with the runtime, export and the round trip back | `23 checks, 0 failed` |
 | `make_logic_test.py` + `fblint` | the FB test project assembles from the real runtime files and lints clean, build order included | `0 problems` |
 
 Run any one of them alone:
