@@ -136,6 +136,19 @@ you regenerate. Clear a cell to go back to the recommendation.
 
 **Done** saves everything in `Project.json`.
 
+### 7.1 The model diagram
+
+*Model → Show Model Diagram* (⇧⌘D) opens the project's **entity-relationship diagram** in your
+browser (`<project>/Model ERD.html`): every entity, its attributes and keys, every relationship
+(crow's foot = many; dashed = optional), and the **business rules** drawn where they act —
+ƒ formula, Σ sum, # count, ⇣ copy, ! parent required on the attributes; ✓ constraint and ⚡ events
+in the header; ⊘ delete action on the relationship.
+
+Drag an entity by its header; the triangle opens and closes it. Click an entity to see its
+relationships, rules and attributes in the side panel. Scroll to zoom, drag the background to
+move, *Find* an entity or attribute, switch the theme, and **Export SVG** to keep a copy.
+Details: `features/MODEL_DIAGRAM_FEATURE.md`.
+
 ## 8. Generating the app
 
 From the *Model* menu:
@@ -461,6 +474,7 @@ Paste a Build Log or NSLog lines into a session when something is unclear.
 | | Generate App | ⌘G |
 | | Import Rules from declare_logic.py… · Export Rules to declare_logic.py… | |
 | | Show Workspace in Finder | |
+| | Show Model Diagram | ⇧⌘D |
 
 *Preferences…* (⌘,) does nothing yet.
 

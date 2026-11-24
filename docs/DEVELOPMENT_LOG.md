@@ -6,6 +6,24 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Model diagram: an interactive ERD with the rules on it
+
+- *Model → Show Model Diagram* (⇧⌘D): `ERD Generator.incl` (FB) fills
+  `Templates/ERD/Model ERD.html` with the model as the generator holds it and the project's
+  `Rules.json`, writes `<project>/Model ERD.html` and opens it.
+- The page: crow's-foot ERD with PK / FK markers, optional relationships dashed, self
+  relationships looped; rule symbols (ƒ Σ # ⇣ ! ✓ ⚡ ⊘), faded when switched off; drag, open /
+  close, select (relationships highlighted, side panel with rules, parents, children,
+  attributes), find, zoom and pan, Arrange, five themes, Export SVG; state kept per project.
+- `tools/check_erd_page.py` (test only) fills the page the same way and drives it in headless
+  Chromium; added to `run_tests.sh`.
+- Decision (author): the Studio's tools are FutureBasic, not Python. A first Python generator for
+  the diagram was dropped before commit; `rules_bridge.py` is now a backlog item to port.
+- Northwind has no foreign key from Product to Supplier, so Supplier stands alone in the diagram —
+  the diagram shows the database as it is.
+
+---
+
 ## 2026-11-24 — App shell: a common look for generated apps; branding in the Studio
 
 - `src/Runtime/App Shell.incl`: the frame of every generated (SQLite) app, built in code from

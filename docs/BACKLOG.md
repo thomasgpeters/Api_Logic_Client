@@ -39,6 +39,21 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Form controls for assigned keys: editable on New, read-only after; identity keys read-only
 - [ ] `guid` key kind: generate with `UUIDString( UUIDInit )`, stored lower-case `TEXT`
 
+## Model diagram (`features/MODEL_DIAGRAM_FEATURE.md`)
+
+- [x] ERD page: entities, keys, relationships (crow's foot, optional), rule symbols; drag, open / close, select, find, themes, Export SVG
+- [x] *Model → Show Model Diagram* (`ERD Generator.incl`, FB)
+- [ ] Verify on a Mac (feature page → Verify)
+- [ ] Show the diagram inside the Studio (a WKWebView window) instead of the browser
+- [ ] Click a rule symbol to open it on the Rules page (once the Rules page exists)
+- [ ] ALS projects: relationships from the metadata (ALS `/metadata` lists them per resource)
+
+## Tools in FutureBasic (author, 2026-11-24)
+
+- [ ] Port `tools/rules_bridge.py` into the generator in FB: `Rules.json` check and `Studio Rules.incl`
+      generation first (plain FB), then `declare_logic.py` import / export (needs a small parser
+      for LogicBank's `Rule.*(...)` calls and their lambdas, written in FB)
+
 ## Data layer
 
 - [x] Data runtime: SQLite records layer in `src/Runtime` (the shell and the rules engine sit on it) — `features/DATA_RUNTIME_FEATURE.md`
