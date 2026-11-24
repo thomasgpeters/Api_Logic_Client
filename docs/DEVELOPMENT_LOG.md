@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Navigation items at the top of the bar (second fix)
+
+- The flipped scroll-view document (78be389) still left the navigation buttons at the bottom on
+  the author's Mac. Replaced: no scroll view, no flipped view. The buttons and the highlight are
+  placed in the window, measured from the navigation bar's top edge (`ShellNavItemY`), with a fixed
+  top margin (`NSViewMinYMargin`), the plain Cocoa way. A model with more entities than the bar's
+  height holds needs scrolling again later (BACKLOG).
+
 ## 2026-11-24 — Generated app builds without warnings
 
 - clang warned about five unused variables in `DataObject.incl` (`selectfilterArrayRef`,

@@ -27,6 +27,8 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 
 ## App shell — lite edition (see `design/App Shell Design.md`)
 
+- [ ] Navigation bar: scroll when there are more entities than fit (removed for now: the flipped scroll view left the items at the bottom)
+
 - [x] List XIB part per entity
 - [x] Entity definitions with recommendations; designer adjustments in `Design.json`
 - [x] Separate commands: Generate XIBs / XIB / Binding Code / App
