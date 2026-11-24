@@ -16,6 +16,10 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   next Generate App.
 - FB: `Redefined variable … projectFolderURL` — a local named like a global (FB forbids it).
   Renamed; `fblint` now reports a local that redeclares a global of the same project.
+- The Studio builds and launches; the open panel was read as asking for a place in `~/Library`
+  (hidden). It asked for the repository. Now the Studio finds the repository itself from its own
+  app's location (FB builds it in `src/Generator`) and copies without asking; the panel remains a
+  fallback, with clearer words. The Application Support folders are created as needed.
 
 ---
 

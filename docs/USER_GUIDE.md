@@ -153,10 +153,12 @@ Details: `features/MODEL_DIAGRAM_FEATURE.md`.
 
 From the *Model* menu:
 
-**On first launch** (and whenever they are missing), the Studio asks for your
-**Api_Logic_Client folder** (the repository) and copies its `src/Runtime` and `src/Templates` into the
-workspace (`workspace/Runtime`, `workspace/Templates`): every generated app is made from those.
-After pulling a newer version, choose *Model → Update Runtime and Templates…* to copy them again.
+**On first launch** (and whenever they are missing), the Studio copies the runtime and templates
+(`src/Runtime`, `src/Templates`) from the repository it was built in, which it finds from where its
+own app sits, into its own folder: `~/Library/Application Support/Imagery LogicBank Studio for
+FutureBasic/workspace/Runtime` and `…/Templates`, creating the folders as needed. Only when it cannot
+find the repository does it ask you to choose the Api_Logic_Client folder you cloned (not a folder in
+Library). After pulling a newer version, choose *Model → Update Runtime and Templates…*.
 
 
 | Command | Key | Writes into `FBapp/` |
