@@ -528,28 +528,30 @@ list (and names it); the Control popup needs an attribute selected in the table.
 |---|---|---|---|
 | Project | New Project… | ⌘N | |
 | | Open Project… | ⌘O | |
-| | Recent Projects · Clear Recent Projects | | |
+| | Recent Projects | ⌘1 | |
+| | Entity Definitions | ⌘2 | a project |
+| | Clear Recent Projects | | |
 | | Close Project | ⇧⌘W | a project |
 | | Project Settings… | ⌘; | a project |
-| | Show Project in Finder | | a project |
+| | Show Project in Finder | ⌥⌘R | a project |
 | | Delete Project… | | a project, or one selected in Recent Projects |
 | Edit | Undo · Cut · Copy · Paste · Select All | ⌘Z ⌘X ⌘C ⌘V ⌘A | |
 | Model | Open SQLite Database… | ⌘D | |
 | | Open API Logic Server Metadata… | ⌘J | |
 | | Show Model Diagram | ⇧⌘D | a project |
-| | Import Rules… · Export Rules… | | a project |
+| | Import Rules… · Export Rules… | ⌥⌘I · ⌥⌘E | a project |
 | Generate | Generate App | ⌘G | a project |
 | | Generate XIBs | ⇧⌘X | a project |
 | | Generate XIB for *entity* | ⌘E | an entity selected |
 | | Generate Binding Code | ⌘B | a project |
-| | Show Generated App in Finder | | a project |
-| | Update Runtime and Templates… | | |
+| | Show Generated App in Finder | ⌥⌘G | a project |
+| | Update Runtime and Templates… | ⌥⌘U | |
 | Window | Minimize · Zoom · Close | ⌘M · · ⌘W | |
 | Help | Imagery LogicBank Studio Help (this guide) | ⌘? | |
-| | Show Workspace in Finder | | |
+| | Show Workspace in Finder | ⇧⌘K | |
 
-**Toolbar:** *Projects* (the Welcome view: new, open, recent), *Entities* (the open project's
-entity definitions), *Diagram* (Show Model Diagram), *Generate* (Generate App), *Settings*
+**Toolbar:** *Projects* (⌘1: the Welcome view, new, open, recent), *Entities* (⌘2: the open
+project's entity definitions), *Diagram* (Show Model Diagram), *Generate* (Generate App), *Settings*
 (Project Settings). All but Projects need a project.
 
 ## 17. What is not built yet

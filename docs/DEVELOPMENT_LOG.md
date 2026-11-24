@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Keyboard shortcuts for the Studio's commands (author)
+
+- `Menus.incl`: ⌘1 Recent Projects, ⌘2 Entity Definitions (a new Project menu item, the
+  toolbar's Entities), ⌥⌘R Show Project in Finder, ⌥⌘I / ⌥⌘E Import / Export Rules, ⌥⌘G Show
+  Generated App, ⌥⌘U Update Runtime and Templates, ⇧⌘K Show Workspace; the option-command ones
+  through the `menu` statement's modifier mask. Delete Project has none on purpose. Toolbar
+  tooltips name the shortcut (in words: no new non-ASCII string literals).
+
 ## 2026-11-24 — Studio review step 1: menus, toolbar, commands enabled by state
 
 - `Menus.incl` (moved before the other includes so every file can call it): Project / Edit /
