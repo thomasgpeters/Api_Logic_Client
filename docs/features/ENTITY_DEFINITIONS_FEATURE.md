@@ -39,6 +39,15 @@ recommendation. All adjustments are saved to `~/Library/Application Support/Imag
 and re-applied whenever the model is opened. Every generator reads attributes only
 through `TypeMapAttribute…` functions, so what the designer sees is what gets generated.
 
+## Values column
+
+`Values` (editable, design key `values`): a comma-separated value list for Radio buttons or a
+Dropdown (`TypeMapAttributeValues`). For a foreign key without a list it shows what the Dropdown
+offers, `→ person.givenName` (`TypeMapValuesText`); typing a list replaces the lookup, clearing
+the cell restores it. Radio buttons without a list (or with more than 8 values) become a
+Dropdown; a Dropdown with neither a list nor a lookup becomes the type's own control
+(`TypeMapAttributeKind`).
+
 ## Control popup
 
 Beside the Form layout popup (`_controlPopup`, created in `Windows.incl`). Selecting an attribute

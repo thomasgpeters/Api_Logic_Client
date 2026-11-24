@@ -90,7 +90,30 @@ def read_model(path):
         if parent in resources:
             resources[parent]['relationships'].append({'name': tomany, 'direction': 'tomany', 'resource': child,
                                                        'fks': fk['fks'], 'parentKeys': fk['parentKeys']})
+    for fk in foreign_keys:                      # a single-column foreign key looks its parent up (Dropdown)
+        parent = resources.get(fk['parent'])
+        if parent is None or len(fk['fks']) != 1 or not fk['parentKeys'][0]:
+            continue
+        for a in resources[fk['child']]['attributes']:
+            if a['name'] == fk['fks'][0]:
+                a['lookup'] = {'entity': fk['parent'], 'key': fk['parentKeys'][0],
+                               'display': display_attribute(parent, fk['parentKeys'][0])}
     return resources
+
+
+def display_attribute(parent, key):
+    """The column a lookup shows (SQLiteModelDisplayAttribute): name / title / description / label,
+    else one whose name contains "name", else the first text column that is not a key, else the key."""
+    found = first_text = None
+    for a in parent['attributes']:
+        lower = a['name'].lower()
+        if lower in ('name', 'title', 'description', 'label'):
+            return a['name']
+        if found is None and 'name' in lower:
+            found = a['name']
+        if first_text is None and not a['pk'] and ('CHAR' in a['type'].upper() or 'TEXT' in a['type'].upper()):
+            first_text = a['name']
+    return found or first_text or key
 
 
 def main(argv):

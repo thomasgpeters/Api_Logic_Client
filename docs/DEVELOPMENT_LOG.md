@@ -6,6 +6,28 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Form designer 3: Dropdowns, radio buttons, value lists; the Form layout popup
+
+- `SQLite Model.incl` (and `tools/sqlite_model.py`): a single-column foreign key gets
+  `lookup` { entity, key, display }; `SQLiteModelDisplayAttribute` picks the column to show.
+  contacts.sqlite: `address.personID` and `contact.personID` look up `person` showing `givenName`.
+- `Type Mapping.incl`: `_xibKindRadio`, `_xibKindDropdown`; a lookup recommends Dropdown;
+  `TypeMapAttributeValues` (the Values column), fallbacks when a choice has nothing to offer;
+  the Values column shows a lookup as `→ person.givenName`.
+- `XIB Generator.incl`: an empty `popUpButton`; radio groups in their own view (side by side or
+  stacked); heights per attribute (`XibFormFieldHeight`); Model.json fields carry `values` / `lookup`.
+- `Binding Generator.incl`: Choice and Radio show / take; `<Entity>FormSetUp`, `<Entity>Lookups`,
+  `<Entity>FillLookup`.
+- Runtime: `Binding Support.incl` choices (keys per tag, the wanted value kept for late rows,
+  radio tags and exclusivity); `App Data Lite.incl` `AppDataLookup` -> `_appDataLookup`.
+- App Pages: lookups requested when a page is shown, filled on the answer; value lists set up
+  when the page is built; radio clicks handled first in AppPagesDoDialog.
+- The Studio: the Values column in the attribute table (ProjectDetailView.xib).
+- Form layout popup (author: "pops back to automatic and never sets"): cause not found by
+  reading; the choice now logs the item and the entity, and the popup is redrawn from what was
+  stored - the log will show where it is lost.
+- fblint caught `text` (an FB keyword) as a variable name.
+
 ## 2026-11-24 — App and entity icons; a larger app name centred on the icon
 
 The author asked for the app's name in larger type, centred up and down beside the icon, and

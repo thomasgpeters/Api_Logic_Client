@@ -33,6 +33,15 @@ regenerations. Constants for every tag go to `Model Tags.incl`
   `XibDatePickerElement` writes all three, with the matching `datePickerElements`. Bindings
   (`Binding Support.incl`) store `yyyy-MM-dd`, `HH:mm:ss`, `yyyy-MM-dd HH:mm:ss` through an
   en_US_POSIX formatter; a stored ISO `T` separator and a date-only value are read too.
+- **Choices:** a Dropdown is an empty `popUpButton`, filled when the app runs: a value list in
+  `<Entity>FormSetUp` (`BindingFillChoices`), a lookup table's rows in `<Entity>FillLookup`
+  (`BindingFillLookup`, after `AppDataLookup` answers `_appDataLookup`). Item 0 is empty (NULL);
+  each item's value is kept per tag (`gBindingChoiceKeys`) and the value a record wants is kept
+  too (`gBindingChoiceWanted`), so rows that arrive after the record (a server) still select it.
+  Radio buttons sit in a `customView` with the field's tag; button n has tag
+  30000 + field tag × 10 + n (`BindingRadioTag`); `BindingRadioClicked` turns the others off.
+  Model.json carries a choice's `values` or `lookup` ({ entity, key, display }), which
+  `SQLite Model.incl` sets on a single-column foreign key.
 - **Type → control:** VARCHAR/CHAR → text field (width from length, capped);
   TEXT → one-line field, 280 wide (SQLite declares every string TEXT; the designer can choose Text
   area); CLOB / MEDIUMTEXT / LONGTEXT → text area; integer types → right-aligned field with integer formatter;

@@ -24,7 +24,11 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Verify on a Mac: the Form layout popup in the entity view; a 3-column Form; a Hidden field; the read-only key on New / Save
 - [x] 2. Date and time widgets: Time picker, Date and time picker; the Control popup in the entity view (choose from a list; Recommended clears it)
 - [ ] Verify on a Mac: the Control popup follows the selected attribute; a TIME and a DATETIME column round-trip through Save
-- [ ] 3. Choices: Checkbox (any yes/no column), Radio buttons and Dropdown, from a value list the designer types in or, for a foreign key, the lookup table's rows (the parent's key stored, a display column shown); App Data gets a lookup call so the Enterprise edition can answer it from the server
+- [x] 3. Choices: Radio buttons, Dropdown (a value list in the Values column, or a foreign key's lookup table: the parent's key stored, a display column shown), Checkbox; `AppDataLookup`
+- [ ] Verify on a Mac: a foreign key's Dropdown lists the parent's rows and Save stores the key; a value list Dropdown; Radio buttons (one at a time); the Form layout popup keeps its choice (log lines "Form layout popup: item …")
+- [ ] Choose the lookup's display column (or several: "givenName surname"); show the display value in the List instead of the key
+- [ ] Studio audit (author, 2026-11-24): the toolbar (Project, Object, Generate, Settings) does nothing; context menus on list items; disable menu items that do not apply (no project: no Generate); regroup the menus
+- [ ] Generated app: one window with pages (today) or a window per entity (author, 2026-11-24) - a project setting
 
 ## App shell — lite edition (see `design/App Shell Design.md`)
 

@@ -116,7 +116,8 @@ Click an entity in the list. Its **attribute table** shows, for every column:
 | Size | text length or numeric size | |
 | Key | primary key and how it is made (identity, autoincrement, assigned) | |
 | Required / Default | from the database | |
-| **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, **Read-only text**, **Hidden** | ✓ |
+| **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, **Radio buttons**, **Dropdown**, **Read-only text**, **Hidden** | ✓ |
+| **Values** | a value list for Radio buttons or a Dropdown (`Retail, Wholesale, Online`); for a foreign key, what its Dropdown shows (`→ person.givenName`) | ✓ |
 | **Form Width** / **List Width** | in points | ✓ |
 | Adjusted | ✓ when you changed something | |
 
@@ -132,6 +133,13 @@ you regenerate. Clear a cell to go back to the recommendation.
   time picker, TIME a time picker. You can still type a control's name in the Form Control cell.
 - Dates are stored as `1996-07-04`, times as `14:30:00`, dates with times as
   `1996-07-04 14:30:00`: the forms SQLite's date and time functions read.
+- **Dropdown**: a foreign key gets one by default. It lists the rows of the table it refers to,
+  showing a readable column (its *name*, *title* or *description*, a column whose name contains
+  "name", else its first text column) and storing the key. Type a value list in **Values** to
+  offer those values instead. The first item is empty: no value.
+- **Radio buttons**: one per value of the **Values** list (up to 8; with more, or with no
+  list, the attribute gets a Dropdown). Side by side when they fit, else one under the other.
+- **Checkbox**: for yes / no columns (BOOLEAN, BIT); stored as 1 or 0.
 - **Read-only text** shows a value without letting the user change it. A key the database
   makes for you (an `INTEGER PRIMARY KEY`, with or without `AUTOINCREMENT`) is read-only by
   default; a key you type yourself (a customer code, say) stays a text field.
