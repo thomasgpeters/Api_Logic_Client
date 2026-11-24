@@ -6,6 +6,13 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — Generated app builds without warnings
+
+- clang warned about five unused variables in `DataObject.incl` (`selectfilterArrayRef`,
+  `filterDictionaryRef`, `sqlFilterCount`, `columnLogic`, `aLogic`): names in the `local mode` dims
+  before `GenerateSelectSQL` that it never uses (the filter code has its own locals). Removed from
+  both copies, which stay identical: here and *TXV* 32cfa32.
+
 ## 2026-11-24 — Form designer 1: layout columns, Hidden, read-only keys
 
 The author asked for a richer Form designer: 1 / 2 / 3-column forms, hidden fields, read-only
