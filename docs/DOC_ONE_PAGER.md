@@ -9,7 +9,7 @@ and its business rules written for you, in code you can read and keep.**
 
 ## What it is
 
-A generator that runs on your Mac. It reads a data model, either the tables, keys and
+An app builder that runs on your Mac. It reads a data model, either the tables, keys and
 relationships of a SQLite database or the model of an API Logic Server project, and writes a
 complete FutureBasic project for it. You open that project in FutureBasic, build it, and carry on
 from there like any other FB program.
@@ -102,8 +102,8 @@ Rule kinds: ƒ formula · Σ sum · # count · ⇣ copy · ✓ constraint · ⊘
 ## The SQL Generator
 
 Every read and write in a generated app goes through Imagery's SQL Generator, a query builder
-written in FutureBasic. You describe the statement: its tables, columns, joins and filters. The
-generator writes the SQL, with every value sent separately from it.
+written in FutureBasic. You describe the statement: its tables, columns, joins and filters. It
+writes the SQL, with every value sent separately from it.
 
 ```
 // describe the query: tables, columns,
