@@ -38,7 +38,7 @@ dictionaries; `metadata`, `results` unused). INSERT: `insertintotable` + `column
 
 ## The example app
 
-A window (Example popup, Run, Run All, Clear, Reset Database, ?), a rich-text output pane: the FB
+A window (Run All, Clear, Reset Database, ?) and one scrolling rich-text output with every example run at launch (author, 2026-11-25: no example popup): the FB
 (purple), the SQL with a `sqlite>` prompt (blue), the values (teal), results as a SQL command line
 prints them (Menlo, `+---+` borders, numbers right-aligned, "n rows in set", "Query OK, 1 row
 affected"); also to NSLog (Examples > Also Log to NSLog). Help opens `User Guide.txt` in its own

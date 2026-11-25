@@ -4,8 +4,8 @@
 This app runs ten examples on a small CRM database and shows every step: the FutureBasic, the SQL it produces, the values, and the rows that come back.
 
 ## The window
-- **Example** and **Run** (or Return): run one example. The **Examples** menu has them all, with Command-1 to Command-0.
-- **Run All** (Command-R): run all ten, one after another.
+- The window opens with every example already run: one scrolling output, the FutureBasic that builds each statement's dictionaries, a blank line, then its results.
+- **Run All** (Return or Command-R): run all ten again. The **Examples** menu also runs one at a time, with Command-1 to Command-0.
 - **Clear** (Command-K): empty the output.
 - **Reset Database**: make the database again as it started. Examples 6, 7, 8 and 10 change it.
 - **Examples > Also Log to NSLog**: the same output in the NSLog window.

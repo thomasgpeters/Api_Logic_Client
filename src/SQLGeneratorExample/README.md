@@ -12,9 +12,10 @@ MIT licence: use it in free or commercial apps, change it, share it.
 
 ## What you see
 
-Choose an example and press Run (or Run All). For each one the window shows the FutureBasic that
-describes the statement, the SQL it produced, the values for its `?` placeholders, and the result
-as a SQL command line prints it:
+The window opens with all ten examples run, in one scrolling output (Run All runs them again). For
+each one it shows the FutureBasic that builds the statement's dictionaries, then - after a blank
+line - the SQL it produced, the values for its `?` placeholders, and the result as a SQL command line
+prints it:
 
 ```
 sqlite> SELECT "p"."givenName" AS "Given Name", "p"."surName" AS "Surname", "a"."street" AS "Street",

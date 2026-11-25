@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — SQL Generator example: one scrolling output with every result
+
+- The author merged and pulled; the Studio and the example compile and run. For the example: no
+  popup to choose an example - a scrolling text with all the results - and a blank line between the
+  building of the dictionaries and the results. The window now opens with every example run
+  (`ExampleRunAll` at launch, under a short introduction); Run All (Return, ⌘R) runs them again;
+  the example popup and Run button are gone (the Examples menu still runs one). `ShowIntroText`
+  moved to Example Output.incl: fblint caught it called before its file in the build order.
+- The branch merged `origin/main` (merges only, no other changes there).
+
 ## 2026-11-25 — SQL Generator example: window title; Run All shows what it ran
 
 - The author: the window title is now "SQL Generator Example by Imagery Business Systems, LLC";
