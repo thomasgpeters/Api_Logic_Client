@@ -57,10 +57,21 @@ if [ ! -d "$headers" ] || [ ! -f "$db" ]; then
 fi
 
 run "fblint: the generator and runtime" python3 "$here/tools/fblint.py" --headers "$headers" "$here/src"
+txv=""
 if [ -d "$here/../Test_Xib_View" ] || [ -d "$here/../test_xib_view" ]; then
     txv="$here/../Test_Xib_View"; [ -d "$txv" ] || txv="$here/../test_xib_view"
     run "fblint: Test_Xib_View" python3 "$here/tools/fblint.py" --headers "$headers" "$txv"
 fi
+# the SQL Generator module: the runtime's copy, the example project's and Test_Xib_View's are one
+sqlgen_same() {
+    for f in DataObject.glbl DataObject_Super.incl DataObject.incl; do
+        cmp -s "$here/src/Runtime/$f" "$here/src/SQLGeneratorExample/$f" || { echo "differs: src/SQLGeneratorExample/$f"; return 1; }
+        if [ -n "$txv" ]; then cmp -s "$here/src/Runtime/$f" "$txv/$f" || { echo "differs: Test_Xib_View/$f"; return 1; }; fi
+    done
+    echo "SQL Generator: the copies are identical"
+}
+run "SQL Generator: one module, identical in the runtime, the example project and Test_Xib_View" sqlgen_same
+run "pill buttons: one module, identical in the Studio and the runtime" cmp "$here/src/Generator/Pill Buttons.incl" "$here/src/Runtime/Pill Buttons.incl"
 run "logic engine: scenarios (Python reference)" python3 "$here/tools/logic_reference.py" --test "$db"
 run "logic engine: every rule proven (each rule left out must fail a scenario)" python3 "$here/tools/logic_reference.py" --prove "$db"
 run "rules bridge: declare_logic.py import / export, Rules.json check, FB generation" python3 "$here/tools/rules_bridge.py" --test "$db"
@@ -68,6 +79,30 @@ run "rules bridge: declare_logic.py import / export, Rules.json check, FB genera
 work=$(mktemp -d)
 run "logic engine: the FB test project builds from the runtime and lints clean" sh -c "python3 '$here/tools/make_logic_test.py' '$db' '$work/LogicTest' >/dev/null && python3 '$here/tools/fblint.py' --headers '$headers' '$work/LogicTest'"
 rm -rf "$work"
+# the API Logic Server contract (Enterprise): only when a server answers on localhost:5656
+if python3 "$here/tools/als_contract.py" http://localhost:5656 >/dev/null 2>&1 || [ $? -ne 2 ]; then
+    run "Enterprise: the API Logic Server contract, against the server on localhost:5656" python3 "$here/tools/als_contract.py" http://localhost:5656
+    alsdb="${ALS_DB:-}"
+    if [ -n "$alsdb" ] && [ -f "$alsdb" ]; then
+        run "Enterprise: the SQL Generator's two sides give the same rows (SQL on the server's db, JSON:API on the server)" python3 "$here/tools/jsonapi_reference.py" --test "$alsdb" http://localhost:5656
+    else
+        echo; echo "== Enterprise: SQL vs JSON:API side by side - skipped (set ALS_DB to the server's database/db.sqlite)"
+    fi
+else
+    echo; echo "== Enterprise: the API Logic Server contract - skipped (no server on localhost:5656; docs/design/ALS Contract.md)"
+fi
+# the Open ALS Project screen's logic: GitHub addresses always; folders, files and the Studio model
+# on the ALS projects in ALS_PROJECTS; public repositories over raw.githubusercontent.com with ALS_GITHUB=1
+run "ALS project: addresses, folders and files, the Studio model with its lookups" python3 "$here/tools/als_project_reference.py" --test ${ALS_PROJECTS:-} ${ALS_GITHUB:+--github}
+# the ALS model reader (Enterprise): database/models.py read as text, compared with SQLAlchemy's view
+# ALS_PROJECTS: ALS project folders (space-separated); ALS_PYTHON: the Python of the ALS install
+if [ -n "${ALS_PROJECTS:-}" ] && [ -x "${ALS_PYTHON:-}" ]; then
+    for project in $ALS_PROJECTS; do
+        run "Enterprise: models.py read as text = SQLAlchemy's model ($(basename "$project"))" python3 "$here/tools/models_py_reference.py" "$project" "$ALS_PYTHON"
+    done
+else
+    echo; echo "== Enterprise: models.py reader vs SQLAlchemy - skipped (set ALS_PROJECTS and ALS_PYTHON)"
+fi
 run "generated pages: App Pages.incl, as AppPagesSource writes it, lints with the runtime and templates" python3 "$here/tools/check_app_pages.py" "$docs"
 run "model diagram: the ERD page draws the model and rules, opens / closes, drags, selects" python3 "$here/tools/check_erd_page.py" "$db"
 

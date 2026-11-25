@@ -1,210 +1,244 @@
 # Backlog
 
-Open items and ideas, grouped by area. The phase plan is in `ROADMAP.md`;
-what was done and learned is in `DEVELOPMENT_LOG.md`.
+Open items and ideas, grouped by area, with a proposed order at the top. The phase plan is in
+`ROADMAP.md`; what was done and learned is in `DEVELOPMENT_LOG.md`; each feature's page is in
+`features/`. Reviewed in full on 2026-11-25.
 
-## Verify on a Mac (first build of recent work)
+## Priorities (proposal, 2026-11-25 - the author decides)
 
-- [x] Generator builds and runs (2026-11-16)
-- [ ] ⌘D opens `nw/database/db.sqlite`; entity summaries and definitions show
-- [ ] Editing Title / widths in the definitions table (`_tableViewCellTextDidEndEditing`); `Design.json` written and re-applied
-- [ ] Regex Title split (`StringByReplacingOccurrencesOfStringWithOptions`, `$1 $2`)
+1. **A green Mac build.** Everything since the last build (2026-11-24) is lint-clean and tested
+   here but not compiled: the Studio's menus, toolbar and crumb trail, the Form designer's three
+   features, the API Logic Server Project page, pill buttons, and a generated app. One build of
+   the Studio and one generated app, then the Build Log and the checklist below.
+2. **The open bug:** the Form layout popup "pops back to automatic" (needs the log lines below).
+3. **Modern look controls** for generated Forms (the author's current interest): toggle switch,
+   combo box, date / time display, calendar picker, colour picker. Each follows the Form
+   designer's pattern (Control popup -> XIB part -> binding), so they are small and independent.
+   Then the **Map view** (any result set with latitude / longitude on a map, an entity first; a bigger piece: a generic map part, then filling the columns by geocoding).
+4. **Lite release:** a generated app builds and runs on a Mac; tag it. Then post the SQL Generator
+   to the FB list.
+5. **Enterprise data:** `App Data Enterprise.incl` and the connection / sign-in, so an ALS project
+   generates a working three-tier app.
+6. **Rules in FB:** the port of `rules_bridge.py` (Rules.json check, Studio Rules.incl), then the
+   Rules page.
+7. Then the Studio review (context menus), the generated app's toolbar, window layouts, users and
+   roles.
+
+## Waiting on the author
+
+- [ ] **Bug:** Form layout popup - choosing "3 columns" pops back to "automatic". Diagnostics are in
+  (`DesignFormColumnsChosen`): the NSLog lines "Form layout popup: item …" and "Form layout of …"
+- [ ] A crash seen in the Studio (2026-11-24): the author is trying to reproduce it
+- [ ] Studio review: agree the generated app's toolbar (`STUDIO_REVIEW.md` 2.6)
+- [ ] The Modern look: more controls and looks to add to the list
+- [ ] Map view (backlogged; MapKit decided): run `src/MacTests/MapKit Points Test.fb`; location columns for Northwind's test data and their names; layer colours; the bubble's details and menu actions (`design/Map View Design.md`)
+- [ ] Enterprise licensing option (A / B / C, see Parked)
+- [ ] Proposal to Val Huber: percentage offer + the name "LogicBank for FutureBasic"
+- [ ] Rename the FB project and its `.main` to the product name (later)
+
+## Verify on a Mac - everything built since the last Mac build
+
+The Studio
+- [x] Generator builds and runs (2026-11-16); runs again after the 2026-11-24 fixes
+- [ ] Menus regrouped, commands enabled by project / entity / attribute, keyboard shortcuts (`USER_GUIDE.md` §16)
+- [ ] Toolbar: Projects, Entities, Diagram, Generate, Settings; the crumb trail's buttons go back
+- [ ] New Project: Choose… shows the tables; Create opens the definitions
+- [ ] API Logic Server Project (⇧⌘N): drop an ALS project folder; paste `https://github.com/ApiLogicServer/basic_demo` + Read; Create; Employee's two Department keys are Dropdowns; reopen from Recent Projects (`features/ALS_PROJECT_FEATURE.md` → Verify)
+- [ ] Pill buttons on every page, light and dark, Return presses Create; on macOS 15 too if possible (`features/PILL_BUTTONS_FEATURE.md`)
+- [ ] Definitions: editing Title / widths writes `Design.json` and it is re-applied; the regex Title split
+- [ ] Form designer: the Form layout popup; a 3-column Form; a Hidden field; the read-only key on New / Save
+- [ ] Form designer: the Control popup follows the selected attribute; TIME and DATETIME round-trip through Save
+- [ ] Form designer: a foreign key's Dropdown lists the parent's rows and stores the key; a value-list Dropdown; Radio buttons
+- [ ] Record popover: ⓘ beside Order's Customer shows the Customer; "No … chosen" when empty; no button on a value list (`features/RECORD_POPOVER_FEATURE.md`)
+- [ ] Icons: the entity Icon popup and preview, the app symbol in Project Settings, the Dock icon from a picture
+- [ ] Project Settings (⌘;): counter, 250 limit, Done saves
+- [ ] Welcome view: Open Project… and Recent Projects (double-click opens)
+- [ ] Resizing: window minimum 1000 × 620; pages fill and stretch (`features/RESPONSIVE_LAYOUT_FEATURE.md`)
+- [ ] Model diagram (⇧⌘D) - also for an ALS project (its relationships now come from models.py)
 - [ ] `SQLite Access.incl` `cln` declarations compile and link (`-lsqlite3`)
-- [ ] Generate XIBs / XIB / Binding Code / App write the expected files; generated XIBs open in Xcode
-- [ ] New Project view: Choose… shows the tables; Create opens the definitions
-- [ ] Resizing: window minimum 1000 × 620; entity list follows the height; pages fill and stretch — `features/RESPONSIVE_LAYOUT_FEATURE.md`
-- [ ] Project Settings (⌘;): counter, 250 limit, Done saves; generated app's About box shows `Credits.rtf`
-- [ ] Welcome view: Open Project… button and Recent Projects table; double-click opens (see `features/PROJECTS_FEATURE.md`)
-- [ ] FBE bundles the `../Runtime` and `../Templates` folders as resources of the generator
-- [ ] Generated `<project>.fbeproj` opens in FB with its groups and builds; `nibview` in `Windows.incl` places each Form part
 
-## Form designer (author, 2026-11-24; split into three features)
+A generated app
+- [ ] Generate XIBs / XIB / Binding Code / App write the expected files; the XIBs open in Xcode
+- [ ] `<project>.fbeproj` opens in FB with its groups and builds; `nibview` in `Windows.incl` places each part
+- [ ] The shell (`features/APP_SHELL_FEATURE.md` → Verify): navigation at the top, Business Objects heading, header, footer pill buttons (Save accent, Delete red), theme menu
+- [ ] Opens its database copy; New / Save / Delete / Refresh through the rules; the About box shows `Credits.rtf`
+- [ ] Run `tools/make_logic_test.py` on a Mac: the 70 FB logic scenarios pass
 
-- [x] 1. Form layout 1 / 2 / 3 columns per entity; Hidden fields; read-only text, the default for a key the database generates (`features/XIB_PARTS_FEATURE.md`)
-- [ ] Verify on a Mac: the Form layout popup in the entity view; a 3-column Form; a Hidden field; the read-only key on New / Save
-- [x] 2. Date and time widgets: Time picker, Date and time picker; the Control popup in the entity view (choose from a list; Recommended clears it)
-- [ ] Verify on a Mac: the Control popup follows the selected attribute; a TIME and a DATETIME column round-trip through Save
-- [x] 3. Choices: Radio buttons, Dropdown (a value list in the Values column, or a foreign key's lookup table: the parent's key stored, a display column shown), Checkbox; `AppDataLookup`
-- [ ] Verify on a Mac: a foreign key's Dropdown lists the parent's rows and Save stores the key; a value list Dropdown; Radio buttons (one at a time); the Form layout popup keeps its choice (log lines "Form layout popup: item …")
+Shared modules
+- [ ] The SQL Generator example project (`features/SQL_GENERATOR_FEATURE.md` checklist); Test_Xib_View still works with the updated builder
+
+## Modern look - the UI transformation (author, 2026-11-25)
+
+A modern Mac look for the Studio and for the apps it generates, and the native controls a
+generated app's Form can use. Each control: a choice in the Studio's Control popup (Type Mapping),
+the XIB part (XIB Generator), its show / take in the binding (Binding Generator, Binding Support),
+both editions. The author adds to this list.
+
+- [x] Pill buttons (`features/PILL_BUTTONS_FEATURE.md`): `Pill Buttons.incl` (the Studio and the runtime,
+  identical copies); macOS 26: AppKit's capsule (`ButtonSetBorderShape`), macOS 15: the same shape
+  drawn by the layer; the Studio's push buttons; the generated app's footer and Log In; `gThemePillButtons`
+- [ ] Toggle switch (`NSSwitch`): a Control choice for BOOLEAN / yes-no columns, beside Checkbox
+- [ ] Combo box (`NSComboBox`): a value list the user can also type into (Dropdown only picks)
+- [ ] Date, time and date-and-time display: read-only, formatted (short / medium / long, relative
+  "Yesterday") for keys, audit columns and Lists
+- [ ] Calendar date picker: `NSDatePicker`'s graphical (calendar) style, in a popover from the date field
+- [ ] Colour picker (`NSColorWell`): for colour columns, stored as hex text (#RRGGBB)
+- [ ] **Map view** (author, 2026-11-25; design: `design/Map View Design.md`): any result set whose rows carry
+  latitude and longitude columns, on a map - generic, starting with an entity's records (Customer, Supplier).
+  Backlogged for later decisions (author, 2026-11-25)
+  - [x] 0. Decided: Apple's MapKit (author, 2026-11-25), not an HTML / JavaScript map
+  - [ ] 0b. Run `src/MacTests/MapKit Points Test.fb` on a Mac: which mode answers `_mapViewViewForAnnotation`
+    (coloured markers with icons, bubbles with details and a button); paste its "MapTest:" log lines
+  - [ ] 1. One entity's result set: the location columns found by name and type (or chosen); a generic
+    `App Map.incl` (rows + latitude / longitude / title keys -> pins); List | Map; a pin click opens the row's Form
+  - [ ] 2. Several result sets on one map (Customers and Suppliers): layers, a colour each, show / hide
+  - [ ] 3. Any result set: a query's rows (SQL Generator / JSON:API) on the map
+  - [ ] 4. Filling the columns: *Add Location Columns* in the Studio (Lite: ALTER TABLE in the project's copy;
+    Enterprise: the columns to add on the server, then an ALS rebuild); *Locate* in the app - address -> location
+    with Apple's geocoder (`CLGeocoder`; `MKGeocodingRequest` on macOS 26), one at a time, written into the row
+  - [ ] 5. The points (author; details later): each row an icon (the entity's SF Symbol in the layer's colour,
+    `MKMarkerAnnotationViewSetGlyphImage`), a bubble that expands to more of the row's details
+    (`DetailCalloutAccessoryView`), and an interactive menu of actions on the row (a callout button); first a small
+    Mac test of `_mapViewViewForAnnotation` (no FBExample uses it)
+  - [ ] 6. Later: clustering many pins; directions between rows; a small map on the Form
+- [ ] Form Control choices: Image, PDF, Tokens, Thumbnails (e.g. `Employee.PhotoPath` → Image)
+- [ ] More controls and looks (author to add): e.g. steppers and sliders for numbers, a search field over
+  the List, a segmented control for short value lists, glass / rounded panels in the shell
+- [ ] Theme files: CSS-like named styles (colours with light / dark values, fonts, corner radius,
+  shadows) applied to parts; light, dark, colourful, base
+- [ ] `Toast.incl` - an in-app toast (visual effect view + fade) for Saved / refused
+- [ ] Carousel prototype in Test_Xib_View (collection view + Quick Look thumbnails)
+
+## Form designer and the generated app (Lite)
+
+Done: Form layout 1 / 2 / 3 columns, Hidden, read-only keys (`features/XIB_PARTS_FEATURE.md`); Time
+and Date-and-time pickers, the Control popup; Radio buttons, Dropdown (value list or lookup),
+Checkbox; app and entity icons; the shell with New / Save / Delete / Refresh through the rules
+(`features/APP_SHELL_FEATURE.md`); starting templates; a developer README.
+
+- [x] Record popover (author, 2026-11-25; `features/RECORD_POPOVER_FEATURE.md`): an info button beside every lookup
+  Dropdown shows the chosen parent record's details in a popover (Order → Customer, Employee → Department, …)
 - [ ] Choose the lookup's display column (or several: "givenName surname"); show the display value in the List instead of the key
-- [ ] Studio review (author, 2026-11-24) - `STUDIO_REVIEW.md`: step 1 done (menus regrouped, toolbar rethought and wired, commands enabled by project / entity / attribute, New / Close Project, the ALS form's Cancel); step 2 context menus; step 3 small fixes (+ / − under Objects)
 - [ ] Generated app toolbar (author): New, Save, Delete, Refresh, Search, Theme, Log In - proposal in `STUDIO_REVIEW.md` 2.6
-- [ ] Users and roles in generated apps (author, 2026-11-24): sign-in, users, roles (e.g. Admin, Editor, Viewer) deciding who may see, edit or delete each entity; Lite: users in the app's SQLite database; Enterprise: the API Logic Server's. Then an audit trail (who changed which record, when)
-- [ ] Generated app window layouts, a project setting (`design/App Shell Design.md`, Window layouts): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one tab per entity (future)
-
-## App shell — lite edition (see `design/App Shell Design.md`)
-
-- [x] App icon (picture or SF Symbol) and an icon per entity, chosen in the Studio; the app name large, centred on the icon
-- [ ] Finder icon for the generated app: the icon picture as `AppIcon.icns` plus `#plist CFBundleIconFile @"AppIcon"` (FB help, Build System)
-- [ ] Verify on a Mac: the Icon popup and preview, the app symbol popup in Project Settings, the Dock icon from a picture
-
-- [ ] Navigation bar: scroll when there are more entities than fit (removed for now: the flipped scroll view left the items at the bottom)
-
-- [x] List XIB part per entity
-- [x] Entity definitions with recommendations; designer adjustments in `Design.json`
-- [x] Separate commands: Generate XIBs / XIB / Binding Code / App
-- [x] Generated `<Entity> Binding.incl`
-- [x] Shell: entity navigator + List + Form, wired to SQLite — `features/APP_SHELL_FEATURE.md`
-- [x] Studio: branding form in Project Settings (logo well, tag-line, copyright)
-- [x] Generated code readable for FB developers: file headers, developer notes, `README.md` tour
-- [ ] Verify on a Mac: the shell (`features/APP_SHELL_FEATURE.md` → Verify)
-- [ ] Enterprise edition (roadmap, after Lite ships): `design/Editions and Licensing.md` → Roadmap
-- [x] Save / New / Delete / Refresh on a page, through the data interface (`App Data Lite.incl`) and the rules
-- [ ] Lite release: first Mac build of a generated app; fix what the Build Log shows; tag a release
-- [ ] Per-entity event handlers routed from one `on dialog` handler by tag range
+- [ ] Window layouts, a project setting (`design/App Shell Design.md`): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one per entity (future)
+- [ ] Users and roles (author, 2026-11-24): sign-in, users, roles (Admin, Editor, Viewer) deciding who may see, edit or delete each entity; Lite: users in the app's SQLite database; Enterprise: the server's. Then an audit trail (who changed which record, when)
+- [ ] Finder icon: the icon picture as `AppIcon.icns` plus `#plist CFBundleIconFile @"AppIcon"` (FB help, Build System)
+- [ ] Navigation bar: scroll when there are more entities than fit (the flipped scroll view left the items at the bottom; removed for now)
+- [ ] Form fields stretch and List tables fill when the window grows (the same masks as the Studio)
 - [ ] Crumb trail and page stack (drill-in replaces the page; back via crumbs)
-- [ ] Related-list tabs (master-detail) and drill-in
-- [x] App starting templates, created only if missing: `EventHandlers.incl`, `Menus.incl`, `Windows.incl`
-- [ ] Per-entity hook files, created only if missing
-- [ ] Optional: open related records in a modal dialog instead of replacing the page
-- [ ] Form controls for assigned keys: editable on New, read-only after; identity keys read-only
-- [ ] `guid` key kind: generate with `UUIDString( UUIDInit )`, stored lower-case `TEXT`
+- [ ] Related-list tabs (master-detail) and drill-in; optionally a modal dialog instead of replacing the page
+- [ ] Per-entity event handlers routed from one `on dialog` handler by tag range; per-entity hook files, created only if missing
+- [ ] Assigned keys: editable on New, read-only after (identity keys are read-only already)
+- [ ] `guid` key kind: generated with `UUIDString( UUIDInit )`, stored lower-case `TEXT`
+- [ ] Lite release: the first Mac build of a generated app; fix what the Build Log shows; tag a release
+
+## Enterprise edition - started 2026-11-25 (author: "we must not fall behind" on multi-user, three tiers)
+
+Code in this repository for now (`src/Enterprise`, behind `Edition.incl`), moved to a private
+repository when sold (author). The model is API Logic Server's: Lite points at the SQLite file,
+Enterprise at the ALS project.
+
+- [x] The ALS contract measured against a running server: `design/ALS Contract.md`, `tools/als_contract.py` (25 checks); `ALS Client.incl` follows it
+- [x] The SQL Generator's JSON:API side (`src/Enterprise/DataObject_JSONAPI.incl`, `features/ENTERPRISE_DATA_FEATURE.md`); `AddOrderToQuery` on both sides
+- [x] The ALS model from `database/models.py`, parsed as text (never run): `ALSModelFromModelsPy` (`src/Generator/ALS Model.incl`), tested against SQLAlchemy on Northwind and CRM; older `class X(SAFRSBaseX, Base)` too
+- [x] API Logic Server Project page (`features/ALS_PROJECT_FEATURE.md`): folder, model file or public GitHub repository; typed, chosen or dropped; a copy in `<project>/ALS Model/`; lookups from the relationships, display columns from `admin.yaml`
+- [ ] **Next:** `App Data Enterprise.incl`: the App Data interface over ALS (list with paging, lookups, save with `S_CheckSum` + re-read, remove, login), answers on the main thread; records keep the JSON:API id
+- [ ] Connection: the server's address (the page's API Server, `baseURL`), login paths; a sign-in window for the header's Log In; the token for the session, a remembered password in the Keychain
+- [ ] Multi-user: a stale checksum explained to the user (reload the record, re-apply the change); Refresh reads the server
+- [ ] *Model > Refresh Model from API Logic Server*: read `alsSource` again, replace the copy, keep the design
+- [ ] Private GitHub repositories: a token in the Keychain; GitHub read without blocking the window (URLSession)
+- [ ] `admin.yaml` titles as the attributes' Titles (its `user_key` is used already)
+- [ ] Generate App (Enterprise): `declare_logic.py` from the project's rules (the rules bridge in FB)
+- [ ] `Edition.incl` offers Enterprise (licensing parked)
+- [ ] The Studio's own ALS fetch (the running-server form) uses the form's base URL and credentials (still a hard-coded host and `admin` / `p`), and waits for login before fetching
+- [ ] Kafka (author, 2026-11-25; already used behind ALS in the author's other applications): first through ALS's own Kafka integration (the app keeps talking JSON:API); then a plain-HTTP messaging module in FB for Kafka's REST Proxy, and Redis through an HTTP gateway (Webdis, Upstash) - publish / poll, set / get over URLSession
+
+## Rules - Logic for FutureBasic (`design/Logic Engine Design.md`, ROADMAP Phase 5)
+
+Done: the engine (formulas, constraints, sums / counts with delta and re-parenting, parent
+references, copy, parent check, cascade, delete actions, events, upsert; LB-41) - 70 scenarios and
+20 rules proven in the Python reference; the rules bridge in Python (`features/RULES_BRIDGE_FEATURE.md`).
+
+- [ ] **Next:** port `tools/rules_bridge.py` into the Studio in FB: `Rules.json` check and `Studio Rules.incl` first (plain FB), then `declare_logic.py` import / export (a small parser for LogicBank's `Rule.*(...)` calls and their lambdas)
+- [ ] The Rules page: list, editor (model-driven pop-ups), check, Explain - on `Rules.json`
+- [ ] Recompute command: rebuild stored sums / counts from the data (adjustment assumes they start right)
+- [ ] LB-42: detect dependency cycles through aggregates at activation (today: a depth limit at run time)
+- [ ] LB-40: round sums to the column's scale (decide)
+- [ ] Scenarios per rule and operation (insert / update / delete / upsert), as the Studio tests rules; keep `--prove` at 0 unproven
+- [ ] Computed columns (`Customer.Balance`, `OrderCount`) need the rules: without them the Lite app does not maintain them
+
+## SQL Generator (module, shared on the FB list - `features/SQL_GENERATOR_FEATURE.md`)
+
+Done: the example project (ten examples, Help window, About box, README, announcement draft);
+INSERT of an array of dictionaries; joins fixed; ORDER BY (`AddOrderToQuery`); names quoted.
+
+- [ ] Verify on a Mac (above), then post to the FB list (`ANNOUNCEMENT.md`: your name, the link)
+- [ ] `IN` / `NOT IN` with one `?` per value (today one `?` for the whole list)
+- [ ] UPSERT (`ON CONFLICT ( key ) DO UPDATE SET … = excluded.…`; SQLite 3.24+)
+- [ ] INSERT omits identity keys and returns `last_insert_rowid()`; omits empty columns so defaults apply
+- [ ] The Help window could show the object model (the SVG as a PNG in the text)
 
 ## Model diagram (`features/MODEL_DIAGRAM_FEATURE.md`)
 
-- [x] ERD page: entities, keys, relationships (crow's foot, optional), rule symbols; drag, open / close, select, find, themes, Export SVG
-- [x] *Model → Show Model Diagram* (`ERD Generator.incl`, FB)
-- [ ] Verify on a Mac (feature page → Verify)
 - [ ] Show the diagram inside the Studio (a WKWebView window) instead of the browser
 - [ ] Click a rule symbol to open it on the Rules page (once the Rules page exists)
-- [ ] ALS projects: relationships from the metadata (ALS `/metadata` lists them per resource)
+
+## The Studio
+
+Done: menus, toolbar, crumb trail, shortcuts (`STUDIO_REVIEW.md` step 1); Edit menu; product name
+and Application Support folder; workspace, `Project.json`, the project's database copy; Project
+Settings and branding; Open Project (⌘O) and Recent Projects; New Project from SQLite; API Logic
+Server Project; runtime and templates in the workspace.
+
+- [ ] Studio review step 2: context menus on the entity list and the attribute table (`STUDIO_REVIEW.md`)
+- [ ] Studio review step 3: small fixes (the + / − under Objects)
+- [ ] Preferences… (⌘,): the repository / library folder, the workspace location; a Settings window, `Settings.plist` in Application Support, secrets in the Keychain
+- [ ] More project settings: version, bundle id, theme
+- [ ] Project backup and restore (zip the project folder; restore into the workspace)
+- [ ] `.alcproj` document type: double-click a project in Finder; Open Recent via NSDocumentController
+- [ ] Git via `/usr/bin/git` (NSTask): init / commit on generation, status, push / pull; GitHub REST (create repo, pull requests)
+- [ ] Settings groups for ALS / APIs, AI / LLM providers, SMTP notifications
+- [ ] Generator offers `build_db.py`-style database creation for generated apps
+- [ ] Rename the rest to the product name (author, later): the FB project and its `.main`, the bundle id
 
 ## Installing the Studio
 
-- [x] Runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`), copied from
-      the repository folder on first launch; *Generate > Update Runtime and Templates* (`Studio Library.incl`)
 - [ ] Installer for a release: the Studio app plus the runtime and templates, put into
-      `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/` (a `.pkg` with a per-user
-      postinstall, or a first-launch copy from the installer's disk image), so users need no repository
-- [ ] Preferences (⌘,): the repository / library folder, the workspace location
-
-## Parked: Enterprise edition — revisit after the Lite release (author, 2026-11-24)
-
-Everything needed to pick this up again is in `design/Editions and Licensing.md` (the editions,
-the code split, what the License Server issues today, the licence options, the roadmap).
-Done already: the data interface `App Data` with its Lite implementation, and the edition hook
-`src/Generator/Edition.incl` (Lite only).
-
-When resuming, in this order:
-
-1. [ ] Choose the licence option — author: **A** portable checksum (SHA-256 on the License Server),
-       **B** signed licence file (the server signs, the Studio verifies with `SecKeyVerifySignature`),
-       or **C** online activation (breaks the no-dependency rule). Already decided: offline, Studio only.
-2. [ ] Create the private repository (e.g. `Api_Logic_Client_Enterprise`) and attach it to a session;
-       move `src/Runtime/ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` there.
-3. [ ] Its `Edition.incl` (replaces this repo's): `EditionEnterpriseAvailable` from the licence;
-       Enterprise runtime files, start-up (`gALSHost`, login paths), `EditionRulesInApp` = NO.
-4. [ ] `App Data Enterprise.incl`: list / save / remove / login over JSON:API; a request context per
-       call (URLSession `userData`); answers on the main thread (`dispatchmain`); records keep the
-       JSON:API id for Save and Delete.
-5. [ ] Sign-in window for the header's Log In; token for the session; Keychain for a remembered password.
-6. [ ] Generate App (Enterprise): export `Rules.json` to `declare_logic.py` for the server.
-7. [ ] Studio: an edition choice in Project Settings and a "Licence…" entry (Preferences).
-8. [ ] License Server (its own repository): product `imagery_logicbank_studio_fb`, bit 0 `enterprise`,
-       and the licence format chosen in step 1.
-9. [ ] The paid build: project file, release, distribution from the License Server.
-
-## Tools in FutureBasic (author, 2026-11-24)
-
-- [x] No Python in the Studio's bundle (author, 2026-11-24): Rules Bridge.incl says "coming" for
-      Import / Export and writes an empty `Studio Rules.incl` until the port below
-- [ ] **Next:** port `tools/rules_bridge.py` into the generator in FB: `Rules.json` check and `Studio Rules.incl`
-      generation first (plain FB), then `declare_logic.py` import / export (needs a small parser
-      for LogicBank's `Rule.*(...)` calls and their lambdas, written in FB)
-
-## Data layer
-
-- [x] Data runtime: SQLite records layer in `src/Runtime` (the shell and the rules engine sit on it) — `features/DATA_RUNTIME_FEATURE.md`
-- [ ] Verify on a Mac: generated app opens its database; Test_Xib_View still works with the updated builder
-
-- [ ] UPSERT in the query builder (`ON CONFLICT ( key ) DO UPDATE SET … = excluded.…`; SQLite 3.24+)
-- [x] Quote every identifier in generated SQL (`"Order"`, `"Union"` are reserved words) — query builder `QuoteSQLName`
-- [ ] INSERT omits identity keys and returns `last_insert_rowid()`; omit empty columns so defaults apply
-- [ ] Generator offers `build_db.py`-style database creation for generated apps
-- [ ] Computed columns (`Customer.Balance`, `OrderCount`) are not maintained in the lite edition — see Rules
-
-## Generator app (see `design/Generator App Design.md`)
-
-- [x] Add an Edit menu (`editmenu`) to the generator: Cut / Copy / Paste in its text fields
-- [x] Generate XIBs uses ⌘X, which is Cut on the Mac: moved to ⇧⌘X (author to confirm)
-- [ ] Preferences… (⌘,) does nothing yet
-- [x] Rules bridge in the generator: Import / Export Rules (declare_logic.py), Studio Rules.incl on Generate App — `features/RULES_BRIDGE_FEATURE.md`
-- [ ] The Rules page: list, editor (model-driven pop-ups), check — on `Rules.json`
-
-- [x] Model from a SQLite database — `SQLite Model.incl`
-- [x] New Project view: a project starts from a SQLite database — `features/NEW_PROJECT_FEATURE.md`
-- [x] Product name: **Imagery LogicBank Studio for FutureBasic** — shown in the window title, Welcome view, server form and About box; Imagery logo (2026-11-24)
-- [x] Application Support folder renamed to `Imagery LogicBank Studio for FutureBasic` (2026-11-24); an old `Api_Logic_Client` folder is moved over on first launch, its stored paths fixed (`Studio Library.incl`)
-- [ ] Rename the rest to the product name (author, later): the FB project and its `.main` (`Api Logic Client.fbeproj` → the built app's name in the Dock and menu bar), the bundle id. The repository and folder names may stay.
-- [x] Workspace in `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/`; *Show Workspace in Finder*
-- [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
-- [x] Project Settings view; About text (≤ 250 chars) deployed as `Credits.rtf` — `features/ABOUT_BOX_FEATURE.md`
-- [ ] More project settings: version, copyright, bundle id, app icon, theme
-- [x] Each project keeps its own copy of the database in `<project>/Database/`
-- [ ] Project backup and restore (zip the project folder; restore into the workspace)
-- [ ] Generated app uses the project's database copy (lite data source, step 3)
-- [x] Open Project (⇧⌘O) and Recent Projects on the Welcome view — `features/PROJECTS_FEATURE.md`
-- [ ] `.alcproj` document type: double-click a project in Finder; Open Recent via NSDocumentController
-- [ ] Settings window; `Settings.plist` in Application Support; secrets in the Keychain
-- [ ] Git via `/usr/bin/git` (NSTask): init/commit on generation, status, push/pull
-- [ ] GitHub REST (create repo, pull requests) and generic Git remotes
-- [ ] Settings groups for ALS/APIs, AI/LLM providers, SMTP notifications
-- [ ] Optional `admin.yaml` hints (titles, `user_key`, relationship names)
-- [ ] Generator's own ALS fetch uses the Create Project form's base URL and credentials (still hard-coded host and `admin`/`p`), and waits for login before fetching
-- [x] ~~Move to FB's newer type names~~ — reversed 2026-11-24: FutureBasic 7.0.38 does not know `StringRef`, `URLRef`, …; everything uses the CF names (fblint enforces it)
-
-## Look and feel
-
-- [ ] Generated apps: resizable shell window; Form fields stretch, List tables fill (same masks as the generator)
-
-- [ ] Theme files: CSS-like named styles (colors with light/dark values, fonts, corner radius, shadows) applied to parts; light, dark, colorful, base
-- [ ] `Toast.incl` — in-app toast (visual effect view + fade)
-- [ ] Carousel prototype in Test_Xib_View (collection view + Quick Look thumbnails)
-- [ ] Form Control choices: Image, PDF, Tokens, Thumbnails (e.g. `Employee.PhotoPath` → Image)
-
-## ALS edition
-
-- [ ] ALS data source behind the shell's data interface (from `src/Runtime/ALS Client.incl`)
-- [ ] Paging (today: first `gALSPageLimit` = 100 records)
-- [ ] Relationships from ALS (lookups, child tables)
+  `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/` (a `.pkg` with a
+  per-user postinstall, or a first-launch copy from the disk image), so users need no repository
 
 ## Tooling
 
-- [ ] `tools/xiblint.py`: unique ids, connections that resolve, tags unique per document, frames inside their superview, base64 key equivalents — run on every generated and hand-written XIB
-- [ ] On a Mac: `xcrun ibtool --errors --warnings --notices` on every XIB in `src/Generator` and a generated project (`docs/reference/XIB Reference.md` §5)
-
+- [ ] `tools/xiblint.py`: unique ids, connections that resolve, tags unique per document, frames inside their superview, base64 key equivalents - on every generated and hand-written XIB
+- [ ] On a Mac: `xcrun ibtool --errors --warnings --notices` on every XIB (`docs/reference/XIB Reference.md` §5)
 - [ ] fblint: check statement syntax (e.g. `tableview`'s `columnWidths`)
-- [ ] Python reference for Type Mapping (definitions report) to check the FB rules
-- [ ] Retire or make private `futurebasic-apis`: outdated (pre-7.0.35), superseded by FutureBasic_Documentation, and the toolboxes carry no redistribution license
+- [ ] A Python reference for Type Mapping (the definitions report) to check the FB rules
+- [ ] Retire or make private `futurebasic-apis`: outdated (pre-7.0.35), and the toolboxes carry no redistribution licence
 
 ## Test_Xib_View
 
-- [ ] `BuildMenu` is never called — the File menu (Close ⌘W) is not built; add `fn BuildMenu` to the main program
+- [ ] `BuildMenu` is never called - the File menu (Close ⌘W) is not built; add `fn BuildMenu` to the main program
 - [ ] Remove or keep `OpenSQLite` / `CloseSQLite` (older database path) and `GetCustomers` / `GetAllCustomers` (hand-written SQL)
 - [ ] Wire `InsertPersonRecord` / `UpdatePersonRecord` / `DeletePersonRecord` to the add, save and delete buttons
 - [ ] Have the app run `Database/schema.sql` + `seed.sql` instead of its own copy in `CreateEmptySQLDatabase`
 
+## Parked: licensing and the paid build - revisit after the Lite release (author, 2026-11-24)
+
+Everything needed is in `design/Editions and Licensing.md`. In this order:
+
+1. [ ] Choose the licence option - author: **A** portable checksum (SHA-256 on the License Server),
+       **B** signed licence file (`SecKeyVerifySignature`), or **C** online activation (breaks the
+       no-dependency rule). Already decided: offline, Studio only.
+2. [ ] Create the private repository (e.g. `Api_Logic_Client_Enterprise`); move `src/Enterprise` and
+       `src/Runtime/ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` there.
+3. [ ] Its `Edition.incl` (replaces this repo's): `EditionEnterpriseAvailable` from the licence;
+       Enterprise runtime files, start-up (`gALSHost`, login paths), `EditionRulesInApp` = NO.
+4. [ ] Studio: an edition choice in Project Settings and a "Licence…" entry (Preferences).
+5. [ ] License Server (its own repository): product `imagery_logicbank_studio_fb`, bit 0 `enterprise`.
+6. [ ] The paid build: project file, release, distribution from the License Server.
+
 ## Ideas
 
-### Logic for FutureBasic — engine + Imagery Logic Studio
-Rewrite of [LogicBank](https://github.com/valhuber/LogicBank) (Val Huber) for FutureBasic:
-**FB code is the rules**, a runtime **Logic Engine** enforces them on every save, and an
-**Imagery Logic Studio** built into Api Logic Client authors them. Full design and plan:
-`design/Logic Engine Design.md`; phases in `ROADMAP.md` → Phase 5.
-
-- [x] Study the Python edition (rule types, per-row sequence, delta adjustment, chaining, formula dependencies)
-- [x] Confirm FB can call rules by address (`@fn` + `def fn … using`)
-- [x] License check: current is Apache 2.0 + Commons Clause (since 2026-05-29, `a475a9c`); BSD in setup.py/pyproject is stale
-- [ ] Proposal to Val Huber: percentage offer + use of the name "LogicBank for FutureBasic" (author) — clean-room until then
-- [x] Engine core: formulas (order, pruning), constraints, transactions — `features/LOGIC_ENGINE_FEATURE.md`
-- [ ] Run `tools/make_logic_test.py` on a Mac: the 70 FB scenarios pass
-- [x] Aggregates (sum/count with where, delta, re-parenting, chaining), parent references
-- [x] Copy, parent check, cascade of parent changes to children, delete cascade/nullify/prevent, events
-- [ ] Recompute command: rebuild stored sums/counts from the data (adjustment assumes they start right)
-- [x] LB-41: protect derived sum/count columns from client writes; aggregates start at 0 on insert
-- [ ] LB-42: detect dependency cycles through aggregates at activation (today: depth limit at run time)
-- [ ] LB-40: round sums to the column's scale (decide)
-- [x] Upsert (Studio's fourth operation): `LogicUpsert` — update when the row exists, else insert
-- [ ] Scenarios per rule and operation (insert / update / delete / upsert), as Studio tests rules; keep `--prove` at 0 unproven
-- [ ] Studio: Rules page, `Rules.json`, generated rule files, validation, Explain
-- [ ] Import ALS `logic/declare_logic.py`
+- LogicBank for FutureBasic: offer it back to Val Huber's project (above, waiting on the author).
+- The ALS model's relationships make a Lite app possible from an ALS project too: its
+  `database/db.sqlite` (SQLite projects) with the ALS model's names.

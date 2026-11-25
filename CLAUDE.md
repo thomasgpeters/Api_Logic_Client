@@ -19,6 +19,7 @@ mode work without extra code).
 - `src/Generator/` — the FB project (`Api Logic Client.fbeproj`): open it in the FB
   editor. Its `data.fbproj` (inside the `.fbeproj` bundle) is the build order: an
   `.incl` must come *before* any file that calls it (FB needs definition before use).
+  - `Pill Buttons.incl` — Mac-style pill (capsule) push buttons: AppKit's capsule on macOS 26, drawn by the layer on 15; identical to `src/Runtime`'s copy.
   - `Branding.incl` — the product name and the Imagery logo (`ImageryLogo` follows light/dark); `imagery_logo.png` / `imagery_logo_white.png` are the canonical files, never edited.
   - `API Interface.incl` — ALS connectivity for the generator itself (metadata fetch).
   - `SQLite Access.incl` — our own minimal SQLite declarations (open read-only, prepare, step, columns).
@@ -35,10 +36,23 @@ mode work without extra code).
   - `Rules Bridge.incl` — Import / Export Rules (declare_logic.py) and `Studio Rules.incl` on Generate App; until its port to FB it says "coming" and writes an empty `Studio Rules.incl`.
   - `ERD Generator.incl` — Model > Show Model Diagram: `<project>/Model ERD.html` from the `Templates/ERD` page, the model and `Rules.json`.
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
+  - `ALS Model.incl` — an ALS project's model, parsed as text (never run): `database/models.py`, else `app_model.yaml` / `admin.yaml` (attributes, keys, relationships, display column).
+  - `ALS Project.incl` — where that model is: an ALS project folder, a model file, or a public GitHub repository (raw.githubusercontent.com); the copy in `<project>/ALS Model/`; the ALS model -> the Studio's.
+  - `Open ALS Project.incl` — the API Logic Server Project view (`ALSProjectView.xib`): point at the ALS project (type, Folder…, Model File…, or drop on a subclassed view) → a project (the Enterprise catalyst).
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/CleanApp/` — a project the FB editor created (author, 2026-11-24): the reference for project
-  settings (`Settings2.plist`: SDK, architecture, minimum macOS). Keep the Studio's, the template's
-  and Test_Xib_View's settings in step with it; it is not built or changed by us.
+  settings (`Settings2.plist`: SDK, architecture, minimum macOS) and the starting point of new example
+  projects (its Hello button and menu were removed at the author's request, 2026-11-25). Keep the
+  Studio's, the template's and Test_Xib_View's settings in step with it.
+- `src/SQLGeneratorExample/` — the SQL Generator shared on its own (MIT): the module, a SQLite runner,
+  ten examples on a CRM database, a Help window and About box; README, LICENSE, a draft post for the FB
+  list (`docs/features/SQL_GENERATOR_FEATURE.md`). Its module files stay identical to `src/Runtime`'s
+  and Test_Xib_View's (`run_tests.sh` checks).
+- `src/MacTests/` — single-file FB programs that answer a question on a Mac before a feature is built on it (`MapKit Points Test.fb`: how FB serves MapKit's point views); see `docs/TESTING.md`.
+- `src/Enterprise/` — the Enterprise edition, in this repository for now (author, 2026-11-25; a private
+  repository when it is sold): `DataObject_JSONAPI.incl` (the SQL Generator's JSON:API side: the same
+  statement dictionaries -> ALS requests, on the model `src/Generator/ALS Model.incl` reads). The contract: `docs/design/ALS Contract.md`;
+  references and tests: `tools/als_contract.py`, `tools/jsonapi_reference.py`, `tools/models_py_reference.py`.
 - `src/Runtime/` — our FB code copied into every generated app. Not bundled into the Studio
   (author, 2026-11-24): `Studio Library.incl` copies `src/Runtime` and `src/Templates` into the
   workspace (`workspace/Runtime`, `workspace/Templates`) the first time they are needed, and on
@@ -53,8 +67,8 @@ mode work without extra code).
     `Logic Row.incl` (what a rule reads), `Logic Engine.incl` (LogicInsert / LogicUpdate /
     LogicDelete). Rules are FB functions registered with `@fn` and called through a C cast.
   - `App Data Lite.incl` — the app's data interface (list / save / remove / login, answers in `AppDataDone`), Lite edition: SQLite + the rules engine.
-  - `App Shell.incl` — the generated app's frame: nav bar, header, footer, pages, theme menu (`features/APP_SHELL_FEATURE.md`).
-  - `Binding Support.incl`. `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` are no longer copied into apps: the start of the Enterprise runtime, to move to its private repository.
+  - `App Shell.incl` — the generated app's frame: nav bar, header, footer, pages, theme menu (`features/APP_SHELL_FEATURE.md`); its buttons are pills (`Pill Buttons.incl`, `gThemePillButtons`).
+  - `Binding Support.incl`; `Record Popover.incl` (a lookup Dropdown's info button: the chosen parent's details in a popover). `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` are no longer copied into apps: the start of the Enterprise runtime, to move to its private repository.
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (from `workspace/Templates`, see above): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`, `App/Theme.incl` (the colours), `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
@@ -74,6 +88,11 @@ mode work without extra code).
   `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
   `check_erd_page.py` (test: the model diagram page in headless Chromium),
   `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
+  `make_sql_generator_svg.py` (draws `docs/design/SQL Generator Object Model.svg`),
+  `als_contract.py` (test: the API Logic Server contract, against a running server),
+  `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),
+  `models_py_reference.py` (an ALS project's `database/models.py` read as text; test: against SQLAlchemy),
+  `als_project_reference.py` (the Open ALS Project screen: folders, files, GitHub, the Studio model),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 

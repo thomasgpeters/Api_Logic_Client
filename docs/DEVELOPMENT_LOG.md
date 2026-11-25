@@ -6,6 +6,206 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Map view: Apple's MapKit decided; a Mac test for its points
+
+- The author: use Apple's MapKit (not an HTML / JavaScript map). `src/MacTests/MapKit Points Test.fb`
+  (new folder: single-file programs that answer a question on a Mac first) shows five points and
+  answers `_mapViewViewForAnnotation` four ways, logging what FB passes. Found in FB's headers: the
+  event's getters / setters are generic (`DialogEventObject`, `DialogEventSetObject`,
+  `DialogEventSetView`), and `MKMarkerAnnotationView` has setters but no constructor - the test
+  makes one with a `cln` line (`cln return (__bridge_retained CFTypeRef)…`).
+
+## 2026-11-25 — Record popover: a related record's details beside its Dropdown
+
+- The author (Lite): an Order's Customer Dropdown needs a small icon that shows that Customer's
+  details in a popup - for every relationship. Built generic: the XIB generator puts an info
+  button beside every lookup Dropdown (tag 40000 + the field's); the binding registers the
+  parent's shown fields and titles; Binding Support keeps the lookup's rows so the chosen parent is
+  at hand; `src/Runtime/Record Popover.incl` shows it in an FB popover (FBExamples' pattern:
+  `popover`, labels made into it, `PopoverShow` beside the button). No new query: the same in
+  both editions. `features/RECORD_POPOVER_FEATURE.md`.
+- From FB's reference: `textlabel tag, text, rect, wndTag` alters a label in another window
+  (the popover) without making it the output window.
+
+## 2026-11-25 — Map view backlogged: native MapKit or an HTML map, to decide later
+
+- The author asked whether the map is an HTML view with a JavaScript map or a native Cocoa view,
+  then backlogged the Map view with everything gathered so the decisions can be made later. Cocoa
+  has MKMapView (FB: `mkmapview`, three FBExamples); the comparison (look, key and cost, events,
+  icons and bubbles, geocoding, code) and the one native risk (`_mapViewViewForAnnotation`
+  untried in FB) are in `design/Map View Design.md`; step 0 of the Map view in `BACKLOG.md`.
+
+## 2026-11-25 — Map points: icon, expandable bubble, menu (noted for later)
+
+- The author: the map's points are the result set's rows, each shown as an icon with a bubble that
+  expands to more details and an interactive menu - details to be worked out later. FB's MapKit
+  header has the parts (marker glyph image and tint, callout, detail accessory view, callout
+  buttons, clustering); the per-point view comes through `_mapViewViewForAnnotation`, which no
+  FBExample uses, so a small Mac test comes first. `design/Map View Design.md`, step 5.
+
+## 2026-11-25 — Map view made generic: a result set with latitude / longitude
+
+- The author: more generic - choose the Map view and show a result set whose rows carry a
+  geographic location in latitude and longitude columns; start with an entity's records (Customer,
+  Supplier). The design changed: the map takes rows and the names of their location and title
+  columns (`App Map.incl`), so any entity, several at once (layers) or a query's rows can be shown.
+  Geocoding becomes how a table's location columns are filled (written into the rows), not a cache
+  beside them. Northwind has no location columns: adding them (Lite: ALTER TABLE in the project's
+  copy; Enterprise: on the server, then an ALS rebuild) is step 4. `design/Map View Design.md`.
+
+## 2026-11-25 — Map view designed (records on a map, addresses geocoded)
+
+- The author: a look with a map - an entity's records (Customers) on a map, addresses translated
+  into locations. Found in FutureBasic: `mkmapview`, `MKPointAnnotationWithTitle`,
+  `MKMapViewShowAnnotations`, the pin-selected event `_mapViewDidSelectAnnotationView`, and Apple's
+  geocoder `CLGeocoderGeocodeAddressString` (no key, no location permission; FBExamples *Coordinates
+  from address*); macOS 26 adds `MKGeocodingRequest`. Northwind's places: Customer, Employee,
+  Supplier (Address, City, Region, PostalCode, Country) and Order (Ship…). Design with open
+  questions: `design/Map View Design.md`; steps in `BACKLOG.md` (Modern look).
+
+## 2026-11-25 — Docs brought up to date; the backlog reviewed and prioritized
+
+- The author: bring the user guide, the development log and especially the backlog up to date, then
+  prioritize. `BACKLOG.md` rewritten in full: a proposed order at the top (a green Mac build, the
+  Form layout bug, the Modern look controls, the Lite release, Enterprise data, rules in FB), what
+  waits on the author, one "Verify on a Mac" list for everything built since the last build, and
+  every area's open items. Fixed on the way: ORDER BY was still open (done: `AddOrderToQuery`);
+  the old "ALS edition" section merged into Enterprise (relationships now come from models.py);
+  the diagram's "relationships from /metadata" (it has none) dropped; Open Project is ⌘O; the
+  bundled-runtime check dropped (the runtime is in the workspace now). `IN` with one `?` per value
+  is still open.
+- `ROADMAP.md`: Phase 2 is the Modern look; Phase 4 (Enterprise) started, licensing still parked.
+  `USER_GUIDE.md`: the pill buttons (§12), what is not built yet (§18). `DOC_ONE_PAGER.md`: an ALS
+  project is opened from its folder, file or repository. Commit hashes added to the last entries.
+
+## 2026-11-25 — Pill buttons; the Modern look backlog (`c36220b`)
+
+- The author: a modern Mac look with pill-shaped buttons, and a backlog for the UI transformation
+  (toggle switch, combo box, date / time display, calendar picker, colour picker for generated
+  apps) - `BACKLOG.md`, Modern look.
+- `Pill Buttons.incl` (the Studio and the runtime, identical): AppKit's capsule border shape on
+  macOS 26 (`ButtonSetBorderShape`, found in FB's headers as macOS 26.0+); on macOS 15, the
+  project's minimum, the property does not exist, so the layer draws the same shape. Works on XIB
+  buttons as on code-made ones (found by tag). The Studio's push buttons; the generated app's
+  footer and Log In (`gThemePillButtons` in Theme.incl). `features/PILL_BUTTONS_FEATURE.md`.
+
+## 2026-11-25 — Open ALS Project: a project from the model API Logic Server generated (`e909058`)
+
+- *Project > New Project from API Logic Server…* (⇧⌘N) and **API Logic Server Project…** on New
+  Project open `ALSProjectView.xib`: an ALS project's folder, its model file or a public GitHub
+  repository - typed, chosen (Folder…, Model File…) or dropped. Create keeps a copy in
+  `<project>/ALS Model/` and opens the project from it; `Project.json` gets `alsSource` and
+  `edition: enterprise`. `features/ALS_PROJECT_FEATURE.md`.
+- The drop zone: the author pointed out FB's translator writes the subclass code, so only its own
+  classes exist - made in code with `subclass view` over the XIB's box, not a class name in the XIB.
+- `ALS Model.incl` moved to `src/Generator/` (the Studio reads ALS models); `ALS Project.incl`
+  (finding, GitHub, the copy, the ALS model -> the Studio's with lookups); `LoadALSModel`;
+  App Generator treats `.py` / `.yaml` sources as no database (Generate App: Enterprise).
+- Learned from the public repositories: `ApiLogicServer/demo`'s models.py writes
+  `class X(SAFRSBaseX, Base):` and trailing `# comments`; the reader (FB and reference) takes both.
+  Its admin.yaml lists 11 relationships, models.py 26 including all 11: models.py first.
+  `ApiLogicServer/basic_demo` and `demo` read over raw.githubusercontent.com from here.
+- `tools/als_project_reference.py` (25 checks) in `run_tests.sh`; String(15) now VARCHAR(15).
+
+## 2026-11-25 — The ALS model from database/models.py, parsed as text (`dedb93b`)
+
+- In the sandbox: `ApiLogicServer create` (17.05.44) on Northwind and on the CRM's contacts.sqlite.
+  Both projects have the model only in `database/models.py` (no `app_model.yaml`): the same file in
+  the same place whatever the database.
+- The author: the Studio parses models.py; no Python interpreter inside FutureBasic.
+  `tools/models_py_reference.py` reads it line by line, as the FB port does, and its test imports
+  the same file with SQLAlchemy and compares every class, table, attribute, key and relationship:
+  Northwind (17 classes) and CRM (3) equal. Learned on the way: `back_populates` names are not
+  unique (Customer, Employee and Location each have an `OrderList`), so a to-many's key columns come
+  from the child's to-one that points back by name *and* class; composite keys only in
+  `ForeignKeyConstraint` (Order -> Location by Country, City); `Table(...)` blocks are views.
+- `src/Enterprise/ALS Model.incl`: `ALSModelFromModelsPy` (the port), `ALSModelFromText` (models.py
+  or YAML, by contents, so a dropped file works whatever its name); `ALSModelFromURL` uses it. The
+  model is keyed by resource, like admin.yaml's. fblint clean; FB-type names avoided (`single`).
+- `run_tests.sh`: the reader vs SQLAlchemy when `ALS_PROJECTS` and `ALS_PYTHON` are set.
+
+## 2026-11-25 — The JSON:API side in FB; the ALS model from app_model.yaml
+
+- The author: `app_model.yaml` is the model source (not admin.yaml). Found: ALS 17.04+ (17.05 here)
+  no longer writes it (`app-create` is gone); the C++ Studio reads it with a line-by-line reader
+  and its notes say the same; its onboarding guide ranks `models.py` first. So one reader for both
+  layouts (`entities/columns/primary_key/favorite` and `resources/attributes/user_key`), preferring
+  `app_model.yaml`; checked against PyYAML on the live server's admin.yaml and on the C++ Studio's
+  app_model.yaml sample (primary keys, display column).
+- `src/Enterprise/ALS Model.incl` and `src/Enterprise/DataObject_JSONAPI.incl`: the FB port of the
+  reference (19 checks). FB has no `continue`: the reader handles one line per call, state in
+  globals. fblint caught `record` (an FB keyword).
+- `run_tests.sh`: the side-by-side test when `ALS_DB` names the server's db.sqlite.
+
+## 2026-11-25 — The SQL Generator's JSON:API side (reference), ORDER BY, the ALS model's relationships
+
+- `AddOrderToQuery` (ORDER BY) in the shared SQL Generator - all three copies (runtime, example,
+  *TXV*); the example's first query uses it instead of SQL added by hand.
+- `tools/jsonapi_reference.py`: the same statement dictionaries -> SQL or a JSON:API request
+  (filters as the JSON list, OR on one column as `in`, sort, a join to a parent as `include=` with
+  inner-join rows, POST / PATCH with `S_CheckSum` / DELETE by the record's id). 17 checks: every
+  query run both ways (SQL on the server's db.sqlite, JSON:API on the server) gives the same rows;
+  writes through JSON:API read back through SQL; OR across columns, filters on a parent and an
+  UPDATE without a key are refused.
+- The author: "ALS does give relationships" - right: `/metadata` leaves them out on purpose, but
+  `/ui/admin/admin.yaml` (no auth) has them (`tab_groups`: direction, name, resource, fks; role
+  names; composite keys) and `user_key` (a lookup's display column). The reference reads it with a
+  YAML-subset reader checked against PyYAML; relationship names are never guessed.
+- Resource names are not table names (Northwind: Category -> CategoryTableNameTest).
+
+## 2026-11-25 — ALS filters measured; the JSON:API side of the SQL Generator (design)
+
+- The author: the Enterprise edition should use the SQL Generator's own dictionaries and arrays and
+  write JSON:API requests instead of SQL, from the ALS model the Studio already reads.
+- Filters measured (`als_contract.py`, now 25 checks; `design/ALS Contract.md` -> Filters): only the
+  JSON list `filter=[{"name","op","val"}]` is reliable; ops eq ne lt le gt ge like ilike notilike in
+  notin; null with eq / ne is IS NULL / IS NOT NULL; filters AND together (ALS's SAFRSBaseX); no OR
+  (`{"or":...}` refused, OR on one column is `in`); `filter[attr][op]=val` is SILENTLY IGNORED (0 rows).
+- The C++/Wt Studio's ApiClient (imagery-logicbank-studio, read-only here) agrees: it uses `include=`
+  for parents and notes that `filter[x]=null` matches the text "null".
+
+## 2026-11-25 — Enterprise: the API Logic Server contract, measured
+
+The author: start on API Logic Server now (multi-user, three tiers); Enterprise code in this
+repository for now; a real ALS in the cloud session for tests.
+- API Logic Server 17.05.44 installed in a scratch venv; the Northwind sample with SQL security
+  and credit-limit rules, run with `SECURITY_ENABLED=true`.
+- `tools/als_contract.py` (18 checks) and `docs/design/ALS Contract.md`. Found:
+  - `links.next` comes one page short (830 rows, pages of 200: offset 600 has no next) - page by
+    offset until `meta.total`;
+  - an update's answer carries the OLD `S_CheckSum` - read the record again before the next save,
+    or it is refused as "row altered by another user";
+  - a rule's message is `errors[0].title`; `detail` is a dictionary;
+  - a wrong password is a bare JSON string (needs fragments allowed); a non-token is 422.
+- `ALS Client.incl` fixed for all four: `ALSErrorMessage` (title first, msg, bare strings),
+  `ALSNeedsSignIn` (401 / 422), `ALSListPage` + `ALSResponseTotal`, `ALSGet`, fragments allowed.
+- `run_tests.sh` runs the contract when a server answers on localhost:5656.
+- Backlog: the Enterprise steps; Kafka (through ALS first - the author already does this - then a
+  plain-HTTP module for Kafka's REST Proxy and Redis).
+
+## 2026-11-25 — The SQL Generator as a shared module: an example project for the FB list
+
+The author wants to share the SQL Generator (the DataObject query builder) on the FutureBasic
+list, open source (MIT), as an example app built from `src/CleanApp`.
+- `src/SQLGeneratorExample/`: the module; `SQL Generator SQLite.incl` (a runner, our own SQLite
+  declarations, `SQLGen` prefix); `CRM Database.incl` (person / address / contact, five made-up
+  people inserted through the builder); ten examples (`CRM Examples.incl`, the FB each shows in
+  `Example Code.txt`); output in colour with results as a SQL command line prints them (`sqlite>`
+  prompt, Menlo, `+---+` tables, "n rows in set", "Query OK"); a Help window with the user guide
+  (`User Guide.txt` in simple markup -> `Rich Text.incl`, system colours for light and dark);
+  About box (`Credits.rtf`); README, LICENSE (MIT), ANNOUNCEMENT (draft post).
+- Module changes, in all three copies (runtime, example, *TXV* 2293f73): joins fixed (the
+  `associations` entry was a dictionary used as an array: the first join would have crashed,
+  `-[__NSDictionaryM addObject:]`; nothing had used joins yet); INSERT of an array of dictionaries
+  (author): `InitInsertRowsDictionary`, `AddRowsToInsert`, `SetInsertColumns`,
+  `GenerateInsertRowsSQL`, rows in `QueryParameterValues`; MIT headers; unused leftovers removed.
+- `tools/make_sql_generator_svg.py` -> `docs/design/SQL Generator Object Model.svg` (the
+  dictionaries and arrays a statement is described with; author's idea), in the user guide (17)
+  and the example's README. `run_tests.sh` checks the three copies are identical.
+- `src/CleanApp`: the Hello function, button, label and menu removed (author).
+- fblint caught `line` (an FB keyword), `for ... in` over a function call, and
+  `FileManagerURLForDirectory` called with five arguments (it takes two).
+
 ## 2026-11-25 — One-pager: "app builder" (author)
 
 - The Studio is introduced as "An app builder that runs on your Mac" instead of "A generator"

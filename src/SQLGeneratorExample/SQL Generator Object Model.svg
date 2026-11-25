@@ -1,0 +1,221 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 1144" width="1060" height="1144" role="img" aria-label="SQL Generator object model">
+<title>SQL Generator object model</title>
+<style>
+:root{--bg:#ffffff;--ink:#1d2433;--muted:#5b6475;--line:#c9d1de;--dict:#112850;--dictInk:#ffffff;
+--array:#0f766e;--arrayInk:#ffffff;--body:#f6f8fb;--key:#1d2433;--val:#5b3cc4;--pill:#eef2f8;--code:#1f5fbf}
+@media (prefers-color-scheme: dark){:root{--bg:#14171c;--ink:#e7ebf2;--muted:#a3acbb;--line:#3a4250;
+--dict:#2b4c8c;--array:#138a80;--body:#1d222a;--key:#e7ebf2;--val:#b9a6ff;--pill:#232a35;--code:#7fb0ff}}
+svg{background:var(--bg)}
+text{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;fill:var(--ink)}
+.h{font-size:19px;font-weight:700}.sub{font-size:13px;fill:var(--muted)}
+.body{fill:var(--body);stroke:var(--line)}
+.dict .band{fill:var(--dict)}.array .band{fill:var(--array)}
+.title{font-size:13px;font-weight:700;fill:#ffffff}.kind{font-size:10.5px;fill:#ffffff;opacity:.8}
+.key{font-size:12.5px;font-family:Menlo,Monaco,monospace;fill:var(--key)}
+.val{font-size:12px;font-family:Menlo,Monaco,monospace;fill:var(--val)}
+.note{font-size:12px;fill:var(--muted)}.label{font-size:11px;fill:var(--muted)}
+.link{fill:none;stroke:var(--muted);stroke-width:1.4}
+.pill{fill:var(--pill);stroke:var(--line)}.pilltext{font-size:12.5px;font-family:Menlo,Monaco,monospace}
+.code{font-size:12.5px;font-family:Menlo,Monaco,monospace;fill:var(--code)}
+.code2{font-size:12.5px;font-family:Menlo,Monaco,monospace;fill:var(--val)}
+</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8a93a3"/></marker></defs>
+<text x="30" y="40" class="h">SELECT: a query is a dictionary of arrays</text>
+<text x="30" y="60" class="sub">fn InitQueryDictionary makes it; each Add... function adds one dictionary to an array</text>
+<g class="dict"><rect x="30" y="80" width="250" height="172" rx="8" class="body"/>
+<path d="M30 88 a8 8 0 0 1 8 -8 h234 a8 8 0 0 1 8 8 v22 h-250 z" class="band"/>
+<text x="42" y="100" class="title">query</text>
+<text x="268" y="100" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="42" y="128" class="key">selecttables</text>
+<text x="268" y="128" class="val" text-anchor="end">array</text>
+<text x="42" y="150" class="key">selectcols</text>
+<text x="268" y="150" class="val" text-anchor="end">array</text>
+<text x="42" y="172" class="key">associations</text>
+<text x="268" y="172" class="val" text-anchor="end">array</text>
+<text x="42" y="194" class="key">filter</text>
+<text x="268" y="194" class="val" text-anchor="end">array</text>
+<text x="42" y="216" class="key">metadata</text>
+<text x="268" y="216" class="val" text-anchor="end">array</text>
+<text x="42" y="238" class="key">results</text>
+<text x="268" y="238" class="val" text-anchor="end">dictionary</text>
+</g>
+<text x="30" y="268" class="note">fn InitQueryDictionary</text>
+<g class="array"><rect x="360" y="80" width="220" height="84" rx="8" class="body"/>
+<path d="M360 88 a8 8 0 0 1 8 -8 h204 a8 8 0 0 1 8 8 v22 h-220 z" class="band"/>
+<text x="372" y="100" class="title">selecttables</text>
+<text x="568" y="100" class="kind" text-anchor="end">NSMutableArray</text>
+<text x="372" y="128" class="key">[0]</text>
+<text x="568" y="128" class="val" text-anchor="end">dictionary</text>
+<text x="372" y="150" class="key">[1] ...</text>
+</g>
+<path d="M280 123 C320.0 123 320.0 123 354 123" class="link" marker-end="url(#arrow)"/>
+<g class="dict"><rect x="720" y="80" width="300" height="84" rx="8" class="body"/>
+<path d="M720 88 a8 8 0 0 1 8 -8 h284 a8 8 0 0 1 8 8 v22 h-300 z" class="band"/>
+<text x="732" y="100" class="title">one entry</text>
+<text x="1008" y="100" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="732" y="128" class="key">tablename</text>
+<text x="1008" y="128" class="val" text-anchor="end">"person"</text>
+<text x="732" y="150" class="key">aliasname</text>
+<text x="1008" y="150" class="val" text-anchor="end">"p"</text>
+</g>
+<text x="720" y="180" class="note">fn AddTableToQuery</text>
+<path d="M580 123 C650.0 123 650.0 123 714 123" class="link" marker-end="url(#arrow)"/>
+<g class="array"><rect x="360" y="198" width="220" height="84" rx="8" class="body"/>
+<path d="M360 206 a8 8 0 0 1 8 -8 h204 a8 8 0 0 1 8 8 v22 h-220 z" class="band"/>
+<text x="372" y="218" class="title">selectcols</text>
+<text x="568" y="218" class="kind" text-anchor="end">NSMutableArray</text>
+<text x="372" y="246" class="key">[0]</text>
+<text x="568" y="246" class="val" text-anchor="end">dictionary</text>
+<text x="372" y="268" class="key">[1] ...</text>
+</g>
+<path d="M280 145 C320.0 145 320.0 241 354 241" class="link" marker-end="url(#arrow)"/>
+<g class="dict"><rect x="720" y="198" width="300" height="84" rx="8" class="body"/>
+<path d="M720 206 a8 8 0 0 1 8 -8 h284 a8 8 0 0 1 8 8 v22 h-300 z" class="band"/>
+<text x="732" y="218" class="title">one entry</text>
+<text x="1008" y="218" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="732" y="246" class="key">columnname</text>
+<text x="1008" y="246" class="val" text-anchor="end">"p.surName"</text>
+<text x="732" y="268" class="key">aliasname</text>
+<text x="1008" y="268" class="val" text-anchor="end">"Surname"</text>
+</g>
+<text x="720" y="298" class="note">fn AddColumnToQuery</text>
+<path d="M580 241 C650.0 241 650.0 241 714 241" class="link" marker-end="url(#arrow)"/>
+<g class="array"><rect x="360" y="316" width="220" height="84" rx="8" class="body"/>
+<path d="M360 324 a8 8 0 0 1 8 -8 h204 a8 8 0 0 1 8 8 v22 h-220 z" class="band"/>
+<text x="372" y="336" class="title">associations</text>
+<text x="568" y="336" class="kind" text-anchor="end">NSMutableArray</text>
+<text x="372" y="364" class="key">[0]</text>
+<text x="568" y="364" class="val" text-anchor="end">dictionary</text>
+<text x="372" y="386" class="key">[1] ...</text>
+</g>
+<path d="M280 167 C320.0 167 320.0 359 354 359" class="link" marker-end="url(#arrow)"/>
+<g class="dict"><rect x="720" y="316" width="300" height="150" rx="8" class="body"/>
+<path d="M720 324 a8 8 0 0 1 8 -8 h284 a8 8 0 0 1 8 8 v22 h-300 z" class="band"/>
+<text x="732" y="336" class="title">one entry</text>
+<text x="1008" y="336" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="732" y="364" class="key">lefttablealias</text>
+<text x="1008" y="364" class="val" text-anchor="end">"a"</text>
+<text x="732" y="386" class="key">leftcolumnname</text>
+<text x="1008" y="386" class="val" text-anchor="end">"personID"</text>
+<text x="732" y="408" class="key">righttablealias</text>
+<text x="1008" y="408" class="val" text-anchor="end">"p"</text>
+<text x="732" y="430" class="key">rightcolumnname</text>
+<text x="1008" y="430" class="val" text-anchor="end">"id"</text>
+<text x="732" y="452" class="key">operator</text>
+<text x="1008" y="452" class="val" text-anchor="end">_isEqual</text>
+</g>
+<text x="720" y="482" class="note">fn AddAssociationToQuery</text>
+<path d="M580 359 C650.0 359 650.0 359 714 359" class="link" marker-end="url(#arrow)"/>
+<g class="array"><rect x="360" y="500" width="220" height="84" rx="8" class="body"/>
+<path d="M360 508 a8 8 0 0 1 8 -8 h204 a8 8 0 0 1 8 8 v22 h-220 z" class="band"/>
+<text x="372" y="520" class="title">filter</text>
+<text x="568" y="520" class="kind" text-anchor="end">NSMutableArray</text>
+<text x="372" y="548" class="key">[0]</text>
+<text x="568" y="548" class="val" text-anchor="end">dictionary</text>
+<text x="372" y="570" class="key">[1] ...</text>
+</g>
+<path d="M280 189 C320.0 189 320.0 543 354 543" class="link" marker-end="url(#arrow)"/>
+<g class="dict"><rect x="720" y="500" width="300" height="172" rx="8" class="body"/>
+<path d="M720 508 a8 8 0 0 1 8 -8 h284 a8 8 0 0 1 8 8 v22 h-300 z" class="band"/>
+<text x="732" y="520" class="title">one entry</text>
+<text x="1008" y="520" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="732" y="548" class="key">tablealias</text>
+<text x="1008" y="548" class="val" text-anchor="end">"p"</text>
+<text x="732" y="570" class="key">columnname</text>
+<text x="1008" y="570" class="val" text-anchor="end">"balance"</text>
+<text x="732" y="592" class="key">value</text>
+<text x="1008" y="592" class="val" text-anchor="end">100.0  (NSNumber)</text>
+<text x="732" y="614" class="key">type</text>
+<text x="1008" y="614" class="val" text-anchor="end">_realType</text>
+<text x="732" y="636" class="key">operator</text>
+<text x="1008" y="636" class="val" text-anchor="end">_isGreaterThan</text>
+<text x="732" y="658" class="key">logic</text>
+<text x="1008" y="658" class="val" text-anchor="end">_and | _or (2nd on)</text>
+</g>
+<text x="720" y="688" class="note">fn AddFilterToQuery</text>
+<path d="M580 543 C650.0 543 650.0 543 714 543" class="link" marker-end="url(#arrow)"/>
+<g class="out"><rect x="30" y="292" width="250" height="34" rx="17" class="pill"/><text x="155.0" y="314" text-anchor="middle" class="pilltext">fn GenerateSelectSQL( query )</text></g>
+<g class="out"><rect x="30" y="336" width="250" height="34" rx="17" class="pill"/><text x="155.0" y="358" text-anchor="middle" class="pilltext">fn QueryParameterValues( query )</text></g>
+<text x="30" y="394" class="code">SELECT "p"."surName" AS "Surname"</text>
+<text x="30" y="412" class="code">  FROM "person" AS "p"</text>
+<text x="30" y="430" class="code"> WHERE "p"."balance" &gt; ?</text>
+<text x="30" y="454" class="code2">values: [ 100.0 ]</text>
+<text x="30" y="484" class="note">rows come back as an array of</text>
+<text x="30" y="500" class="note">dictionaries: { "Surname": "Fischer" }</text>
+<text x="30" y="726" class="h">INSERT, UPDATE, DELETE: a dictionary per statement</text>
+<text x="30" y="746" class="sub">the table, the column values in SQL order, and the filters (the same entries as a query's)</text>
+<g class="dict"><rect x="30" y="766" width="230" height="84" rx="8" class="body"/>
+<path d="M30 774 a8 8 0 0 1 8 -8 h214 a8 8 0 0 1 8 8 v22 h-230 z" class="band"/>
+<text x="42" y="786" class="title">insert</text>
+<text x="248" y="786" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="42" y="814" class="key">insertintotable</text>
+<text x="248" y="814" class="val" text-anchor="end">"person"</text>
+<text x="42" y="836" class="key">columnvalues</text>
+<text x="248" y="836" class="val" text-anchor="end">array</text>
+</g>
+<text x="30" y="866" class="note">fn InitInsertIntoDictionary</text>
+<g class="out"><rect x="30" y="880" width="230" height="34" rx="17" class="pill"/><text x="145.0" y="902" text-anchor="middle" class="pilltext">fn GenerateInsertIntoSQL</text></g>
+<g class="dict"><rect x="282" y="766" width="230" height="106" rx="8" class="body"/>
+<path d="M282 774 a8 8 0 0 1 8 -8 h214 a8 8 0 0 1 8 8 v22 h-230 z" class="band"/>
+<text x="294" y="786" class="title">insert rows</text>
+<text x="500" y="786" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="294" y="814" class="key">insertintotable</text>
+<text x="500" y="814" class="val" text-anchor="end">"person"</text>
+<text x="294" y="836" class="key">rows</text>
+<text x="500" y="836" class="val" text-anchor="end">array</text>
+<text x="294" y="858" class="key">columnnames</text>
+<text x="500" y="858" class="val" text-anchor="end">array</text>
+</g>
+<text x="282" y="888" class="note">fn InitInsertRowsDictionary</text>
+<g class="out"><rect x="282" y="902" width="230" height="34" rx="17" class="pill"/><text x="397.0" y="924" text-anchor="middle" class="pilltext">fn GenerateInsertRowsSQL</text></g>
+<g class="dict"><rect x="534" y="766" width="230" height="106" rx="8" class="body"/>
+<path d="M534 774 a8 8 0 0 1 8 -8 h214 a8 8 0 0 1 8 8 v22 h-230 z" class="band"/>
+<text x="546" y="786" class="title">update</text>
+<text x="752" y="786" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="546" y="814" class="key">updatetable</text>
+<text x="752" y="814" class="val" text-anchor="end">"person"</text>
+<text x="546" y="836" class="key">columnvalues</text>
+<text x="752" y="836" class="val" text-anchor="end">array</text>
+<text x="546" y="858" class="key">filter</text>
+<text x="752" y="858" class="val" text-anchor="end">array</text>
+</g>
+<text x="534" y="888" class="note">fn InitUpdateDictionary</text>
+<g class="out"><rect x="534" y="902" width="230" height="34" rx="17" class="pill"/><text x="649.0" y="924" text-anchor="middle" class="pilltext">fn GenerateUpdateSQL</text></g>
+<g class="dict"><rect x="786" y="766" width="230" height="84" rx="8" class="body"/>
+<path d="M786 774 a8 8 0 0 1 8 -8 h214 a8 8 0 0 1 8 8 v22 h-230 z" class="band"/>
+<text x="798" y="786" class="title">delete</text>
+<text x="1004" y="786" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="798" y="814" class="key">deletefromtable</text>
+<text x="1004" y="814" class="val" text-anchor="end">"contact"</text>
+<text x="798" y="836" class="key">filter</text>
+<text x="1004" y="836" class="val" text-anchor="end">array</text>
+</g>
+<text x="786" y="866" class="note">fn InitDeleteFromDictionary</text>
+<g class="out"><rect x="786" y="880" width="230" height="34" rx="17" class="pill"/><text x="901.0" y="902" text-anchor="middle" class="pilltext">fn GenerateDeleteFromSQL</text></g>
+<g class="dict"><rect x="30" y="962" width="482" height="106" rx="8" class="body"/>
+<path d="M30 970 a8 8 0 0 1 8 -8 h466 a8 8 0 0 1 8 8 v22 h-482 z" class="band"/>
+<text x="42" y="982" class="title">a columnvalues entry</text>
+<text x="500" y="982" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="42" y="1010" class="key">columnname</text>
+<text x="500" y="1010" class="val" text-anchor="end">"surName"</text>
+<text x="42" y="1032" class="key">value</text>
+<text x="500" y="1032" class="val" text-anchor="end">"Lima"  (NULL: SQL NULL)</text>
+<text x="42" y="1054" class="key">type</text>
+<text x="500" y="1054" class="val" text-anchor="end">_textType</text>
+</g>
+<text x="30" y="1084" class="note">fn AddColumnToInsert / fn AddColumnToUpdate</text>
+<g class="dict"><rect x="534" y="962" width="482" height="106" rx="8" class="body"/>
+<path d="M534 970 a8 8 0 0 1 8 -8 h466 a8 8 0 0 1 8 8 v22 h-482 z" class="band"/>
+<text x="546" y="982" class="title">a rows entry: a SELECT row, reversed</text>
+<text x="1004" y="982" class="kind" text-anchor="end">NSMutableDictionary</text>
+<text x="546" y="1010" class="key">"givenName"</text>
+<text x="1004" y="1010" class="val" text-anchor="end">"Kai"</text>
+<text x="546" y="1032" class="key">"surName"</text>
+<text x="1004" y="1032" class="val" text-anchor="end">"Nakamura"</text>
+<text x="546" y="1054" class="key">"balance"</text>
+<text x="1004" y="1054" class="val" text-anchor="end">15.0  (missing: NULL)</text>
+</g>
+<text x="534" y="1084" class="note">fn AddRowsToInsert: an array of these</text>
+<text x="30" y="1114" class="note">An UPDATE or DELETE with an empty filter array gets NULL from its Generate... function: it never changes a whole table.</text>
+<text x="30" y="1132" class="note">fn QueryParameterValues lists the values in placeholder order: column values, then rows, then filters.</text>
+</svg>

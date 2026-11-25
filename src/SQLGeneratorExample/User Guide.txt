@@ -1,0 +1,127 @@
+# SQL Generator Example
+**Use a SQL database from FutureBasic without writing SQL.** You describe each statement with Cocoa dictionaries and arrays; the SQL Generator writes the SQL, and keeps every value apart from it.
+
+This app runs ten examples on a small CRM database and shows every step: the FutureBasic, the SQL it produces, the values, and the rows that come back.
+
+## The window
+- **Example** and **Run** (or Return): run one example. The **Examples** menu has them all, with Command-1 to Command-0.
+- **Run All** (Command-R): run all ten, one after another.
+- **Clear** (Command-K): empty the output.
+- **Reset Database**: make the database again as it started. Examples 6, 7, 8 and 10 change it.
+- **Examples > Also Log to NSLog**: the same output in the NSLog window.
+
+Each example shows, in colour:
+- the **FutureBasic** that describes the statement (purple);
+- the **SQL** the generator wrote (blue);
+- the **values** for its `?` placeholders (teal);
+- the **rows** that came back, or how many rows changed.
+
+## The database
+`~/Library/Application Support/SQL Generator Example/crm.sqlite`, made on first launch:
+```
+person   id, type, givenName, middleName, surName, balance
+address  id, personID -> person.id, type, street, apartment, city, state, zip
+contact  id, personID -> person.id, type, contact
+```
+The five people in it are made up. Even its sample rows go in through the generator's INSERT builder (CRM Database.incl).
+
+# Using the SQL Generator in your app
+## 1. Add the files
+Copy these four files into your project folder and add them to the project, in this order (FB needs a function defined before it is used):
+```
+DataObject.glbl            constants: operators, AND / OR, value types
+DataObject_Super.incl      the builders: describe the statement
+DataObject.incl            the SQL: GenerateSelectSQL and the others
+SQL Generator SQLite.incl  runs it on SQLite (optional: use your own)
+```
+Add `-lsqlite3` to the compiler options in **Build Settings** when you use the SQLite file.
+
+## 2. Describe a SELECT
+A query is a dictionary. Tables, columns, joins and filters go into arrays inside it:
+```
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"person", @"p" )         // table, alias
+fn AddColumnToQuery( query, @"p.surName", @"Surname" )  // column, its name in the result
+fn AddFilterToQuery( query, @"p", @"balance", fn NumberWithDouble( 100.0 ), _realType, 0, _isGreaterThan, 0 )
+sql = fn GenerateSelectSQL( query )
+```
+That writes:
+```
+SELECT "p"."surName" AS "Surname" FROM "person" AS "p" WHERE "p"."balance" > ?
+```
+
+## 3. Run it with its values
+`fn QueryParameterValues( query )` returns the values for the `?` placeholders, in order:
+```
+rows = fn MutableArrayNew
+fn SQLGenExecute( db, sql, fn QueryParameterValues( query ), rows )
+for row in rows
+  NSLog( @"%@", fn DictionaryObjectForKey( row, @"Surname" ) )
+next
+```
+Each row is a dictionary, keyed by the column names you gave (`Surname`).
+
+## Joins
+Add both tables, then say how they join:
+```
+fn AddTableToQuery( query, @"person", @"p" )
+fn AddTableToQuery( query, @"address", @"a" )
+fn AddAssociationToQuery( query, @"a", @"personID", @"p", @"id", _isEqual )
+```
+
+## Sorting
+`fn AddOrderToQuery( query, alias, column, descending )`, once per column, most important first:
+```
+fn AddOrderToQuery( query, @"p", @"surName", NO )      // ORDER BY "p"."surName"
+fn AddOrderToQuery( query, @"p", @"balance", YES )     // , "p"."balance" DESC
+```
+
+## Filters
+`fn AddFilterToQuery( query, alias, column, value, type, 0, operator, logic )`
+- **operator**: `_isEqual`, `_isNotEqual`, `_isLessThan`, `_isGreaterThan`, `_isLessThanOrEqual`, `_isGreaterThanOrEqual`, `_isLike`, `_isNotLike`, `_isNull`, `_isNotNull`
+- **logic**: how the filter joins the one before it, `_and` (the default, 0) or `_or`
+- **type**: `_textType`, `_integerType`, `_realType`, `_blobType`, `_nullType`
+- **value**: a string or a number; NULL for `_isNull` and `_isNotNull`, which take no value
+
+## INSERT, UPDATE and DELETE
+```
+statement = fn InitInsertIntoDictionary
+fn AddTableToInsert( statement, @"person" )
+fn AddColumnToInsert( statement, @"surName", @"Lima", _textType )
+sql = fn GenerateInsertIntoSQL( statement )
+
+statement = fn InitUpdateDictionary
+fn AddTableToUpdate( statement, @"person" )
+fn AddColumnToUpdate( statement, @"balance", fn NumberWithDouble( 99.95 ), _realType )
+fn AddFilterToQuery( statement, @"", @"surName", @"Okafor", _textType, 0, _isEqual, 0 )
+sql = fn GenerateUpdateSQL( statement )
+
+statement = fn InitDeleteFromDictionary
+fn AddTableToDelete( statement, @"contact" )
+fn AddFilterToQuery( statement, @"", @"id", fn NumberWithInteger( 8 ), _integerType, 0, _isEqual, 0 )
+sql = fn GenerateDeleteFromSQL( statement )
+```
+Filters on an UPDATE or DELETE use an empty alias `@""`.
+
+## Many rows at once
+The opposite of a SELECT: give it an array of dictionaries, column to value, and it writes one INSERT for them all.
+```
+statement = fn InitInsertRowsDictionary
+fn AddTableToInsert( statement, @"person" )
+fn AddRowsToInsert( statement, rows )
+sql = fn GenerateInsertRowsSQL( statement )
+```
+That writes `INSERT INTO "person" ( "balance", "givenName", ... ) VALUES ( ?, ?, ... ), ( ?, ?, ... )`. The columns are the rows' keys, sorted; `fn SetInsertColumns( statement, columns )` sets them and their order yourself. A column a row has no value for goes in as NULL, so rows straight from a SELECT can go back in as they are. For thousands of rows, insert a few hundred at a time.
+
+# What it does for you
+- **Parameterized.** Values never go into the SQL text: they are bound to `?` placeholders. No SQL injection, no quoting of names like O'Brien.
+- **Names quoted.** Tables and columns are quoted, so names like `Order` or `Group`, or with spaces, just work.
+- **Safe by default.** An UPDATE or DELETE without a filter returns NULL instead of SQL: it can never change a whole table by accident (example 9).
+- **SQLite types kept.** Numbers come back as numbers, text as text, NULL as NSNull.
+
+## Good to know
+- **IN** writes a single `?`, so it matches one value; use OR filters for a few values.
+- The generator writes queries, not schemas: create your tables with plain SQL (CRM Database.incl).
+
+# Licence
+MIT. Use it in free or commercial apps, change it, share it; keep the copyright notice. Copyright (c) 2026 Imagery Business Systems, LLC.

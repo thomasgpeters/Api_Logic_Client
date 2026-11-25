@@ -23,8 +23,11 @@ tools/run_tests.sh
 | `logic_reference.py --prove` | every rule is really tested: each rule left out in turn makes a scenario fail | `20 rules, 0 not proven` |
 | `rules_bridge.py --test` | `declare_logic.py` → `Rules.json` (lambdas translated to FB, the rest switched off with its Python kept), `check`, FB generation lints with the runtime, export and the round trip back | `23 checks, 0 failed` |
 | `make_logic_test.py` + `fblint` | the FB test project assembles from the real runtime files and lints clean, build order included | `0 problems` |
+| `run_tests.sh` (SQL Generator) | the module's three copies (runtime, `src/SQLGeneratorExample`, Test_Xib_View) are identical | `the copies are identical` |
 | `check_app_pages.py` | the `App Pages.incl` the generator writes (its `AppPagesSource` played for two entities) lints with the real runtime, templates and stand-in bindings | `0 failed` |
 | `check_erd_page.py` | the model diagram page, filled as `ERD Generator.incl` fills it, draws every entity, relationship and rule symbol, opens / closes, drags and selects with no script errors (headless Chromium; skipped without node + Playwright) | `0 failed` |
+| `als_project_reference.py --test` (projects from `ALS_PROJECTS`; `--github` with `ALS_GITHUB=1`) | the Open ALS Project screen's logic, as `ALS Project.incl` does it: GitHub addresses; a project's folder, `database/` and `models.py` find the same model; the Studio model (keys, relationships, lookups and their display columns); public repositories over raw.githubusercontent.com | `25 checks, 0 failed` |
+| `models_py_reference.py` (Enterprise; when `ALS_PROJECTS` and `ALS_PYTHON` are set) | an ALS project's `database/models.py`, read as text the way `ALSModelFromModelsPy` reads it, equals SQLAlchemy's own model of the same file: classes, tables, attributes, primary keys, relationships with their key columns. Make projects with `ApiLogicServer create --project_name=nw --db_url=nw-` and `--db_url=sqlite:///<file>` | `0 failed` per project |
 
 Run any one of them alone:
 
@@ -51,6 +54,14 @@ lists one `PASS` / `FAIL` line per scenario — the same scenarios as `logic_ref
 and ends with `logic test: 70 scenarios, 0 failed`. It works on `~/Desktop/LogicTest/test.sqlite`,
 a copy; run `make_logic_test.py` again for a fresh one. Paste the Build Log or the NSLog lines
 into a session when something fails.
+
+## 2b. On a Mac — MapKit points (before the Map view is built)
+
+Open `src/MacTests/MapKit Points Test.fb` in FB and run it. Five points (three customers in blue,
+two suppliers in orange); the popup answers the map's `_mapViewViewForAnnotation` event four ways.
+Report which modes show coloured markers with a person / shipping-box icon, and a bubble with two
+lines of details and an (i) button; paste the `MapTest:` lines from the log
+(`design/Map View Design.md`).
 
 ## 3. On a Mac — the generator and generated apps (by hand)
 

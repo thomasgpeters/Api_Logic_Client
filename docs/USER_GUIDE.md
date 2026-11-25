@@ -22,7 +22,8 @@
 14. [Checking your work](#14-checking-your-work)
 15. [Troubleshooting](#15-troubleshooting)
 16. [Menus and keyboard shortcuts](#16-menus-and-keyboard-shortcuts)
-17. [What is not built yet](#17-what-is-not-built-yet)
+17. [The SQL Generator](#17-the-sql-generator)
+18. [What is not built yet](#18-what-is-not-built-yet)
 
 ---
 
@@ -80,9 +81,29 @@ definitions.
 
 If a project with that name already exists, you are asked whether to **open it** instead.
 
-*Working with a running API Logic Server instead?* **API Logic Server instead…** on the New
-Project page opens the server form (base URL, user name, password). *Model → Open API Logic Server Metadata
-JSON…* (⌘J) reads a saved `/metadata?include=attributes` response.
+### From an API Logic Server project
+
+*Project → New Project from API Logic Server…* (⇧⌘N), or **API Logic Server Project…** on the New
+Project page, starts from the model API Logic Server generated (its resources, attributes, keys and
+relationships) instead of a database. Point at the ALS project:
+
+- **drop** its folder, or its `database/models.py`, on the drop zone;
+- **Folder…** or **Model File…** to choose it; or
+- type or paste a path, or a **public GitHub repository's address**
+  (`https://github.com/owner/repo`, or `…/tree/<branch>/<subfolder>`), then **Read**.
+
+The page shows what the model holds and where it came from, and fills in the Project Name. Enter
+the **API Server** the generated app will talk to (`http://localhost:5656` by default) and click
+**Create**. The Studio keeps a copy of the model in the project (`ALS Model/`), so the project opens
+again without the original. The Studio reads the model; it never runs it.
+
+An app generated from an ALS project talks to the server: it is the **Enterprise** edition. The
+free Studio opens, designs and generates screens for ALS projects; for a Lite app, start from the
+server's SQLite database instead.
+
+*A running server instead?* **From a Running Server…** on that page opens the server form (base URL,
+user name, password). *Model → Open API Logic Server Metadata JSON…* (⌘J) reads a saved
+`/metadata?include=attributes` response. Neither has the relationships.
 
 ## 5. The workspace and your project's files
 
@@ -137,6 +158,8 @@ you regenerate. Clear a cell to go back to the recommendation.
   showing a readable column (its *name*, *title* or *description*, a column whose name contains
   "name", else its first text column) and storing the key. Type a value list in **Values** to
   offer those values instead. The first item is empty: no value.
+  Beside a foreign key's Dropdown, an **info button** (ⓘ) shows the chosen record's details in a
+  popover - the Customer of an Order, the Department of an Employee: every field and its value.
 - **Radio buttons**: one per value of the **Values** list (up to 8; with more, or with no
   list, the attribute gets a Dropdown). Side by side when they fit, else one under the other.
 - **Checkbox**: for yes / no columns (BOOLEAN, BIT); stored as 1 or 0.
@@ -481,6 +504,9 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 - **Regenerated:** `App Pages.incl`, `README.md`, the XIBs, bindings, `Model.json`, `Model Tags.incl`, `Studio Rules.incl`, the
   runtime and the main program — change the model, your adjustments or the rules instead.
 - `Model Tags.incl` names every view and control tag, for your own code.
+- **Buttons** are Mac-style pills (on macOS 26 the system's own capsule; on macOS 15 the same shape
+  drawn in system colours): Save in the accent colour, Delete in red. For classic push buttons set
+  `gThemePillButtons = NO` in `Theme.incl`.
 
 ## 13. Opening projects again
 
@@ -527,6 +553,7 @@ list (and names it); the Control popup needs an attribute selected in the table.
 | Menu | Command | Key | Needs |
 |---|---|---|---|
 | Project | New Project… | ⌘N | |
+| | New Project from API Logic Server… | ⇧⌘N | |
 | | Open Project… | ⌘O | |
 | | Recent Projects | ⌘1 | |
 | | Entity Definitions | ⌘2 | a project |
@@ -558,13 +585,35 @@ project's name to go back to its entity definitions.
 project's entity definitions), *Diagram* (Show Model Diagram), *Generate* (Generate App), *Settings*
 (Project Settings). All but Projects need a project.
 
-## 17. What is not built yet
+## 17. The SQL Generator
+
+Every read and write in a generated app goes through the **SQL Generator** (`DataObject.glbl`,
+`DataObject_Super.incl`, `DataObject.incl` in the runtime). You describe a statement with Cocoa
+dictionaries and arrays; it writes parameterized SQL and lists the values for its `?` placeholders.
+Your own code in a generated app can use it the same way.
+
+![The SQL Generator's object model](design/SQL%20Generator%20Object%20Model.svg)
+
+A query is a dictionary (`InitQueryDictionary`) of arrays: `selecttables`, `selectcols`,
+`associations` (joins) and `filter`. Each `Add...ToQuery` call adds one small dictionary to one
+of them. INSERT (one row, or an array of rows), UPDATE and DELETE each have a dictionary of their
+own. `GenerateSelectSQL`, `GenerateInsertIntoSQL`, `GenerateInsertRowsSQL`, `GenerateUpdateSQL`
+and `GenerateDeleteFromSQL` write the SQL; `QueryParameterValues` gives the values in order. An
+UPDATE or DELETE without a filter gets no SQL at all.
+
+The module is also shared on its own, MIT-licensed, as an example project:
+`src/SQLGeneratorExample/` (ten examples on a small CRM database, a user guide in its Help
+window). Its `README.md` has the whole API.
+
+## 18. What is not built yet
 
 - **The Rules page** in the generator: the rules of `Rules.json` in a list, an editor with the
   model's entities and attributes to pick from, and checking. Until then, write rules in
   `Rules.incl`, or import them (§11) and edit `Rules.json`.
-- **The app shell** for SQLite projects: an entity navigator, Lists and Forms reading and saving
-  through the rules engine (the parts, bindings, data runtime and rules are ready).
+- **Apps from API Logic Server projects** (Enterprise): the Studio opens, designs and generates
+  screens for them; the data side that talks to the server, and sign-in, come next.
+- **More Form controls**: toggle switch, combo box, calendar and colour pickers, formatted date and
+  time displays (`BACKLOG.md` → Modern look).
 - **Renaming** the project file, the app bundle and the Application Support folder to the
   product's name.
 
