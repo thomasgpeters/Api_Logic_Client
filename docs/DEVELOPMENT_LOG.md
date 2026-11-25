@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Map view made generic: a result set with latitude / longitude
+
+- The author: more generic - choose the Map view and show a result set whose rows carry a
+  geographic location in latitude and longitude columns; start with an entity's records (Customer,
+  Supplier). The design changed: the map takes rows and the names of their location and title
+  columns (`App Map.incl`), so any entity, several at once (layers) or a query's rows can be shown.
+  Geocoding becomes how a table's location columns are filled (written into the rows), not a cache
+  beside them. Northwind has no location columns: adding them (Lite: ALTER TABLE in the project's
+  copy; Enterprise: on the server, then an ALS rebuild) is step 4. `design/Map View Design.md`.
+
 ## 2026-11-25 — Map view designed (records on a map, addresses geocoded)
 
 - The author: a look with a map - an entity's records (Customers) on a map, addresses translated
