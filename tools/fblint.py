@@ -152,6 +152,10 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
                 # a local that redeclares a global: "Redefined variable" (FB 7.0.38)
                 if current and name.lower() in (global_names or {}).get(os.path.dirname(path), set()) and not re.search(r'\blocal\s+fn\b|^\s*for\b', code_only):
                     report(no, f'"{name}" is a global (begin globals / .glbl) - give the local another name')
+                # a parameter named like a global: "Redefined parameter" (FB 7.0.38, ALSProjectKeepCopy's projectName)
+                fn_params = re.search(r'\blocal\s+fn\s+\w+\s*\((.*)\)', code_only)
+                if fn_params and re.search(r'\b' + re.escape(name) + r'\s+as\b', fn_params.group(1)) and name.lower() in (global_names or {}).get(os.path.dirname(path), set()):
+                    report(no, f'parameter "{name}" is a global (begin globals / .glbl) - FB: "Redefined parameter"; rename it')
                 if name.lower() in fb_keywords:
                     report(no, f'"{name}" is an FB keyword - rename the variable')
         if arity:

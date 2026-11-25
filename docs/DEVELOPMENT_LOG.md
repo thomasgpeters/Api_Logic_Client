@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Build fix: a parameter named like a global
+
+- The author's build: "Redefined parameter in line 359 of ALS Project.incl: projectName" -
+  `ALSProjectKeepCopy( projectName … )`, and `projectName` is a Studio global (`My Globals.glbl`).
+  Renamed `nameOfProject`. fblint already caught locals that reuse a global's name but skipped
+  `local fn` lines: it now checks parameters too (and not a function's own name, which FB
+  accepts); run on the old file it reports exactly line 359. Every other parameter and local in
+  the Studio checked: none other. Coding rule 25.
+
 ## 2026-11-25 — Map view: Apple's MapKit decided; a Mac test for its points
 
 - The author: use Apple's MapKit (not an HTML / JavaScript map). `src/MacTests/MapKit Points Test.fb`
