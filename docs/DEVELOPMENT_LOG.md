@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Map view designed (records on a map, addresses geocoded)
+
+- The author: a look with a map - an entity's records (Customers) on a map, addresses translated
+  into locations. Found in FutureBasic: `mkmapview`, `MKPointAnnotationWithTitle`,
+  `MKMapViewShowAnnotations`, the pin-selected event `_mapViewDidSelectAnnotationView`, and Apple's
+  geocoder `CLGeocoderGeocodeAddressString` (no key, no location permission; FBExamples *Coordinates
+  from address*); macOS 26 adds `MKGeocodingRequest`. Northwind's places: Customer, Employee,
+  Supplier (Address, City, Region, PostalCode, Country) and Order (Ship…). Design with open
+  questions: `design/Map View Design.md`; steps in `BACKLOG.md` (Modern look).
+
 ## 2026-11-25 — Docs brought up to date; the backlog reviewed and prioritized
 
 - The author: bring the user guide, the development log and especially the backlog up to date, then

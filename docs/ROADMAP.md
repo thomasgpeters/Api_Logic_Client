@@ -26,6 +26,7 @@ The generated app talks directly to a SQLite database.
 |---|---|
 | Pill buttons in the Studio and generated apps (`features/PILL_BUTTONS_FEATURE.md`) | done — awaiting build |
 | Form controls: toggle switch, combo box, date / time display, calendar picker, colour picker | next (`BACKLOG.md` → Modern look) |
+| Map view: records on a map, addresses geocoded and cached (`design/Map View Design.md`) | designed |
 | Image / PDF viewers, thumbnails, token fields, toast, carousel | |
 | Theme files: CSS-like named styles (light, dark, colourful, base) applied to parts | |
 

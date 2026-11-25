@@ -14,6 +14,7 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 3. **Modern look controls** for generated Forms (the author's current interest): toggle switch,
    combo box, date / time display, calendar picker, colour picker. Each follows the Form
    designer's pattern (Control popup -> XIB part -> binding), so they are small and independent.
+   Then the **Map view** (records on a map; a bigger piece: a new part, geocoding, a cache).
 4. **Lite release:** a generated app builds and runs on a Mac; tag it. Then post the SQL Generator
    to the FB list.
 5. **Enterprise data:** `App Data Enterprise.incl` and the connection / sign-in, so an ALS project
@@ -30,6 +31,7 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [ ] A crash seen in the Studio (2026-11-24): the author is trying to reproduce it
 - [ ] Studio review: agree the generated app's toolbar (`STUDIO_REVIEW.md` 2.6)
 - [ ] The Modern look: more controls and looks to add to the list
+- [ ] Map view: the open questions in `design/Map View Design.md` (cache file or table, writing coordinates back, clustering)
 - [ ] Enterprise licensing option (A / B / C, see Parked)
 - [ ] Proposal to Val Huber: percentage offer + the name "LogicBank for FutureBasic"
 - [ ] Rename the FB project and its `.main` to the product name (later)
@@ -80,6 +82,16 @@ both editions. The author adds to this list.
   "Yesterday") for keys, audit columns and Lists
 - [ ] Calendar date picker: `NSDatePicker`'s graphical (calendar) style, in a popover from the date field
 - [ ] Colour picker (`NSColorWell`): for colour columns, stored as hex text (#RRGGBB)
+- [ ] **Map view** (author, 2026-11-25; design: `design/Map View Design.md`): an entity's records on a map
+  beside its List, addresses translated into locations
+  - [ ] Studio: find the columns that make a place (latitude / longitude, or an address family such as
+    Address, City, Region, PostalCode, Country, or ShipAddress …); the entity's Map setting in the design row
+  - [ ] `Geo Location.incl` (runtime): address -> location with Apple's geocoder (`CLGeocoder`; `MKGeocodingRequest`
+    on macOS 26), one at a time from a queue, remembered in `GeoCache.sqlite`; status in the footer
+  - [ ] `App Map.incl`: the Map part (`mkmapview`), a pin per record of the List (display column, city, country),
+    a pin click opens the record's Form; the List | Map switch
+  - [ ] Optional: write the coordinates into the record's latitude / longitude columns
+  - [ ] Later: clustering of many pins; directions; a small map on the Form
 - [ ] Form Control choices: Image, PDF, Tokens, Thumbnails (e.g. `Employee.PhotoPath` → Image)
 - [ ] More controls and looks (author to add): e.g. steppers and sliders for numbers, a search field over
   the List, a segmented control for short value lists, glass / rounded panels in the shell
