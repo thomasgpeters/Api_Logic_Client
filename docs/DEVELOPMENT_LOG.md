@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — SQL Generator example builds and runs; its warnings fixed
+
+- The author's build of `SQLGeneratorExample` compiled, linked and ran, with two warnings:
+  - `-lsqlite3: 'linker' input unused`, once per file: FB passes Build Settings' "Compiler options"
+    to every compile, and that is where its reference says a library goes. The example lacked
+    `-Wno-unused-command-line-argument`, which the Studio, the app template and Test_Xib_View
+    already have; added.
+  - `selectfilterArrayRef is used uninitialized` (`GetSelectFilterArray`, DataObject_Super.incl):
+    a query without a filter returned an unset variable; it starts at NULL now - in the runtime,
+    the example and *TXV* `e045def` (the copies stay identical).
+
 ## 2026-11-25 — Build fix: SQL Generator example, a text-view function newer than the author's FB
 
 - The author's build of `SQLGeneratorExample`: "Unknown … Toolbox name … TextViewAppendAttributedString"
