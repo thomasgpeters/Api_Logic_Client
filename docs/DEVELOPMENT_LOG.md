@@ -6,6 +6,12 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — One-pager: "app builder" (author)
+
+- The Studio is introduced as "An app builder that runs on your Mac" instead of "A generator"
+  (author: say app builder where it says generator). The SQL Generator keeps its name (it builds
+  SQL, not apps); its paragraph says "It writes the SQL". PDF reprinted, page republished.
+
 ## 2026-11-24 — One-pager: the SQL Generator (author)
 
 - `docs/DOC_ONE_PAGER.md` / `.html` / `.pdf`: a section on the SQL Generator (the DataObject
