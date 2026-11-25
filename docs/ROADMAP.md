@@ -18,13 +18,16 @@ The generated app talks directly to a SQLite database.
 | 4. Crumb trail and page stack | |
 | 5. Related lists in tabs (master-detail), drill-in (`_tableViewDoubleAction`) | |
 | 6. Hook files for hand-written code (created only if missing) | |
-| 7. `admin.yaml` hints (titles, `user_key`, relationship names) | |
+| 7. `admin.yaml` hints (titles, `user_key`, relationship names) | `user_key` done (the lookups' display column, ALS projects); titles open |
 
-## Phase 2 — Look and feel
+## Phase 2 — Look and feel: the Modern look (author, 2026-11-25)
 
-- Theme files: CSS-like named styles (light, dark, colorful, base) applied to parts.
-- Controls catalog in generated apps: toast, image / PDF viewers, thumbnails,
-  token fields, carousel (prototype first) — offered as Form Control choices.
+| Step | Status |
+|---|---|
+| Pill buttons in the Studio and generated apps (`features/PILL_BUTTONS_FEATURE.md`) | done — awaiting build |
+| Form controls: toggle switch, combo box, date / time display, calendar picker, colour picker | next (`BACKLOG.md` → Modern look) |
+| Image / PDF viewers, thumbnails, token fields, toast, carousel | |
+| Theme files: CSS-like named styles (light, dark, colourful, base) applied to parts | |
 
 ## Phase 3 — Generator app
 
@@ -32,7 +35,7 @@ The generated app talks directly to a SQLite database.
 - Git (init/commit on generation, status, push/pull) and GitHub (create repo, PRs).
 - Settings for ALS/APIs, AI/LLM providers, SMTP notifications.
 
-## Phase 4 — Enterprise edition (paid) — parked until the Lite release; resume list in `BACKLOG.md`
+## Phase 4 — Enterprise edition (paid) — started 2026-11-25 (author); licensing parked until the Lite release
 
 Design: `design/Editions and Licensing.md`. A three-tier app over API Logic Server behind the same
 data interface as Lite (`App Data`); private repository; licence checked offline by the Studio only.
@@ -40,7 +43,11 @@ data interface as Lite (`App Data`); private repository; licence checked offline
 | Step | Status |
 |---|---|
 | Data interface `App Data` with the Lite implementation; edition hook `Edition.incl` | done — awaiting build |
-| Licence option (portable checksum / signed file / online) | open — author |
+| The ALS contract, measured (`design/ALS Contract.md`); `ALS Client.incl` follows it | done |
+| The SQL Generator's JSON:API side (`features/ENTERPRISE_DATA_FEATURE.md`) | done — awaiting build |
+| The ALS model from `database/models.py`, as text; the API Logic Server Project page (folder, file, GitHub, drop) (`features/ALS_PROJECT_FEATURE.md`) | done — awaiting build |
+| `App Data Enterprise.incl`, connection and sign-in | next |
+| Licence option (portable checksum / signed file / online) | open — author (parked) |
 | Private repository; `App Data Enterprise.incl`, sign-in, `declare_logic.py` export | |
 | License Server: FB Studio product and licence format | |
 

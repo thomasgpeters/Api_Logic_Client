@@ -502,6 +502,9 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 - **Regenerated:** `App Pages.incl`, `README.md`, the XIBs, bindings, `Model.json`, `Model Tags.incl`, `Studio Rules.incl`, the
   runtime and the main program — change the model, your adjustments or the rules instead.
 - `Model Tags.incl` names every view and control tag, for your own code.
+- **Buttons** are Mac-style pills (on macOS 26 the system's own capsule; on macOS 15 the same shape
+  drawn in system colours): Save in the accent colour, Delete in red. For classic push buttons set
+  `gThemePillButtons = NO` in `Theme.incl`.
 
 ## 13. Opening projects again
 
@@ -605,8 +608,10 @@ window). Its `README.md` has the whole API.
 - **The Rules page** in the generator: the rules of `Rules.json` in a list, an editor with the
   model's entities and attributes to pick from, and checking. Until then, write rules in
   `Rules.incl`, or import them (§11) and edit `Rules.json`.
-- **The app shell** for SQLite projects: an entity navigator, Lists and Forms reading and saving
-  through the rules engine (the parts, bindings, data runtime and rules are ready).
+- **Apps from API Logic Server projects** (Enterprise): the Studio opens, designs and generates
+  screens for them; the data side that talks to the server, and sign-in, come next.
+- **More Form controls**: toggle switch, combo box, calendar and colour pickers, formatted date and
+  time displays (`BACKLOG.md` → Modern look).
 - **Renaming** the project file, the app bundle and the Application Support folder to the
   product's name.
 

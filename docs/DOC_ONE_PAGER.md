@@ -39,7 +39,7 @@ Also as a designed page and a PDF to share: [`DOC_ONE_PAGER.html`](DOC_ONE_PAGER
 
 ## How it works
 
-1. **Open a model.** Choose a SQLite file (or connect to an API Logic Server). The Studio reads
+1. **Open a model.** Choose a SQLite file, or point at an API Logic Server project (its folder, its model file, or its GitHub repository). The Studio reads
    every table, column, key and relationship, and draws the model as an interactive diagram.
 2. **Shape the app.** Review each entity's fields, adjust titles and widths, import or write the
    business rules, and add your logo, tag-line and copyright.

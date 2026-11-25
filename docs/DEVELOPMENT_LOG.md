@@ -6,7 +6,22 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
-## 2026-11-25 — Pill buttons; the Modern look backlog
+## 2026-11-25 — Docs brought up to date; the backlog reviewed and prioritized
+
+- The author: bring the user guide, the development log and especially the backlog up to date, then
+  prioritize. `BACKLOG.md` rewritten in full: a proposed order at the top (a green Mac build, the
+  Form layout bug, the Modern look controls, the Lite release, Enterprise data, rules in FB), what
+  waits on the author, one "Verify on a Mac" list for everything built since the last build, and
+  every area's open items. Fixed on the way: ORDER BY was still open (done: `AddOrderToQuery`);
+  the old "ALS edition" section merged into Enterprise (relationships now come from models.py);
+  the diagram's "relationships from /metadata" (it has none) dropped; Open Project is ⌘O; the
+  bundled-runtime check dropped (the runtime is in the workspace now). `IN` with one `?` per value
+  is still open.
+- `ROADMAP.md`: Phase 2 is the Modern look; Phase 4 (Enterprise) started, licensing still parked.
+  `USER_GUIDE.md`: the pill buttons (§12), what is not built yet (§18). `DOC_ONE_PAGER.md`: an ALS
+  project is opened from its folder, file or repository. Commit hashes added to the last entries.
+
+## 2026-11-25 — Pill buttons; the Modern look backlog (`c36220b`)
 
 - The author: a modern Mac look with pill-shaped buttons, and a backlog for the UI transformation
   (toggle switch, combo box, date / time display, calendar picker, colour picker for generated
@@ -17,7 +32,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   buttons as on code-made ones (found by tag). The Studio's push buttons; the generated app's
   footer and Log In (`gThemePillButtons` in Theme.incl). `features/PILL_BUTTONS_FEATURE.md`.
 
-## 2026-11-25 — Open ALS Project: a project from the model API Logic Server generated
+## 2026-11-25 — Open ALS Project: a project from the model API Logic Server generated (`e909058`)
 
 - *Project > New Project from API Logic Server…* (⇧⌘N) and **API Logic Server Project…** on New
   Project open `ALSProjectView.xib`: an ALS project's folder, its model file or a public GitHub
@@ -35,7 +50,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   `ApiLogicServer/basic_demo` and `demo` read over raw.githubusercontent.com from here.
 - `tools/als_project_reference.py` (25 checks) in `run_tests.sh`; String(15) now VARCHAR(15).
 
-## 2026-11-25 — The ALS model from database/models.py, parsed as text
+## 2026-11-25 — The ALS model from database/models.py, parsed as text (`dedb93b`)
 
 - In the sandbox: `ApiLogicServer create` (17.05.44) on Northwind and on the CRM's contacts.sqlite.
   Both projects have the model only in `database/models.py` (no `app_model.yaml`): the same file in
