@@ -7,8 +7,8 @@ fn AddColumnToQuery( query, @"p.id", @"ID" )
 fn AddColumnToQuery( query, @"p.givenName", @"Given Name" )
 fn AddColumnToQuery( query, @"p.surName", @"Surname" )
 fn AddColumnToQuery( query, @"p.balance", @"Balance" )
+fn AddOrderToQuery( query, @"p", @"surName", NO )   // NO: ascending, YES: descending
 sql = fn GenerateSelectSQL( query )
-MutableStringAppendString( sql, @" ORDER BY \"p\".\"surName\"" )  // by hand
 
 ### 2
 query = fn InitQueryDictionary

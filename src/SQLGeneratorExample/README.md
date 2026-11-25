@@ -37,7 +37,7 @@ what the app and the module do.
 
 | | Shows |
 |---|---|
-| 1 | everyone, by surname: a SELECT, and ORDER BY added by hand |
+| 1 | everyone, by surname: a SELECT with ORDER BY (`AddOrderToQuery`) |
 | 2 | a person and their addresses: a join and a filter |
 | 3 | addresses without an apartment: IS NULL |
 | 4 | email addresses at test.com: LIKE, AND |
@@ -97,7 +97,7 @@ each have a dictionary of their own. The Generate functions read them and write 
 - **Many rows at once.** An array of dictionaries (what a SELECT returns) goes back in with one
   INSERT.
 
-Good to know: ORDER BY is appended by hand for now (example 1); IN writes a single `?`, so use OR
+Good to know: IN writes a single `?`, so use OR
 filters for a few values; the generator writes queries, not schemas (create tables with plain SQL).
 
 ## Files in this folder

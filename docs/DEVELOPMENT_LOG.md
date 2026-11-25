@@ -6,6 +6,22 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — The SQL Generator's JSON:API side (reference), ORDER BY, the ALS model's relationships
+
+- `AddOrderToQuery` (ORDER BY) in the shared SQL Generator - all three copies (runtime, example,
+  *TXV*); the example's first query uses it instead of SQL added by hand.
+- `tools/jsonapi_reference.py`: the same statement dictionaries -> SQL or a JSON:API request
+  (filters as the JSON list, OR on one column as `in`, sort, a join to a parent as `include=` with
+  inner-join rows, POST / PATCH with `S_CheckSum` / DELETE by the record's id). 17 checks: every
+  query run both ways (SQL on the server's db.sqlite, JSON:API on the server) gives the same rows;
+  writes through JSON:API read back through SQL; OR across columns, filters on a parent and an
+  UPDATE without a key are refused.
+- The author: "ALS does give relationships" - right: `/metadata` leaves them out on purpose, but
+  `/ui/admin/admin.yaml` (no auth) has them (`tab_groups`: direction, name, resource, fks; role
+  names; composite keys) and `user_key` (a lookup's display column). The reference reads it with a
+  YAML-subset reader checked against PyYAML; relationship names are never guessed.
+- Resource names are not table names (Northwind: Category -> CategoryTableNameTest).
+
 ## 2026-11-25 — ALS filters measured; the JSON:API side of the SQL Generator (design)
 
 - The author: the Enterprise edition should use the SQL Generator's own dictionaries and arrays and

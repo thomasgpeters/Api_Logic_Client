@@ -69,6 +69,13 @@ fn AddTableToQuery( query, @"address", @"a" )
 fn AddAssociationToQuery( query, @"a", @"personID", @"p", @"id", _isEqual )
 ```
 
+## Sorting
+`fn AddOrderToQuery( query, alias, column, descending )`, once per column, most important first:
+```
+fn AddOrderToQuery( query, @"p", @"surName", NO )      // ORDER BY "p"."surName"
+fn AddOrderToQuery( query, @"p", @"balance", YES )     // , "p"."balance" DESC
+```
+
 ## Filters
 `fn AddFilterToQuery( query, alias, column, value, type, 0, operator, logic )`
 - **operator**: `_isEqual`, `_isNotEqual`, `_isLessThan`, `_isGreaterThan`, `_isLessThanOrEqual`, `_isGreaterThanOrEqual`, `_isLike`, `_isNotLike`, `_isNull`, `_isNotNull`
@@ -113,7 +120,6 @@ That writes `INSERT INTO "person" ( "balance", "givenName", ... ) VALUES ( ?, ?,
 - **SQLite types kept.** Numbers come back as numbers, text as text, NULL as NSNull.
 
 ## Good to know
-- **ORDER BY** is not in the builder yet: append it to the SQL, as example 1 does.
 - **IN** writes a single `?`, so it matches one value; use OR filters for a few values.
 - The generator writes queries, not schemas: create your tables with plain SQL (CRM Database.incl).
 

@@ -3,11 +3,29 @@
 What the generated app's Enterprise data layer can rely on from API Logic Server, and what it
 must do itself. Measured against a running server (API Logic Server / GenAI-Logic 17.05.44,
 the Northwind sample with SQL security and a credit-limit rule) on 2026-11-25, and checked again
-by `tools/als_contract.py` (18 checks) whenever a server is running.
+by `tools/als_contract.py` (25 checks) and `tools/jsonapi_reference.py` (17) whenever a server is running.
 
 The runtime's `src/Runtime/ALS Client.incl` follows it; `App Data Enterprise.incl` (next) builds on
 that client with the same interface as the Lite edition (`App Data Lite.incl`), so the pages,
 bindings and screens are the same in both editions.
+
+## The model: resources, attributes, relationships
+
+| Where | What it gives | Auth |
+|---|---|---|
+| `GET /metadata?include=attributes` | resources and their attributes (name, type) - **no relationships** (the endpoint skips them on purpose: `if not each_attr._is_relationship`) | token |
+| `GET /ui/admin/admin.yaml` | the model ALS's Admin app runs on: per resource its attributes (label, required, search, sort), `user_key` (the column that names a record: a lookup's display column), and `tab_groups` - **the relationships**: `{direction: toone / tomany, name, resource, fks: [...]}`, role names included (Employee: `WorksForDepartment`, `OnLoanDepartment` to Department), composite keys (Order -> Location by `City`, `Country`) and self relationships | none |
+| `GET /api/swagger.json` | relationship names as paths (`/Employee/{EmployeeId}/WorksForDepartment`), not their keys | none |
+
+The Studio reads `/metadata` and `admin.yaml` for an ALS project: the relationships come in the
+same shape the SQLite model reader produces, so the generator, the model diagram and the JSON:API
+side all use them. Relationship names are never guessed (two to the same parent are common).
+`admin.yaml` is a small, regular YAML subset (maps by indentation, `- ` lists, plain or quoted
+values): `tools/jsonapi_reference.py` reads it with a subset reader checked against PyYAML - the
+reference for the FB reader.
+
+**Resource names are not table names**: Northwind's `Category` lives in table
+`CategoryTableNameTest` (on purpose, in the sample). Enterprise statements name resources.
 
 ## Sign-in
 
