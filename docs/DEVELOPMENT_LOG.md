@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Value lists with codes: "R = Retail" stores R, shows Retail
+
+- The author: a type field should be able to be a Dropdown whose values the developer types,
+  written into the FB code, not a lookup but behaving like one. Most of it existed (Control:
+  Dropdown, the Values column, `BindingFillChoices` with the list in the generated binding); what
+  a lookup did and a value list did not was storing a key while showing a name. Values now take
+  `code = label` pairs: `TypeMapValuePart` / `TypeMapValueParts` / `TypeMapValuesArePairs` (Type
+  Mapping); a Dropdown's binding calls `BindingSetChoices( tag, titles, codes )`, Radio buttons
+  get the labels as titles (XIB) and the codes in their show / take. A plain list is generated as
+  before.
+
 ## 2026-11-25 — SQL Generator example builds and runs; its warnings fixed
 
 - The author's build of `SQLGeneratorExample` compiled, linked and ran, with two warnings:

@@ -49,6 +49,7 @@ The Studio
 - [ ] Form designer: the Form layout popup; a 3-column Form; a Hidden field; the read-only key on New / Save
 - [ ] Form designer: the Control popup follows the selected attribute; TIME and DATETIME round-trip through Save
 - [ ] Form designer: a foreign key's Dropdown lists the parent's rows and stores the key; a value-list Dropdown; Radio buttons
+- [ ] A value list with codes: `R = Retail, W = Wholesale` on a type field - the Dropdown shows Retail, Save stores R, reopening selects Retail
 - [ ] Record popover: ⓘ beside Order's Customer shows the Customer; "No … chosen" when empty; no button on a value list (`features/RECORD_POPOVER_FEATURE.md`)
 - [ ] Icons: the entity Icon popup and preview, the app symbol in Project Settings, the Dock icon from a picture
 - [ ] Project Settings (⌘;): counter, 250 limit, Done saves
@@ -118,6 +119,8 @@ Checkbox; app and entity icons; the shell with New / Save / Delete / Refresh thr
 
 - [x] Record popover (author, 2026-11-25; `features/RECORD_POPOVER_FEATURE.md`): an info button beside every lookup
   Dropdown shows the chosen parent record's details in a popover (Order → Customer, Employee → Department, …)
+- [x] Value lists as code = label pairs (author, 2026-11-25): `R = Retail, W = Wholesale` in Values - a Dropdown
+  or Radio buttons store the code and show the label, like a lookup; written into the generated code
 - [ ] Choose the lookup's display column (or several: "givenName surname"); show the display value in the List instead of the key
 - [ ] Generated app toolbar (author): New, Save, Delete, Refresh, Search, Theme, Log In - proposal in `STUDIO_REVIEW.md` 2.6
 - [ ] Window layouts, a project setting (`design/App Shell Design.md`): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one per entity (future)

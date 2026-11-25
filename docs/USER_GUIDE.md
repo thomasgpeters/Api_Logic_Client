@@ -138,7 +138,7 @@ Click an entity in the list. Its **attribute table** shows, for every column:
 | Key | primary key and how it is made (identity, autoincrement, assigned) | |
 | Required / Default | from the database | |
 | **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, **Radio buttons**, **Dropdown**, **Read-only text**, **Hidden** | ✓ |
-| **Values** | a value list for Radio buttons or a Dropdown (`Retail, Wholesale, Online`); for a foreign key, what its Dropdown shows (`→ person.givenName`) | ✓ |
+| **Values** | a value list for Radio buttons or a Dropdown (`Retail, Wholesale, Online`, or code = label pairs `R = Retail, W = Wholesale`); for a foreign key, what its Dropdown shows (`→ person.givenName`) | ✓ |
 | **Form Width** / **List Width** | in points | ✓ |
 | Adjusted | ✓ when you changed something | |
 
@@ -157,11 +157,15 @@ you regenerate. Clear a cell to go back to the recommendation.
 - **Dropdown**: a foreign key gets one by default. It lists the rows of the table it refers to,
   showing a readable column (its *name*, *title* or *description*, a column whose name contains
   "name", else its first text column) and storing the key. Type a value list in **Values** to
-  offer those values instead. The first item is empty: no value.
+  offer those values instead - any attribute can have one, a type or status field for example.
+  The list is written into the generated code (no table behind it) and behaves like a lookup:
+  `Retail, Wholesale, Online` stores what it shows; `R = Retail, W = Wholesale, O = Online` stores
+  the code (`R`) and shows the label (`Retail`). The first item is empty: no value.
   Beside a foreign key's Dropdown, an **info button** (ⓘ) shows the chosen record's details in a
   popover - the Customer of an Order, the Department of an Employee: every field and its value.
 - **Radio buttons**: one per value of the **Values** list (up to 8; with more, or with no
-  list, the attribute gets a Dropdown). Side by side when they fit, else one under the other.
+  list, the attribute gets a Dropdown); code = label pairs work the same way (the label is the
+  button's title, the code is stored). Side by side when they fit, else one under the other.
 - **Checkbox**: for yes / no columns (BOOLEAN, BIT); stored as 1 or 0.
 - **Read-only text** shows a value without letting the user change it. A key the database
   makes for you (an `INTEGER PRIMARY KEY`, with or without `AUTOINCREMENT`) is read-only by
