@@ -90,6 +90,15 @@ if python3 "$here/tools/als_contract.py" http://localhost:5656 >/dev/null 2>&1 |
 else
     echo; echo "== Enterprise: the API Logic Server contract - skipped (no server on localhost:5656; docs/design/ALS Contract.md)"
 fi
+# the ALS model reader (Enterprise): database/models.py read as text, compared with SQLAlchemy's view
+# ALS_PROJECTS: ALS project folders (space-separated); ALS_PYTHON: the Python of the ALS install
+if [ -n "${ALS_PROJECTS:-}" ] && [ -x "${ALS_PYTHON:-}" ]; then
+    for project in $ALS_PROJECTS; do
+        run "Enterprise: models.py read as text = SQLAlchemy's model ($(basename "$project"))" python3 "$here/tools/models_py_reference.py" "$project" "$ALS_PYTHON"
+    done
+else
+    echo; echo "== Enterprise: models.py reader vs SQLAlchemy - skipped (set ALS_PROJECTS and ALS_PYTHON)"
+fi
 run "generated pages: App Pages.incl, as AppPagesSource writes it, lints with the runtime and templates" python3 "$here/tools/check_app_pages.py" "$docs"
 run "model diagram: the ERD page draws the model and rules, opens / closes, drags, selects" python3 "$here/tools/check_erd_page.py" "$db"
 

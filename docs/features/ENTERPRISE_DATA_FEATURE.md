@@ -8,7 +8,7 @@ So the pages, bindings and examples do not know which edition they run on.
 
 | | |
 |---|---|
-| `src/Enterprise/ALS Model.incl` | the model from `app_model.yaml` (ALS 17.3 and earlier) or `admin.yaml`: attributes, primary keys, relationships (name, direction, resource, fks), the display column (`favorite` / `user_key`). Line by line by indentation, the design of the C++ Studio's `Model::fromAppModelYaml` |
+| `src/Enterprise/ALS Model.incl` | the model from `database/models.py` (every ALS project; the only model file from 17.04 on: `ALSModelFromModelsPy`, read as text, never run), or from `app_model.yaml` (ALS 17.3 and earlier) or `admin.yaml`; `ALSModelFromText` tells them apart by their contents: attributes, primary keys, relationships (name, direction, resource, fks), the display column (`favorite` / `user_key`). Line by line by indentation, the design of the C++ Studio's `Model::fromAppModelYaml` |
 | `src/Enterprise/DataObject_JSONAPI.incl` | `GenerateJSONAPISelect / Insert / InsertRows / Update / Delete`, `JSONAPIPagePath`, `JSONAPIRowsFromAnswer`, `JSONAPILastError` |
 | `src/Runtime/ALS Client.incl` | sends the requests (Bearer token, paging, errors) |
 | `tools/jsonapi_reference.py` | the reference and its test: 19 checks against a running server |
@@ -60,13 +60,26 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
   to ALS in ALS's names - resources (Category, stored in CategoryTableNameTest) and relationships
   (WorksForDepartment) - which only ALS's model has.
 
-- The model file: `app_model.yaml` (author), read with the same reader as `admin.yaml` (same shape);
-  current ALS (17.04+) writes only `admin.yaml` - and `database/models.py`, which the author's
-  onboarding guide ranks first (a reader for it: backlog). `/metadata` has no relationships.
+- The model file: `database/models.py` - in the same place for any database (checked: `ApiLogicServer
+  create` on Northwind and on the CRM's contacts.sqlite, ALS 17.05.44; neither has `app_model.yaml`).
+  **Parsed as text, never run** (author, 2026-11-25: no Python interpreter inside FutureBasic). The
+  lines read: `class X(Base)`, `__tablename__`, `_s_collection_name`, `Column(...)` (type, primary key,
+  `ForeignKey('table.col')`, `nullable=False`), `Mapped["X"]` / `Mapped[List["X"]]` relationships with
+  `foreign_keys` and `back_populates`, `ForeignKeyConstraint` (composite keys); `Table(...)` views
+  skipped. A to-many's key columns are its child's to-one that points back: by name *and* class
+  (Customer, Employee and Location each have an `OrderList`). The model is keyed by resource, as
+  `admin.yaml` keys it. No display column in models.py: `admin.yaml`'s `user_key` when there.
+  `app_model.yaml` / `admin.yaml` (older projects) keep their reader. `/metadata` has no relationships.
 - Relationship names are never guessed (Employee has two to Department).
 - Inner-join rows on the JSON:API side, so both sides return the same rows.
 
 ## Verify
+
+- `tools/models_py_reference.py <ALS project> <ALS venv python>`: models.py read as text against
+  SQLAlchemy's own mappers on the same file - every class, table, attribute, primary key and
+  relationship (name, direction, resource, key columns). Passes on Northwind (17 classes: role names,
+  self and composite relationships) and the CRM (3). In `run_tests.sh` when `ALS_PROJECTS` and
+  `ALS_PYTHON` are set. The FB port follows the reference line for line (fblint clean); it runs on a Mac.
 
 - [x] `jsonapi_reference.py`: 19 checks against ALS 17.05 Northwind (same rows both ways; writes read back)
 - [ ] The FB code on a Mac: lint passes; first use comes with App Data Enterprise

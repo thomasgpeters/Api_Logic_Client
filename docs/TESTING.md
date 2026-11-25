@@ -26,6 +26,7 @@ tools/run_tests.sh
 | `run_tests.sh` (SQL Generator) | the module's three copies (runtime, `src/SQLGeneratorExample`, Test_Xib_View) are identical | `the copies are identical` |
 | `check_app_pages.py` | the `App Pages.incl` the generator writes (its `AppPagesSource` played for two entities) lints with the real runtime, templates and stand-in bindings | `0 failed` |
 | `check_erd_page.py` | the model diagram page, filled as `ERD Generator.incl` fills it, draws every entity, relationship and rule symbol, opens / closes, drags and selects with no script errors (headless Chromium; skipped without node + Playwright) | `0 failed` |
+| `models_py_reference.py` (Enterprise; when `ALS_PROJECTS` and `ALS_PYTHON` are set) | an ALS project's `database/models.py`, read as text the way `ALSModelFromModelsPy` reads it, equals SQLAlchemy's own model of the same file: classes, tables, attributes, primary keys, relationships with their key columns. Make projects with `ApiLogicServer create --project_name=nw --db_url=nw-` and `--db_url=sqlite:///<file>` | `0 failed` per project |
 
 Run any one of them alone:
 

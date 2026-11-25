@@ -6,6 +6,23 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — The ALS model from database/models.py, parsed as text
+
+- In the sandbox: `ApiLogicServer create` (17.05.44) on Northwind and on the CRM's contacts.sqlite.
+  Both projects have the model only in `database/models.py` (no `app_model.yaml`): the same file in
+  the same place whatever the database.
+- The author: the Studio parses models.py; no Python interpreter inside FutureBasic.
+  `tools/models_py_reference.py` reads it line by line, as the FB port does, and its test imports
+  the same file with SQLAlchemy and compares every class, table, attribute, key and relationship:
+  Northwind (17 classes) and CRM (3) equal. Learned on the way: `back_populates` names are not
+  unique (Customer, Employee and Location each have an `OrderList`), so a to-many's key columns come
+  from the child's to-one that points back by name *and* class; composite keys only in
+  `ForeignKeyConstraint` (Order -> Location by Country, City); `Table(...)` blocks are views.
+- `src/Enterprise/ALS Model.incl`: `ALSModelFromModelsPy` (the port), `ALSModelFromText` (models.py
+  or YAML, by contents, so a dropped file works whatever its name); `ALSModelFromURL` uses it. The
+  model is keyed by resource, like admin.yaml's. fblint clean; FB-type names avoided (`single`).
+- `run_tests.sh`: the reader vs SQLAlchemy when `ALS_PROJECTS` and `ALS_PYTHON` are set.
+
 ## 2026-11-25 — The JSON:API side in FB; the ALS model from app_model.yaml
 
 - The author: `app_model.yaml` is the model source (not admin.yaml). Found: ALS 17.04+ (17.05 here)
