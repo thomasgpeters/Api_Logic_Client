@@ -37,6 +37,14 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
   generated there: `ui/app/app_model.yaml` (ALS 17.3 and earlier), else `database/models.py`
   (current ALS: types, primary keys, foreign keys, relationship names), with `ui/admin/admin.yaml`
   for labels and the display column. Read as text (as the C++ Studio does), never run.
+- **No repository access? Drop the model file** (author, 2026-11-25; Enterprise): the Enterprise
+  New Project screen takes the ALS project three ways - choose its folder (a clone of its
+  repository), **drag and drop** the model file onto a drop zone (`app_model.yaml`, `models.py` or
+  `admin.yaml`, or the whole project folder), or Choose... the file in an open panel (the fallback
+  that always works). The Studio keeps a copy of the dropped file in the project (`<project>/ALS
+  Model/`), so the model is there next time without the original. FB: a view registered for
+  `NSPasteboardTypeFileURL` drags, `_viewDraggingEntered` / `_viewPerformDragOperation` (FBExamples,
+  TableView Drag Drop).
 - The two editions mirror each other (author): Lite points at the **SQLite file** and reads the
   model from the database itself (`SQLite Model.incl`); Enterprise points at the **ALS project** and
   reads the model ALS generated. Enterprise cannot read the server's database instead: the app speaks
