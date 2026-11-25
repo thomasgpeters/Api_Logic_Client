@@ -48,6 +48,7 @@ mode work without extra code).
   ten examples on a CRM database, a Help window and About box; README, LICENSE, a draft post for the FB
   list (`docs/features/SQL_GENERATOR_FEATURE.md`). Its module files stay identical to `src/Runtime`'s
   and Test_Xib_View's (`run_tests.sh` checks).
+- `src/MacTests/` — single-file FB programs that answer a question on a Mac before a feature is built on it (`MapKit Points Test.fb`: how FB serves MapKit's point views); see `docs/TESTING.md`.
 - `src/Enterprise/` — the Enterprise edition, in this repository for now (author, 2026-11-25; a private
   repository when it is sold): `DataObject_JSONAPI.incl` (the SQL Generator's JSON:API side: the same
   statement dictionaries -> ALS requests, on the model `src/Generator/ALS Model.incl` reads). The contract: `docs/design/ALS Contract.md`;

@@ -31,7 +31,7 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [ ] A crash seen in the Studio (2026-11-24): the author is trying to reproduce it
 - [ ] Studio review: agree the generated app's toolbar (`STUDIO_REVIEW.md` 2.6)
 - [ ] The Modern look: more controls and looks to add to the list
-- [ ] Map view (backlogged, decisions later): native MapKit or an HTML map; location columns for Northwind's test data and their names; layer colours; the bubble's details and menu actions (`design/Map View Design.md`)
+- [ ] Map view (backlogged; MapKit decided): run `src/MacTests/MapKit Points Test.fb`; location columns for Northwind's test data and their names; layer colours; the bubble's details and menu actions (`design/Map View Design.md`)
 - [ ] Enterprise licensing option (A / B / C, see Parked)
 - [ ] Proposal to Val Huber: percentage offer + the name "LogicBank for FutureBasic"
 - [ ] Rename the FB project and its `.main` to the product name (later)
@@ -86,8 +86,9 @@ both editions. The author adds to this list.
 - [ ] **Map view** (author, 2026-11-25; design: `design/Map View Design.md`): any result set whose rows carry
   latitude and longitude columns, on a map - generic, starting with an entity's records (Customer, Supplier).
   Backlogged for later decisions (author, 2026-11-25)
-  - [ ] 0. Decide: native MapKit (`mkmapview`; recommended - no key, native look and events, icons / bubbles /
-    menus built in) or an HTML page with a JavaScript map; if native, a small Mac test of `_mapViewViewForAnnotation`
+  - [x] 0. Decided: Apple's MapKit (author, 2026-11-25), not an HTML / JavaScript map
+  - [ ] 0b. Run `src/MacTests/MapKit Points Test.fb` on a Mac: which mode answers `_mapViewViewForAnnotation`
+    (coloured markers with icons, bubbles with details and a button); paste its "MapTest:" log lines
   - [ ] 1. One entity's result set: the location columns found by name and type (or chosen); a generic
     `App Map.incl` (rows + latitude / longitude / title keys -> pins); List | Map; a pin click opens the row's Form
   - [ ] 2. Several result sets on one map (Customers and Suppliers): layers, a colour each, show / hide

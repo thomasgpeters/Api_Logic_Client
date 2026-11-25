@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Map view: Apple's MapKit decided; a Mac test for its points
+
+- The author: use Apple's MapKit (not an HTML / JavaScript map). `src/MacTests/MapKit Points Test.fb`
+  (new folder: single-file programs that answer a question on a Mac first) shows five points and
+  answers `_mapViewViewForAnnotation` four ways, logging what FB passes. Found in FB's headers: the
+  event's getters / setters are generic (`DialogEventObject`, `DialogEventSetObject`,
+  `DialogEventSetView`), and `MKMarkerAnnotationView` has setters but no constructor - the test
+  makes one with a `cln` line (`cln return (__bridge_retained CFTypeRef)…`).
+
 ## 2026-11-25 — Record popover: a related record's details beside its Dropdown
 
 - The author (Lite): an Order's Customer Dropdown needs a small icon that shows that Customer's

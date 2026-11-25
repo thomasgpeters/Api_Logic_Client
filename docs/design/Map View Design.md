@@ -6,7 +6,7 @@ entity's records (Customer, Supplier, …); any query's result set later. Addres
 into locations to fill those columns where a table has none. A design to agree before building;
 the steps are in `BACKLOG.md` → Modern look → Map view.
 
-## Native MapKit or an HTML map? (to decide - author, later)
+## Native MapKit or an HTML map? Decided: Apple's MapKit (author, 2026-11-25)
 
 Cocoa has a native map view, **MKMapView** (Apple's MapKit); FutureBasic has the `mkmapview`
 statement, three FBExamples and all of MapKit in its headers. The alternative is an HTML page with a
@@ -23,7 +23,10 @@ JavaScript map (Leaflet / OpenStreetMap, Google Maps JS, MapKit JS) in a web vie
 | For it | | the model diagram is already HTML; more ready-made map plug-ins (heat maps, clustering) |
 
 The one open risk on the native side: custom icons and bubbles come through `_mapViewViewForAnnotation`,
-which no FBExample uses - a small Mac test project settles it first. If FB cannot serve that event,
+which no FBExample uses - `src/MacTests/MapKit Points Test.fb` settles it first: five points (three
+customers, two suppliers) answered four ways (not at all; a marker view through `DialogEventSetObject`;
+through `DialogEventSetView`; a plain view with an image), each logged. FB's headers have the marker's
+setters but no constructor for `MKMarkerAnnotationView`, so the test makes one in a `cln` line. If FB cannot serve that event,
 the native map still works with standard pins and their simple callouts; only the custom icons and
 the expanding bubble wait.
 
@@ -125,8 +128,8 @@ Coordinates from address*):
 
 ## Open questions (author)
 
-- **Native MapKit or an HTML / JavaScript map** (above; native recommended) - and, if native, the
-  small Mac test of `_mapViewViewForAnnotation` first.
+- ~~Native MapKit or an HTML / JavaScript map~~ - decided: MapKit (author, 2026-11-25). Waiting on
+  the Mac test's result: which of its four modes shows coloured markers and bubbles.
 
 - Northwind has no location columns: add `Latitude` / `Longitude` to Customer and Supplier in the
   project's copy (Lite) so step 1 has data - or start with a test database that has them?

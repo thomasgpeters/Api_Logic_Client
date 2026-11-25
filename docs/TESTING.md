@@ -55,6 +55,14 @@ and ends with `logic test: 70 scenarios, 0 failed`. It works on `~/Desktop/Logic
 a copy; run `make_logic_test.py` again for a fresh one. Paste the Build Log or the NSLog lines
 into a session when something fails.
 
+## 2b. On a Mac — MapKit points (before the Map view is built)
+
+Open `src/MacTests/MapKit Points Test.fb` in FB and run it. Five points (three customers in blue,
+two suppliers in orange); the popup answers the map's `_mapViewViewForAnnotation` event four ways.
+Report which modes show coloured markers with a person / shipping-box icon, and a bubble with two
+lines of details and an (i) button; paste the `MapTest:` lines from the log
+(`design/Map View Design.md`).
+
 ## 3. On a Mac — the generator and generated apps (by hand)
 
 | Check | How | Passing |
