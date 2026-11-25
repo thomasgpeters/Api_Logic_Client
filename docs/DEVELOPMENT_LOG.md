@@ -6,6 +6,29 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — The SQL Generator as a shared module: an example project for the FB list
+
+The author wants to share the SQL Generator (the DataObject query builder) on the FutureBasic
+list, open source (MIT), as an example app built from `src/CleanApp`.
+- `src/SQLGeneratorExample/`: the module; `SQL Generator SQLite.incl` (a runner, our own SQLite
+  declarations, `SQLGen` prefix); `CRM Database.incl` (person / address / contact, five made-up
+  people inserted through the builder); ten examples (`CRM Examples.incl`, the FB each shows in
+  `Example Code.txt`); output in colour with results as a SQL command line prints them (`sqlite>`
+  prompt, Menlo, `+---+` tables, "n rows in set", "Query OK"); a Help window with the user guide
+  (`User Guide.txt` in simple markup -> `Rich Text.incl`, system colours for light and dark);
+  About box (`Credits.rtf`); README, LICENSE (MIT), ANNOUNCEMENT (draft post).
+- Module changes, in all three copies (runtime, example, *TXV* 2293f73): joins fixed (the
+  `associations` entry was a dictionary used as an array: the first join would have crashed,
+  `-[__NSDictionaryM addObject:]`; nothing had used joins yet); INSERT of an array of dictionaries
+  (author): `InitInsertRowsDictionary`, `AddRowsToInsert`, `SetInsertColumns`,
+  `GenerateInsertRowsSQL`, rows in `QueryParameterValues`; MIT headers; unused leftovers removed.
+- `tools/make_sql_generator_svg.py` -> `docs/design/SQL Generator Object Model.svg` (the
+  dictionaries and arrays a statement is described with; author's idea), in the user guide (17)
+  and the example's README. `run_tests.sh` checks the three copies are identical.
+- `src/CleanApp`: the Hello function, button, label and menu removed (author).
+- fblint caught `line` (an FB keyword), `for ... in` over a function call, and
+  `FileManagerURLForDirectory` called with five arguments (it takes two).
+
 ## 2026-11-25 — One-pager: "app builder" (author)
 
 - The Studio is introduced as "An app builder that runs on your Mac" instead of "A generator"

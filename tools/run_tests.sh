@@ -57,10 +57,20 @@ if [ ! -d "$headers" ] || [ ! -f "$db" ]; then
 fi
 
 run "fblint: the generator and runtime" python3 "$here/tools/fblint.py" --headers "$headers" "$here/src"
+txv=""
 if [ -d "$here/../Test_Xib_View" ] || [ -d "$here/../test_xib_view" ]; then
     txv="$here/../Test_Xib_View"; [ -d "$txv" ] || txv="$here/../test_xib_view"
     run "fblint: Test_Xib_View" python3 "$here/tools/fblint.py" --headers "$headers" "$txv"
 fi
+# the SQL Generator module: the runtime's copy, the example project's and Test_Xib_View's are one
+sqlgen_same() {
+    for f in DataObject.glbl DataObject_Super.incl DataObject.incl; do
+        cmp -s "$here/src/Runtime/$f" "$here/src/SQLGeneratorExample/$f" || { echo "differs: src/SQLGeneratorExample/$f"; return 1; }
+        if [ -n "$txv" ]; then cmp -s "$here/src/Runtime/$f" "$txv/$f" || { echo "differs: Test_Xib_View/$f"; return 1; }; fi
+    done
+    echo "SQL Generator: the copies are identical"
+}
+run "SQL Generator: one module, identical in the runtime, the example project and Test_Xib_View" sqlgen_same
 run "logic engine: scenarios (Python reference)" python3 "$here/tools/logic_reference.py" --test "$db"
 run "logic engine: every rule proven (each rule left out must fail a scenario)" python3 "$here/tools/logic_reference.py" --prove "$db"
 run "rules bridge: declare_logic.py import / export, Rules.json check, FB generation" python3 "$here/tools/rules_bridge.py" --test "$db"

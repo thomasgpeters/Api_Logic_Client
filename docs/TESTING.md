@@ -23,6 +23,7 @@ tools/run_tests.sh
 | `logic_reference.py --prove` | every rule is really tested: each rule left out in turn makes a scenario fail | `20 rules, 0 not proven` |
 | `rules_bridge.py --test` | `declare_logic.py` → `Rules.json` (lambdas translated to FB, the rest switched off with its Python kept), `check`, FB generation lints with the runtime, export and the round trip back | `23 checks, 0 failed` |
 | `make_logic_test.py` + `fblint` | the FB test project assembles from the real runtime files and lints clean, build order included | `0 problems` |
+| `run_tests.sh` (SQL Generator) | the module's three copies (runtime, `src/SQLGeneratorExample`, Test_Xib_View) are identical | `the copies are identical` |
 | `check_app_pages.py` | the `App Pages.incl` the generator writes (its `AppPagesSource` played for two entities) lints with the real runtime, templates and stand-in bindings | `0 failed` |
 | `check_erd_page.py` | the model diagram page, filled as `ERD Generator.incl` fills it, draws every entity, relationship and rule symbol, opens / closes, drags and selects with no script errors (headless Chromium; skipped without node + Playwright) | `0 failed` |
 

@@ -1,0 +1,96 @@
+The FB each example shows (CRM Examples.incl has the same lines). "### n" starts example n.
+
+### 1
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"person", @"p" )
+fn AddColumnToQuery( query, @"p.id", @"ID" )
+fn AddColumnToQuery( query, @"p.givenName", @"Given Name" )
+fn AddColumnToQuery( query, @"p.surName", @"Surname" )
+fn AddColumnToQuery( query, @"p.balance", @"Balance" )
+sql = fn GenerateSelectSQL( query )
+MutableStringAppendString( sql, @" ORDER BY \"p\".\"surName\"" )  // by hand
+
+### 2
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"person", @"p" )
+fn AddTableToQuery( query, @"address", @"a" )
+fn AddColumnToQuery( query, @"p.givenName", @"Given Name" )
+fn AddColumnToQuery( query, @"p.surName", @"Surname" )
+fn AddColumnToQuery( query, @"a.street", @"Street" )
+fn AddColumnToQuery( query, @"a.apartment", @"Apartment" )
+fn AddColumnToQuery( query, @"a.city", @"City" )
+fn AddAssociationToQuery( query, @"a", @"personID", @"p", @"id", _isEqual )
+fn AddFilterToQuery( query, @"p", @"surName", @"Fischer", _textType, 0, _isEqual, 0 )
+sql = fn GenerateSelectSQL( query )
+
+### 3
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"address", @"a" )
+fn AddColumnToQuery( query, @"a.street", @"Street" )
+fn AddColumnToQuery( query, @"a.city", @"City" )
+fn AddColumnToQuery( query, @"a.state", @"State" )
+fn AddFilterToQuery( query, @"a", @"apartment", NULL, _textType, 0, _isNull, 0 )
+sql = fn GenerateSelectSQL( query )
+
+### 4
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"contact", @"c" )
+fn AddTableToQuery( query, @"person", @"p" )
+fn AddColumnToQuery( query, @"p.givenName", @"Given Name" )
+fn AddColumnToQuery( query, @"c.contact", @"Email" )
+fn AddAssociationToQuery( query, @"c", @"personID", @"p", @"id", _isEqual )
+fn AddFilterToQuery( query, @"c", @"type", @"Email", _textType, 0, _isEqual, 0 )
+fn AddFilterToQuery( query, @"c", @"contact", @"%@test.com", _textType, 0, _isLike, _and )
+sql = fn GenerateSelectSQL( query )
+
+### 5
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"person", @"p" )
+fn AddColumnToQuery( query, @"p.givenName", @"Given Name" )
+fn AddColumnToQuery( query, @"p.surName", @"Surname" )
+fn AddColumnToQuery( query, @"p.balance", @"Balance" )
+fn AddFilterToQuery( query, @"p", @"surName", @"Okafor", _textType, 0, _isEqual, 0 )
+fn AddFilterToQuery( query, @"p", @"balance", fn NumberWithDouble( 1000.0 ), _realType, 0, _isGreaterThan, _or )
+sql = fn GenerateSelectSQL( query )
+
+### 6
+statement = fn InitInsertIntoDictionary
+fn AddTableToInsert( statement, @"person" )
+fn AddColumnToInsert( statement, @"type", @"Business", _textType )
+fn AddColumnToInsert( statement, @"givenName", @"Ana", _textType )
+fn AddColumnToInsert( statement, @"surName", @"Lima", _textType )
+fn AddColumnToInsert( statement, @"balance", fn NumberWithDouble( 0.0 ), _realType )
+sql = fn GenerateInsertIntoSQL( statement )
+// ... run it, then fn SQLGenLastInsertID( db ) is the new person's id
+statement = fn InitInsertIntoDictionary
+fn AddTableToInsert( statement, @"contact" )
+fn AddColumnToInsert( statement, @"personID", fn NumberWithInteger( newID ), _integerType )
+fn AddColumnToInsert( statement, @"type", @"Email", _textType )
+fn AddColumnToInsert( statement, @"contact", @"ana.lima@test.com", _textType )
+sql = fn GenerateInsertIntoSQL( statement )
+
+### 7
+statement = fn InitUpdateDictionary
+fn AddTableToUpdate( statement, @"person" )
+fn AddColumnToUpdate( statement, @"balance", fn NumberWithDouble( 99.95 ), _realType )
+fn AddFilterToQuery( statement, @"", @"surName", @"Okafor", _textType, 0, _isEqual, 0 )
+sql = fn GenerateUpdateSQL( statement )
+
+### 8
+statement = fn InitDeleteFromDictionary
+fn AddTableToDelete( statement, @"contact" )
+fn AddFilterToQuery( statement, @"", @"contact", @"608-555-0199", _textType, 0, _isEqual, 0 )
+sql = fn GenerateDeleteFromSQL( statement )
+
+### 9
+statement = fn InitUpdateDictionary
+fn AddTableToUpdate( statement, @"person" )
+fn AddColumnToUpdate( statement, @"balance", fn NumberWithDouble( 0.0 ), _realType )
+sql = fn GenerateUpdateSQL( statement )   // NULL: no filter
+
+### 10
+rows = @[ @{ @"type":@"Personal", @"givenName":@"Kai", @"surName":@"Nakamura", @"balance":fn NumberWithDouble( 15.0 ) }, @{ @"type":@"Business", @"givenName":@"Sofia", @"surName":@"Rossi", @"balance":fn NumberWithDouble( 880.0 ) }, @{ @"type":@"Personal", @"givenName":@"Noah", @"surName":@"Berg" } ]
+statement = fn InitInsertRowsDictionary
+fn AddTableToInsert( statement, @"person" )
+fn AddRowsToInsert( statement, rows )      // the columns: the rows' keys, sorted
+sql = fn GenerateInsertRowsSQL( statement )

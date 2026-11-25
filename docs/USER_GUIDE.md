@@ -22,7 +22,8 @@
 14. [Checking your work](#14-checking-your-work)
 15. [Troubleshooting](#15-troubleshooting)
 16. [Menus and keyboard shortcuts](#16-menus-and-keyboard-shortcuts)
-17. [What is not built yet](#17-what-is-not-built-yet)
+17. [The SQL Generator](#17-the-sql-generator)
+18. [What is not built yet](#18-what-is-not-built-yet)
 
 ---
 
@@ -558,7 +559,27 @@ project's name to go back to its entity definitions.
 project's entity definitions), *Diagram* (Show Model Diagram), *Generate* (Generate App), *Settings*
 (Project Settings). All but Projects need a project.
 
-## 17. What is not built yet
+## 17. The SQL Generator
+
+Every read and write in a generated app goes through the **SQL Generator** (`DataObject.glbl`,
+`DataObject_Super.incl`, `DataObject.incl` in the runtime). You describe a statement with Cocoa
+dictionaries and arrays; it writes parameterized SQL and lists the values for its `?` placeholders.
+Your own code in a generated app can use it the same way.
+
+![The SQL Generator's object model](design/SQL%20Generator%20Object%20Model.svg)
+
+A query is a dictionary (`InitQueryDictionary`) of arrays: `selecttables`, `selectcols`,
+`associations` (joins) and `filter`. Each `Add...ToQuery` call adds one small dictionary to one
+of them. INSERT (one row, or an array of rows), UPDATE and DELETE each have a dictionary of their
+own. `GenerateSelectSQL`, `GenerateInsertIntoSQL`, `GenerateInsertRowsSQL`, `GenerateUpdateSQL`
+and `GenerateDeleteFromSQL` write the SQL; `QueryParameterValues` gives the values in order. An
+UPDATE or DELETE without a filter gets no SQL at all.
+
+The module is also shared on its own, MIT-licensed, as an example project:
+`src/SQLGeneratorExample/` (ten examples on a small CRM database, a user guide in its Help
+window). Its `README.md` has the whole API.
+
+## 18. What is not built yet
 
 - **The Rules page** in the generator: the rules of `Rules.json` in a list, an editor with the
   model's entities and attributes to pick from, and checking. Until then, write rules in

@@ -32,6 +32,14 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] Users and roles in generated apps (author, 2026-11-24): sign-in, users, roles (e.g. Admin, Editor, Viewer) deciding who may see, edit or delete each entity; Lite: users in the app's SQLite database; Enterprise: the API Logic Server's. Then an audit trail (who changed which record, when)
 - [ ] Generated app window layouts, a project setting (`design/App Shell Design.md`, Window layouts): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one tab per entity (future)
 
+## SQL Generator (module, shared on the FB list - `features/SQL_GENERATOR_FEATURE.md`)
+
+- [x] Example project `src/SQLGeneratorExample` (MIT): ten examples, Help window, About box, README, announcement draft
+- [x] INSERT of an array of dictionaries (author); joins fixed (associations array)
+- [ ] Verify on a Mac (see the feature's checklist), then post to the FB list
+- [ ] ORDER BY in the builder (`AddOrderToQuery`); `IN` with one `?` per value
+- [ ] The Help window could show the object model (the SVG as a PNG in the text)
+
 ## App shell — lite edition (see `design/App Shell Design.md`)
 
 - [x] App icon (picture or SF Symbol) and an icon per entity, chosen in the Studio; the app name large, centred on the icon

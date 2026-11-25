@@ -37,8 +37,13 @@ mode work without extra code).
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/CleanApp/` — a project the FB editor created (author, 2026-11-24): the reference for project
-  settings (`Settings2.plist`: SDK, architecture, minimum macOS). Keep the Studio's, the template's
-  and Test_Xib_View's settings in step with it; it is not built or changed by us.
+  settings (`Settings2.plist`: SDK, architecture, minimum macOS) and the starting point of new example
+  projects (its Hello button and menu were removed at the author's request, 2026-11-25). Keep the
+  Studio's, the template's and Test_Xib_View's settings in step with it.
+- `src/SQLGeneratorExample/` — the SQL Generator shared on its own (MIT): the module, a SQLite runner,
+  ten examples on a CRM database, a Help window and About box; README, LICENSE, a draft post for the FB
+  list (`docs/features/SQL_GENERATOR_FEATURE.md`). Its module files stay identical to `src/Runtime`'s
+  and Test_Xib_View's (`run_tests.sh` checks).
 - `src/Runtime/` — our FB code copied into every generated app. Not bundled into the Studio
   (author, 2026-11-24): `Studio Library.incl` copies `src/Runtime` and `src/Templates` into the
   workspace (`workspace/Runtime`, `workspace/Templates`) the first time they are needed, and on
@@ -74,6 +79,7 @@ mode work without extra code).
   `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
   `check_erd_page.py` (test: the model diagram page in headless Chromium),
   `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
+  `make_sql_generator_svg.py` (draws `docs/design/SQL Generator Object Model.svg`),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 
