@@ -179,6 +179,28 @@ When resuming, in this order:
 - [ ] Generator's own ALS fetch uses the Create Project form's base URL and credentials (still hard-coded host and `admin`/`p`), and waits for login before fetching
 - [x] ~~Move to FB's newer type names~~ — reversed 2026-11-24: FutureBasic 7.0.38 does not know `StringRef`, `URLRef`, …; everything uses the CF names (fblint enforces it)
 
+## Modern look - the UI transformation (author, 2026-11-25)
+
+A modern Mac look for the Studio and for the apps it generates, and the native controls a
+generated app's Form can use. Each control: a choice in the Studio's Control popup (Type Mapping),
+the XIB part (XIB Generator), its show / take in the binding (Binding Generator, Binding Support),
+both editions. The author adds to this list.
+
+- [x] Pill buttons (`features/PILL_BUTTONS_FEATURE.md`): `Pill Buttons.incl` (the Studio and the runtime,
+  identical copies); macOS 26: AppKit's capsule (`ButtonSetBorderShape`), macOS 15: the same shape
+  drawn by the layer; the Studio's push buttons; the generated app's footer (Save accent, Delete red)
+  and Log In; `gThemePillButtons` in Theme.incl
+- [ ] Verify on a Mac (26 and 15): the Studio's pages and a generated app's footer; light and dark; the
+  Return button; Delete in red; disabled buttons
+- [ ] Toggle switch (`NSSwitch`): a Control choice for BOOLEAN / yes-no columns, beside Checkbox
+- [ ] Combo box (`NSComboBox`): a value list the user can also type into (Dropdown only picks)
+- [ ] Date, time and date-and-time display: read-only, formatted (short / medium / long, relative "Yesterday")
+  for keys, audit columns and Lists
+- [ ] Calendar date picker: `NSDatePicker`'s graphical (calendar) style, in a popover from the date field
+- [ ] Colour picker (`NSColorWell`): for colour columns, stored as hex text (#RRGGBB)
+- [ ] More controls and looks (author to add): e.g. steppers and sliders for numbers, a search field over
+  the List, a segmented control for short value lists, glass / rounded panels in the shell
+
 ## Look and feel
 
 - [ ] Generated apps: resizable shell window; Form fields stretch, List tables fill (same masks as the generator)

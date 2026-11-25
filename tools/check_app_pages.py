@@ -100,7 +100,7 @@ for r in res:
     n=r['name']
     open(G+f'/{n} Binding.incl','w',newline='').write(f'void local fn {n}RecordToForm( aRecord as CFDictionaryRef )\rend fn\r\rlocal fn {n}FormToRecord as CFMutableDictionaryRef\rend fn = fn MutableDictionaryNew\r\rvoid local fn {n}RecordsToList( records as CFArrayRef )\rend fn\r'+f'\rvoid local fn {n}FormSetUp\rend fn\r\rlocal fn {n}Lookups as CFArrayRef\rend fn = @[]\r\rvoid local fn {n}FillLookup( lookupEntity as CFStringRef, records as CFArrayRef )\rend fn\r')
 R=os.path.join(ROOT,'src')+'/'
-for f in ['Data SQLite.incl','DataObject.glbl','DataObject_Super.incl','DataObject.incl','Data Model.incl','Data Records.incl','Logic Rules.incl','Logic Row.incl','Logic Engine.incl','App Data Lite.incl','App Shell.incl','Binding Support.incl']:
+for f in ['Data SQLite.incl','DataObject.glbl','DataObject_Super.incl','DataObject.incl','Data Model.incl','Data Records.incl','Logic Rules.incl','Logic Row.incl','Logic Engine.incl','App Data Lite.incl','Pill Buttons.incl','App Shell.incl','Binding Support.incl']:
     shutil.copy(R+'Runtime/'+f,G)
 for f in ['EventHandlers.incl','Menus.incl','Theme.incl','Rules.incl']:
     shutil.copy(R+'Templates/App/'+f,G)

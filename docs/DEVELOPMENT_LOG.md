@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Pill buttons; the Modern look backlog
+
+- The author: a modern Mac look with pill-shaped buttons, and a backlog for the UI transformation
+  (toggle switch, combo box, date / time display, calendar picker, colour picker for generated
+  apps) - `BACKLOG.md`, Modern look.
+- `Pill Buttons.incl` (the Studio and the runtime, identical): AppKit's capsule border shape on
+  macOS 26 (`ButtonSetBorderShape`, found in FB's headers as macOS 26.0+); on macOS 15, the
+  project's minimum, the property does not exist, so the layer draws the same shape. Works on XIB
+  buttons as on code-made ones (found by tag). The Studio's push buttons; the generated app's
+  footer and Log In (`gThemePillButtons` in Theme.incl). `features/PILL_BUTTONS_FEATURE.md`.
+
 ## 2026-11-25 — Open ALS Project: a project from the model API Logic Server generated
 
 - *Project > New Project from API Logic Server…* (⇧⌘N) and **API Logic Server Project…** on New

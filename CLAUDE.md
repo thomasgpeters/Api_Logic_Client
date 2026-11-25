@@ -19,6 +19,7 @@ mode work without extra code).
 - `src/Generator/` — the FB project (`Api Logic Client.fbeproj`): open it in the FB
   editor. Its `data.fbproj` (inside the `.fbeproj` bundle) is the build order: an
   `.incl` must come *before* any file that calls it (FB needs definition before use).
+  - `Pill Buttons.incl` — Mac-style pill (capsule) push buttons: AppKit's capsule on macOS 26, drawn by the layer on 15; identical to `src/Runtime`'s copy.
   - `Branding.incl` — the product name and the Imagery logo (`ImageryLogo` follows light/dark); `imagery_logo.png` / `imagery_logo_white.png` are the canonical files, never edited.
   - `API Interface.incl` — ALS connectivity for the generator itself (metadata fetch).
   - `SQLite Access.incl` — our own minimal SQLite declarations (open read-only, prepare, step, columns).
@@ -65,7 +66,7 @@ mode work without extra code).
     `Logic Row.incl` (what a rule reads), `Logic Engine.incl` (LogicInsert / LogicUpdate /
     LogicDelete). Rules are FB functions registered with `@fn` and called through a C cast.
   - `App Data Lite.incl` — the app's data interface (list / save / remove / login, answers in `AppDataDone`), Lite edition: SQLite + the rules engine.
-  - `App Shell.incl` — the generated app's frame: nav bar, header, footer, pages, theme menu (`features/APP_SHELL_FEATURE.md`).
+  - `App Shell.incl` — the generated app's frame: nav bar, header, footer, pages, theme menu (`features/APP_SHELL_FEATURE.md`); its buttons are pills (`Pill Buttons.incl`, `gThemePillButtons`).
   - `Binding Support.incl`. `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` are no longer copied into apps: the start of the Enterprise runtime, to move to its private repository.
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (from `workspace/Templates`, see above): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,

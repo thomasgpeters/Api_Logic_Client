@@ -71,6 +71,7 @@ sqlgen_same() {
     echo "SQL Generator: the copies are identical"
 }
 run "SQL Generator: one module, identical in the runtime, the example project and Test_Xib_View" sqlgen_same
+run "pill buttons: one module, identical in the Studio and the runtime" cmp "$here/src/Generator/Pill Buttons.incl" "$here/src/Runtime/Pill Buttons.incl"
 run "logic engine: scenarios (Python reference)" python3 "$here/tools/logic_reference.py" --test "$db"
 run "logic engine: every rule proven (each rule left out must fail a scenario)" python3 "$here/tools/logic_reference.py" --prove "$db"
 run "rules bridge: declare_logic.py import / export, Rules.json check, FB generation" python3 "$here/tools/rules_bridge.py" --test "$db"
