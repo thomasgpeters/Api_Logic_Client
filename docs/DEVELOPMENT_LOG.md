@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — The JSON:API side in FB; the ALS model from app_model.yaml
+
+- The author: `app_model.yaml` is the model source (not admin.yaml). Found: ALS 17.04+ (17.05 here)
+  no longer writes it (`app-create` is gone); the C++ Studio reads it with a line-by-line reader
+  and its notes say the same; its onboarding guide ranks `models.py` first. So one reader for both
+  layouts (`entities/columns/primary_key/favorite` and `resources/attributes/user_key`), preferring
+  `app_model.yaml`; checked against PyYAML on the live server's admin.yaml and on the C++ Studio's
+  app_model.yaml sample (primary keys, display column).
+- `src/Enterprise/ALS Model.incl` and `src/Enterprise/DataObject_JSONAPI.incl`: the FB port of the
+  reference (19 checks). FB has no `continue`: the reader handles one line per call, state in
+  globals. fblint caught `record` (an FB keyword).
+- `run_tests.sh`: the side-by-side test when `ALS_DB` names the server's db.sqlite.
+
 ## 2026-11-25 — The SQL Generator's JSON:API side (reference), ORDER BY, the ALS model's relationships
 
 - `AddOrderToQuery` (ORDER BY) in the shared SQL Generator - all three copies (runtime, example,

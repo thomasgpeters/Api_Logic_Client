@@ -81,6 +81,12 @@ rm -rf "$work"
 # the API Logic Server contract (Enterprise): only when a server answers on localhost:5656
 if python3 "$here/tools/als_contract.py" http://localhost:5656 >/dev/null 2>&1 || [ $? -ne 2 ]; then
     run "Enterprise: the API Logic Server contract, against the server on localhost:5656" python3 "$here/tools/als_contract.py" http://localhost:5656
+    alsdb="${ALS_DB:-}"
+    if [ -n "$alsdb" ] && [ -f "$alsdb" ]; then
+        run "Enterprise: the SQL Generator's two sides give the same rows (SQL on the server's db, JSON:API on the server)" python3 "$here/tools/jsonapi_reference.py" --test "$alsdb" http://localhost:5656
+    else
+        echo; echo "== Enterprise: SQL vs JSON:API side by side - skipped (set ALS_DB to the server's database/db.sqlite)"
+    fi
 else
     echo; echo "== Enterprise: the API Logic Server contract - skipped (no server on localhost:5656; docs/design/ALS Contract.md)"
 fi

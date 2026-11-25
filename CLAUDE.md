@@ -44,6 +44,11 @@ mode work without extra code).
   ten examples on a CRM database, a Help window and About box; README, LICENSE, a draft post for the FB
   list (`docs/features/SQL_GENERATOR_FEATURE.md`). Its module files stay identical to `src/Runtime`'s
   and Test_Xib_View's (`run_tests.sh` checks).
+- `src/Enterprise/` — the Enterprise edition, in this repository for now (author, 2026-11-25; a private
+  repository when it is sold): `ALS Model.incl` (the ALS model from `app_model.yaml` or `admin.yaml`:
+  attributes, keys, relationships, display column), `DataObject_JSONAPI.incl` (the SQL Generator's
+  JSON:API side: the same statement dictionaries -> ALS requests). The contract: `docs/design/ALS Contract.md`;
+  references and tests: `tools/als_contract.py`, `tools/jsonapi_reference.py`.
 - `src/Runtime/` — our FB code copied into every generated app. Not bundled into the Studio
   (author, 2026-11-24): `Studio Library.incl` copies `src/Runtime` and `src/Templates` into the
   workspace (`workspace/Runtime`, `workspace/Templates`) the first time they are needed, and on
@@ -80,6 +85,8 @@ mode work without extra code).
   `check_erd_page.py` (test: the model diagram page in headless Chromium),
   `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
   `make_sql_generator_svg.py` (draws `docs/design/SQL Generator Object Model.svg`),
+  `als_contract.py` (test: the API Logic Server contract, against a running server),
+  `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 

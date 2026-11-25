@@ -258,9 +258,78 @@ def read_admin_yaml(text):
 
     return block(0)
 
+def read_model_yaml(text):
+    """An ALS model file -> the model, line by line by indentation (the design of the C++
+    Studio's Model::fromAppModelYaml; the exact mirror of ALSModelFromYAML in ALS Model.incl).
+    Two layouts, the same shape:
+      app_model.yaml (ALS 17.3 and earlier)     admin.yaml (every ALS project)
+      entities:                                 resources:                   indent 0
+        Student:                                  Customer:                  2
+          columns:                                  attributes:              4  -> attributes
+          primary_key:   - id                       (none)                   4  -> keys
+          tab_groups:                               tab_groups:              4  -> relationships
+          favorite: name                            user_key: CompanyName    4  -> display
+      list items "- name: x" at 4, their other keys at 6, "fks:" at 6 with "- fk" lines at 6.
+    -> {entity: {attributes: [{name, ...}], relationships: [{name, direction, resource, fks}],
+        keys: [...], display: column, type: name}}"""
+    def unquote(t):
+        t = t.strip()
+        return t[1:-1] if len(t) >= 2 and t[0] == t[-1] and t[0] in '\'"' else t
+    sections = {'columns': 'attributes', 'attributes': 'attributes', 'tab_groups': 'relationships', 'primary_key': 'keys'}
+    model, ent, section, item, in_fks, inside = {}, None, None, None, False, False
+    for raw in text.splitlines():
+        body = raw.strip()
+        if not body or body.startswith('#'): continue
+        ind = len(raw) - len(raw.lstrip(' '))
+        if ind == 0:
+            inside = body in ('entities:', 'resources:'); ent = None; continue
+        if not inside: continue
+        if ind == 2 and body.endswith(':'):
+            ent = model.setdefault(body[:-1], {'attributes': [], 'relationships': [], 'keys': []}); section = item = None; continue
+        if ent is None: continue
+        is_item = body.startswith('- ')
+        text_ = body[2:] if is_item else body
+        if ind == 4 and not is_item:
+            k, _, v = text_.partition(':'); k, v = k.strip(), v.strip()
+            section = sections.get(k) if not v else None
+            if v:
+                if k in ('user_key', 'favorite'): ent['display'] = unquote(v)
+                elif k == 'type': ent['type'] = unquote(v)
+            item = None; in_fks = False; continue
+        if section is None: continue
+        if section == 'keys':
+            if ind == 4 and is_item: ent['keys'].append(unquote(text_))
+            continue
+        if ind == 4 and is_item:
+            item = {}; ent[section].append(item); in_fks = False
+        if item is None: continue
+        if ind == 6 and is_item and in_fks:
+            item['fks'].append(unquote(text_)); continue
+        if (ind == 4 and is_item) or (ind == 6 and not is_item):
+            k, _, v = text_.partition(':'); k, v = k.strip(), v.strip()
+            if k == 'fks' and not v:
+                item['fks'] = []; in_fks = True
+            else:
+                in_fks = False
+                item[k] = True if v == 'true' else False if v == 'false' else unquote(v)
+    return model
+
+
+def expected_model(doc):
+    """The same model from a real YAML parser's document, for the reader's test."""
+    root = doc.get('entities') or doc.get('resources') or {}
+    out = {}
+    for n, r in root.items():
+        e = {'attributes': [{k: (str(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v) for k, v in a.items()} for a in r.get('columns') or r.get('attributes') or []],
+             'relationships': r.get('tab_groups') or [], 'keys': [str(k) for k in r.get('primary_key') or []]}
+        if r.get('user_key') or r.get('favorite'): e['display'] = r.get('user_key') or r.get('favorite')
+        if r.get('type'): e['type'] = r['type']
+        out[n] = e
+    return out
+
+
 def model_from_admin_yaml(admin):
-    """resource -> {relationships: [{name, direction, resource, fks}], user_key}: the shape the
-    Studio's model already has for a SQLite project (SQLite Model.incl)."""
+    """resource -> {relationships, user_key} straight from a parsed admin.yaml."""
     return {name: {'relationships': r.get('tab_groups') or [], 'user_key': r.get('user_key')}
             for name, r in (admin.get('resources') or {}).items()}
 
@@ -344,7 +413,22 @@ def main():
         check('admin.yaml: the subset reader reads it as PyYAML does', admin == yaml.safe_load(text))
     except ImportError:
         pass
-    MODEL.update(model_from_admin_yaml(admin))
+    MODEL.update(read_model_yaml(text))           # the same reader the FB code mirrors
+    try:
+        import yaml
+        check('admin.yaml (from the server): the line reader gives every resource, attribute and relationship',
+              read_model_yaml(text) == expected_model(yaml.safe_load(text)))
+        import os
+        cpp_test = os.path.join(os.path.dirname(__file__), '..', '..', 'imagery-logicbank-studio', 'tests', 'CompletionTest.cpp')
+        if os.path.exists(cpp_test):     # the C++ Studio's app_model.yaml sample (legacy layout, with primary_key)
+            src = open(cpp_test).read(); start = src.index('entities:'); sample = src[start:src.index(')', start)].rsplit('"', 1)[0]
+            sample = sample.replace('\\n', '\n')
+            m = read_model_yaml(sample)
+            check('app_model.yaml (the C++ Studio\'s sample): the same reader, with primary_key and favorite',
+                  m == expected_model(yaml.safe_load(sample)) and m['AcademicHistory']['keys'] == ['student_id', 'institution_name'] and m['AcademicHistory']['display'] == 'institution_name',
+                  list(m)[:4])
+    except ImportError:
+        pass
     check('admin.yaml: relationships with their names, directions and keys (Employee -> WorksForDepartment)',
           {'direction': 'toone', 'fks': ['WorksForDepartmentId'], 'name': 'WorksForDepartment', 'resource': 'Department'} in MODEL['Employee']['relationships'])
 
