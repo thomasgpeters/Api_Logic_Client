@@ -127,6 +127,21 @@ def main():
     status, payload = call('GET', '/api/Customer?filter[Country]=Germany&sort=CompanyName&page[limit]=100', token=token)
     names = [r['attributes']['CompanyName'] for r in payload['data']]
     check('filter[Country]=Germany and sort=CompanyName', status == 200 and len(names) == 11 and names == sorted(names), len(names))
+    # filters: the JSON list form, filter=[{"name", "op", "val"}, ...] - what the JSON:API side of
+    # the SQL Generator writes. The filter[attr][op]=val form is silently ignored (0 rows).
+    def count(filters):
+        st, pl = call('GET', '/api/Customer?page[limit]=200&filter=' + urllib.request.quote(json.dumps(filters)), token=token)
+        return pl['meta']['total'] if st == 200 else (st, error_message(st, pl))
+    status, payload = call('GET', '/api/Customer?filter[Balance][gt]=1000', token=token)
+    check('filter[attr][op]=val is silently ignored: never write it', status == 200 and payload['meta']['total'] == 0, status)
+    check('filter list: gt', count([{'name': 'Balance', 'op': 'gt', 'val': 1000}]) == 8)
+    check('filter list: like (case-sensitive) and ilike', count([{'name': 'CompanyName', 'op': 'like', 'val': 'A%'}]) == 4 and count([{'name': 'CompanyName', 'op': 'ilike', 'val': 'a%'}]) == 4)
+    check('filter list: eq null is IS NULL, ne null is IS NOT NULL (3 + 92 = 95)', count([{'name': 'Region', 'op': 'eq', 'val': None}]) == 3 and count([{'name': 'Region', 'op': 'ne', 'val': None}]) == 92)
+    check('filter list: in and notin take a list of values', count([{'name': 'Country', 'op': 'in', 'val': ['Germany', 'France']}]) == 22 and count([{'name': 'Country', 'op': 'notin', 'val': ['Germany', 'USA']}]) == 67)
+    check('filter list: several filters are joined with AND', count([{'name': 'Balance', 'op': 'ge', 'val': 1000}, {'name': 'Country', 'op': 'eq', 'val': 'Germany'}]) == 2)
+    r = count({'or': [{'name': 'Country', 'op': 'eq', 'val': 'Mexico'}]})
+    check('no OR: {"or": [...]} is refused (400) - OR across one column is "in"', isinstance(r, tuple) and r[0] == 400, r)
+
     status, payload = call('GET', '/api/Customer/ALFKI', token=token)
     check('one record: GET /api/Customer/ALFKI', status == 200 and payload['data']['id'] == 'ALFKI', status)
     original = payload['data']['attributes']

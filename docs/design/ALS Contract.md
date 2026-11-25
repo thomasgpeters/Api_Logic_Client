@@ -44,6 +44,27 @@ needs `NSJSONReadingFragmentsAllowed` to be read at all.
   no `next`, though offset 800 holds the last 30. **Page by offset until `meta.total` rows have
   arrived** (`ALSListPage`, `ALSResponseTotal`).
 
+## Filters
+
+Only the **JSON list form** filters reliably:
+`filter=[{"name": "<attribute>", "op": "<op>", "val": <value>}, ...]` (URL-encoded).
+
+| op | means | SQL Generator operator |
+|---|---|---|
+| `eq`, `ne` | = , != | `_isEqual`, `_isNotEqual` |
+| `lt`, `le`, `gt`, `ge` | < , <= , > , >= | `_isLessThan` ... `_isGreaterThanOrEqual` |
+| `like`, `ilike`, `notilike` | LIKE (case-sensitive), case-insensitive LIKE, NOT ILIKE | `_isLike`, (none), `_isNotLike` |
+| `eq` / `ne` with `null` | IS NULL / IS NOT NULL | `_isNull`, `_isNotNull` |
+| `in`, `notin` with a list | IN, NOT IN (several values: better than the SQL side's single `?`) | `_isIn`, `_isNotIn` |
+
+- Several filters are joined with **AND** (ALS's `SAFRSBaseX._s_filter`; plain safrs would use OR).
+- **No OR**: `{"or": [...]}` is refused (400). OR across values of one attribute is `in`.
+- `is_null` / `is_` are not operators ("unknown operator").
+- **`filter[attr][op]=val` is silently ignored** - it returns 0 rows, no error. Never write it.
+  `filter[attr]=val` (equality only) works.
+- Relationships: `include=<toone>` adds the parent to `included`; `/api/Customer/ALFKI/OrderList`
+  lists a parent's children.
+
 ## Writes
 
 | | Request | Answer |

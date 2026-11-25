@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — ALS filters measured; the JSON:API side of the SQL Generator (design)
+
+- The author: the Enterprise edition should use the SQL Generator's own dictionaries and arrays and
+  write JSON:API requests instead of SQL, from the ALS model the Studio already reads.
+- Filters measured (`als_contract.py`, now 25 checks; `design/ALS Contract.md` -> Filters): only the
+  JSON list `filter=[{"name","op","val"}]` is reliable; ops eq ne lt le gt ge like ilike notilike in
+  notin; null with eq / ne is IS NULL / IS NOT NULL; filters AND together (ALS's SAFRSBaseX); no OR
+  (`{"or":...}` refused, OR on one column is `in`); `filter[attr][op]=val` is SILENTLY IGNORED (0 rows).
+- The C++/Wt Studio's ApiClient (imagery-logicbank-studio, read-only here) agrees: it uses `include=`
+  for parents and notes that `filter[x]=null` matches the text "null".
+
 ## 2026-11-25 — Enterprise: the API Logic Server contract, measured
 
 The author: start on API Logic Server now (multi-user, three tiers); Enterprise code in this
