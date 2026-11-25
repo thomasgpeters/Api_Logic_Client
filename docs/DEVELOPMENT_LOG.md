@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — SQL Generator example: window title; Run All shows what it ran
+
+- The author: the window title is now "SQL Generator Example by Imagery Business Systems, LLC";
+  Run All "does not seem to work". Its wiring is right (button, menu ⌘R, `ExampleRunAll` runs
+  1-10), but every example scrolls the output to its own end, so after Run All only the end of
+  example 10 was in view - it looked like nothing, or one example, had run. Run All now starts
+  with a heading, logs each example (when the output is logged), ends with a note and scrolls
+  back to the top (`TextScrollRangeToVisible`). If it still does nothing on the Mac, the cause is
+  elsewhere: the author's report decides.
+
 ## 2026-11-25 — Value lists with codes: "R = Retail" stores R, shows Retail
 
 - The author: a type field should be able to be a Dropdown whose values the developer types,
