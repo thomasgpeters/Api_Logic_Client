@@ -22,7 +22,7 @@ Selecting an entity shows a summary — `Customer — key Id (assigned) — Orde
 | Size | | `40 chars`, `10,2`, `64-bit`, `variable` |
 | Key | | `PK`, `FK → Customer`, `PK, FK → Order` |
 | Required, Default | | NOT NULL, column default |
-| Form Control | ✓ | Text field, Text area, Integer field, Decimal field, Date picker, Checkbox |
+| Form Control | ✓ | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, Read-only text, Hidden — typed, or chosen in the Control popup |
 | Form Width, List Width | ✓ | points |
 | Adjusted | | which values the designer changed |
 
@@ -30,7 +30,7 @@ Selecting an entity shows a summary — `Customer — key Id (assigned) — Orde
 
 An edit is stored in the attribute's `design` dictionary (`title`, `fbType`,
 `formControl`, `formWidth`, `listWidth`); clearing a cell returns to the
-recommendation. All adjustments are saved to `~/Library/Application Support/Api_Logic_Client/workspace/<project>/Design.json`:
+recommendation. All adjustments are saved to `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/Design.json`:
 
 ```json
 { "Customer": { "CompanyName": { "title": "Company", "listWidth": "180" } } }
@@ -38,6 +38,34 @@ recommendation. All adjustments are saved to `~/Library/Application Support/Api_
 
 and re-applied whenever the model is opened. Every generator reads attributes only
 through `TypeMapAttribute…` functions, so what the designer sees is what gets generated.
+
+## Values column
+
+`Values` (editable, design key `values`): a comma-separated value list for Radio buttons or a
+Dropdown (`TypeMapAttributeValues`). For a foreign key without a list it shows what the Dropdown
+offers, `→ person.givenName` (`TypeMapValuesText`); typing a list replaces the lookup, clearing
+the cell restores it. Radio buttons without a list (or with more than 8 values) become a
+Dropdown; a Dropdown with neither a list nor a lookup becomes the type's own control
+(`TypeMapAttributeKind`).
+
+## Control popup
+
+Beside the Form layout popup (`_controlPopup`, created in `Windows.incl`). Selecting an attribute
+(`_tableViewSelectionDidChange` on the attribute table) rebuilds its items
+(`DisplayAttributeControl`): *Recommended: <control>* (`TypeMapRecommendedKind`), then every
+control in `TypeMapControlKinds` order. Choosing one stores its name as `formControl`
+(`DesignControlChosen` → `DesignSetAttributeValue`, shared with cell editing); *Recommended*
+clears it. The table keeps the attribute selected after the refresh.
+
+## Form layout
+
+The popup at the top right of the entity view (`_formColumnsPopup`, created in `Windows.incl`):
+*Form: automatic*, *1 column*, *2 columns*, *3 columns*. The choice is the entity's own design
+(`DesignFormColumnsChosen`), saved in `Design.json` under `"@entity"`:
+
+```json
+{ "Customer": { "@entity": { "formColumns": "3" }, "Fax": { "formControl": "Hidden" } } }
+```
 
 ## Notes
 

@@ -58,7 +58,7 @@ into a session when something fails.
 |---|---|---|
 | Generator builds and runs | open `src/Generator/Api Logic Client.fbeproj`, build | builds; window opens |
 | New Project | Create Project → Choose… a database → Create | tables summary; entity list and definitions |
-| Workspace | Model → Show Workspace in Finder | `<project>/Project.json`, `Database/<db>`, `Design.json` after an edit |
+| Workspace | Help → Show Workspace in Finder | `<project>/Project.json`, `Database/<db>`, `Design.json` after an edit |
 | Designer adjustments | edit a Title or a width in the attribute table | `Design.json` written; kept after reopening |
 | Project Settings | ⌘; → About text | counter, 250 limit, saved in `Project.json` |
 | Recent Projects | quit, relaunch | the project is listed; double-click opens it |

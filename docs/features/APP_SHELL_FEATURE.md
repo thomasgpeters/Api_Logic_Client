@@ -70,3 +70,15 @@ without a copyright the footer says `© <app name>`.
 - [ ] Resize: the nav bar keeps its width; header and footer stretch; the List grows.
 - [ ] New → fill in → Save adds a row; choose a row → change → Save updates it; a constraint's
       message appears when a save is refused; Delete asks, then removes; Refresh re-reads.
+
+## Header and icons (2026-11-24)
+
+- The app icon (52 points) sits centred in the header's height; the app name, 24-point bold, is
+  centred on it, or with a tag-line the two lines are centred together.
+- The app icon is the picture from Project Settings (`AppLogo.png`): header, Dock and About box
+  (`AppSetIconImage`). Without one, the SF Symbol chosen there (`APP_SYMBOL` in App Pages.incl,
+  `ShellSetAppSymbol`), in the header only. A Finder icon (`.icns` with `#plist CFBundleIconFile`)
+  is in the BACKLOG.
+- Each entity's navigation icon is its Model.json `icon`: the designer's choice in the Studio
+  (Icon popup, saved under `"@entity"` in Design.json) or `TypeMapRecommendedIcon` from its name.
+- The navigation bar has a "Business Objects" heading (`SHELL_NAV_HEADING`, `gThemeNavHeadingText`).

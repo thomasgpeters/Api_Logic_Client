@@ -6,6 +6,250 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-24 — One-pager: the SQL Generator (author)
+
+- `docs/DOC_ONE_PAGER.md` / `.html` / `.pdf`: a section on the SQL Generator (the DataObject
+  query builder): FB code describing a two-table query with a join and a filter, the exact SQL
+  `GenerateSelectSQL` writes for it (quoted names, `?` placeholders, the values apart), and what it
+  guarantees: SELECT / INSERT / UPDATE / DELETE, parameterized, names quoted, no UPDATE or DELETE
+  without a filter. "Data, done properly" names it. PDF reprinted (still two pages); the published
+  page republished (new link: https://claude.ai/artifact/4h8NeeASNMggnnztHuicky).
+
+## 2026-11-24 — Crumb trail rebuilt from buttons
+
+- The `NSPathControl` trail highlighted when clicked but did nothing (author): the item handed
+  back by `PathControlClickedPathItem` is most likely not the object we stored, so the action was
+  never found. Replaced with up to four borderless buttons (symbol and title, sized to fit,
+  `_crumbButtonBase` 611-614) and chevron image views between them (621-623), made once in
+  `BuildSubViews` and titled, placed and shown by `StudioUpdateCrumbs`; the last crumb is bold.
+  Clicks are `_btnClick` -> `StudioCrumbClicked` (EventHandlers.incl, logged). The square-icon
+  workaround (`StudioCrumbImage`) went with the path control: a button keeps a symbol's proportions.
+
+## 2026-11-24 — Crumb icons kept square; the entity line's placeholder
+
+- The path control draws each item's image in a square, so SF Symbols were squeezed (author's
+  screenshot). `StudioCrumbImage` draws the symbol centred in a 16-point square, proportions kept
+  (`ImageWithSize`, `ImageLockFocus`, `ImageDrawInRect`), as a template image.
+- With a project open and no entity chosen, the summary line showed the XIB's placeholder
+  "an object"; it now says "Choose an entity in the Objects list" (`StudioUpdateCommands`).
+
+## 2026-11-24 — The Studio's crumb trail (author: "a way to navigate back to the Project screen")
+
+- `Menus.incl`: `StudioUpdateCrumbs` builds an `NSPathControl` trail from the visible view and the
+  state (Projects › project › entity or Settings; › New Project; › API Logic Server), keeping an
+  action beside each item (`gStudioCrumbActions`); `StudioCrumbAction` reads the clicked one
+  (`PathControlClickedPathItem`, `_btnClick`). Projects -> the Projects screen, the project -> its
+  entity definitions.
+- `Windows.incl`: the trail at the top of the page area, the heading moved down under it
+  (`_crumbTrailHeight`; `_pageHeadingHeight` 60 -> 86 so the pages start below both).
+- A "< Projects" button beside the heading was written first and replaced by the trail before
+  committing (the author's suggestion).
+
+## 2026-11-24 — Keyboard shortcuts for the Studio's commands (author)
+
+- `Menus.incl`: ⌘1 Recent Projects, ⌘2 Entity Definitions (a new Project menu item, the
+  toolbar's Entities), ⌥⌘R Show Project in Finder, ⌥⌘I / ⌥⌘E Import / Export Rules, ⌥⌘G Show
+  Generated App, ⌥⌘U Update Runtime and Templates, ⇧⌘K Show Workspace; the option-command ones
+  through the `menu` statement's modifier mask. Delete Project has none on purpose. Toolbar
+  tooltips name the shortcut (in words: no new non-ASCII string literals).
+
+## 2026-11-24 — Studio review step 1: menus, toolbar, commands enabled by state
+
+- `Menus.incl` (moved before the other includes so every file can call it): Project / Edit /
+  Model / Generate / Window / Help; `StudioUpdateCommands` enables each menu item, toolbar item
+  and design popup from the state - a project, an entity selected (the Generate XIB item names
+  it), an attribute selected, a project selected in Recent Projects (Delete). Called at launch,
+  after every menu command, toolbar click and button, on table selection, when a model loads,
+  on Close and Delete.
+- `Toolbar.xib`: Projects, Entities, Diagram, Generate, Settings (tags 600-604, handled in
+  `_toolbarItemClick`); the old items were never implemented (author: they came from
+  Test_Xib_View) and shared tags with view controls.
+- New commands: New Project (⌘N), Close Project (⇧⌘W, `ProjectClose`, sharing
+  `ProjectResetToEmpty` with Delete), Show Project / Generated App / Workspace in Finder, Help
+  (the user guide from the repository, else GitHub). The ALS form's Cancel works.
+- Open One Xib is behind `STUDIO_DEBUG_MENU` (off). Docs follow the new menus.
+
+## 2026-11-24 — Studio review: inventory and proposal
+
+- `docs/STUDIO_REVIEW.md`: every toolbar item, menu item and view control, with its status.
+  Found: the toolbar is dead (no `_toolbarItemClick` handler) and its tags collide with view
+  controls (205 = the ALS form's Cancel, 303 = the tag-line field); Preferences and Help are
+  empty; the ALS form's Cancel and the Objects list's + / − do nothing; nothing is ever disabled.
+- Proposal: Project / Model / Generate / Window / Help menus, a state table for enabling,
+  a five-item toolbar with its own tag range, context menus on the Objects list, the attribute
+  table and Recent Projects. Waiting for the author's answers before changing anything.
+- FB facts for the work: `_toolbarItemClick` (Toolbar.incl), `ToolbarItemSetEnabled`,
+  `MenuSetAutoenablesItems` / `MenuItemSetEnabled`, a context menu is a `menu` not in the menu bar
+  attached with `ResponderSetMenu` / `ViewSetMenu` (FBExamples, View Contextual Menu).
+- Users and roles for generated apps (author) added to the backlog.
+
+## 2026-11-24 — Form designer 3: Dropdowns, radio buttons, value lists; the Form layout popup
+
+- `SQLite Model.incl` (and `tools/sqlite_model.py`): a single-column foreign key gets
+  `lookup` { entity, key, display }; `SQLiteModelDisplayAttribute` picks the column to show.
+  contacts.sqlite: `address.personID` and `contact.personID` look up `person` showing `givenName`.
+- `Type Mapping.incl`: `_xibKindRadio`, `_xibKindDropdown`; a lookup recommends Dropdown;
+  `TypeMapAttributeValues` (the Values column), fallbacks when a choice has nothing to offer;
+  the Values column shows a lookup as `→ person.givenName`.
+- `XIB Generator.incl`: an empty `popUpButton`; radio groups in their own view (side by side or
+  stacked); heights per attribute (`XibFormFieldHeight`); Model.json fields carry `values` / `lookup`.
+- `Binding Generator.incl`: Choice and Radio show / take; `<Entity>FormSetUp`, `<Entity>Lookups`,
+  `<Entity>FillLookup`.
+- Runtime: `Binding Support.incl` choices (keys per tag, the wanted value kept for late rows,
+  radio tags and exclusivity); `App Data Lite.incl` `AppDataLookup` -> `_appDataLookup`.
+- App Pages: lookups requested when a page is shown, filled on the answer; value lists set up
+  when the page is built; radio clicks handled first in AppPagesDoDialog.
+- The Studio: the Values column in the attribute table (ProjectDetailView.xib).
+- Form layout popup (author: "pops back to automatic and never sets"): cause not found by
+  reading; the choice now logs the item and the entity, and the popup is redrawn from what was
+  stored - the log will show where it is lost.
+- fblint caught `text` (an FB keyword) as a variable name.
+
+## 2026-11-24 — App and entity icons; a larger app name centred on the icon
+
+The author asked for the app's name in larger type, centred up and down beside the icon, and
+for the developer to choose icons for the app and for each entity.
+- App Shell: the name is 24-point bold, centred on the 52-point icon (with a tag-line, the two
+  lines together); a picture icon also becomes the Dock / About box icon (`AppSetIconImage`);
+  `ShellSetAppSymbol` puts the chosen SF Symbol in the header when there is no picture.
+- Type Mapping: `TypeMapIconChoices` (33 SF Symbols), `TypeMapRecommendedIcon` (moved from App
+  Generator's `AppNavSymbol`), `TypeMapEntityIcon` (designer's choice first). Model.json carries
+  each entity's `icon`; App Pages.incl uses it for the navigation button and defines `APP_SYMBOL`.
+- The Studio: the entity view has a design row under its summary - Control, Form layout, Icon
+  (with a preview); Project Settings' well is now the *app icon*, with a symbol popup and preview
+  for apps without a picture (`appSymbol` in Project.json).
+- fblint again caught functions used before their definition (Project Workspace builds before
+  Project Settings); moved.
+
+## 2026-11-24 — Form designer 2: time and date-and-time pickers, the Control popup; nav heading
+
+- `Type Mapping.incl`: `_xibKindTime`, `_xibKindDateTime` ("Time picker", "Date and time picker");
+  DATETIME / TIMESTAMP recommend the date and time picker, TIME the time picker;
+  `TypeMapRecommendedKind` (before the designer's choice), `TypeMapControlKinds` (the popup's order).
+- `XIB Generator.incl`: one date-picker writer for the three, with their `datePickerElements`.
+- `Binding Support.incl` (runtime): `BindingShowTime` / `BindingTakeTime`, `BindingShowDateTime` /
+  `BindingTakeDateTime`; formatters are en_US_POSIX so a user's region never changes stored digits.
+- The Studio: the **Control** popup in the entity view (`_controlPopup`): its items are rebuilt
+  for the selected attribute, the first naming the recommendation; `DesignSetAttributeValue` is
+  shared with cell editing and keeps the row selected.
+- App shell: a **Business Objects** heading above the entity buttons (author), coloured by
+  `gThemeNavHeadingText` (Theme.incl template; NULL falls back to the buttons' colour).
+- fblint caught `DisplayAttributeControl` called before its definition; moved up.
+
+## 2026-11-24 — Navigation items at the top of the bar (second fix)
+
+- The flipped scroll-view document (78be389) still left the navigation buttons at the bottom on
+  the author's Mac. Replaced: no scroll view, no flipped view. The buttons and the highlight are
+  placed in the window, measured from the navigation bar's top edge (`ShellNavItemY`), with a fixed
+  top margin (`NSViewMinYMargin`), the plain Cocoa way. A model with more entities than the bar's
+  height holds needs scrolling again later (BACKLOG).
+
+## 2026-11-24 — Generated app builds without warnings
+
+- clang warned about five unused variables in `DataObject.incl` (`selectfilterArrayRef`,
+  `filterDictionaryRef`, `sqlFilterCount`, `columnLogic`, `aLogic`): names in the `local mode` dims
+  before `GenerateSelectSQL` that it never uses (the filter code has its own locals). Removed from
+  both copies, which stay identical: here and *TXV* 32cfa32.
+
+## 2026-11-24 — Form designer 1: layout columns, Hidden, read-only keys
+
+The author asked for a richer Form designer: 1 / 2 / 3-column forms, hidden fields, read-only
+keys, and widgets (time, date-and-time, checkbox, radio buttons, dropdowns from lookup tables or
+value lists). Split into three features (BACKLOG, *Form designer*); this is the first.
+- `Type Mapping.incl`: kinds `_xibKindReadOnly`, `_xibKindHidden` ("Read-only text", "Hidden" in
+  the Form Control column); a key the database generates is read-only by default;
+  `TypeMapFormColumns` (designer's choice or automatic), `TypeMapShownAttributes`.
+- `SQLite Model.incl` (and `tools/sqlite_model.py`): `"generated"` on the key column of an
+  identity / autoincrement table.
+- `XIB Generator.incl`: the Form lays out in 1-3 columns, labels as wide as the longest title,
+  Hidden attributes left out (tags keep model order), read-only fields without a bezel; the List
+  has no column for a Hidden attribute.
+- `Binding Generator.incl`: no code for Hidden fields; read-only fields are shown, not read back.
+- The Studio: a *Form layout* popup in the entity view (`Windows.incl`, `DesignFormColumnsChosen`),
+  saved under `"@entity"` in `Design.json` (`DesignSave` / `DesignLoad`).
+- An assigned key (typed by the user, e.g. a customer code) stays editable: a new record needs it.
+
+## 2026-11-24 — First generated app runs: navigation, fields, list
+
+The author's Northwind app built and ran (Address page). Three cosmetic faults, fixed:
+- **Navigation buttons at the bottom, on top of each other** (`App Shell.incl`). The flipped
+  navigation document was shorter than its scroll view, so it sat at the bottom; and FB's
+  buttons keep a flexible top margin, so each time the document grew for a new button the
+  earlier ones moved down onto it. Now the document is at least the scroll view's height and
+  grows with it, and buttons and the highlight have a fixed top margin (`NSViewMaxYMargin` in a
+  flipped view).
+- **Every text field a 90-point text area** (`Type Mapping.incl`): SQLite declares every string
+  `TEXT`, which mapped to a text area. `TEXT` is now a one-line field (280 wide); CLOB / MEDIUMTEXT /
+  LONGTEXT stay text areas, and the designer can still choose Text area per attribute.
+- **The list's first row under its header** (generated `<Entity> Binding.incl`): the list view is
+  resized when the page is laid out and kept its old scroll position; `<Entity>RecordsToList` now
+  scrolls to the first row after reloading.
+- Answered: the pages are XIBs (`<Entity>Form.xib`, `<Entity>List.xib`, loaded with `nibview`);
+  the frame around them (navigation, header, footer) is built in code by `App Shell.incl`.
+
+## 2026-11-24 — Generated apps always get the Studio's own runtime
+
+- The generated app crashed again in `DataExecute` ("index 0 beyond bounds for empty array"):
+  the fix (23ced18) was in the repository, but not in the app. *Update Runtime and Templates*
+  copied from the **remembered** folder (`Studio Library.json`), which after the bisect pointed at
+  an older clone; Generate App copied only when the workspace had no runtime at all.
+- Now (`Studio Library.incl`): when the Studio runs from the repository it was built in,
+  `StudioLibraryReady` copies `src/Runtime` and `src/Templates` from there on every Generate App
+  (and at launch); *Update Runtime and Templates* also tries that repository first. The
+  remembered folder and the folder panel are only for a Studio that is not inside a repository.
+- Learned: a cache of our own code must never be preferred over the source the Studio was built
+  from; during development the two drift as soon as the author switches clones.
+
+## 2026-11-24 — Delete Project
+
+- *Model > Delete Project…* (`ProjectDelete`, Project Actions.incl): the open project, or the one
+  selected in Recent Projects, after a confirmation, to the Trash (`FileManagerTrashItemAtURL`);
+  its Recent Projects entries removed; the Studio back to an empty Welcome page.
+
+---
+
+## 2026-11-24 — The first generated app builds and runs: an unsigned loop bound
+
+- The author generated an app (from Test_Xib_View's contacts database), opened it in FB, built it:
+  it compiled. At launch it stopped in `DataExecute` (`index 0 beyond bounds for empty array`):
+  `for i = 0 to fn ArrayCount( params ) - 1` with no parameters - `ArrayCount` is unsigned, so
+  `0 - 1` wraps and the loop runs. Eight such loops (runtime, Studio, logic engine) now cast to
+  `long`; `fblint` reports the uncast form; `FB Coding Rules.md` records it.
+
+---
+
+## 2026-11-24 — The Studio's folder takes the product's name
+
+- The Studio builds and launches again (the author's screenshot: the first-launch prompt for the
+  runtime and templates). The author: the location is `~/Library/Application Support/Imagery
+  LogicBank Studio for FutureBasic`. `APP_SUPPORT_FOLDER_NAME` changed; on first launch an existing
+  `Api_Logic_Client` folder is moved over, and the paths in `Recent Projects.json` and each
+  `Project.json` are rewritten (plain and JSON-escaped). Generated apps take the new path on their
+  next Generate App.
+- FB: `Redefined variable … projectFolderURL` — a local named like a global (FB forbids it).
+  Renamed; `fblint` now reports a local that redeclares a global of the same project.
+- The Studio builds and launches; the open panel was read as asking for a place in `~/Library`
+  (hidden). It asked for the repository. Now the Studio finds the repository itself from its own
+  app's location (FB builds it in `src/Generator`) and copies without asking; the panel remains a
+  fallback, with clearer words. The Application Support folders are created as needed.
+- Welcome view: the logo and the heading drifted apart in a wide window (both floated with
+  flexible margins). The logo is anchored left; the heading and subtitle start beside it and stretch.
+
+---
+
+## 2026-11-24 — The crash is gone; FutureBasic 7.0.38's own errors fixed
+
+- With the folder resources off the build list (the Xcode project last), FutureBasic translates the
+  Studio again: no crash. Its errors: `width` used as a variable (an FB keyword); the newer type
+  names `URLRef`, `StringRef`, `DataRef`, `DictionaryRef`, `ArrayRef` unknown in FB 7.0.38; a `…` in
+  a string literal.
+- Fixed: `colWidth` in XIB Generator; every FB source (Studio, runtime, templates, generated code,
+  the FB logic test, Test_Xib_View) back to the CF names; the alert's `Locate...`. `fblint` now
+  reports the newer names and `width`. Learned: FutureBasic_Documentation's headers are newer than
+  the author's FB — a name the linter accepts can still be unknown to the translator.
+
+---
+
 ## 2026-11-24 — Runtime and templates in the workspace, not the Studio's bundle
 
 - The headers change (below) did not stop the crash. What every crashing version shares: the
@@ -17,6 +261,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   Generation and the ERD read from there. The Studio's project lists neither folder.
 - Still listed: `Api_Logic_Client.xcodeproj` (the author's, a folder too) — the next suspect if FB
   still crashes.
+- It still crashed; `Api_Logic_Client.xcodeproj` (listed since the first commit, used by nothing in
+  the Studio) is taken off the build list, so the project lists only files, like a fresh FB project.
 
 ---
 

@@ -70,6 +70,31 @@ From *Building Production Software with AI — A Domain-Driven Approach*
   `Customers › ALFKI › Orders › 10643`. Clicking a crumb returns to that page and
   record; choosing an entity in the navigator starts a new trail.
 
+## Window layouts (author, 2026-11-24)
+
+A project setting chooses how the generated app shows its entities. The pages are the same in
+every layout: each entity's List part, Form part and bindings (`<Entity>List.xib`,
+`<Entity>Form.xib`, `<Entity> Binding.incl`); only where they are placed differs, so the layout is
+the shell's business (App Shell.incl), not the pages'.
+
+| Layout | What the user sees | Status |
+|---|---|---|
+| **Single window** | one window: the navigation bar on the left, one entity's page at a time in the content area (the shell as built) | built |
+| **Multiple windows** | the main window keeps the header and the navigation bar; choosing an entity opens (or brings forward) **its own window** with its List and Form and its own New / Save / Delete / Refresh. A **Window** menu lists the open entity windows and arranges them: **Stack** (cascade, each offset down and right from the last) and **Tile** (side by side in a grid that fills the screen's visible frame) | next |
+| **Tabs** | one window, one tab per entity (or the open ones), the navigation bar optional | future |
+
+Decisions for *Multiple windows*:
+- One window per entity, opened once: choosing it again brings it to the front.
+- Window tags: a range of their own (e.g. 63000 + page index), clear of the model's tags.
+- Each entity window is a standard titled, closable, resizable window titled with the entity's
+  Title; closing it does not quit the app (the main window does).
+- App Data stays the same: answers go to the window of the entity they name (today they go to
+  the page on screen), so `AppDataDone` routes by entity, not by "the current page".
+- Stack: windows in navigation order, each 24 points down and right of the previous one,
+  starting at the top left of the visible screen. Tile: n windows in ceil(sqrt(n)) columns, rows
+  to match, each the same size, filling the visible frame (menu bar and Dock excluded).
+- Window menu items: Stack Windows, Tile Windows, then one item per open entity window.
+
 ## Designer workflow (generator)
 
 1. **Open** a model — *Model → Open SQLite Database…* (or ALS metadata JSON).

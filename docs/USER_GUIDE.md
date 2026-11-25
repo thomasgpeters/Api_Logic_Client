@@ -81,16 +81,16 @@ definitions.
 If a project with that name already exists, you are asked whether to **open it** instead.
 
 *Working with a running API Logic Server instead?* **API Logic Server instead…** on the New
-Project page opens the server form (base URL, user name, password). *Model → Open Metadata
+Project page opens the server form (base URL, user name, password). *Model → Open API Logic Server Metadata
 JSON…* (⌘J) reads a saved `/metadata?include=attributes` response.
 
 ## 5. The workspace and your project's files
 
-Everything lives in your Application Support folder — *Model → Show Workspace in Finder*
+Everything lives in your Application Support folder — *Help → Show Workspace in Finder*
 opens it (`~/Library` is hidden in Finder):
 
 ```
-~/Library/Application Support/Api_Logic_Client/
+~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/
 ├── Recent Projects.json           the Welcome page's list
 └── workspace/
     └── <name> Project/            one folder per project — back it up, and you have it all
@@ -116,21 +116,48 @@ Click an entity in the list. Its **attribute table** shows, for every column:
 | Size | text length or numeric size | |
 | Key | primary key and how it is made (identity, autoincrement, assigned) | |
 | Required / Default | from the database | |
-| **Form Control** | text field, checkbox, date picker, … | ✓ |
+| **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, **Radio buttons**, **Dropdown**, **Read-only text**, **Hidden** | ✓ |
+| **Values** | a value list for Radio buttons or a Dropdown (`Retail, Wholesale, Online`); for a foreign key, what its Dropdown shows (`→ person.givenName`) | ✓ |
 | **Form Width** / **List Width** | in points | ✓ |
 | Adjusted | ✓ when you changed something | |
 
 Edit a cell and press Return: the change is saved to `Design.json` at once and kept every time
 you regenerate. Clear a cell to go back to the recommendation.
 
+- Under the entity's summary is a row of three popups: **Control**, **Form layout** and **Icon**.
+- **Icon**: the SF Symbol on the entity's button in the app's navigation bar (preview beside
+  the popup). *Icon: recommended* goes back to the generator's choice from the entity's name.
+- **Control**: select an attribute in the table, then
+  choose its control from the list. The first item, *Recommended: …*, goes back to what the
+  generator suggests for the column's type: DATE a date picker, DATETIME / TIMESTAMP a date and
+  time picker, TIME a time picker. You can still type a control's name in the Form Control cell.
+- Dates are stored as `1996-07-04`, times as `14:30:00`, dates with times as
+  `1996-07-04 14:30:00`: the forms SQLite's date and time functions read.
+- **Dropdown**: a foreign key gets one by default. It lists the rows of the table it refers to,
+  showing a readable column (its *name*, *title* or *description*, a column whose name contains
+  "name", else its first text column) and storing the key. Type a value list in **Values** to
+  offer those values instead. The first item is empty: no value.
+- **Radio buttons**: one per value of the **Values** list (up to 8; with more, or with no
+  list, the attribute gets a Dropdown). Side by side when they fit, else one under the other.
+- **Checkbox**: for yes / no columns (BOOLEAN, BIT); stored as 1 or 0.
+- **Read-only text** shows a value without letting the user change it. A key the database
+  makes for you (an `INTEGER PRIMARY KEY`, with or without `AUTOINCREMENT`) is read-only by
+  default; a key you type yourself (a customer code, say) stays a text field.
+- **Hidden** leaves the attribute off the Form and the List. It is still in the database, and
+  a save leaves its value as it was.
+- **Form layout**: how many columns of fields the Form has —
+  *automatic* (1 up to 10 fields, 2 up to 24, then 3), or 1, 2 or 3. Generate XIBs to see it.
+
 ## 7. Project settings
 
-*Model → Project Settings…* (⌘;) — what is deployed with the generated app beyond the model.
+*Project → Project Settings…* (⌘;) — what is deployed with the generated app beyond the model.
 - **About text**, up to 250 characters (a counter shows how many are left). It appears in the
   generated app's **About** box, under its name, icon and version.
 - **Branding** for the generated app's header and footer:
-  - **Logo** — paste (⌘V) or drag a picture into the well. It is kept as
-    `<project>/Branding/logo.png` and deployed as `FBapp/AppLogo.png`. Select it and press Delete to remove it.
+  - **App icon** — paste (⌘V) or drag a picture into the well. It is kept as
+    `<project>/Branding/logo.png` and deployed as `FBapp/AppLogo.png`; the app shows it in its
+    header, its Dock icon and its About box. Select it and press Delete to remove it.
+    **Without a picture, the symbol:** an SF Symbol for the header instead (preview beside it).
   - **Tag-line** — a short description under the app's name, up to 80 characters.
   - **Copyright** — the footer's text (`© <app name>` when empty).
 
@@ -153,10 +180,14 @@ Details: `features/MODEL_DIAGRAM_FEATURE.md`.
 
 From the *Model* menu:
 
-**On first launch** (and whenever they are missing), the Studio asks for your
-**Api_Logic_Client folder** (the repository) and copies its `src/Runtime` and `src/Templates` into the
-workspace (`workspace/Runtime`, `workspace/Templates`): every generated app is made from those.
-After pulling a newer version, choose *Model → Update Runtime and Templates…* to copy them again.
+**On first launch** (and whenever they are missing), the Studio copies the runtime and templates
+(`src/Runtime`, `src/Templates`) from the repository it was built in, which it finds from where its
+own app sits, into its own folder: `~/Library/Application Support/Imagery LogicBank Studio for
+FutureBasic/workspace/Runtime` and `…/Templates`, creating the folders as needed. Only when it cannot
+find the repository does it ask you to choose the Api_Logic_Client folder you cloned (not a folder in
+Library). While the Studio runs from the repository it was built in, *Generate App* copies them from there
+every time, so an app always gets the runtime the Studio was built with. *Generate → Update Runtime
+and Templates…* does the same on demand.
 
 
 | Command | Key | Writes into `FBapp/` |
@@ -185,7 +216,7 @@ generated file starts with a comment saying what it does and whether it is regen
 Every generated app has the same frame (`App Shell.incl`):
 
 - a **dark blue navigation bar** on the left, with a white, bold button and an icon per entity;
-- a **header** with your logo, the app's name and tag-line, and on the right the **theme menu**
+- a **header** with the app icon, the app's name in large type centred on it (with the tag-line under it), and on the right the **theme menu**
   (System / Light / Dark) and **Log In** (connect it to your sign-in in `EventHandlers.incl`, `DoLogin`);
 - a **footer** with the copyright, a status line, and the page actions **New**, **Save**,
   **Delete** and **Refresh** (also in the *Records* menu: ⌘N, ⌘S, ⌘R);
@@ -204,7 +235,7 @@ The app is generated as the **Lite** edition: free and open source. It opens the
 database itself and runs the business rules inside the app. A paid **Enterprise** edition, a
 three-tier app that talks to an API Logic Server, is planned (`design/Editions and Licensing.md`).
 
-A project whose model was read from an API Logic Server (*Open Metadata JSON*, or the ALS form)
+A project whose model was read from an API Logic Server (*Open API Logic Server Metadata JSON*, or the ALS form)
 can generate XIBs, bindings and the model diagram, but not a Lite app: create the project from the
 server's SQLite database instead (*New Project*), which gives the same model.
 
@@ -453,10 +484,14 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 ## 13. Opening projects again
 
-- **Welcome page:** double-click a recent project. *Model → Recent Projects* returns to it;
+- **Welcome page:** double-click a recent project. *Project → Recent Projects* returns to it;
   *Clear Recent Projects* empties the list.
 - **Open Project…** (⇧⌘O): choose a project's `Project.json` in the workspace.
 - If the project's database has moved, you are asked to locate it; the new place is remembered.
+- **Delete Project…** (*Model* menu): the open project, or on the Welcome page the one selected in
+  Recent Projects, goes to the **Trash** after you confirm: its folder with the database copy,
+  settings, rules and generated app. The database you started from is not touched; drag the folder
+  back out of the Trash to restore it.
 
 ## 14. Checking your work
 
@@ -483,27 +518,45 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 Paste a Build Log or NSLog lines into a session when something is unclear.
 
-## 16. Menus and keyboard shortcuts
+## 16. Menus, toolbar and keyboard shortcuts
 
-| Menu | Command | Key |
-|---|---|---|
-| File | Close | ⌘W |
-| Edit | Undo · Cut · Copy · Paste · Select All | ⌘Z ⌘X ⌘C ⌘V ⌘A |
-| Model | Open Project… | ⇧⌘O |
-| | Recent Projects · Clear Recent Projects | |
-| | Project Settings… | ⌘; |
-| | Open SQLite Database… | ⌘D |
-| | Open Metadata JSON… | ⌘J |
-| | Generate XIBs | ⇧⌘X |
-| | Generate XIB for Selected Entity | ⌘E |
-| | Generate Binding Code | ⌘B |
-| | Generate App | ⌘G |
-| | Import Rules from declare_logic.py… · Export Rules to declare_logic.py… | |
-| | Show Workspace in Finder | |
-| | Show Model Diagram | ⇧⌘D |
-| | Update Runtime and Templates… | |
+A command is enabled only when what it works on is there: with no project open, only the
+commands that open or create one; *Generate XIB for …* needs an entity selected in the Objects
+list (and names it); the Control popup needs an attribute selected in the table.
 
-*Preferences…* (⌘,) does nothing yet.
+| Menu | Command | Key | Needs |
+|---|---|---|---|
+| Project | New Project… | ⌘N | |
+| | Open Project… | ⌘O | |
+| | Recent Projects | ⌘1 | |
+| | Entity Definitions | ⌘2 | a project |
+| | Clear Recent Projects | | |
+| | Close Project | ⇧⌘W | a project |
+| | Project Settings… | ⌘; | a project |
+| | Show Project in Finder | ⌥⌘R | a project |
+| | Delete Project… | | a project, or one selected in Recent Projects |
+| Edit | Undo · Cut · Copy · Paste · Select All | ⌘Z ⌘X ⌘C ⌘V ⌘A | |
+| Model | Open SQLite Database… | ⌘D | |
+| | Open API Logic Server Metadata… | ⌘J | |
+| | Show Model Diagram | ⇧⌘D | a project |
+| | Import Rules… · Export Rules… | ⌥⌘I · ⌥⌘E | a project |
+| Generate | Generate App | ⌘G | a project |
+| | Generate XIBs | ⇧⌘X | a project |
+| | Generate XIB for *entity* | ⌘E | an entity selected |
+| | Generate Binding Code | ⌘B | a project |
+| | Show Generated App in Finder | ⌥⌘G | a project |
+| | Update Runtime and Templates… | ⌥⌘U | |
+| Window | Minimize · Zoom · Close | ⌘M · · ⌘W | |
+| Help | Imagery LogicBank Studio Help (this guide) | ⌘? | |
+| | Show Workspace in Finder | ⇧⌘K | |
+
+**Crumb trail:** along the top of the window, where you are — *Projects › Northwind › address*
+(or *› Settings*, *› New Project*). Click *Projects* to go back to the Projects screen, or the
+project's name to go back to its entity definitions.
+
+**Toolbar:** *Projects* (⌘1: the Welcome view, new, open, recent), *Entities* (⌘2: the open
+project's entity definitions), *Diagram* (Show Model Diagram), *Generate* (Generate App), *Settings*
+(Project Settings). All but Projects need a project.
 
 ## 17. What is not built yet
 

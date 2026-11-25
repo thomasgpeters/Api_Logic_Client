@@ -25,7 +25,7 @@ the top of Recent Projects.
 **If the model file has moved**, an alert offers *Locate…*; the chosen file becomes the
 new `source`.
 
-**Recent Projects** — `~/Library/Application Support/Api_Logic_Client/Recent Projects.json`,
+**Recent Projects** — `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/Recent Projects.json`,
 newest first, at most 10, one entry per `Project.json` path:
 
 ```json
@@ -33,8 +33,8 @@ newest first, at most 10, one entry per `Project.json` path:
 ```
 
 `Project` and `Model` are the table's column identifiers, so the list is the table's
-data as is. Shown on the Welcome view (double-click opens); *Model → Recent Projects*
-returns to the Welcome view; *Model → Clear Recent Projects* empties it.
+data as is. Shown on the Welcome view (double-click opens); *Project → Recent Projects*
+returns to the Welcome view; *Project → Clear Recent Projects* empties it.
 
 ## Commands
 

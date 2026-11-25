@@ -118,7 +118,7 @@ class ToFB:
         return False
 
     def value(self, node):
-        """An expression giving a number (FB double) or text (StringRef)."""
+        """An expression giving a number (FB double) or text (CFStringRef)."""
         ref = self.attr_ref(node)
         if ref:
             attr, role = ref

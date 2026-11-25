@@ -52,7 +52,7 @@ Also as a designed page and a PDF to share: [`DOC_ONE_PAGER.html`](DOC_ONE_PAGER
 |---|---|
 | **A common look** | A dark blue navigation bar with an icon per entity, a header with your logo, app name, tag-line, theme menu and Log In, and a footer. Light and dark mode come for free. |
 | **Screens as XIBs** | A List and a Form for every entity, loaded with FB's own `nibview`. Open any of them in Xcode's Interface Builder and change it. |
-| **Data, done properly** | Reads and writes the SQLite database through a parameterized query builder, with parent and child lookups and real transactions. |
+| **Data, done properly** | Reads and writes the SQLite database through Imagery's SQL Generator: parameterized queries, joins, parent and child lookups and real transactions. |
 | **LogicBank for FutureBasic** | The rules engine: formulas, sums, counts, copies, constraints, parent checks, delete actions and events, run in dependency order on every save. |
 | **Code people can read** | Every file says what it does and whether it is regenerated. A `README.md` walks you through the project, file by file. |
 | **A map of the model** | The Studio's model diagram shows every entity and relationship with the rules marked where they act. Drag, fold, search, export to SVG. |
@@ -98,6 +98,50 @@ What one save does:
 | ✓ | `Balance ≤ CreditLimit` | if not, the whole save is rolled back and the message says why |
 
 Rule kinds: ƒ formula · Σ sum · # count · ⇣ copy · ✓ constraint · ⊘ delete action · ⚡ event
+
+## The SQL Generator
+
+Every read and write in a generated app goes through Imagery's SQL Generator, a query builder
+written in FutureBasic. You describe the statement: its tables, columns, joins and filters. The
+generator writes the SQL, with every value sent separately from it.
+
+```
+// describe the query: tables, columns,
+// the join and a filter
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"Order", @"o" )
+fn AddTableToQuery( query, @"Customer", @"c" )
+fn AddColumnToQuery( query, @"o.Id", @"Order" )
+fn AddColumnToQuery( query, @"c.CompanyName", @"Company" )
+fn AddAssociationToQuery( query,
+  @"o", @"CustomerId", @"c", @"Id", _isEqual )
+fn AddFilterToQuery( query, @"c", @"Country",
+  @"Germany", _textType, NULL, _isEqual, NULL )
+
+// the SQL, then run it with its values
+sql = fn GenerateSelectSQL( query )
+fn DataExecute( sql,
+  fn QueryParameterValues( query ), rows )
+```
+
+The SQL it writes:
+
+```sql
+SELECT "o"."Id" AS "Order",
+       "c"."CompanyName" AS "Company"
+  FROM "Order" AS "o", "Customer" AS "c"
+ WHERE "o"."CustomerId" = "c"."Id"
+   AND "c"."Country" = ?
+-- values: Germany
+```
+
+- **SELECT, INSERT, UPDATE and DELETE** from one builder; joins, and filters (comparisons, IN,
+  LIKE, IS NULL) joined by AND or OR.
+- **Parameterized.** Values are bound to `?` placeholders, never pasted into the SQL: no SQL
+  injection, no quoting bugs.
+- **Names quoted.** Tables called `Order` or `Group`, and columns with spaces, just work.
+- **Safe by default.** UPDATE and DELETE refuse to run without a filter, so a whole table is
+  never changed by accident.
 
 ## The app stays yours
 

@@ -6,7 +6,7 @@
 
 ## How it works
 
-**In the generator:** *Model → Project Settings…* (⌘;) shows the Project Settings view
+**In the generator:** *Project → Project Settings…* (⌘;) shows the Project Settings view
 in place of the entity definitions. Its **About text** field (multi-line, wraps) takes at
 most **250 characters** (`ABOUT_TEXT_MAX`): typing past the limit cuts the text and
 beeps; a counter shows `n / 250`. *Done* saves `Project.json` and returns to the

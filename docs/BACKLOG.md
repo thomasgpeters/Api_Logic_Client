@@ -18,7 +18,27 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 - [ ] FBE bundles the `../Runtime` and `../Templates` folders as resources of the generator
 - [ ] Generated `<project>.fbeproj` opens in FB with its groups and builds; `nibview` in `Windows.incl` places each Form part
 
+## Form designer (author, 2026-11-24; split into three features)
+
+- [x] 1. Form layout 1 / 2 / 3 columns per entity; Hidden fields; read-only text, the default for a key the database generates (`features/XIB_PARTS_FEATURE.md`)
+- [ ] Verify on a Mac: the Form layout popup in the entity view; a 3-column Form; a Hidden field; the read-only key on New / Save
+- [x] 2. Date and time widgets: Time picker, Date and time picker; the Control popup in the entity view (choose from a list; Recommended clears it)
+- [ ] Verify on a Mac: the Control popup follows the selected attribute; a TIME and a DATETIME column round-trip through Save
+- [x] 3. Choices: Radio buttons, Dropdown (a value list in the Values column, or a foreign key's lookup table: the parent's key stored, a display column shown), Checkbox; `AppDataLookup`
+- [ ] Verify on a Mac: a foreign key's Dropdown lists the parent's rows and Save stores the key; a value list Dropdown; Radio buttons (one at a time); the Form layout popup keeps its choice (log lines "Form layout popup: item …")
+- [ ] Choose the lookup's display column (or several: "givenName surname"); show the display value in the List instead of the key
+- [ ] Studio review (author, 2026-11-24) - `STUDIO_REVIEW.md`: step 1 done (menus regrouped, toolbar rethought and wired, commands enabled by project / entity / attribute, New / Close Project, the ALS form's Cancel); step 2 context menus; step 3 small fixes (+ / − under Objects)
+- [ ] Generated app toolbar (author): New, Save, Delete, Refresh, Search, Theme, Log In - proposal in `STUDIO_REVIEW.md` 2.6
+- [ ] Users and roles in generated apps (author, 2026-11-24): sign-in, users, roles (e.g. Admin, Editor, Viewer) deciding who may see, edit or delete each entity; Lite: users in the app's SQLite database; Enterprise: the API Logic Server's. Then an audit trail (who changed which record, when)
+- [ ] Generated app window layouts, a project setting (`design/App Shell Design.md`, Window layouts): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one tab per entity (future)
+
 ## App shell — lite edition (see `design/App Shell Design.md`)
+
+- [x] App icon (picture or SF Symbol) and an icon per entity, chosen in the Studio; the app name large, centred on the icon
+- [ ] Finder icon for the generated app: the icon picture as `AppIcon.icns` plus `#plist CFBundleIconFile @"AppIcon"` (FB help, Build System)
+- [ ] Verify on a Mac: the Icon popup and preview, the app symbol popup in Project Settings, the Dock icon from a picture
+
+- [ ] Navigation bar: scroll when there are more entities than fit (removed for now: the flipped scroll view left the items at the bottom)
 
 - [x] List XIB part per entity
 - [x] Entity definitions with recommendations; designer adjustments in `Design.json`
@@ -52,9 +72,9 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
 ## Installing the Studio
 
 - [x] Runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`), copied from
-      the repository folder on first launch; *Model > Update Runtime and Templates* (`Studio Library.incl`)
+      the repository folder on first launch; *Generate > Update Runtime and Templates* (`Studio Library.incl`)
 - [ ] Installer for a release: the Studio app plus the runtime and templates, put into
-      `~/Library/Application Support/Api_Logic_Client/workspace/` (a `.pkg` with a per-user
+      `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/` (a `.pkg` with a per-user
       postinstall, or a first-launch copy from the installer's disk image), so users need no repository
 - [ ] Preferences (⌘,): the repository / library folder, the workspace location
 
@@ -114,8 +134,9 @@ When resuming, in this order:
 - [x] Model from a SQLite database — `SQLite Model.incl`
 - [x] New Project view: a project starts from a SQLite database — `features/NEW_PROJECT_FEATURE.md`
 - [x] Product name: **Imagery LogicBank Studio for FutureBasic** — shown in the window title, Welcome view, server form and About box; Imagery logo (2026-11-24)
-- [ ] Rename the rest to the product name (author, later): the FB project and its `.main` (`Api Logic Client.fbeproj` → the built app's name in the Dock and menu bar), the bundle id, and the Application Support folder (`Api_Logic_Client` → new name, moving an existing workspace and Recent Projects over at first launch). The repository and folder names may stay.
-- [x] Workspace in `~/Library/Application Support/Api_Logic_Client/workspace/<project>/`; *Show Workspace in Finder*
+- [x] Application Support folder renamed to `Imagery LogicBank Studio for FutureBasic` (2026-11-24); an old `Api_Logic_Client` folder is moved over on first launch, its stored paths fixed (`Studio Library.incl`)
+- [ ] Rename the rest to the product name (author, later): the FB project and its `.main` (`Api Logic Client.fbeproj` → the built app's name in the Dock and menu bar), the bundle id. The repository and folder names may stay.
+- [x] Workspace in `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/`; *Show Workspace in Finder*
 - [x] Project settings in `<project>/Project.json`; generated app in `<project>/FBapp/`
 - [x] Project Settings view; About text (≤ 250 chars) deployed as `Credits.rtf` — `features/ABOUT_BOX_FEATURE.md`
 - [ ] More project settings: version, copyright, bundle id, app icon, theme
@@ -130,7 +151,7 @@ When resuming, in this order:
 - [ ] Settings groups for ALS/APIs, AI/LLM providers, SMTP notifications
 - [ ] Optional `admin.yaml` hints (titles, `user_key`, relationship names)
 - [ ] Generator's own ALS fetch uses the Create Project form's base URL and credentials (still hard-coded host and `admin`/`p`), and waits for login before fetching
-- [ ] Move to FB's current type names (`StringRef`, `DictionaryRef`, …) and Cocoa wrappers everywhere — done in the data runtime and query builder; generator and ALS runtime still use the CF names
+- [x] ~~Move to FB's newer type names~~ — reversed 2026-11-24: FutureBasic 7.0.38 does not know `StringRef`, `URLRef`, …; everything uses the CF names (fblint enforces it)
 
 ## Look and feel
 

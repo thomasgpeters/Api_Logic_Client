@@ -80,6 +80,8 @@ pre .c { color: var(--muted); }
 .sym { width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; color: #fff; font: 700 12px/1 var(--body); }
 .k-formula { background: var(--formula); } .k-sum { background: var(--sum); } .k-count { background: var(--count); }
 .k-copy { background: var(--copy); } .k-constraint { background: var(--constraint); } .k-event { background: var(--event); } .k-delete { background: var(--delete); }
+.points { margin: 14px 0 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14px; line-height: 1.5; }
+.points b { font-weight: 600; }
 .kinds { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 14px; font-size: 14px; color: var(--muted); }
 .kinds span { display: inline-flex; gap: 6px; align-items: center; }
 .kinds .sym { width: 20px; height: 20px; font-size: 11px; }
@@ -204,7 +206,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <div class="gets">
       <div class="get"><h3>A common look</h3><p>A dark blue navigation bar with an icon per entity, a header with your logo, app name, tag-line, theme menu and Log In, and a footer. Light and dark mode come for free.</p></div>
       <div class="get"><h3>Screens as XIBs</h3><p>A List and a Form for every entity, loaded with FB's own <code>nibview</code>. Open any of them in Xcode's Interface Builder and change it.</p></div>
-      <div class="get"><h3>Data, done properly</h3><p>Reads and writes the SQLite database through a parameterized query builder, with parent and child lookups and real transactions.</p></div>
+      <div class="get"><h3>Data, done properly</h3><p>Reads and writes the SQLite database through Imagery's SQL Generator: parameterized queries, joins, parent and child lookups and real transactions.</p></div>
       <div class="get"><h3>LogicBank for FutureBasic</h3><p>The rules engine: formulas, sums, counts, copies, constraints, parent checks, delete actions and events, run in dependency order on every save.</p></div>
       <div class="get"><h3>Code people can read</h3><p>Every file says what it does and whether it is regenerated. A <code>README.md</code> walks you through the project, file by file.</p></div>
       <div class="get"><h3>A map of the model</h3><p>The Studio's model diagram shows every entity and relationship with the rules marked where they act. Drag, fold, search, export to SVG.</p></div>
@@ -251,6 +253,43 @@ end if</pre>
           <span><span class="sym k-formula">ƒ</span>formula</span><span><span class="sym k-sum">Σ</span>sum</span><span><span class="sym k-count">#</span>count</span>
           <span><span class="sym k-copy">⇣</span>copy</span><span><span class="sym k-constraint">✓</span>constraint</span><span><span class="sym k-delete">⊘</span>delete action</span><span><span class="sym k-event">⚡</span>event</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The SQL Generator</h2>
+    <p>Every read and write in a generated app goes through Imagery's SQL Generator, a query builder written in FutureBasic. You describe the statement: its tables, columns, joins and filters. The generator writes the SQL, with every value sent separately from it.</p>
+    <div class="rules">
+      <pre aria-label="Describing a query in FutureBasic"><span class="c">// describe the query: tables, columns,
+// the join and a filter</span>
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"Order", @"o" )
+fn AddTableToQuery( query, @"Customer", @"c" )
+fn AddColumnToQuery( query, @"o.Id", @"Order" )
+fn AddColumnToQuery( query, @"c.CompanyName", @"Company" )
+fn AddAssociationToQuery( query,
+  @"o", @"CustomerId", @"c", @"Id", _isEqual )
+fn AddFilterToQuery( query, @"c", @"Country",
+  @"Germany", _textType, NULL, _isEqual, NULL )
+
+<span class="c">// the SQL, then run it with its values</span>
+sql = fn GenerateSelectSQL( query )
+fn DataExecute( sql,
+  fn QueryParameterValues( query ), rows )</pre>
+      <div>
+        <pre aria-label="The SQL it writes">SELECT "o"."Id" AS "Order",
+       "c"."CompanyName" AS "Company"
+  FROM "Order" AS "o", "Customer" AS "c"
+ WHERE "o"."CustomerId" = "c"."Id"
+   AND "c"."Country" = ?
+<span class="c">-- values: Germany</span></pre>
+        <ul class="points">
+          <li><b>SELECT, INSERT, UPDATE and DELETE</b> from one builder; joins, and filters (comparisons, IN, LIKE, IS NULL) joined by AND or OR.</li>
+          <li><b>Parameterized.</b> Values are bound to <code>?</code> placeholders, never pasted into the SQL: no SQL injection, no quoting bugs.</li>
+          <li><b>Names quoted.</b> Tables called <code>Order</code> or <code>Group</code>, and columns with spaces, just work.</li>
+          <li><b>Safe by default.</b> UPDATE and DELETE refuse to run without a filter, so a whole table is never changed by accident.</li>
+        </ul>
       </div>
     </div>
   </section>
