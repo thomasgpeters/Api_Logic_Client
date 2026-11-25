@@ -37,6 +37,15 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
   generated there: `ui/app/app_model.yaml` (ALS 17.3 and earlier), else `database/models.py`
   (current ALS: types, primary keys, foreign keys, relationship names), with `ui/admin/admin.yaml`
   for labels and the display column. Read as text (as the C++ Studio does), never run.
+- **From a public GitHub repository** (author, 2026-11-25): the repository's address (and a branch,
+  `main` by default) is enough. The Studio reads the model file over plain HTTPS, no sign-in:
+  `https://raw.githubusercontent.com/<owner>/<repo>/<branch>/<path>`, trying `ui/app/app_model.yaml`,
+  then `database/models.py`, then `ui/admin/admin.yaml` (a path can be given), and `master` when
+  `main` is not there. Checked from the cloud session: a raw file answers 200; GitHub's API
+  (`api.github.com`) is not needed (it refused here, 403, and is rate-limited without a token).
+  The copy is kept in `<project>/ALS Model/` with its address and date in `Project.json`; *Refresh
+  Model* fetches it again. Raw files can lag a push by a few minutes (GitHub's cache). A private
+  repository needs a token (the Keychain) - later.
 - **No repository access? Drop the model file** (author, 2026-11-25; Enterprise): the Enterprise
   New Project screen takes the ALS project three ways - choose its folder (a clone of its
   repository), **drag and drop** the model file onto a drop zone (`app_model.yaml`, `models.py` or
