@@ -123,6 +123,11 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
     "Redefined variable", a parameter with "Redefined parameter" (FB 7.0.38:
     `local fn ALSProjectKeepCopy( projectName as CFStringRef )` - `projectName` is a Studio
     global, `My Globals.glbl`). A function *named* like a global is accepted. fblint checks both.
+26. **The headers can be newer than the FutureBasic that builds.** FutureBasic_Documentation's
+    headers list functions the author's FB does not have yet ("Unknown variable, command or
+    Toolbox name"): `TextViewAppendAttributedString` (a "Convenience" function in `TextView.incl`) -
+    append to `fn TextViewTextStorage( tag )` with `MutableAttributedStringAppendAttributedString`
+    instead. fblint keeps each one found by a Build Log in `NEWER_THAN_FB`, with its way round.
 
 - **Mutable variables from getters need a cast.** `fn DictionaryObjectForKey` and
   `fn ArrayObjectAtIndex` return `CFTypeRef` (`const void *`); assigning one to a

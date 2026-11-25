@@ -25,6 +25,13 @@ DEPRECATED = [
 ]
 
 
+# Toolbox names in FutureBasic_Documentation's headers (newer) that the author's FutureBasic does not
+# have yet - each one found by a Build Log ("Unknown variable, command or Toolbox name"), with the way round
+NEWER_THAN_FB = {
+    'textviewappendattributedstring': 'append to fn TextViewTextStorage( tag ) with MutableAttributedStringAppendAttributedString (2026-11-25)',
+}
+
+
 def comment_apostrophe(line):
     """Index of a ' that starts a comment (outside strings), or -1."""
     i, n = 0, len(line)
@@ -205,6 +212,8 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
             for n in names:
                 if n.lower() not in known_toolbox and n.lower() not in local_fns:
                     report(no, f'{n} is not in the toolbox headers or this code')
+                elif n.lower() in NEWER_THAN_FB and n.lower() not in local_fns:
+                    report(no, f'{n} is in the headers but not in the author\'s FutureBasic: {NEWER_THAN_FB[n.lower()]}')
     return problems
 
 
