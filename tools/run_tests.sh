@@ -90,6 +90,9 @@ if python3 "$here/tools/als_contract.py" http://localhost:5656 >/dev/null 2>&1 |
 else
     echo; echo "== Enterprise: the API Logic Server contract - skipped (no server on localhost:5656; docs/design/ALS Contract.md)"
 fi
+# the Open ALS Project screen's logic: GitHub addresses always; folders, files and the Studio model
+# on the ALS projects in ALS_PROJECTS; public repositories over raw.githubusercontent.com with ALS_GITHUB=1
+run "ALS project: addresses, folders and files, the Studio model with its lookups" python3 "$here/tools/als_project_reference.py" --test ${ALS_PROJECTS:-} ${ALS_GITHUB:+--github}
 # the ALS model reader (Enterprise): database/models.py read as text, compared with SQLAlchemy's view
 # ALS_PROJECTS: ALS project folders (space-separated); ALS_PYTHON: the Python of the ALS install
 if [ -n "${ALS_PROJECTS:-}" ] && [ -x "${ALS_PYTHON:-}" ]; then

@@ -8,7 +8,7 @@ So the pages, bindings and examples do not know which edition they run on.
 
 | | |
 |---|---|
-| `src/Enterprise/ALS Model.incl` | the model from `database/models.py` (every ALS project; the only model file from 17.04 on: `ALSModelFromModelsPy`, read as text, never run), or from `app_model.yaml` (ALS 17.3 and earlier) or `admin.yaml`; `ALSModelFromText` tells them apart by their contents: attributes, primary keys, relationships (name, direction, resource, fks), the display column (`favorite` / `user_key`). Line by line by indentation, the design of the C++ Studio's `Model::fromAppModelYaml` |
+| `src/Generator/ALS Model.incl` (the Studio reads it too: `features/ALS_PROJECT_FEATURE.md`) | the model from `database/models.py` (every ALS project; the only model file from 17.04 on: `ALSModelFromModelsPy`, read as text, never run), or from `app_model.yaml` (ALS 17.3 and earlier) or `admin.yaml`; `ALSModelFromText` tells them apart by their contents: attributes, primary keys, relationships (name, direction, resource, fks), the display column (`favorite` / `user_key`). Line by line by indentation, the design of the C++ Studio's `Model::fromAppModelYaml` |
 | `src/Enterprise/DataObject_JSONAPI.incl` | `GenerateJSONAPISelect / Insert / InsertRows / Update / Delete`, `JSONAPIPagePath`, `JSONAPIRowsFromAnswer`, `JSONAPILastError` |
 | `src/Runtime/ALS Client.incl` | sends the requests (Bearer token, paging, errors) |
 | `tools/jsonapi_reference.py` | the reference and its test: 19 checks against a running server |
@@ -34,13 +34,13 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
 
 - **The model is API Logic Server's, never FutureBasic's** (author, 2026-11-25). The Studio points
   at the ALS project the app is built from (its folder or repository) and reads the model ALS
-  generated there: `ui/app/app_model.yaml` (ALS 17.3 and earlier), else `database/models.py`
-  (current ALS: types, primary keys, foreign keys, relationship names), with `ui/admin/admin.yaml`
-  for labels and the display column. Read as text (as the C++ Studio does), never run.
+  generated there: `database/models.py` (every project: types, primary keys, foreign keys,
+  relationship names), else `ui/app/app_model.yaml` (ALS 17.3 and earlier), with `ui/admin/admin.yaml`
+  for the display column. Built: Open ALS Project (`features/ALS_PROJECT_FEATURE.md`). Read as text (as the C++ Studio does), never run.
 - **From a public GitHub repository** (author, 2026-11-25): the repository's address (and a branch,
   `main` by default) is enough. The Studio reads the model file over plain HTTPS, no sign-in:
-  `https://raw.githubusercontent.com/<owner>/<repo>/<branch>/<path>`, trying `ui/app/app_model.yaml`,
-  then `database/models.py`, then `ui/admin/admin.yaml` (a path can be given), and `master` when
+  `https://raw.githubusercontent.com/<owner>/<repo>/<branch>/<path>`, trying `database/models.py`,
+  then `ui/app/app_model.yaml`, then `ui/admin/admin.yaml` (a path can be given), and `master` when
   `main` is not there. Checked from the cloud session: a raw file answers 200; GitHub's API
   (`api.github.com`) is not needed (it refused here, 403, and is rate-limited without a token).
   The copy is kept in `<project>/ALS Model/` with its address and date in `Project.json`; *Refresh

@@ -35,6 +35,9 @@ mode work without extra code).
   - `Rules Bridge.incl` — Import / Export Rules (declare_logic.py) and `Studio Rules.incl` on Generate App; until its port to FB it says "coming" and writes an empty `Studio Rules.incl`.
   - `ERD Generator.incl` — Model > Show Model Diagram: `<project>/Model ERD.html` from the `Templates/ERD` page, the model and `Rules.json`.
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
+  - `ALS Model.incl` — an ALS project's model, parsed as text (never run): `database/models.py`, else `app_model.yaml` / `admin.yaml` (attributes, keys, relationships, display column).
+  - `ALS Project.incl` — where that model is: an ALS project folder, a model file, or a public GitHub repository (raw.githubusercontent.com); the copy in `<project>/ALS Model/`; the ALS model -> the Studio's.
+  - `Open ALS Project.incl` — the API Logic Server Project view (`ALSProjectView.xib`): point at the ALS project (type, Folder…, Model File…, or drop on a subclassed view) → a project (the Enterprise catalyst).
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/CleanApp/` — a project the FB editor created (author, 2026-11-24): the reference for project
   settings (`Settings2.plist`: SDK, architecture, minimum macOS) and the starting point of new example
@@ -45,9 +48,8 @@ mode work without extra code).
   list (`docs/features/SQL_GENERATOR_FEATURE.md`). Its module files stay identical to `src/Runtime`'s
   and Test_Xib_View's (`run_tests.sh` checks).
 - `src/Enterprise/` — the Enterprise edition, in this repository for now (author, 2026-11-25; a private
-  repository when it is sold): `ALS Model.incl` (the ALS model from `database/models.py`, read as text, or `app_model.yaml` / `admin.yaml`:
-  attributes, keys, relationships, display column), `DataObject_JSONAPI.incl` (the SQL Generator's
-  JSON:API side: the same statement dictionaries -> ALS requests). The contract: `docs/design/ALS Contract.md`;
+  repository when it is sold): `DataObject_JSONAPI.incl` (the SQL Generator's JSON:API side: the same
+  statement dictionaries -> ALS requests, on the model `src/Generator/ALS Model.incl` reads). The contract: `docs/design/ALS Contract.md`;
   references and tests: `tools/als_contract.py`, `tools/jsonapi_reference.py`, `tools/models_py_reference.py`.
 - `src/Runtime/` — our FB code copied into every generated app. Not bundled into the Studio
   (author, 2026-11-24): `Studio Library.incl` copies `src/Runtime` and `src/Templates` into the
@@ -88,6 +90,7 @@ mode work without extra code).
   `als_contract.py` (test: the API Logic Server contract, against a running server),
   `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),
   `models_py_reference.py` (an ALS project's `database/models.py` read as text; test: against SQLAlchemy),
+  `als_project_reference.py` (the Open ALS Project screen: folders, files, GitHub, the Studio model),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 

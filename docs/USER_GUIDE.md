@@ -81,9 +81,29 @@ definitions.
 
 If a project with that name already exists, you are asked whether to **open it** instead.
 
-*Working with a running API Logic Server instead?* **API Logic Server instead…** on the New
-Project page opens the server form (base URL, user name, password). *Model → Open API Logic Server Metadata
-JSON…* (⌘J) reads a saved `/metadata?include=attributes` response.
+### From an API Logic Server project
+
+*Project → New Project from API Logic Server…* (⇧⌘N), or **API Logic Server Project…** on the New
+Project page, starts from the model API Logic Server generated (its resources, attributes, keys and
+relationships) instead of a database. Point at the ALS project:
+
+- **drop** its folder, or its `database/models.py`, on the drop zone;
+- **Folder…** or **Model File…** to choose it; or
+- type or paste a path, or a **public GitHub repository's address**
+  (`https://github.com/owner/repo`, or `…/tree/<branch>/<subfolder>`), then **Read**.
+
+The page shows what the model holds and where it came from, and fills in the Project Name. Enter
+the **API Server** the generated app will talk to (`http://localhost:5656` by default) and click
+**Create**. The Studio keeps a copy of the model in the project (`ALS Model/`), so the project opens
+again without the original. The Studio reads the model; it never runs it.
+
+An app generated from an ALS project talks to the server: it is the **Enterprise** edition. The
+free Studio opens, designs and generates screens for ALS projects; for a Lite app, start from the
+server's SQLite database instead.
+
+*A running server instead?* **From a Running Server…** on that page opens the server form (base URL,
+user name, password). *Model → Open API Logic Server Metadata JSON…* (⌘J) reads a saved
+`/metadata?include=attributes` response. Neither has the relationships.
 
 ## 5. The workspace and your project's files
 
@@ -528,6 +548,7 @@ list (and names it); the Control popup needs an attribute selected in the table.
 | Menu | Command | Key | Needs |
 |---|---|---|---|
 | Project | New Project… | ⌘N | |
+| | New Project from API Logic Server… | ⇧⌘N | |
 | | Open Project… | ⌘O | |
 | | Recent Projects | ⌘1 | |
 | | Entity Definitions | ⌘2 | a project |

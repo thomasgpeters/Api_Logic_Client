@@ -6,6 +6,24 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Open ALS Project: a project from the model API Logic Server generated
+
+- *Project > New Project from API Logic Server…* (⇧⌘N) and **API Logic Server Project…** on New
+  Project open `ALSProjectView.xib`: an ALS project's folder, its model file or a public GitHub
+  repository - typed, chosen (Folder…, Model File…) or dropped. Create keeps a copy in
+  `<project>/ALS Model/` and opens the project from it; `Project.json` gets `alsSource` and
+  `edition: enterprise`. `features/ALS_PROJECT_FEATURE.md`.
+- The drop zone: the author pointed out FB's translator writes the subclass code, so only its own
+  classes exist - made in code with `subclass view` over the XIB's box, not a class name in the XIB.
+- `ALS Model.incl` moved to `src/Generator/` (the Studio reads ALS models); `ALS Project.incl`
+  (finding, GitHub, the copy, the ALS model -> the Studio's with lookups); `LoadALSModel`;
+  App Generator treats `.py` / `.yaml` sources as no database (Generate App: Enterprise).
+- Learned from the public repositories: `ApiLogicServer/demo`'s models.py writes
+  `class X(SAFRSBaseX, Base):` and trailing `# comments`; the reader (FB and reference) takes both.
+  Its admin.yaml lists 11 relationships, models.py 26 including all 11: models.py first.
+  `ApiLogicServer/basic_demo` and `demo` read over raw.githubusercontent.com from here.
+- `tools/als_project_reference.py` (25 checks) in `run_tests.sh`; String(15) now VARCHAR(15).
+
 ## 2026-11-25 — The ALS model from database/models.py, parsed as text
 
 - In the sandbox: `ApiLogicServer create` (17.05.44) on Northwind and on the CRM's contacts.sqlite.

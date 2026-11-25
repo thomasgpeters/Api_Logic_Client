@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Read an API Logic Server project's model, database/models.py, AS TEXT - the reference for the
-FB reader (ALSModelFromModelsPy in src/Enterprise/ALS Model.incl) and its test.
+FB reader (ALSModelFromModelsPy in src/Generator/ALS Model.incl) and its test.
 
     python3 tools/models_py_reference.py <ALS project folder> [<ALS venv python>]
 
@@ -37,6 +37,20 @@ def quoted_items(text):
     return re.findall(r"""['"]([^'"]*)['"]""", text)
 
 
+def without_comment(line):
+    """the line without a trailing # comment (a # inside quotes is kept)"""
+    quote = None
+    for i, c in enumerate(line):
+        if quote:
+            if c == quote:
+                quote = None
+        elif c in '\'"':
+            quote = c
+        elif c == '#':
+            return line[:i].rstrip()
+    return line
+
+
 def read_models_py(text):
     """models.py -> the model. Lines it reads:
          class Order(Base):                         a resource (a class)
@@ -52,10 +66,10 @@ def read_models_py(text):
        are the child's foreign keys to the parent's table. Table(...) blocks (views) are skipped."""
     model, cls, fk_columns, constraints = {}, None, {}, {}
     for raw in text.splitlines():
-        line = raw.strip()
-        if not line or line.startswith('#'):
+        line = without_comment(raw.strip())
+        if not line:
             continue
-        m = re.match(r'class\s+(\w+)\s*\(\s*Base\b', line)
+        m = re.match(r'class\s+(\w+)\s*\((?:[^)]*,\s*)?Base\s*\)', line)      # (Base) or (SAFRSBaseX, Base)
         if m:
             cls = m.group(1)
             model[cls] = {'resource': cls, 'table': cls, 'attributes': [], 'keys': [], 'relationships': []}
@@ -104,6 +118,9 @@ def read_models_py(text):
             tm = re.match(r'(\w+)', first)
             if tm and tm.group(1) in TYPE_NAMES:
                 attr['type'] = TYPE_NAMES[tm.group(1)]
+                size = re.match(r'\w+\((\d+)', first)            # String(15) -> VARCHAR(15)
+                if size and int(size.group(1)) > 0:
+                    attr['type'] += f'({size.group(1)})'
             if 'primary_key=True' in args:
                 attr['pk'] = True
                 entity['keys'].append(name)
