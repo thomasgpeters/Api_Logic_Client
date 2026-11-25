@@ -32,6 +32,12 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
 
 ## Decisions
 
+- **The model is API Logic Server's, never FutureBasic's** (author, 2026-11-25). The Studio points
+  at the ALS project the app is built from (its folder or repository) and reads the model ALS
+  generated there: `ui/app/app_model.yaml` (ALS 17.3 and earlier), else `database/models.py`
+  (current ALS: types, primary keys, foreign keys, relationship names), with `ui/admin/admin.yaml`
+  for labels and the display column. Read as text (as the C++ Studio does), never run.
+
 - The model file: `app_model.yaml` (author), read with the same reader as `admin.yaml` (same shape);
   current ALS (17.04+) writes only `admin.yaml` - and `database/models.py`, which the author's
   onboarding guide ranks first (a reader for it: backlog). `/metadata` has no relationships.

@@ -92,7 +92,7 @@ Code in this repository for now (`src/Enterprise`, behind `Edition.incl`), moved
 - [x] The ALS contract measured against a running server and written up: `design/ALS Contract.md`, `tools/als_contract.py` (18 checks)
 - [x] `ALS Client.incl` follows it: error messages (title first, `msg`, bare strings), 401 / 422 = sign in again, paging by offset to `meta.total`, `ALSGet` to re-read the checksum
 - [x] The SQL Generator's JSON:API side (author's design): `src/Enterprise/DataObject_JSONAPI.incl`, the model from `app_model.yaml` / `admin.yaml` (`ALS Model.incl`); `AddOrderToQuery` on both sides (`features/ENTERPRISE_DATA_FEATURE.md`)
-- [ ] A reader for `database/models.py` (current ALS projects; first in the author's onboarding guide)
+- [ ] The Studio points at the ALS project the app is built from (author: the model is ALS's, not FB's): detect it (`api_logic_server_run.py`, `database/models.py`), read `app_model.yaml` if there, else `database/models.py` (a text reader like the C++ Studio's `Model::fromModelsPy`, tested against SQLAlchemy's own view of the same file), `admin.yaml` for labels / display column
 - [ ] `App Data Enterprise.incl`: the App Data interface over ALS (list with paging, lookups, save with `S_CheckSum` + re-read, remove, login), answers on the main thread
 - [ ] Connection: the server's address, API and login paths in the Studio (Project Settings) and a Server window in the app; Log In in the header; the token for the session, the password in the Keychain
 - [ ] Multi-user: a stale checksum explained to the user (reload the record, re-apply the change); Refresh reads the server
