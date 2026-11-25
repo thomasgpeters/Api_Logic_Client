@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Map view backlogged: native MapKit or an HTML map, to decide later
+
+- The author asked whether the map is an HTML view with a JavaScript map or a native Cocoa view,
+  then backlogged the Map view with everything gathered so the decisions can be made later. Cocoa
+  has MKMapView (FB: `mkmapview`, three FBExamples); the comparison (look, key and cost, events,
+  icons and bubbles, geocoding, code) and the one native risk (`_mapViewViewForAnnotation`
+  untried in FB) are in `design/Map View Design.md`; step 0 of the Map view in `BACKLOG.md`.
+
 ## 2026-11-25 — Map points: icon, expandable bubble, menu (noted for later)
 
 - The author: the map's points are the result set's rows, each shown as an icon with a bubble that

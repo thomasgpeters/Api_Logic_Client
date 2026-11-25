@@ -6,6 +6,27 @@ entity's records (Customer, Supplier, …); any query's result set later. Addres
 into locations to fill those columns where a table has none. A design to agree before building;
 the steps are in `BACKLOG.md` → Modern look → Map view.
 
+## Native MapKit or an HTML map? (to decide - author, later)
+
+Cocoa has a native map view, **MKMapView** (Apple's MapKit); FutureBasic has the `mkmapview`
+statement, three FBExamples and all of MapKit in its headers. The alternative is an HTML page with a
+JavaScript map (Leaflet / OpenStreetMap, Google Maps JS, MapKit JS) in a web view.
+
+| | Native MapKit (recommended) | HTML + JavaScript map |
+|---|---|---|
+| Look | Apple Maps; light and dark mode by itself | a web page inside the app |
+| Key / cost | none for a Mac app | Google: a key and billing; MapKit JS: a token; OSM tiles: a usage policy |
+| Events | a pin click comes to the app's `DoDialog` | messages passed between the JavaScript and FB |
+| Icons, bubble, menu | built in: glyph image (the entity's SF Symbol), tint, callout, detail view, buttons, clustering | drawn in HTML / CSS |
+| Geocoding | Apple's geocoder, the same toolkit | a separate web service |
+| Code | FB only, in the runtime | an HTML / JS template and the bridge to FB |
+| For it | | the model diagram is already HTML; more ready-made map plug-ins (heat maps, clustering) |
+
+The one open risk on the native side: custom icons and bubbles come through `_mapViewViewForAnnotation`,
+which no FBExample uses - a small Mac test project settles it first. If FB cannot serve that event,
+the native map still works with standard pins and their simple callouts; only the custom icons and
+the expanding bubble wait.
+
 ## The idea in one line
 
     a result set (rows)  +  which columns are latitude, longitude, title  ->  pins on a map
@@ -103,6 +124,9 @@ Coordinates from address*):
 6. Later: clustering many pins; directions between rows; a small map on the Form.
 
 ## Open questions (author)
+
+- **Native MapKit or an HTML / JavaScript map** (above; native recommended) - and, if native, the
+  small Mac test of `_mapViewViewForAnnotation` first.
 
 - Northwind has no location columns: add `Latitude` / `Longitude` to Customer and Supplier in the
   project's copy (Lite) so step 1 has data - or start with a test database that has them?
