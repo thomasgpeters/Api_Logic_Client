@@ -37,6 +37,11 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
   generated there: `ui/app/app_model.yaml` (ALS 17.3 and earlier), else `database/models.py`
   (current ALS: types, primary keys, foreign keys, relationship names), with `ui/admin/admin.yaml`
   for labels and the display column. Read as text (as the C++ Studio does), never run.
+- The two editions mirror each other (author): Lite points at the **SQLite file** and reads the
+  model from the database itself (`SQLite Model.incl`); Enterprise points at the **ALS project** and
+  reads the model ALS generated. Enterprise cannot read the server's database instead: the app speaks
+  to ALS in ALS's names - resources (Category, stored in CategoryTableNameTest) and relationships
+  (WorksForDepartment) - which only ALS's model has.
 
 - The model file: `app_model.yaml` (author), read with the same reader as `admin.yaml` (same shape);
   current ALS (17.04+) writes only `admin.yaml` - and `database/models.py`, which the author's
