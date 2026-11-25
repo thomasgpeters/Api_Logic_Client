@@ -6,6 +6,18 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Record popover: a related record's details beside its Dropdown
+
+- The author (Lite): an Order's Customer Dropdown needs a small icon that shows that Customer's
+  details in a popup - for every relationship. Built generic: the XIB generator puts an info
+  button beside every lookup Dropdown (tag 40000 + the field's); the binding registers the
+  parent's shown fields and titles; Binding Support keeps the lookup's rows so the chosen parent is
+  at hand; `src/Runtime/Record Popover.incl` shows it in an FB popover (FBExamples' pattern:
+  `popover`, labels made into it, `PopoverShow` beside the button). No new query: the same in
+  both editions. `features/RECORD_POPOVER_FEATURE.md`.
+- From FB's reference: `textlabel tag, text, rect, wndTag` alters a label in another window
+  (the popover) without making it the output window.
+
 ## 2026-11-25 — Map view backlogged: native MapKit or an HTML map, to decide later
 
 - The author asked whether the map is an HTML view with a JavaScript map or a native Cocoa view,

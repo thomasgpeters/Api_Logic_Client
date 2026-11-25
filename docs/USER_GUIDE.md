@@ -158,6 +158,8 @@ you regenerate. Clear a cell to go back to the recommendation.
   showing a readable column (its *name*, *title* or *description*, a column whose name contains
   "name", else its first text column) and storing the key. Type a value list in **Values** to
   offer those values instead. The first item is empty: no value.
+  Beside a foreign key's Dropdown, an **info button** (ⓘ) shows the chosen record's details in a
+  popover - the Customer of an Order, the Department of an Employee: every field and its value.
 - **Radio buttons**: one per value of the **Values** list (up to 8; with more, or with no
   list, the attribute gets a Dropdown). Side by side when they fit, else one under the other.
 - **Checkbox**: for yes / no columns (BOOLEAN, BIT); stored as 1 or 0.
