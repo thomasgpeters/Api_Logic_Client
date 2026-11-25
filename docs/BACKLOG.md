@@ -86,6 +86,18 @@ what was done and learned is in `DEVELOPMENT_LOG.md`.
       postinstall, or a first-launch copy from the installer's disk image), so users need no repository
 - [ ] Preferences (⌘,): the repository / library folder, the workspace location
 
+## Enterprise edition — started 2026-11-25 (author: "we must not fall behind" on multi-user, three tiers)
+
+Code in this repository for now (`src/Enterprise`, behind `Edition.incl`), moved to a private repository when sold (author).
+- [x] The ALS contract measured against a running server and written up: `design/ALS Contract.md`, `tools/als_contract.py` (18 checks)
+- [x] `ALS Client.incl` follows it: error messages (title first, `msg`, bare strings), 401 / 422 = sign in again, paging by offset to `meta.total`, `ALSGet` to re-read the checksum
+- [ ] `App Data Enterprise.incl`: the App Data interface over ALS (list with paging, lookups, save with `S_CheckSum` + re-read, remove, login), answers on the main thread
+- [ ] Connection: the server's address, API and login paths in the Studio (Project Settings) and a Server window in the app; Log In in the header; the token for the session, the password in the Keychain
+- [ ] Multi-user: a stale checksum explained to the user (reload the record, re-apply the change); Refresh reads the server
+- [ ] Generate App (Enterprise): `declare_logic.py` from the project's rules (the rules bridge in FB)
+- [ ] `Edition.incl` offers Enterprise (licensing still parked)
+- [ ] Kafka (author, 2026-11-25; already used behind ALS in the author's other applications): first through ALS's own Kafka integration (the app keeps talking JSON:API, the server publishes and consumes); then a plain-HTTP messaging module in FB for Kafka's REST Proxy, and Redis through an HTTP gateway (Webdis, Upstash) - publish / poll, set / get over URLSession
+
 ## Parked: Enterprise edition — revisit after the Lite release (author, 2026-11-24)
 
 Everything needed to pick this up again is in `design/Editions and Licensing.md` (the editions,

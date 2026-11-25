@@ -6,6 +6,25 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Enterprise: the API Logic Server contract, measured
+
+The author: start on API Logic Server now (multi-user, three tiers); Enterprise code in this
+repository for now; a real ALS in the cloud session for tests.
+- API Logic Server 17.05.44 installed in a scratch venv; the Northwind sample with SQL security
+  and credit-limit rules, run with `SECURITY_ENABLED=true`.
+- `tools/als_contract.py` (18 checks) and `docs/design/ALS Contract.md`. Found:
+  - `links.next` comes one page short (830 rows, pages of 200: offset 600 has no next) - page by
+    offset until `meta.total`;
+  - an update's answer carries the OLD `S_CheckSum` - read the record again before the next save,
+    or it is refused as "row altered by another user";
+  - a rule's message is `errors[0].title`; `detail` is a dictionary;
+  - a wrong password is a bare JSON string (needs fragments allowed); a non-token is 422.
+- `ALS Client.incl` fixed for all four: `ALSErrorMessage` (title first, msg, bare strings),
+  `ALSNeedsSignIn` (401 / 422), `ALSListPage` + `ALSResponseTotal`, `ALSGet`, fragments allowed.
+- `run_tests.sh` runs the contract when a server answers on localhost:5656.
+- Backlog: the Enterprise steps; Kafka (through ALS first - the author already does this - then a
+  plain-HTTP module for Kafka's REST Proxy and Redis).
+
 ## 2026-11-25 — The SQL Generator as a shared module: an example project for the FB list
 
 The author wants to share the SQL Generator (the DataObject query builder) on the FutureBasic
