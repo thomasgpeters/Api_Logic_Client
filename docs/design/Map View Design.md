@@ -26,6 +26,22 @@ Generator (or its JSON:API side) returns - as long as each row has a latitude an
 - **Any result set** (step 3): a query's rows - e.g. "Customers with orders over 10,000" - shown
   on the map the same way.
 
+## The points: an icon, a bubble, a menu (author, 2026-11-25 - details later)
+
+Each map point is a result-set row, shown as an **icon**: a marker with the entity's own icon (the
+SF Symbol chosen for it in the Studio, as on its navigation button) in the layer's colour. Clicking
+it opens a **bubble** with the row's title and a line or two; the bubble **expands** to show more of
+the row's details, and has an **interactive menu** of actions on the row (Open, Edit, Delete,
+Directions, and the app's own). Which details and which actions: to be worked out later.
+
+FutureBasic has the parts (`Tlbx MapKit.incl`, MKMarkerAnnotationView / MKAnnotationView):
+`MKMarkerAnnotationViewSetGlyphImage` (the icon), `MKMarkerAnnotationViewSetMarkerTintColor` (the
+colour), `MKAnnotationViewSetCanShowCallout` (the bubble), `MKAnnotationViewSetDetailCalloutAccessoryView`
+(a view of details inside it), `MKAnnotationViewSetRightCalloutAccessoryView` (a button there that
+opens the menu), and `MKAnnotationViewSetClusteringIdentifier` (many points grouped). The map asks for
+each point's view through the `_mapViewViewForAnnotation` event; no FBExample uses it yet, so it is
+tried first, on a Mac, in a small test before the map part is built on it.
+
 ## The location columns
 
 The map needs a latitude and a longitude in each row. The Studio finds them in the model by name
@@ -82,7 +98,9 @@ Coordinates from address*):
 2. Several result sets on one map (Customers and Suppliers): layers, colours, show / hide.
 3. Any result set: a query's rows (SQL Generator / JSON:API) on the map.
 4. Filling the columns: *Add Location Columns* in the Studio; *Locate* in the app (geocoding).
-5. Later: clustering many pins; directions between rows; a small map on the Form.
+5. The points (later): the entity's icon in the layer's colour; the bubble, expandable to the row's
+   details; the menu of actions on the row.
+6. Later: clustering many pins; directions between rows; a small map on the Form.
 
 ## Open questions (author)
 
@@ -90,3 +108,5 @@ Coordinates from address*):
   project's copy (Lite) so step 1 has data - or start with a test database that has them?
 - Column names: `Latitude` / `Longitude` (proposed) for the columns the Studio adds?
 - Step 2's layers: one colour per entity chosen in the Studio, or the system's palette in order?
+- The points (later): which details the expanded bubble shows (the Form's fields? the List's
+  columns?), and which actions its menu offers.

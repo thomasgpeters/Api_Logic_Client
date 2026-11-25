@@ -91,7 +91,11 @@ both editions. The author adds to this list.
   - [ ] 4. Filling the columns: *Add Location Columns* in the Studio (Lite: ALTER TABLE in the project's copy;
     Enterprise: the columns to add on the server, then an ALS rebuild); *Locate* in the app - address -> location
     with Apple's geocoder (`CLGeocoder`; `MKGeocodingRequest` on macOS 26), one at a time, written into the row
-  - [ ] 5. Later: clustering many pins; directions between rows; a small map on the Form
+  - [ ] 5. The points (author; details later): each row an icon (the entity's SF Symbol in the layer's colour,
+    `MKMarkerAnnotationViewSetGlyphImage`), a bubble that expands to more of the row's details
+    (`DetailCalloutAccessoryView`), and an interactive menu of actions on the row (a callout button); first a small
+    Mac test of `_mapViewViewForAnnotation` (no FBExample uses it)
+  - [ ] 6. Later: clustering many pins; directions between rows; a small map on the Form
 - [ ] Form Control choices: Image, PDF, Tokens, Thumbnails (e.g. `Employee.PhotoPath` → Image)
 - [ ] More controls and looks (author to add): e.g. steppers and sliders for numbers, a search field over
   the List, a segmented control for short value lists, glass / rounded panels in the shell

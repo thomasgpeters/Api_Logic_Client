@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — Map points: icon, expandable bubble, menu (noted for later)
+
+- The author: the map's points are the result set's rows, each shown as an icon with a bubble that
+  expands to more details and an interactive menu - details to be worked out later. FB's MapKit
+  header has the parts (marker glyph image and tint, callout, detail accessory view, callout
+  buttons, clustering); the per-point view comes through `_mapViewViewForAnnotation`, which no
+  FBExample uses, so a small Mac test comes first. `design/Map View Design.md`, step 5.
+
 ## 2026-11-25 — Map view made generic: a result set with latitude / longitude
 
 - The author: more generic - choose the Map view and show a result set whose rows carry a
