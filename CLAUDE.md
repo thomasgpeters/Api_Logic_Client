@@ -88,7 +88,7 @@ mode work without extra code).
   `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
   `check_erd_page.py` (test: the model diagram page in headless Chromium),
   `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
-  `make_sql_generator_svg.py` (draws `docs/design/SQL Generator Object Model.svg`),
+  `make_sql_generator_svg.py` (draws `docs/design/SQL Generator Object Model.svg`), `svg_to_png.js` (an SVG as a 2x PNG, light colours: the example's Help diagram),
   `als_contract.py` (test: the API Logic Server contract, against a running server),
   `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),
   `models_py_reference.py` (an ALS project's `database/models.py` read as text; test: against SQLAlchemy),

@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-25 — SQL Generator example: a Help window to read, preview and export
+
+- The author: the Help window stays - a heading and opening paragraph, the architecture diagram, then
+  each function explained one by one; it should print as PDF; then, instead of printing, Preview and
+  Export (PDF or Rich Text). Done: `User Guide.txt` rewritten in that order (every public function of
+  the module and the runner); the diagram as a PNG (`tools/svg_to_png.js`: the SVG in headless
+  Chromium, light colours, 2x) placed by a new `![name]` markup line (`RichAppendImage`, a text
+  attachment); **Open in Preview** (a print job saved to a temporary PDF, in the light appearance so
+  it is black on white in dark mode, opened in /System/Applications/Preview.app), **Export…** (PDF, or
+  RTFD with the diagram), **View Diagram** (full size, zoom, full screen); Help menu items too.
+- FB has no wrapper for a print job to a file with a copied NSPrintInfo, for RTFD, or for opening
+  with a given app: those are single `cln` lines. fblint caught `textView` (an FB keyword) and a
+  function placed before one it calls.
+
 ## 2026-11-25 — SQL Generator example: one scrolling output with every result
 
 - The author merged and pulled; the Studio and the example compile and run. For the example: no

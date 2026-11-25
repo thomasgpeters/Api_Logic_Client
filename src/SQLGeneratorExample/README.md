@@ -31,7 +31,7 @@ sqlite> SELECT "p"."givenName" AS "Given Name", "p"."surName" AS "Surname", "a".
 2 rows in set
 ```
 
-Help (the ? button, or Command-?) opens the user guide in a window of its own. The About box says
+Help (the ? button, or Command-?) opens the user guide in a window of its own: the object model diagram, then every function explained one by one. It opens in Preview as a PDF, exports as PDF or Rich Text, and shows the diagram full size. The About box says
 what the app and the module do.
 
 ## The examples
@@ -109,7 +109,7 @@ filters for a few values; the generator writes queries, not schemas (create tabl
 | `CRM Database.incl` | the example database: tables and sample people |
 | `CRM Examples.incl`, `Example Code.txt` | the ten examples, and the FB each one shows |
 | `Example Output.incl`, `Rich Text.incl` | the coloured output and the SQL-command-line tables |
-| `Help.incl`, `User Guide.txt` | the Help window and its text (simple markup: `#` headings, `**bold**`, code blocks) |
+| `Help.incl`, `User Guide.txt`, `SQL Generator Diagram.png` | the Help window and its text (simple markup: `#` headings, `**bold**`, code blocks, `![picture]`); Open in Preview, Export (PDF, Rich Text), View Diagram |
 | `Windows.incl`, `Menus.incl`, `EventHandlers.incl`, `SQLGeneratorExample.main`, `SQLGeneratorExample.glbl` | the app |
 | `Credits.rtf`, `Info.plist` | the About box and the app's name |
 
