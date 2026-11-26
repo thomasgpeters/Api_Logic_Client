@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""The API Logic Server contract the FutureBasic Enterprise client relies on, checked against a
+"""The API Logic Server contract the FutureBasic Professional client relies on, checked against a
 running server.
 
     python3 tools/als_contract.py http://localhost:5656 [user] [password]
 
-Each check is one thing src/Runtime/ALS Client.incl (and App Data Enterprise) does or expects:
+Each check is one thing src/Runtime/ALS Client.incl (and App Data Professional) does or expects:
 login and its token, JSON:API lists, paging by links.next, filters and sorting, create, update
 with the optimistic-lock checksum, a stale checksum refused, a rule's message, delete, and the
 three shapes an error comes in. error_message() is the reference for ALSErrorMessage.
@@ -81,7 +81,7 @@ def check(name, ok, info=''):
 
 def fetch_all(resource, token, limit=100, query=''):
     """A whole list, page by page, by offset until meta.total rows have arrived - what App Data
-    Enterprise does. links.next is NOT reliable: ALS (17.05) leaves it out one page early (with
+    Professional does. links.next is NOT reliable: ALS (17.05) leaves it out one page early (with
     830 rows and pages of 200, the page at offset 600 has no next, though offset 800 holds 30)."""
     rows, offset, pages, total = [], 0, 0, None
     while total is None or offset < total:

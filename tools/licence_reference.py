@@ -4,7 +4,7 @@ Imagery License Server do. Design: docs/design/Licensing Design.md.
 
     python3 tools/licence_reference.py --test                    every case: valid, tampered, expired, other product ...
     python3 tools/licence_reference.py --issue lite jane@example.com "Jane Outerbridge" [--expires 2027-11-30]
-    python3 tools/licence_reference.py --issue enterprise ...    a licence signed with the TEST key (for a Mac test)
+    python3 tools/licence_reference.py --issue professional ...    a licence signed with the TEST key (for a Mac test)
     python3 tools/licence_reference.py --public-key              the TEST public key as App Builder embeds it
     python3 tools/licence_reference.py --mac-test                write src/MacTests/Licence Verify Test.fb
     python3 tools/licence_reference.py --mac-test-check          is that program up to date with Licence.incl?
@@ -39,7 +39,7 @@ FEATURES = [
     ('core', 'Studio core: projects from SQLite, generation, rules, LogicBank for FutureBasic'),
     ('ai', 'AI Assistant (your own key)'),
     ('als_projects', 'API Logic Server projects'),
-    ('enterprise_runtime', 'Enterprise apps: the API Logic Server client'),
+    ('professional_runtime', 'Professional apps: the API Logic Server client'),
     ('rules_exchange', 'Rules exchanged with API Logic Server (declare_logic.py)'),
     ('integration', 'Integration and scheduled rules'),
     ('authorization', 'Authorization rules'),
@@ -47,7 +47,7 @@ FEATURES = [
     ('genai_logic', 'AI through API Logic Server (genai-logic)'),
 ]
 LITE = 0x0003
-ENTERPRISE = 0x01FF
+PROFESSIONAL = 0x01FF
 
 
 def b64url(data):
@@ -79,7 +79,7 @@ def public_key_base64(public):
 
 def issue(private, lic, edition, account, name, issued, expires=None, features=None, product=PRODUCT):
     payload = {'lic': lic, 'product': product, 'account': account, 'name': name, 'edition': edition,
-               'features': features if features is not None else (ENTERPRISE if edition == 'enterprise' else LITE),
+               'features': features if features is not None else (PROFESSIONAL if edition == 'professional' else LITE),
                'issued': issued, 'expires': expires}
     body = b64url(json.dumps(payload, separators=(',', ':')).encode('utf-8'))
     signature = private.sign(body.encode('ascii'), ec.ECDSA(hashes.SHA256()))
@@ -118,19 +118,19 @@ def cases(private, public):
     """(name, licence text, today, expected: ok, expected words in the reason, features expected)"""
     other_private = ec.generate_private_key(ec.SECP256R1())
     lite = issue(private, 'L-TEST-0001', 'lite', 'jane@example.com', 'Jane Outerbridge', '2026-11-26')
-    ent = issue(private, 'L-TEST-0002', 'enterprise', 'jane@example.com', 'Jane Outerbridge', '2026-11-26', '2027-11-30')
+    ent = issue(private, 'L-TEST-0002', 'professional', 'jane@example.com', 'Jane Outerbridge', '2026-11-26', '2027-11-30')
     body, sig = lite.split('.')
     tampered = json.loads(unb64url(body))
-    tampered['features'] = ENTERPRISE
+    tampered['features'] = PROFESSIONAL
     tampered_body = b64url(json.dumps(tampered, separators=(',', ':')).encode('utf-8'))
     return [
-        ('a Lite licence: core and the AI assistant, nothing Enterprise', lite, '2026-11-26', True, '', LITE),
-        ('an Enterprise licence until 2027-11-30', ent, '2026-11-26', True, '', ENTERPRISE),
-        ('the Enterprise licence the day it ends: still good', ent, '2027-11-30', True, '', ENTERPRISE),
-        ('the Enterprise licence the day after: expired', ent, '2027-12-01', False, 'expired', None),
-        ('a Lite licence edited to Enterprise: the signature no longer matches', tampered_body + '.' + sig, '2026-11-26', False, 'signature', None),
+        ('a Lite licence: core and the AI assistant, nothing Professional', lite, '2026-11-26', True, '', LITE),
+        ('an Professional licence until 2027-11-30', ent, '2026-11-26', True, '', PROFESSIONAL),
+        ('the Professional licence the day it ends: still good', ent, '2027-11-30', True, '', PROFESSIONAL),
+        ('the Professional licence the day after: expired', ent, '2027-12-01', False, 'expired', None),
+        ('a Lite licence edited to Professional: the signature no longer matches', tampered_body + '.' + sig, '2026-11-26', False, 'signature', None),
         ('a licence with another licence\'s signature', body + '.' + ent.split('.')[1], '2026-11-26', False, 'signature', None),
-        ('a licence signed with another key (not Imagery\'s)', issue(other_private, 'L-X', 'enterprise', 'x@example.com', 'X', '2026-11-26'), '2026-11-26', False, 'signature', None),
+        ('a licence signed with another key (not Imagery\'s)', issue(other_private, 'L-X', 'professional', 'x@example.com', 'X', '2026-11-26'), '2026-11-26', False, 'signature', None),
         ('a licence for another product', issue(private, 'L-TEST-0003', 'lite', 'jane@example.com', 'Jane', '2026-11-26', product='fleet_dispatcher'), '2026-11-26', False, 'another product', None),
         ('text that is not a licence', 'hello', '2026-11-26', False, 'not a licence', None),
         ('a licence pasted with spaces and a new line around it', '  ' + lite + '\n', '2026-11-26', True, '', LITE),
@@ -224,7 +224,7 @@ def main(argv):
         payload, reason = verify(text, public, today)
         good = (payload is not None) == ok and (ok or words in (reason or '')) and (not ok or int(payload['features']) == feats)
         if ok and good:
-            good = allows(payload, 0) and allows(payload, 1) and (allows(payload, 2) == (feats == ENTERPRISE))
+            good = allows(payload, 0) and allows(payload, 1) and (allows(payload, 2) == (feats == PROFESSIONAL))
         failed += 0 if good else 1
         print(f'{"PASS" if good else "FAIL"}  {name}' + ('' if good else f'   ({reason})'))
     print(f'licences: {len(cases(private, public))} cases, {failed} failed')

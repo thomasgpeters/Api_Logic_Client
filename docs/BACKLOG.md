@@ -18,7 +18,7 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
    Then the **Map view** (any result set with latitude / longitude on a map, an entity first; a bigger piece: a generic map part, then filling the columns by geocoding).
 4. **Lite release:** a generated app builds and runs on a Mac; tag it. Then post the SQL Generator
    to the FB list.
-5. **Enterprise data:** `App Data Enterprise.incl` and the connection / sign-in, so an ALS project
+5. **Professional data:** `App Data Professional.incl` and the connection / sign-in, so an ALS project
    generates a working three-tier app.
 6. **Rules in FB:** the port of `rules_bridge.py` (Rules.json check, Studio Rules.incl), then the
    Rules page.
@@ -47,9 +47,14 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [x] Free (MIT), the third free module (author, 2026-11-26): its user guide, its page and downloads on the site, the
       About Imagery window in its example.
 - [ ] The name ("Web Toolkit for FutureBasic" is a working name); its own public repository.
-- [x] **Pricing decided** (author, 2026-11-26): Lite free; Enterprise on the company-wide tiers as developer seats
-      (`docs/design/Licensing Design.md` -> Pricing); the web target is in Enterprise.
+- [x] **Pricing decided** (author, 2026-11-26): Lite free; Professional on the company-wide tiers as developer seats
+      (`docs/design/Licensing Design.md` -> Pricing); the web target is in Professional.
 - [ ] The Licence window shows the licence's tier and seats; the License Server issues them (its L36).
+- [ ] **Seats on the local network (Bonjour)** (author, 2026-11-26; `Licensing Design.md` -> Seats): copies with
+      the same licence find each other. The newest copy past the seat count is read-only until resolved. Lite: one
+      copy at a time.
+- [ ] **Online activation per Mac:** the License Server refuses more Macs than seats, then App Builder works offline;
+      "Release this Mac" frees a seat. Needs the License Server's endpoints (its L38).
 
 ## Waiting on the author
 
@@ -59,7 +64,7 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [ ] Studio review: agree the generated app's toolbar (`STUDIO_REVIEW.md` 2.6)
 - [ ] The Modern look: more controls and looks to add to the list
 - [ ] Map view (backlogged; MapKit decided): run `src/MacTests/MapKit Points Test.fb`; location columns for Northwind's test data and their names; layer colours; the bubble's details and menu actions (`design/Map View Design.md`)
-- [ ] Enterprise licensing option (A / B / C, see Parked)
+- [ ] Professional licensing option (A / B / C, see Parked)
 - [ ] Proposal to Val Huber: percentage offer + the name "LogicBank for FutureBasic"
 
 ## Verify on a Mac - everything built since the last Mac build
@@ -121,7 +126,7 @@ both editions. The author adds to this list.
   - [ ] 2. Several result sets on one map (Customers and Suppliers): layers, a colour each, show / hide
   - [ ] 3. Any result set: a query's rows (SQL Generator / JSON:API) on the map
   - [ ] 4. Filling the columns: *Add Location Columns* in the Studio (Lite: ALTER TABLE in the project's copy;
-    Enterprise: the columns to add on the server, then an ALS rebuild); *Locate* in the app - address -> location
+    Professional: the columns to add on the server, then an ALS rebuild); *Locate* in the app - address -> location
     with Apple's geocoder (`CLGeocoder`; `MKGeocodingRequest` on macOS 26), one at a time, written into the row
   - [ ] 5. The points (author; details later): each row an icon (the entity's SF Symbol in the layer's colour,
     `MKMarkerAnnotationViewSetGlyphImage`), a bubble that expands to more of the row's details
@@ -150,7 +155,7 @@ Checkbox; app and entity icons; the shell with New / Save / Delete / Refresh thr
 - [ ] Choose the lookup's display column (or several: "givenName surname"); show the display value in the List instead of the key
 - [ ] Generated app toolbar (author): New, Save, Delete, Refresh, Search, Theme, Log In - proposal in `STUDIO_REVIEW.md` 2.6
 - [ ] Window layouts, a project setting (`design/App Shell Design.md`): Single window (built); Multiple windows - a window per entity, Window menu with Stack and Tile; Tabs - one per entity (future)
-- [ ] Users and roles (author, 2026-11-24): sign-in, users, roles (Admin, Editor, Viewer) deciding who may see, edit or delete each entity; Lite: users in the app's SQLite database; Enterprise: the server's. Then an audit trail (who changed which record, when)
+- [ ] Users and roles (author, 2026-11-24): sign-in, users, roles (Admin, Editor, Viewer) deciding who may see, edit or delete each entity; Lite: users in the app's SQLite database; Professional: the server's. Then an audit trail (who changed which record, when)
 - [ ] Finder icon: the icon picture as `AppIcon.icns` plus `#plist CFBundleIconFile @"AppIcon"` (FB help, Build System)
 - [ ] Navigation bar: scroll when there are more entities than fit (the flipped scroll view left the items at the bottom; removed for now)
 - [ ] Form fields stretch and List tables fill when the window grows (the same masks as the Studio)
@@ -161,31 +166,31 @@ Checkbox; app and entity icons; the shell with New / Save / Delete / Refresh thr
 - [ ] `guid` key kind: generated with `UUIDString( UUIDInit )`, stored lower-case `TEXT`
 - [ ] Lite release: the first Mac build of a generated app; fix what the Build Log shows; tag a release
 
-## Enterprise edition - started 2026-11-25 (author: "we must not fall behind" on multi-user, three tiers)
+## Professional edition - started 2026-11-25 (author: "we must not fall behind" on multi-user, three tiers)
 
-Code in this repository for now (`src/Enterprise`, behind `Edition.incl`), moved to a private
+Code in this repository for now (`src/Professional`, behind `Edition.incl`), moved to a private
 repository when sold (author). The model is API Logic Server's: Lite points at the SQLite file,
-Enterprise at the ALS project.
+Professional at the ALS project.
 
 - [x] The ALS contract measured against a running server: `design/ALS Contract.md`, `tools/als_contract.py` (25 checks); `ALS Client.incl` follows it
-- [x] The SQL Generator's JSON:API side (`src/Enterprise/DataObject_JSONAPI.incl`, `features/ENTERPRISE_DATA_FEATURE.md`); `AddOrderToQuery` on both sides
+- [x] The SQL Generator's JSON:API side (`src/Professional/DataObject_JSONAPI.incl`, `features/PROFESSIONAL_DATA_FEATURE.md`); `AddOrderToQuery` on both sides
 - [x] The ALS model from `database/models.py`, parsed as text (never run): `ALSModelFromModelsPy` (`src/AppBuilder/ALS Model.incl`), tested against SQLAlchemy on Northwind and CRM; older `class X(SAFRSBaseX, Base)` too
 - [x] API Logic Server Project page (`features/ALS_PROJECT_FEATURE.md`): folder, model file or public GitHub repository; typed, chosen or dropped; a copy in `<project>/ALS Model/`; lookups from the relationships, display columns from `admin.yaml`
-- [ ] **Next:** `App Data Enterprise.incl`: the App Data interface over ALS (list with paging, lookups, save with `S_CheckSum` + re-read, remove, login), answers on the main thread; records keep the JSON:API id
+- [ ] **Next:** `App Data Professional.incl`: the App Data interface over ALS (list with paging, lookups, save with `S_CheckSum` + re-read, remove, login), answers on the main thread; records keep the JSON:API id
 - [ ] Connection: the server's address (the page's API Server, `baseURL`), login paths; a sign-in window for the header's Log In; the token for the session, a remembered password in the Keychain
 - [ ] Multi-user: a stale checksum explained to the user (reload the record, re-apply the change); Refresh reads the server
 - [ ] *Model > Refresh Model from API Logic Server*: read `alsSource` again, replace the copy, keep the design
 - [ ] Private GitHub repositories: a token in the Keychain; GitHub read without blocking the window (URLSession)
 - [ ] `admin.yaml` titles as the attributes' Titles (its `user_key` is used already)
-- [ ] Generate App (Enterprise): `declare_logic.py` from the project's rules (the rules bridge in FB)
-- [ ] `Edition.incl` offers Enterprise (licensing parked)
+- [ ] Generate App (Professional): `declare_logic.py` from the project's rules (the rules bridge in FB)
+- [ ] `Edition.incl` offers Professional (licensing parked)
 - [ ] The Studio's own ALS fetch (the running-server form) uses the form's base URL and credentials (still a hard-coded host and `admin` / `p`), and waits for login before fetching
 - [ ] Kafka (author, 2026-11-25; already used behind ALS in the author's other applications): first through ALS's own Kafka integration (the app keeps talking JSON:API); then a plain-HTTP messaging module in FB for Kafka's REST Proxy, and Redis through an HTTP gateway (Webdis, Upstash) - publish / poll, set / get over URLSession
 
 ## AI Assistant - rules in natural language, controls suggested (author, 2026-11-26; `design/AI Assistant Design.md`)
 
 A rule is a sentence in the model's own names; the sentence is the source of truth, and the AI translates it into
-LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in ALS (Enterprise).
+LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in ALS (Professional).
 - [x] LogicBank for FutureBasic as a module of its own (as LogicBank is to ALS): `src/LogicBankExample` - the module,
   `Data Memory.incl`, the example on Customer / Order / Item in memory, Help with the user guide, README, MIT licence
   (author, 2026-11-26; `features/LOGICBANK_MODULE_FEATURE.md`)
@@ -204,10 +209,10 @@ LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in AL
 - [ ] Rules page: grounded sentences (type-ahead from the model), Translate, approve
 - [ ] Suggest Rules; the evaluation on Telecom, Customs and Flight Planner (sentences from their READMEs)
 - [ ] Suggest Controls into `Design.json`
-- [ ] Enterprise: `declare_logic.py` from the same rules, sentences as comments; the scenarios run against ALS;
+- [ ] Professional: `declare_logic.py` from the same rules, sentences as comments; the scenarios run against ALS;
   translation through the ALS project's `genai-logic` when it has it, else the Studio's connector
-- [ ] Enterprise: the client previews the rules locally (LogicBank for FutureBasic) while the server decides
-- [x] Decisions (author, 2026-11-26): every edition with the user's own key; Claude first; Enterprise both routes;
+- [ ] Professional: the client previews the rules locally (LogicBank for FutureBasic) while the server decides
+- [x] Decisions (author, 2026-11-26): every edition with the user's own key; Claude first; Professional both routes;
   the neutral expression language; the module published. The rules split: `design/Editions and Licensing.md`
 
 ## Rules - Logic for FutureBasic (`design/Logic Engine Design.md`, ROADMAP Phase 5)
@@ -287,13 +292,13 @@ Server Project; runtime and templates in the workspace.
 2. [x] `Licence.incl`: verify with `SecKeyCreateWithData` + `SecKeyVerifySignature`, keep in the Keychain,
        `LicenceAllows( feature )`; `Edition.incl` follows the licence; `src/MacTests/Licence Verify Test.fb`
        (`features/LICENSING_FEATURE.md`) - [ ] verify on a Mac
-3. [x] The Licence window and menu (Licence…, Enter Licence…, Upgrade to Enterprise…, Manage Licence Online…,
+3. [x] The Licence window and menu (Licence…, Enter Licence…, Upgrade to Professional…, Manage Licence Online…,
        Remove Licence…), the upgrade offer - [ ] the edition in the About box
-4. [x] The gate on every Enterprise command ("(Enterprise)" in the menu title, not hidden); no generation without a licence
+4. [x] The gate on every Professional command ("(Professional)" in the menu title, not hidden); no generation without a licence
 4a. [ ] Before release: the production public key in `LICENCE_PUBLIC_KEY`; confirm `LICENCE_SERVER` and its pages
 5. [ ] The `appbuilderfb://` URL scheme and the `.fblicence` document type
 6. [ ] License Server (its own repository): product `app_builder_fb` and its feature bits (Lite `0x0003`,
-       Enterprise `0x01FF`), signed licences (ES256), the `/appbuilder` landing page, registration to download,
+       Professional `0x01FF`), signed licences (ES256), the `/appbuilder` landing page, registration to download,
        the upgrade with payment, the licence delivered back to the app
 7. [ ] The author: make this repository private; public repositories for LogicBank for FutureBasic and the SQL Generator
 8. [ ] The release: the signed, notarized app, downloaded from the License Server
@@ -329,14 +334,14 @@ the site, download] -> [post to the list].
 - [x] Flight planner, elaborated from the domain research (author, 2026-11-26): wind triangle, weight and balance,
   runways (takeoff / landing distance at density altitude, crosswind), weather minimums, NOTAMs, medical / BasicMed,
   flight review, currency from the logbook, student endorsements, inspections, the plan's life cycle - 104 rules
-- [ ] Enterprise: Flight Service filing, simulated in the ALS project (author, 2026-11-26) - file, amend, cancel,
+- [ ] Professional: Flight Service filing, simulated in the ALS project (author, 2026-11-26) - file, amend, cancel,
   activate, close, extend; the ICAO message from a FlightPlan; overdue -> QALQ -> INREQ -> ALNOT on read.
   Design: `docs/design/Flight Service Filing Design.md`
 - [x] Customs, elaborated from the domain research (author, 2026-11-26: automated clearance, auto-release) - duty
   on the price paid (FOB) at the week's rate, specific / compound / stepped rates, wharfage, relief, personal
   allowances; master and house bills; agency permits, holds, prohibited goods; risk score and lanes (green,
   yellow, red, blue, random); release reasons; statements within the bond - 93 rules
-- [ ] Automatic release in the generated app (and in ALS for Enterprise): release every Releasable declaration
+- [ ] Automatic release in the generated app (and in ALS for Professional): release every Releasable declaration
   when something changes (a ship docks, a permit is approved, a payment lands) - the rules say which
 - [ ] Flight planner: build it on a Mac; its Map view (legs between airports, the track replayed, other traffic)
 - [ ] Oil and gas assets: the database (sites, assets, responsible organisations, operating hours, maintenance

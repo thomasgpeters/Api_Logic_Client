@@ -1,6 +1,6 @@
-# Enterprise data: the SQL Generator's JSON:API side
+# Professional data: the SQL Generator's JSON:API side
 
-The author's design (2026-11-25): the Enterprise edition uses the SQL Generator's own dictionaries
+The author's design (2026-11-25): the Professional edition uses the SQL Generator's own dictionaries
 and arrays, and writes JSON:API requests for API Logic Server instead of SQL, from the ALS model.
 So the pages, bindings and examples do not know which edition they run on.
 
@@ -9,7 +9,7 @@ So the pages, bindings and examples do not know which edition they run on.
 | | |
 |---|---|
 | `src/AppBuilder/ALS Model.incl` (the Studio reads it too: `features/ALS_PROJECT_FEATURE.md`) | the model from `database/models.py` (every ALS project; the only model file from 17.04 on: `ALSModelFromModelsPy`, read as text, never run), or from `app_model.yaml` (ALS 17.3 and earlier) or `admin.yaml`; `ALSModelFromText` tells them apart by their contents: attributes, primary keys, relationships (name, direction, resource, fks), the display column (`favorite` / `user_key`). Line by line by indentation, the design of the C++ Studio's `Model::fromAppModelYaml` |
-| `src/Enterprise/DataObject_JSONAPI.incl` | `GenerateJSONAPISelect / Insert / InsertRows / Update / Delete`, `JSONAPIPagePath`, `JSONAPIRowsFromAnswer`, `JSONAPILastError` |
+| `src/Professional/DataObject_JSONAPI.incl` | `GenerateJSONAPISelect / Insert / InsertRows / Update / Delete`, `JSONAPIPagePath`, `JSONAPIRowsFromAnswer`, `JSONAPILastError` |
 | `src/Runtime/ALS Client.incl` | sends the requests (Bearer token, paging, errors) |
 | `tools/jsonapi_reference.py` | the reference and its test: 19 checks against a running server |
 
@@ -46,7 +46,7 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
   The copy is kept in `<project>/ALS Model/` with its address and date in `Project.json`; *Refresh
   Model* fetches it again. Raw files can lag a push by a few minutes (GitHub's cache). A private
   repository needs a token (the Keychain) - later.
-- **No repository access? Drop the model file** (author, 2026-11-25; Enterprise): the Enterprise
+- **No repository access? Drop the model file** (author, 2026-11-25; Professional): the Professional
   New Project screen takes the ALS project three ways - choose its folder (a clone of its
   repository), **drag and drop** the model file onto a drop zone (`app_model.yaml`, `models.py` or
   `admin.yaml`, or the whole project folder), or Choose... the file in an open panel (the fallback
@@ -55,8 +55,8 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
   `NSPasteboardTypeFileURL` drags, `_viewDraggingEntered` / `_viewPerformDragOperation` (FBExamples,
   TableView Drag Drop).
 - The two editions mirror each other (author): Lite points at the **SQLite file** and reads the
-  model from the database itself (`SQLite Model.incl`); Enterprise points at the **ALS project** and
-  reads the model ALS generated. Enterprise cannot read the server's database instead: the app speaks
+  model from the database itself (`SQLite Model.incl`); Professional points at the **ALS project** and
+  reads the model ALS generated. Professional cannot read the server's database instead: the app speaks
   to ALS in ALS's names - resources (Category, stored in CategoryTableNameTest) and relationships
   (WorksForDepartment) - which only ALS's model has.
 
@@ -82,4 +82,4 @@ names (Northwind: `Category` is table `CategoryTableNameTest`).
   `ALS_PYTHON` are set. The FB port follows the reference line for line (fblint clean); it runs on a Mac.
 
 - [x] `jsonapi_reference.py`: 19 checks against ALS 17.05 Northwind (same rows both ways; writes read back)
-- [ ] The FB code on a Mac: lint passes; first use comes with App Data Enterprise
+- [ ] The FB code on a Mac: lint passes; first use comes with App Data Professional

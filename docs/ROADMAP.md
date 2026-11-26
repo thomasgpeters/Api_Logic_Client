@@ -36,7 +36,7 @@ The generated app talks directly to a SQLite database.
 - Git (init/commit on generation, status, push/pull) and GitHub (create repo, PRs).
 - Settings for ALS/APIs, AI/LLM providers, SMTP notifications.
 
-## Phase 4 — Enterprise edition (paid) — started 2026-11-25 (author); licensing parked until the Lite release
+## Phase 4 — Professional edition (paid) — started 2026-11-25 (author); licensing parked until the Lite release
 
 Design: `design/Editions and Licensing.md`. A three-tier app over API Logic Server behind the same
 data interface as Lite (`App Data`); private repository; licence checked offline by the Studio only.
@@ -45,11 +45,11 @@ data interface as Lite (`App Data`); private repository; licence checked offline
 |---|---|
 | Data interface `App Data` with the Lite implementation; edition hook `Edition.incl` | done — awaiting build |
 | The ALS contract, measured (`design/ALS Contract.md`); `ALS Client.incl` follows it | done |
-| The SQL Generator's JSON:API side (`features/ENTERPRISE_DATA_FEATURE.md`) | done — awaiting build |
+| The SQL Generator's JSON:API side (`features/PROFESSIONAL_DATA_FEATURE.md`) | done — awaiting build |
 | The ALS model from `database/models.py`, as text; the API Logic Server Project page (folder, file, GitHub, drop) (`features/ALS_PROJECT_FEATURE.md`) | done — awaiting build |
-| `App Data Enterprise.incl`, connection and sign-in | next |
+| `App Data Professional.incl`, connection and sign-in | next |
 | Licence option (portable checksum / signed file / online) | open — author (parked) |
-| Private repository; `App Data Enterprise.incl`, sign-in, `declare_logic.py` export | |
+| Private repository; `App Data Professional.incl`, sign-in, `declare_logic.py` export | |
 | License Server: FB Studio product and licence format | |
 
 ## Phase 5 — Rules

@@ -11,7 +11,7 @@ repository already holds, so the site and the apps never disagree:
     /help/sql-generator/      the example apps' user guides (User Guide.txt), as web pages - what their Help shows
     /help/logicbank/
     /samples/, /samples/<name>/   the sample applications: their READMEs, their downloads
-    /app-builder/             App Builder: Lite and Enterprise, registration on the Imagery License Server
+    /app-builder/             App Builder: Lite and Professional, registration on the Imagery License Server
     /downloads/*.zip          each module's example app (MIT), each sample
 Standard library only (no packages to install). Imagery's name and logos are not licensed for reuse.
 """
@@ -312,8 +312,8 @@ def build(out):
     write(out, 'app-builder/index.html', page('App Builder for FutureBasic', f"""<h1>App Builder for FutureBasic</h1>
 <p class="lead">A Mac app that builds a complete FutureBasic application from your database: the windows and forms, the lists,
 the data binding and the business rules, ready for you to open in the FutureBasic editor and build.</p>
-<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Enterprise</a></p>
-<table><thead><tr><th></th><th>Lite</th><th>Enterprise</th></tr></thead><tbody>
+<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Professional</a></p>
+<table><thead><tr><th></th><th>Lite</th><th>Professional</th></tr></thead><tbody>
 <tr><td>Licence</td><td>free, with registration</td><td>paid</td></tr>
 <tr><td>Start from</td><td>a SQLite database</td><td>a SQLite database, or an API Logic Server project</td></tr>
 <tr><td>The app</td><td>runs on your Mac, its rules with it (LogicBank for FutureBasic)</td><td>three tiers: many users, the rules enforced on the server, sign-in and security</td></tr>
@@ -336,9 +336,9 @@ modules for your own apps, sample applications that show them at work, and App B
 <h2>Free modules</h2>
 <div class="cards">{module_cards}</div>
 <h2>App Builder for FutureBasic</h2>
-<div class="cards"><div class="card"><span class="tag">Lite free &middot; Enterprise licensed</span><h3><a href="app-builder/index.html">App Builder</a></h3>
+<div class="cards"><div class="card"><span class="tag">Lite free &middot; Professional licensed</span><h3><a href="app-builder/index.html">App Builder</a></h3>
 <p>Windows, forms, lists, data binding and business rules, generated from your database. You write rules as plain sentences, and App Builder checks and tests them.</p>
-<p><a href="{register}">Register</a> &middot; <a href="app-builder/index.html">Lite and Enterprise</a></p></div>
+<p><a href="{register}">Register</a> &middot; <a href="app-builder/index.html">Lite and Professional</a></p></div>
 <div class="card"><span class="tag">samples</span><h3><a href="samples/index.html">Sample applications</a></h3>
 <p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, each with its database, rules and tests.</p></div></div>""", 0,
         'Free FutureBasic modules (the SQL Generator, LogicBank for FutureBasic and the Web Toolkit) and App Builder for FutureBasic.'))

@@ -10,7 +10,7 @@ All three are yours to download, use and change for free, with their examples an
 ## App Builder for FutureBasic
 A Mac app that builds a complete FutureBasic application from your database: the windows and forms (XIB), the lists, the data binding and the business rules, ready for you to open in the FutureBasic editor and build.
 - **Lite** is free when you register. You start from a SQLite database, and the app and its rules run on your Mac, with LogicBank for FutureBasic.
-- **Enterprise** is licensed. It works in three tiers with API Logic Server: many users, the rules enforced on the server, sign-in and security, and rules shared with your Python project.
+- **Professional** is licensed. It works in three tiers with API Logic Server: many users, the rules enforced on the server, sign-in and security, and rules shared with your Python project.
 - We're also working on an AI assistant, though it isn't ready yet. You'll describe a rule in plain language, in your model's own names, and App Builder will turn it into the rule.
 
 ## Sample applications

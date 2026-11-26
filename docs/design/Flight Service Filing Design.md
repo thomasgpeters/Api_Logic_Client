@@ -1,7 +1,7 @@
-# Flight Service filing - a simulated interface (Enterprise edition, in API Logic Server)
+# Flight Service filing - a simulated interface (Professional edition, in API Logic Server)
 
 The author (2026-11-26): the Flight Planner sample registers its flight plans with the FAA "however that
-process works" - researched, stubbed, **Enterprise only**, the interface inside the ALS project. Status:
+process works" - researched, stubbed, **Professional only**, the interface inside the ALS project. Status:
 design; the stub is not built yet (BACKLOG).
 
 ## How filing works today (research, 2026-11-26)

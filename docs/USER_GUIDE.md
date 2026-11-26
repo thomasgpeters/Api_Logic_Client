@@ -97,7 +97,7 @@ the **API Server** the generated app will talk to (`http://localhost:5656` by de
 **Create**. The Studio keeps a copy of the model in the project (`ALS Model/`), so the project opens
 again without the original. The Studio reads the model; it never runs it.
 
-An app generated from an ALS project talks to the server: it is the **Enterprise** edition. The
+An app generated from an ALS project talks to the server: it is the **Professional** edition. The
 free Studio opens, designs and generates screens for ALS projects; for a Lite app, start from the
 server's SQLite database instead.
 
@@ -259,7 +259,7 @@ adds the record. **Delete** asks first; the rules decide what happens to related
 ### 8.2 Editions
 
 The app is generated as the **Lite** edition: free and open source. It opens the project's SQLite
-database itself and runs the business rules inside the app. A paid **Enterprise** edition, a
+database itself and runs the business rules inside the app. A paid **Professional** edition, a
 three-tier app that talks to an API Logic Server, is planned (`design/Editions and Licensing.md`).
 
 A project whose model was read from an API Logic Server (*Open API Logic Server Metadata JSON*, or the ALS form)
@@ -614,7 +614,7 @@ window). Its `README.md` has the whole API.
 - **The Rules page** in the generator: the rules of `Rules.json` in a list, an editor with the
   model's entities and attributes to pick from, and checking. Until then, write rules in
   `Rules.incl`, or import them (§11) and edit `Rules.json`.
-- **Apps from API Logic Server projects** (Enterprise): the Studio opens, designs and generates
+- **Apps from API Logic Server projects** (Professional): the Studio opens, designs and generates
   screens for them; the data side that talks to the server, and sign-in, come next.
 - **More Form controls**: toggle switch, combo box, calendar and colour pickers, formatted date and
   time displays (`BACKLOG.md` → Modern look).

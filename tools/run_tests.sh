@@ -124,29 +124,29 @@ run "rules bridge: declare_logic.py import / export, Rules.json check, FB genera
 work=$(mktemp -d)
 run "logic engine: the FB test project builds from the runtime and lints clean" sh -c "python3 '$here/tools/make_logic_test.py' '$db' '$work/LogicTest' >/dev/null && python3 '$here/tools/fblint.py' --headers '$headers' '$work/LogicTest'"
 rm -rf "$work"
-# the API Logic Server contract (Enterprise): only when a server answers on localhost:5656
+# the API Logic Server contract (Professional): only when a server answers on localhost:5656
 if python3 "$here/tools/als_contract.py" http://localhost:5656 >/dev/null 2>&1 || [ $? -ne 2 ]; then
-    run "Enterprise: the API Logic Server contract, against the server on localhost:5656" python3 "$here/tools/als_contract.py" http://localhost:5656
+    run "Professional: the API Logic Server contract, against the server on localhost:5656" python3 "$here/tools/als_contract.py" http://localhost:5656
     alsdb="${ALS_DB:-}"
     if [ -n "$alsdb" ] && [ -f "$alsdb" ]; then
-        run "Enterprise: the SQL Generator's two sides give the same rows (SQL on the server's db, JSON:API on the server)" python3 "$here/tools/jsonapi_reference.py" --test "$alsdb" http://localhost:5656
+        run "Professional: the SQL Generator's two sides give the same rows (SQL on the server's db, JSON:API on the server)" python3 "$here/tools/jsonapi_reference.py" --test "$alsdb" http://localhost:5656
     else
-        echo; echo "== Enterprise: SQL vs JSON:API side by side - skipped (set ALS_DB to the server's database/db.sqlite)"
+        echo; echo "== Professional: SQL vs JSON:API side by side - skipped (set ALS_DB to the server's database/db.sqlite)"
     fi
 else
-    echo; echo "== Enterprise: the API Logic Server contract - skipped (no server on localhost:5656; docs/design/ALS Contract.md)"
+    echo; echo "== Professional: the API Logic Server contract - skipped (no server on localhost:5656; docs/design/ALS Contract.md)"
 fi
 # the Open ALS Project screen's logic: GitHub addresses always; folders, files and the Studio model
 # on the ALS projects in ALS_PROJECTS; public repositories over raw.githubusercontent.com with ALS_GITHUB=1
 run "ALS project: addresses, folders and files, the Studio model with its lookups" python3 "$here/tools/als_project_reference.py" --test ${ALS_PROJECTS:-} ${ALS_GITHUB:+--github}
-# the ALS model reader (Enterprise): database/models.py read as text, compared with SQLAlchemy's view
+# the ALS model reader (Professional): database/models.py read as text, compared with SQLAlchemy's view
 # ALS_PROJECTS: ALS project folders (space-separated); ALS_PYTHON: the Python of the ALS install
 if [ -n "${ALS_PROJECTS:-}" ] && [ -x "${ALS_PYTHON:-}" ]; then
     for project in $ALS_PROJECTS; do
-        run "Enterprise: models.py read as text = SQLAlchemy's model ($(basename "$project"))" python3 "$here/tools/models_py_reference.py" "$project" "$ALS_PYTHON"
+        run "Professional: models.py read as text = SQLAlchemy's model ($(basename "$project"))" python3 "$here/tools/models_py_reference.py" "$project" "$ALS_PYTHON"
     done
 else
-    echo; echo "== Enterprise: models.py reader vs SQLAlchemy - skipped (set ALS_PROJECTS and ALS_PYTHON)"
+    echo; echo "== Professional: models.py reader vs SQLAlchemy - skipped (set ALS_PROJECTS and ALS_PYTHON)"
 fi
 # the sample applications (samples/*): each one's rules scenario by scenario (with the purge of its sample
 # data), every rule proven, and its FB Rules.incl linted with the runtime

@@ -13,7 +13,7 @@ Imagery gives three FutureBasic modules away and sells App Builder:
 | **SQL Generator** | free, MIT | its own public repository; downloadable from the GitHub Pages site | statements as dictionaries -> safe, parameterized SQL (`src/SQLGeneratorExample`) |
 | **LogicBank for FutureBasic** | free, MIT | its own public repository; downloadable from the GitHub Pages site | business rules declared once and enforced on every save (`AI Assistant Design.md` -> the module) |
 | **Web Toolkit for FutureBasic** | free, MIT | its own public repository; downloadable from fb.imagery-business-systems.com | web apps in FB behind nginx: widgets, AJAX events, the page lifecycle, XIB layouts and the Layout Tool (`docs/features/WEB_TOOLKIT_FEATURE.md`) |
-| **App Builder for FutureBasic** | licensed: Lite free with registration, Enterprise paid; resold by Imagery | private; downloaded from the Imagery License Server after registering | a complete app from a database, with its rules (`Licensing Design.md`) |
+| **App Builder for FutureBasic** | licensed: Lite free with registration, Professional paid; resold by Imagery | private; downloaded from the Imagery License Server after registering | a complete app from a database, with its rules (`Licensing Design.md`) |
 
 The modules are useful on their own, and they are how FutureBasic programmers meet Imagery. Open-sourcing LogicBank for
 FutureBasic also keeps faith with LogicBank for Python (author, 2026-11-26): it is open source, and ours is inspired by it.
@@ -49,7 +49,7 @@ the incentive to buy the subscription." The pricing is in `Licensing Design.md` 
 Both sample apps have **About Imagery Business Systems…** in the application menu, under About. It opens a window
 about Imagery's FutureBasic work:
 - the free modules;
-- App Builder (Lite and Enterprise, and the AI assistant to come);
+- App Builder (Lite and Professional, and the AI assistant to come);
 - the sample applications (Telecom, Customs, Flight Planner);
 - a button to the website.
 

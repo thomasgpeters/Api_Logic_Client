@@ -22,7 +22,7 @@ parent chosen, the popover says *"No Customer chosen"*. Value-list Dropdowns hav
   shown fields (not Hidden) in the model's order, with the Titles the designer gave them.
 - **The rows** (`Binding Support.incl`): `BindingFillLookup` keeps the lookup's whole rows with the
   Dropdown; `BindingChosenRecord( tag )` is the row its selected item stands for. Nothing is read
-  again, so the popover is instant and the same in both editions (Lite: SQLite; Enterprise: the
+  again, so the popover is instant and the same in both editions (Lite: SQLite; Professional: the
   server's lookup rows).
 - **The popover** (`src/Runtime/Record Popover.incl`): made once (FB's `popover` statement, a heading
   and 16 title / value rows), filled and sized for the record, shown with `PopoverShow` at the info

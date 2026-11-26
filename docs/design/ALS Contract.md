@@ -1,11 +1,11 @@
-# The API Logic Server contract (Enterprise edition)
+# The API Logic Server contract (Professional edition)
 
-What the generated app's Enterprise data layer can rely on from API Logic Server, and what it
+What the generated app's Professional data layer can rely on from API Logic Server, and what it
 must do itself. Measured against a running server (API Logic Server / GenAI-Logic 17.05.44,
 the Northwind sample with SQL security and a credit-limit rule) on 2026-11-25, and checked again
 by `tools/als_contract.py` (25 checks) and `tools/jsonapi_reference.py` (17) whenever a server is running.
 
-The runtime's `src/Runtime/ALS Client.incl` follows it; `App Data Enterprise.incl` (next) builds on
+The runtime's `src/Runtime/ALS Client.incl` follows it; `App Data Professional.incl` (next) builds on
 that client with the same interface as the Lite edition (`App Data Lite.incl`), so the pages,
 bindings and screens are the same in both editions.
 
@@ -25,7 +25,7 @@ values): `tools/jsonapi_reference.py` reads it with a subset reader checked agai
 reference for the FB reader.
 
 **Resource names are not table names**: Northwind's `Category` lives in table
-`CategoryTableNameTest` (on purpose, in the sample). Enterprise statements name resources.
+`CategoryTableNameTest` (on purpose, in the sample). Professional statements name resources.
 
 ## Sign-in
 

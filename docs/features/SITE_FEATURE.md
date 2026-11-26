@@ -14,7 +14,7 @@ without redeploying them).
 | `/sql-generator/`, `/logicbank/`, `/web-toolkit/` | each module's README, its download, its user guide (the Web Toolkit: the module and the Orders example, two downloads) |
 | `/help/sql-generator/`, `/help/logicbank/`, `/help/web-toolkit/` | each example's (the Web Toolkit: the module's) `User Guide.txt` (the markup the apps' Help uses), with its diagram |
 | `/samples/`, `/samples/<name>/` | each sample's README and download |
-| `/app-builder/` | Lite and Enterprise; registration on the Imagery License Server (`LICENCE_SERVER` + `LICENCE_PAGE`, read from `Licence.incl`) |
+| `/app-builder/` | Lite and Professional; registration on the Imagery License Server (`LICENCE_SERVER` + `LICENCE_PAGE`, read from `Licence.incl`) |
 | `/downloads/*.zip` | each module's example folder and each sample folder |
 
 - **No packages needed:** it uses the standard library only (a small Markdown converter for the READMEs: headings,

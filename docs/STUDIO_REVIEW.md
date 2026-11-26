@@ -151,7 +151,7 @@ users look for them, and the footer keeps the copyright and the status line.
 | Refresh | the List again | always |
 | Search (a search field) | filters the List | always |
 | Theme | System / Light / Dark (today in the header) | always |
-| Log In | Enterprise only | when App Data needs it |
+| Log In | Professional only | when App Data needs it |
 
 With *Multiple windows* (App Shell Design, Window layouts) each entity window has the same
 toolbar, acting on its own entity.

@@ -17,11 +17,11 @@ Status: built here (2026-11-26); not yet built on a Mac. The License Server's si
     | Edition | Bits | Features |
     |---|---|---|
     | Lite | `0x0003` | core, AI |
-    | Enterprise | `0x01FF` | Lite's, plus ALS projects, the Enterprise runtime, rules exchange, integration, authorization, governance, genai-logic |
+    | Professional | `0x01FF` | Lite's, plus ALS projects, the Professional runtime, rules exchange, integration, authorization, governance, genai-logic |
 - **The Licence window and menu:** `src/AppBuilder/Licence Window.incl`.
-  - The App Builder menu, after About: Licence…, Enter Licence…, Upgrade to Enterprise…, Manage Licence Online…,
+  - The App Builder menu, after About: Licence…, Enter Licence…, Upgrade to Professional…, Manage Licence Online…,
     Remove Licence….
-  - The window shows the licence in words (who, the edition, until when, each feature ticked or "Enterprise"). It
+  - The window shows the licence in words (who, the edition, until when, each feature ticked or "Professional"). It
     has a field to paste a licence, Get a Free Lite Licence, Upgrade, Manage Online, Remove and Close.
   - At launch, without a valid licence, the window opens.
 - **The gates:** `fn LicenceGate( feature, what )`:
@@ -30,9 +30,9 @@ Status: built here (2026-11-26); not yet built on a Mac. The License Server's si
   - Import / Export Rules: rules exchange;
   - Generate App / XIBs / XIB / Binding (menu and toolbar): core, so nothing is generated without a licence.
 
-  A locked command stays in its menu with "(Enterprise)" after its title. Choosing it explains, and offers the
-  upgrade (or the Licence window, without a licence). `Edition.incl`'s `EditionEnterpriseAvailable` is the licence's
-  Enterprise runtime bit.
+  A locked command stays in its menu with "(Professional)" after its title. Choosing it explains, and offers the
+  upgrade (or the Licence window, without a licence). `Edition.incl`'s `EditionProfessionalAvailable` is the licence's
+  Professional runtime bit.
 - **The License Server's pages:** `LICENCE_SERVER` + `/appbuilder`, `/appbuilder/upgrade?lic=…`, `/account`. The
   address (`https://license.imagery.com`, from the License Server's documents) is to confirm before release.
 
@@ -45,7 +45,7 @@ private key never leaves the server.
 ## Verification
 
 - `tools/licence_reference.py --test` (in `run_tests.sh`) runs 10 cases:
-  - valid Lite and Enterprise licences;
+  - valid Lite and Professional licences;
   - the last day, and the day after (expired);
   - edited, another licence's signature, another key, another product;
   - not a licence; pasted with spaces and new lines.
@@ -54,8 +54,8 @@ private key never leaves the server.
 - **On a Mac (to do):** the test program says PASS for each case.
 - **In the app (to do):**
   - no licence: the window opens at launch; Generate asks for a licence;
-  - a Lite licence (`--issue lite`): ALS projects say Enterprise; Generate works;
-  - an Enterprise licence: everything opens;
+  - a Lite licence (`--issue lite`): ALS projects say Professional; Generate works;
+  - an Professional licence: everything opens;
   - Remove, then relaunch;
   - the Keychain item is in Keychain Access.
 

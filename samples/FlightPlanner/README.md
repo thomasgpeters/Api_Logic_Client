@@ -36,7 +36,7 @@ pilots, tail numbers, weather and NOTAMs are made up. **Please don't use it for 
   my ETA and when search and rescue would begin, and a closed flight goes into my logbook and the aircraft's.
 - As a pilot, I can replay a flight I've flown on a map, from its position reports, with other traffic
   around it (`docs/design/Map View Design.md`).
-- In the Enterprise edition, the plan is filed with Flight Service through a simulated interface in the API
+- In the Professional edition, the plan is filed with Flight Service through a simulated interface in the API
   Logic Server project (`docs/design/Flight Service Filing Design.md`).
 
 ## The model

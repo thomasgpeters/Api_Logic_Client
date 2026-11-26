@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Enterprise is now Professional; seats on the network
+
+- **The rename:** the author renamed App Builder's paid edition from Enterprise to Professional. It applies across
+  the code, the tools, the docs and the licence payload (`"edition": "professional"`). `src/Enterprise` is now
+  `src/Professional`, and `ENTERPRISE_DATA_FEATURE.md` is now `PROFESSIONAL_DATA_FEATURE.md`.
+  - Projects and licences that say "enterprise" are still read as Professional (`Edition.incl`, `Licence.incl`).
+  - The Mac licence test was regenerated.
+  - Earlier entries of this log keep the old name, as written.
+- **Seats:** designed in `Licensing Design.md` -> Seats, from the author's answers.
+  - Bonjour finds copies with the same licence on the local network; past the seat count, the newest copy is
+    read-only until resolved.
+  - Each Mac is activated online once, then works offline.
+  - Lite: one copy at a time.
+
 ## 2026-11-26 — The Web Toolkit is the third free module; pricing
 
 - **The author:** the Web Toolkit is a free module, like the other two. Those who take it write their own pages;

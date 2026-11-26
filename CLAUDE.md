@@ -32,7 +32,7 @@ mode work without extra code).
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
   - `Studio Library.incl` — the runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`): installed from the repository folder, updated from the Model menu; also `AppSupportFolderURL`.
   - `Licence.incl` — the licence: ES256, verified offline (Security framework), kept in the Keychain, `LicenceAllows( feature )`; `Licence Window.incl` — the Licence menu and window, `LicenceGate` on licensed commands (`docs/features/LICENSING_FEATURE.md`). Test keys only here (`tools/licence_test_keys`).
-  - `Edition.incl` — which edition the Studio generates: Enterprise when the licence includes it.
+  - `Edition.incl` — which edition the Studio generates: Professional when the licence includes it.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
@@ -42,7 +42,7 @@ mode work without extra code).
   - `Recent Projects.incl` — the Recent Projects list (`Recent Projects.json` in Application Support), shown on the Welcome view.
   - `ALS Model.incl` — an ALS project's model, parsed as text (never run): `database/models.py`, else `app_model.yaml` / `admin.yaml` (attributes, keys, relationships, display column).
   - `ALS Project.incl` — where that model is: an ALS project folder, a model file, or a public GitHub repository (raw.githubusercontent.com); the copy in `<project>/ALS Model/`; the ALS model -> the Studio's.
-  - `Open ALS Project.incl` — the API Logic Server Project view (`ALSProjectView.xib`): point at the ALS project (type, Folder…, Model File…, or drop on a subclassed view) → a project (the Enterprise catalyst).
+  - `Open ALS Project.incl` — the API Logic Server Project view (`ALSProjectView.xib`): point at the ALS project (type, Folder…, Model File…, or drop on a subclassed view) → a project (the Professional catalyst).
   - `Project Actions.incl` — Open Project, model loading, entity definitions, design load/save, generate commands.
 - `src/CleanApp/` — a project the FB editor created (author, 2026-11-24): the reference for project
   settings (`Settings2.plist`: SDK, architecture, minimum macOS) and the starting point of new example
@@ -66,7 +66,7 @@ mode work without extra code).
   compiled here with GNUstep (`tools/check_web_layout.py`); `Layout Tool/Layout Tool.html` lays them out (`tools/check_layout_tool.py`).
   Copies are identical (`run_tests.sh`); `tools/web_toolkit_reference.py` tests web.js (`docs/features/WEB_TOOLKIT_FEATURE.md`).
 - `src/MacTests/` — single-file FB programs that answer a question on a Mac before a feature is built on it (`MapKit Points Test.fb`: how FB serves MapKit's point views); see `docs/TESTING.md`.
-- `src/Enterprise/` — the Enterprise edition, in this repository for now (author, 2026-11-25; a private
+- `src/Professional/` — the Professional edition, in this repository for now (author, 2026-11-25; a private
   repository when it is sold): `DataObject_JSONAPI.incl` (the SQL Generator's JSON:API side: the same
   statement dictionaries -> ALS requests, on the model `src/AppBuilder/ALS Model.incl` reads). The contract: `docs/design/ALS Contract.md`;
   references and tests: `tools/als_contract.py`, `tools/jsonapi_reference.py`, `tools/models_py_reference.py`.
@@ -85,12 +85,12 @@ mode work without extra code).
     LogicDelete). Rules are FB functions registered with `@fn` and called through a C cast.
   - `App Data Lite.incl` — the app's data interface (list / save / remove / login, answers in `AppDataDone`), Lite edition: SQLite + the rules engine.
   - `App Shell.incl` — the generated app's frame: nav bar, header, footer, pages, theme menu (`features/APP_SHELL_FEATURE.md`); its buttons are pills (`Pill Buttons.incl`, `gThemePillButtons`).
-  - `Binding Support.incl`; `Record Popover.incl` (a lookup Dropdown's info button: the chosen parent's details in a popover). `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` are no longer copied into apps: the start of the Enterprise runtime, to move to its private repository.
+  - `Binding Support.incl`; `Record Popover.incl` (a lookup Dropdown's info button: the chosen parent's details in a popover). `ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` are no longer copied into apps: the start of the Professional runtime, to move to its private repository.
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (from `workspace/Templates`, see above): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`, `App/Theme.incl` (the colours), `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/research/` — domain research behind the samples (flight planning, customs clearance), with sources.
-- `docs/design/` — `Web Toolkit Design.md` (feasibility: a standalone web server and UI in FB, replacing Wt; proof: `src/MacTests/Web Server Test.fb`), `Free Modules Design.md` (the SQL Generator and LogicBank for FutureBasic: free, each with a sample app and the About Imagery window; App Builder licensed), `Licensing Design.md` (one app, signed licences from the Imagery License Server, the Licence menu and upgrade), `AI Assistant Design.md` (rules as sentences in the model's names, translated by AI into LogicBank for FutureBasic and ALS's declare_logic.py; controls suggested), `Flight Service Filing Design.md` (Enterprise: the simulated FAA filing interface in ALS), `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
+- `docs/design/` — `Web Toolkit Design.md` (feasibility: a standalone web server and UI in FB, replacing Wt; proof: `src/MacTests/Web Server Test.fb`), `Free Modules Design.md` (the SQL Generator and LogicBank for FutureBasic: free, each with a sample app and the About Imagery window; App Builder licensed), `Licensing Design.md` (one app, signed licences from the Imagery License Server, the Licence menu and upgrade), `AI Assistant Design.md` (rules as sentences in the model's names, translated by AI into LogicBank for FutureBasic and ALS's declare_logic.py; controls suggested), `Flight Service Filing Design.md` (Professional: the simulated FAA filing interface in ALS), `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
 - `docs/design/architecture.svg` — the end-to-end diagram, drawn by `tools/make_architecture_svg.py` (edit the script, not the SVG).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).

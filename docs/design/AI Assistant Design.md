@@ -9,7 +9,7 @@ generate every screen, but none of the 93 rules that make it a customs system: d
 the bond. Today rules come from only two places:
 
 - **Written by hand**, as in the samples: `samples/*/<name>_rules.py` and their `Rules.incl`.
-- **Imported from an ALS project's `declare_logic.py`** (Enterprise, through the rules bridge).
+- **Imported from an ALS project's `declare_logic.py`** (Professional, through the rules bridge).
 
 A user who starts from a bare schema, which is what the Lite edition invites, has neither. The AI Assistant
 is the third source. It also helps with the second job a new project faces: choosing the right control for
@@ -20,7 +20,7 @@ each attribute.
 1. **A rule is a sentence in the model's own language** (author, 2026-11-26: "rules as natural language,
    using the entity, model and attributes provided by the structure"). The sentence names real entities,
    attributes and relationships: tables and columns in Lite, resources and attributes from ALS in
-   Enterprise. This is the ubiquitous language of the DDD book (§2.2), applied to behaviour.
+   Professional. This is the ubiquitous language of the DDD book (§2.2), applied to behaviour.
 2. **The sentence is the source of truth.** It is what the user writes, reads, approves and keeps. Every
    translation of it is derived and can be regenerated.
 3. **The AI proposes; a person approves.** Nothing the AI says takes effect until someone accepts it, sentence
@@ -28,7 +28,7 @@ each attribute.
 4. **Generation stays reproducible.** Generating the app never calls the AI. Only the *Suggest…* and
    *Translate* commands do, and their results are saved as project files kept in git.
 5. **One rule, two engines.** The same sentence becomes a LogicBank for FutureBasic rule in the app (Lite), and
-   a LogicBank rule in ALS's `declare_logic.py` (Enterprise). The rules mean the same on both sides.
+   a LogicBank rule in ALS's `declare_logic.py` (Professional). The rules mean the same on both sides.
 6. **No Python in anything FB builds.** The connector is FB: an HTTPS request with JSON, through FB's
    URLSession toolbox. The API key is kept in the Keychain.
 
@@ -65,8 +65,8 @@ LogicBank is the Python original, and the same rules are written as `declare_log
         ▼
  approved by the user  ───────▶ the sentence and its rule are shown side by side
         │
-        ├──▶ LogicBank for FutureBasic:  Studio Rules.incl  (generated, Lite and Enterprise clients)
-        └──▶ LogicBank in ALS:           logic/declare_logic.py  (generated, Enterprise)
+        ├──▶ LogicBank for FutureBasic:  Studio Rules.incl  (generated, Lite and Professional clients)
+        └──▶ LogicBank in ALS:           logic/declare_logic.py  (generated, Professional)
 ```
 
 ### 1. Writing: grounded sentences
@@ -127,7 +127,7 @@ LogicBank is the Python original, and the same rules are written as `declare_log
 
 - **Lite:** *Generate App* writes `Studio Rules.incl`, which the generated app runs with LogicBank for
   FutureBasic, as today.
-- **Enterprise:**
+- **Professional:**
   - The same rules export to the ALS project's `logic/declare_logic.py`: `Rule.sum`, `Rule.count`,
     `Rule.formula`, `Rule.constraint`, `Rule.copy`, `Rule.parent_check`, events. Each rule carries its
     sentence as a comment, so the ALS project stays readable on its own.
@@ -137,7 +137,7 @@ LogicBank is the Python original, and the same rules are written as `declare_log
     sentence (the AI writes one from the rule; the user approves the wording), so every project ends up
     with sentences.
 - **Equivalence is tested, not assumed.** The samples' scenarios (`test_rules.py`) are the yardstick. The
-  same scenarios run against the FB rules (reference engine) and, for Enterprise, against ALS
+  same scenarios run against the FB rules (reference engine) and, for Professional, against ALS
   (`tools/als_contract.py`).
 
 ### 6. Suggesting: rules the user did not write
@@ -212,7 +212,7 @@ recorded answer (no network in the test).
   API key. The rules split between editions is in `Editions and Licensing.md` → *Rules: where the line is*.
 - **Provider:** Claude first, behind a narrow connector interface, so others can be added later without changing the
   Studio.
-- **Enterprise route:** both. The ALS project's `genai-logic` when the server has it (as Imagery LogicBank Studio
+- **Professional route:** both. The ALS project's `genai-logic` when the server has it (as Imagery LogicBank Studio
   does); otherwise the Studio's own connector, then export to `declare_logic.py`.
 - **Expressions:** the neutral expression language. FB and Python are both generated from it; the FB bodies in
   `Rules.json` are retired step by step.
@@ -229,4 +229,4 @@ recorded answer (no network in the test).
 5. Rules page: grounded sentences, Translate, approve.
 6. Suggest Rules; the evaluation on the three samples.
 7. Suggest Controls into `Design.json`.
-8. Enterprise: `declare_logic.py` from the same rules, sentences as comments; scenarios against ALS.
+8. Professional: `declare_logic.py` from the same rules, sentences as comments; scenarios against ALS.

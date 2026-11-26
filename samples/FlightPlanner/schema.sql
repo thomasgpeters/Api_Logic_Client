@@ -179,8 +179,8 @@ CREATE TABLE IF NOT EXISTS FlightPlan (
     FuelOnBoard      REAL NOT NULL DEFAULT 0,   -- gallons at engine start
     Status           TEXT NOT NULL DEFAULT 'D', -- D = Draft, F = Filed, A = Active (in the air), C = Closed
     Remarks          TEXT,
-    FlightServiceId  TEXT,                 -- Enterprise: the identifier Flight Service gave the filed plan
-    FiledAt          TEXT,                 -- Enterprise: when it was filed (docs/design/Flight Service Filing Design.md)
+    FlightServiceId  TEXT,                 -- Professional: the identifier Flight Service gave the filed plan
+    FiledAt          TEXT,                 -- Professional: when it was filed (docs/design/Flight Service Filing Design.md)
     CruiseKnots      INTEGER,              -- (rule) copied from the aircraft
     FuelBurn         REAL,                 -- (rule) copied
     MaxCrosswind     INTEGER,              -- (rule) copied
