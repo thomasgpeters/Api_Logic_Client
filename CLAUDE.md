@@ -31,7 +31,7 @@ mode work without extra code).
   - `XIB Generator.incl` — Form and List parts per entity; `Model Tags.incl`; model entries.
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
   - `Studio Library.incl` — the runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`): installed from the repository folder, updated from the Model menu; also `AppSupportFolderURL`.
-  - `Edition.incl` — which edition the Studio generates (this repo: Lite only; the paid build replaces this file). `docs/design/Editions and Licensing.md`.
+  - `Edition.incl` — which edition the Studio generates (this repo: Lite only). To be replaced by `Licence.incl`: one app for both editions, Enterprise features switched on by a signed licence from the Imagery License Server (`docs/design/Licensing Design.md`, author 2026-11-26).
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
@@ -76,7 +76,7 @@ mode work without extra code).
   (from `workspace/Templates`, see above): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`, `App/Theme.incl` (the colours), `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/research/` — domain research behind the samples (flight planning, customs clearance), with sources.
-- `docs/design/` — `AI Assistant Design.md` (rules as sentences in the model's names, translated by AI into LogicBank for FutureBasic and ALS's declare_logic.py; controls suggested), `Flight Service Filing Design.md` (Enterprise: the simulated FAA filing interface in ALS), `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
+- `docs/design/` — `Licensing Design.md` (one app, signed licences from the Imagery License Server, the Licence menu and upgrade), `AI Assistant Design.md` (rules as sentences in the model's names, translated by AI into LogicBank for FutureBasic and ALS's declare_logic.py; controls suggested), `Flight Service Filing Design.md` (Enterprise: the simulated FAA filing interface in ALS), `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
 - `docs/design/architecture.svg` — the end-to-end diagram, drawn by `tools/make_architecture_svg.py` (edit the script, not the SVG).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).

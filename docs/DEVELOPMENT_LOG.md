@@ -6,6 +6,23 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Licensing designed: one app, signed licences from the Imagery License Server
+
+- The author: App Builder is one app for Lite and Enterprise, the Enterprise features gated by the licence. Lite is
+  licensed too: users register on the Imagery License Server before they can download, and upgrade from a Licence
+  menu in the app. Design: `docs/design/Licensing Design.md`.
+- Decided:
+  - App Builder's source goes private; LogicBank for FutureBasic and the SQL Generator stay public modules.
+  - Licences are bound to the registered account, signed for both editions, and checked offline.
+  - Generated apps never check a licence.
+- Learned:
+  - The License Server's current tokens can be forged (a published salt, a non-cryptographic hash) and use
+    `std::hash`, which differs between Linux and macOS.
+  - macOS verifies ECDSA P-256 natively (`SecKeyVerifySignature`, in FB's Security headers); Ed25519 would need
+    a library. Licences are therefore ES256.
+  - Fleet Dispatcher's editions-as-bit-bundles is the pattern App Builder follows (Lite `0x0003`, Enterprise
+    `0x01FF`).
+
 ## 2026-11-26 — Rules: the line between Lite and Enterprise; the AI Assistant's decisions
 
 - The author drew the line for rules by where they run and who shares them (`docs/design/Editions and Licensing.md`):

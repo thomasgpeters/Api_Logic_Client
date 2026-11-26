@@ -99,38 +99,24 @@ type, using LogicBank for FutureBasic, while the server makes the final decision
 **Upgrading carries the rules over.** The same sentences work in both editions: moving a project from Lite to
 Enterprise exports its rules to `declare_logic.py` unchanged.
 
-## Licensing (decision for later)
+## Licensing (decided, author, 2026-11-26)
 
-Decided (author, 2026-11-24): the Studio checks the licence **offline** (it never calls the
-License Server, consistent with "no Imagery application is a dependency"), and the licence gates
-**the Studio only**: apps already generated never stop working.
+Design: `Licensing Design.md`. In short:
 
-Still open: **how** the Studio knows a licence is real. What the License Server issues today
-(`Imagery-License-Server` README, `TokenGenerator`):
+- **One app.** The same App Builder for Lite and Enterprise; Enterprise features are switched on by the licence.
+  `Edition.incl` is no longer swapped by a separate build: `Licence.incl` answers `LicenceAllows( feature )`.
+- **Everyone registers.** Lite licences are free, issued by the Imagery License Server when the user registers;
+  only then is the download offered. *Upgrade to Enterprise…* in the app's Licence menu leads to the License
+  Server's order form.
+- **Signed licences** (the earlier option B), ECDSA P-256:
+  - verified offline with `SecKeyVerifySignature`;
+  - bound to the registered account, not to a Mac.
 
-- a key `XXXX-XXXX-MMMM-XXXX-XXXX`: site, product, module bitmask, random part, checksum;
-- the checksum is C++ `std::hash` of the other parts plus a salt that is published in the README.
-
-Two things stop the Studio from using it as it is. First, `std::hash` is not the same on Linux
-and on a Mac (libstdc++ and libc++ differ), so FutureBasic cannot recompute it. Second, anyone
-who reads the salt can make a valid key. There is also no product entry for the FB Studio yet;
-the existing `imagery_logicbank_studio` product "is free and never checks a licence".
-
-The choices, in plain terms:
-
-| Option | How it works | Trade-off |
-|---|---|---|
-| **A. The key as it is, with a portable checksum** | The License Server computes the checksum with SHA-256 (the same on every machine) instead of `std::hash`. The Studio recomputes it. | A small change on the License Server. Anyone who reads the Studio's code or the README can still make a key: it keeps honest people honest. |
-| **B. A signed licence file** | Besides the key, the License Server issues a small file (who, which product, Enterprise, expiry) and *signs* it with a private key that never leaves the server. The Studio holds only the matching public key: it can check a signature but cannot make one, so nobody can forge a licence without the server's private key. macOS checks such signatures natively (`SecKeyVerifySignature`, in FB's Security headers). | A new feature on the License Server (key pair, signing, a file to download). The strongest offline option. |
-| **C. Online activation** | The Studio sends the key to the License Server, which says yes or no. | Simple to reason about; makes the License Server a run-time dependency, which the no-dependency rule forbids. |
-
-A signature works like a notary's seal: anyone can check it, only the notary can make it.
-Option A is enough for a first paid release if forgery is not a worry; B can follow without
-changing what users do (they still enter the key; the file comes with it).
-
-Whichever is chosen, the License Server needs a product for the FB Studio (proposal:
-`imagery_logicbank_studio_fb`, bit 0 `enterprise`) and the Studio needs a "Licence…" entry in
-Project Settings or Preferences. Both belong to the Enterprise work.
+  The License Server is needed to register and to upgrade, never to run App Builder (the 2026-11-24 offline
+  decision stands).
+- **The source:** App Builder's source becomes private; LogicBank for FutureBasic and the SQL Generator stay
+  public modules (MIT).
+- **Generated apps never check a licence.**
 
 ## Roadmap (Enterprise)
 

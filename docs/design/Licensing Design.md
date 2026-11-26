@@ -1,0 +1,169 @@
+# Licensing Design: one app, licensed through the Imagery License Server
+
+Status: design (author, 2026-11-26). It replaces the earlier plan in `Editions and Licensing.md` (Lite open source,
+Enterprise a separate private build that swaps `Edition.incl`). Nothing is built yet; see BACKLOG.
+
+## Decisions (author, 2026-11-26)
+
+- **One application.** App Builder for FutureBasic (the built app: Studio for FB) is the same app for Lite and
+  Enterprise. Enterprise features are in every copy, switched on by the licence.
+- **Lite has a licence too.** Users register on the Imagery License Server, get a free Lite licence, and only
+  then download the app.
+- **Upgrade from inside the app.** A Licence menu shows the licence and leads to the Enterprise upgrade.
+- **The source:**
+  - App Builder's source becomes **private**: it is one licensed binary.
+  - **LogicBank for FutureBasic** and the **SQL Generator** stay **public** (MIT), as separate modules in
+    public repositories.
+  - Generated apps belong to their users.
+- **A licence is bound to the registered account** (email / company), not to a Mac: it works on any Mac the
+  person uses.
+- **Licences are signed** for both editions. The app checks the signature with a public key built into it,
+  offline. A licence cannot be forged or edited.
+- **Generated apps never check a licence.** Licences gate App Builder's features only. A generated app, with
+  its copy of LogicBank for FutureBasic, runs anywhere.
+
+## Why signed licences, and which signature
+
+The License Server's tokens today (`XXXX-XXXX-MMMM-XXXX-XXXX`) have two problems for App Builder:
+
+- **They can be forged.** The checksum uses a published salt and a non-cryptographic hash.
+- **The hash differs by platform.** It is C++'s `std::hash`, whose results differ between the server's
+  library (libstdc++, Linux) and macOS.
+
+So App Builder uses a **signed licence** instead:
+
+- **The algorithm is ECDSA P-256 with SHA-256 (ES256).** macOS verifies it natively, and FB can call it:
+  `SecKeyCreateWithData` and `SecKeyVerifySignature` with `kSecKeyAlgorithmECDSASignatureMessageX962SHA256`
+  are in FutureBasic_Documentation's `Toolboxes/Headers/Security/SecKey.incl`.
+- **No extra library is needed.** Ed25519 would need one; the Security framework does not offer it.
+- **The server signs** with OpenSSL (C++). Only the server holds the private key.
+- **The app checks** with the public key compiled into it.
+
+### The licence
+
+A licence is a short text in two parts, `<payload>.<signature>`, both base64url (the JWT idea, without the
+library). The payload is JSON:
+
+```json
+{
+  "lic": "L-2026-000417",                 // the licence's id on the License Server
+  "product": "app_builder_fb",
+  "account": "jane@example.com",          // the registered account (the "site")
+  "name": "Jane Outerbridge",
+  "edition": "lite",                      // lite | enterprise
+  "features": 1,                          // the feature bits (below)
+  "issued": "2026-11-26",
+  "expires": null                         // Lite: none; Enterprise: the subscription's end
+}
+```
+
+- **How it reaches the app:** the user pastes it, opens a `.fblicence` file the License Server sends, or clicks
+  an `appbuilderfb://licence?...` link from the License Server's page (a URL scheme App Builder registers).
+- **Where it is kept:** in the Keychain (`docs/design/Generator App Design.md`: secrets in the Keychain).
+- **When it is checked:** at launch and whenever it is entered. The check is offline: the signature, the
+  product, the expiry date.
+- **On the network, later:** a periodic, optional check for a revoked licence. It never blocks offline work.
+
+## Feature bits
+
+App Builder becomes one more product on the License Server, `app_builder_fb`. Like Fleet Dispatcher, its
+editions are bundles of feature bits. The bits are App Builder's; the server mirrors the table (as it mirrors
+Fleet's `docs/LICENSING.md`).
+
+| Bit | Feature | Edition |
+|---:|---|---|
+| 0 | Studio core: projects from SQLite, model, design, generation, rules, LogicBank for FutureBasic, scenarios, model diagram, sample databases | Lite |
+| 1 | AI Assistant with the user's own key (Translate, Suggest Rules, Suggest Controls) | Lite |
+| 2 | API Logic Server projects: Open ALS Project, a running server's model | Enterprise |
+| 3 | The Enterprise runtime in generated apps (ALS client, sign-in, the rules preview) | Enterprise |
+| 4 | Rules exchanged with ALS: `declare_logic.py` import and export, equivalence tests | Enterprise |
+| 5 | Integration and scheduled rules (server events; e.g. the Flight Service filing simulation) | Enterprise |
+| 6 | Authorization rules (row-level security, grants by role) | Enterprise |
+| 7 | Rule governance: versions, sign-off, an audit trail | Enterprise |
+| 8 | AI through the ALS project's `genai-logic`; team prompts and settings | Enterprise |
+| 9–15 | reserved | |
+
+- **Lite is `0x0003`.** **Enterprise is `0x01FF`** (all of the above).
+- **Trials:** a trial is an Enterprise licence that expires, as the License Server's 30-day trials already work.
+- **The split between editions:** `Editions and Licensing.md` → *Rules: where the line is*; this table is that
+  split, in bits.
+
+## In the app
+
+### The gate
+
+- **What replaces `Edition.incl`:** `Licence.incl`. `Edition.incl` is no longer replaced by a different build.
+  `Licence.incl` keeps the licence, verified once, and answers `fn LicenceAllows( _featureALSProjects )`.
+- **Every Enterprise command asks it:** menus, buttons, the Open ALS Project view, and generating with the
+  Enterprise runtime.
+- **A command the licence does not allow is shown, not hidden.** It carries an "Enterprise" badge, and choosing
+  it opens the Upgrade sheet: what Enterprise adds, and *Upgrade…*. People see what they could have.
+- **Without a valid licence,** App Builder opens on the Licence window. Projects can be opened and read, but
+  nothing is generated until a licence is entered.
+
+### The Licence menu
+
+In the App Builder menu, after *About*:
+
+| Item | Does |
+|---|---|
+| **Licence…** | The licence: account, name, edition, features (each with a tick or "Enterprise"), licence id, issued, expires |
+| **Enter Licence…** | Paste a licence, or open a `.fblicence` file; it is verified and saved to the Keychain |
+| **Upgrade to Enterprise…** | Opens the License Server's upgrade page for this licence (its id and account filled in). After payment, the server sends the Enterprise licence (a link back into the app, or a file) |
+| **Manage Licence Online…** | The account's page on the License Server: renewal, invoices, other Macs |
+| **Remove Licence…** | Takes the licence off this Mac (the Keychain item) |
+
+The About box shows the edition and the licensed account.
+
+## Registration and download (on the License Server)
+
+1. **An App Builder landing page** on the License Server (`/appbuilder`, like `/fleet` and `/studio`): what it is,
+   Lite and Enterprise side by side, the samples.
+2. **Register:** name, email, company (the existing order form: *Register, Review, Licence*). Lite is free: the
+   server's rule `free_licence_only_for_free_product` already governs free licences.
+3. **The Lite licence is issued and signed.** The page shows the download link, and the licence by email (the
+   text, a `.fblicence` file, and the `appbuilderfb://` link).
+4. **First launch:** App Builder asks for the licence; the link or the file fills it in.
+5. **Upgrade:** the same order form with payment (Stripe / PayPal, as on the server). The new Enterprise licence
+   replaces the Lite one, for the same account.
+
+## What changes where
+
+**App Builder (this repository):**
+- `Licence.incl` (verify, keep in the Keychain, the gate) and the Licence window, menu and Upgrade sheet.
+- The URL scheme and the `.fblicence` document type.
+- The public key compiled in.
+- Every Enterprise command gated.
+
+**Repository visibility (the author, on GitHub):**
+- **This repository becomes private.** It holds App Builder's source, Enterprise included; `src/Enterprise`
+  no longer needs a separate private repository.
+- **New public repositories** for the modules that stay open: LogicBank for FutureBasic (`AI Assistant
+  Design.md`) and the SQL Generator (`src/SQLGeneratorExample`).
+
+**The Imagery License Server:**
+- The product `app_builder_fb`, its feature table (`AppBuilderModules.h`, mirroring the table above), and its
+  seed rows.
+- **Signed licences (ES256)** for App Builder: a key pair, signing on issue, the private key kept on the server
+  only. The same signing can later serve other products.
+- The `/appbuilder` landing page, the free Lite licence on registration, the download.
+- The upgrade page, and the licence delivered back to the app (email, file, `appbuilderfb://` link).
+
+## Tests
+
+- **Here (no Mac):** a reference in Python signs a licence with a test key and checks it, including a tampered
+  payload, an expired licence, another product, and a bad signature. The FB `Licence.incl` lints with the
+  headers.
+- **On a Mac:** a test program verifies the same reference licences with the Security framework, in
+  `src/MacTests/`.
+- **The gate:** every Enterprise command, with a Lite licence and with an Enterprise one.
+- **The License Server:** its own tests for signing and for the product's feature table (`ProductCatalogTest`).
+
+## Plan
+
+1. **Here:** the Python reference and test licences; `Licence.incl` (verify with `SecKey…`, Keychain); a Mac test
+   program.
+2. **Here:** the Licence window and menu, the Upgrade sheet, the gate on every Enterprise command, the URL scheme
+   and document type.
+3. **The License Server:** the product, signed licences, `/appbuilder`, registration to download, the upgrade.
+4. **The author:** repository visibility; the public module repositories.

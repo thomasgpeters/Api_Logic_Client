@@ -246,20 +246,20 @@ Server Project; runtime and templates in the workspace.
 - [ ] Wire `InsertPersonRecord` / `UpdatePersonRecord` / `DeletePersonRecord` to the add, save and delete buttons
 - [ ] Have the app run `Database/schema.sql` + `seed.sql` instead of its own copy in `CreateEmptySQLDatabase`
 
-## Parked: licensing and the paid build - revisit after the Lite release (author, 2026-11-24)
+## Licensing - one app, licensed through the Imagery License Server (author, 2026-11-26; `design/Licensing Design.md`)
 
-Everything needed is in `design/Editions and Licensing.md`. In this order:
-
-1. [ ] Choose the licence option - author: **A** portable checksum (SHA-256 on the License Server),
-       **B** signed licence file (`SecKeyVerifySignature`), or **C** online activation (breaks the
-       no-dependency rule). Already decided: offline, Studio only.
-2. [ ] Create the private repository (e.g. `Api_Logic_Client_Enterprise`); move `src/Enterprise` and
-       `src/Runtime/ALS Client.incl`, `ALS Binding.incl`, `ALS App.incl` there.
-3. [ ] Its `Edition.incl` (replaces this repo's): `EditionEnterpriseAvailable` from the licence;
-       Enterprise runtime files, start-up (`gALSHost`, login paths), `EditionRulesInApp` = NO.
-4. [ ] Studio: an edition choice in Project Settings and a "Licence…" entry (Preferences).
-5. [ ] License Server (its own repository): product `imagery_logicbank_studio_fb`, bit 0 `enterprise`.
-6. [ ] The paid build: project file, release, distribution from the License Server.
+1. [ ] The Python reference: sign and verify test licences (ES256), tampered / expired / other product / bad signature
+2. [ ] `Licence.incl`: verify with `SecKeyCreateWithData` + `SecKeyVerifySignature`, keep in the Keychain,
+       `LicenceAllows( feature )`; replaces `Edition.incl`'s build-time swap; a Mac test program in `src/MacTests/`
+3. [ ] The Licence window and menu (Licence…, Enter Licence…, Upgrade to Enterprise…, Manage Licence Online…,
+       Remove Licence…), the Upgrade sheet, the edition in the About box
+4. [ ] The gate on every Enterprise command (shown with an "Enterprise" badge, not hidden); no generation without a licence
+5. [ ] The `appbuilderfb://` URL scheme and the `.fblicence` document type
+6. [ ] License Server (its own repository): product `app_builder_fb` and its feature bits (Lite `0x0003`,
+       Enterprise `0x01FF`), signed licences (ES256), the `/appbuilder` landing page, registration to download,
+       the upgrade with payment, the licence delivered back to the app
+7. [ ] The author: make this repository private; public repositories for LogicBank for FutureBasic and the SQL Generator
+8. [ ] The release: the signed, notarized app, downloaded from the License Server
 
 ## Sample applications - the whole lifecycle, use case by use case (author, 2026-11-26)
 
