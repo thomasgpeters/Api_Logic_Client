@@ -1,0 +1,22 @@
+# Imagery Business Systems, LLC
+Imagery Business Systems builds business software, and a growing set of tools for FutureBasic programmers on the Mac. This app is one of them: a free module, with an example that shows how to use it.
+
+## Free modules for FutureBasic (MIT licence)
+- **SQL Generator**: describe a SELECT, INSERT, UPDATE or DELETE as a dictionary - tables, columns, filters, joins - and generate safe, parameterized SQL for SQLite. Names are quoted for you, and every value is bound, never pasted into the SQL.
+- **LogicBank for FutureBasic**: business rules for your data, declared once and enforced on every save - sums, counts, formulas, copies, constraints, parent checks and delete actions, kept in step automatically as rows change. Inspired by LogicBank for API Logic Server, rewritten for FutureBasic.
+Both are free to download, use and change, with their examples and documentation, from the website below.
+
+## App Builder for FutureBasic
+A Mac app that builds a complete FutureBasic application from your database: the windows and forms (XIB), the lists, the data binding, and the business rules - ready to open in the FutureBasic editor and build.
+- **Lite**: free with registration. Start from a SQLite database; the app and its rules run on your Mac, with LogicBank for FutureBasic.
+- **Enterprise**: licensed. Three tiers with API Logic Server: many users, the rules enforced on the server, sign-in and security, rules shared with your Python project.
+- An AI assistant (coming): describe a rule in plain language, in your model's own names, and App Builder turns it into the rule.
+
+## Sample applications
+Built to show what the rules can do, each with its database, its rules and its tests:
+- **Telecom**: a mobile carrier's travel plans, priced from its roaming agreements.
+- **Customs**: automated customs clearance, set in Bermuda - duty, risk lanes, release and the port gate.
+- **Flight Planner**: VFR flight planning - wind, weight and balance, runways, weather and a go / no-go.
+
+## Find out more
+The website has the modules, the samples, the documentation, and App Builder's registration and licences.

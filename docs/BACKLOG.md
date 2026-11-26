@@ -160,9 +160,11 @@ Enterprise at the ALS project.
 
 A rule is a sentence in the model's own names; the sentence is the source of truth, and the AI translates it into
 LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in ALS (Enterprise).
-- [ ] LogicBank for FutureBasic as a module of its own (as LogicBank is to ALS): folder, README, example app (with
-  the About Imagery window), tests, MIT licence - free from the GitHub Pages site, like the SQL Generator
-  (author, 2026-11-26; `design/Free Modules Design.md`)
+- [x] LogicBank for FutureBasic as a module of its own (as LogicBank is to ALS): `src/LogicBankExample` - the module,
+  `Data Memory.incl`, the example on Customer / Order / Item in memory, Help with the user guide, README, MIT licence
+  (author, 2026-11-26; `features/LOGICBANK_MODULE_FEATURE.md`)
+- [ ] Verify on a Mac: the LogicBank example builds and its story matches `tools/logicbank_example_reference.py`;
+  Help, Diagram, Preview, Export; About Imagery (in both examples)
 - [x] About Imagery Business Systems window (`src/Shared`), in the SQL Generator example's application menu
 - [ ] `ABOUT_IMAGERY_SITE` (src/Shared/About Imagery.incl) set once the GitHub Pages repository is named
 - [ ] The neutral expression language for formulas / constraints / where (FB and Python generated from it);

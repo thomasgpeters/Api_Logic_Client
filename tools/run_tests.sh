@@ -72,7 +72,7 @@ sqlgen_same() {
 }
 run "SQL Generator: one module, identical in the runtime, the example project and Test_Xib_View" sqlgen_same
 about_same() {
-    for app in SQLGeneratorExample; do
+    for app in SQLGeneratorExample LogicBankExample; do
         for f in "About Imagery.incl" "About Imagery.txt" imagery_logo.png imagery_logo_white.png; do
             cmp -s "$here/src/Shared/$f" "$here/src/$app/$f" || { echo "differs: src/$app/$f"; return 1; }
         done
@@ -80,6 +80,15 @@ about_same() {
     echo "About Imagery: the copies are identical"
 }
 run "About Imagery: one window, identical in src/Shared and each module's example app" about_same
+logicbank_same() {
+    for f in "Logic Rules.incl" "Logic Row.incl" "Logic Engine.incl" "Data Model.incl"; do
+        cmp -s "$here/src/Runtime/$f" "$here/src/LogicBankExample/$f" || { echo "differs: src/LogicBankExample/$f"; return 1; }
+    done
+    cmp -s "$here/src/SQLGeneratorExample/Rich Text.incl" "$here/src/LogicBankExample/Rich Text.incl" || { echo "differs: Rich Text.incl"; return 1; }
+    echo "LogicBank for FutureBasic: the copies are identical"
+}
+run "LogicBank for FutureBasic: the module, identical in the runtime and the example project" logicbank_same
+run "LogicBank example: the story's every value, worked out by the reference engine" python3 "$here/tools/logicbank_example_reference.py"
 run "pill buttons: one module, identical in the Studio and the runtime" cmp "$here/src/AppBuilder/Pill Buttons.incl" "$here/src/Runtime/Pill Buttons.incl"
 run "logic engine: scenarios (Python reference)" python3 "$here/tools/logic_reference.py" --test "$db"
 run "logic engine: every rule proven (each rule left out must fail a scenario)" python3 "$here/tools/logic_reference.py" --prove "$db"

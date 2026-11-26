@@ -51,6 +51,10 @@ mode work without extra code).
   ten examples on a CRM database, a Help window and About box; README, LICENSE, a draft post for the FB
   list (`docs/features/SQL_GENERATOR_FEATURE.md`). Its module files stay identical to `src/Runtime`'s
   and Test_Xib_View's (`run_tests.sh` checks).
+- `src/LogicBankExample/` — LogicBank for FutureBasic shared on its own (MIT): the module (Logic *.incl, Data Model.incl,
+  identical to `src/Runtime`'s - `run_tests.sh` checks), `Data Memory.incl` (the data layer in memory), an example on
+  Customer / Order / Item with no database, a Help window with the user guide, README, LICENSE
+  (`docs/features/LOGICBANK_MODULE_FEATURE.md`; its story is checked by `tools/logicbank_example_reference.py`).
 - `src/Shared/` — files shared by the free modules' sample apps, identical in each (`run_tests.sh` checks): `About Imagery.incl`
   + `About Imagery.txt` + the logos - the *About Imagery Business Systems* window (`docs/design/Free Modules Design.md`).
 - `src/MacTests/` — single-file FB programs that answer a question on a Mac before a feature is built on it (`MapKit Points Test.fb`: how FB serves MapKit's point views); see `docs/TESTING.md`.
@@ -94,6 +98,7 @@ mode work without extra code).
   `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
   `check_erd_page.py` (test: the model diagram page in headless Chromium),
   `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
+  `logicbank_example_reference.py` (the LogicBank example's model, rules and story on the reference engine), `make_logicbank_svg.py` (its Help diagram),
   `make_sql_generator_svg.py` (draws `docs/design/SQL Generator Object Model.svg`), `svg_to_png.js` (an SVG as a 2x PNG, light colours: the example's Help diagram),
   `als_contract.py` (test: the API Logic Server contract, against a running server),
   `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),

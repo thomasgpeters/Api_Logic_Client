@@ -6,6 +6,25 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — LogicBank for FutureBasic as a free module, with its example app
+
+- The author: LogicBank's sample is its own app, on three objects that never touch a database - Customer, Order,
+  Item - with hand-written rules; App Builder is what adds the AI, the checks and the tests. Open-sourcing the module
+  also keeps faith with LogicBank for Python, which is open source. And like the SQL Generator's, the example gets a
+  Help window with the user guide and examples.
+- `src/LogicBankExample`:
+  - `Data Memory.incl`: the engine's data calls answered from memory - copies out, a snapshot rolled back on a
+    refused save, generated keys.
+  - The module's files are identical to the runtime's.
+  - The example: `Rules.incl` (all rule kinds), a 13-step story with Next / Run All / Start Again and the engine
+    log, Help with `User Guide.txt` and a rules diagram, About Imagery.
+  - `tools/logicbank_example_reference.py` checks the story on the reference engine and writes `Model.json`.
+- Learned:
+  - The engine depends on its data only through about fifteen `Data…` calls, so a data layer is a file:
+    memory today, ALS tomorrow (the Enterprise client's preview of the rules).
+  - `%-8@` widths do nothing for objects in NSString formats: pad with `StringByPaddingToLength`; numbers keep
+    `%8.2f`.
+
 ## 2026-11-26 — The free modules and the About Imagery window
 
 - The author: the SQL Generator and LogicBank for FutureBasic are free modules, downloadable from the GitHub Pages
