@@ -217,9 +217,26 @@ def run_all():
     except SystemExit as e:                         # a rule left out can make the seed itself fail
         shutil.rmtree(folder, ignore_errors=True)
         return [('the sample database builds through the rules', False, str(e))]
-    results = [('the sample database builds through the rules', True, '')] + scenarios(base)
+    results = [('the sample database builds through the rules', True, '')] + scenarios(base) + purge_checks(folder, base)
     shutil.rmtree(folder, ignore_errors=True)
     return results
+
+
+def purge_checks(folder, base):
+    """purge_sample.sql removes the demo scenario and keeps the lookup data: the result is the lookup-only build"""
+    import sqlite3
+    purged = os.path.join(folder, 'purged.sqlite')
+    shutil.copy(base, purged)
+    db = sqlite3.connect(purged)
+    db.executescript(open(os.path.join(HERE, 'purge_sample.sql')).read())
+    lookup_only = sqlite3.connect(build_db.build(os.path.join(folder, 'lookup-only.sqlite'), with_sample=False))
+    left = [t for t in build_db.SAMPLE if db.execute(f'select count(*) from "{t}"').fetchone()[0]]
+    differ = [t for t in build_db.LOOKUP if sorted(db.execute(f'select * from "{t}"')) != sorted(lookup_only.execute(f'select * from "{t}"'))]
+    kept = all(db.execute(f'select count(*) from "{t}"').fetchone()[0] for t in build_db.LOOKUP)
+    db.close()
+    lookup_only.close()
+    return [('purge_sample.sql empties every sample table', not left, left),
+            ('purge_sample.sql keeps the lookup data, exactly as a lookup-only build makes it', kept and not differ, differ)]
 
 
 def main():

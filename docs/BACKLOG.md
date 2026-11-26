@@ -247,7 +247,8 @@ application; it is built and run on a Mac; it is published as a sample on the Gi
 announced on the FutureBasic list. Many use cases and user stories, through the whole lifecycle.
 
 Every sample has the same parts (`samples/<Name>/`, as `samples/Telecom`): `README.md` (the use case, its
-**user stories**, the model, the rules), `schema.sql`, `build_db.py` (the seed data, put in through the rules),
+**user stories**, the model, the rules), `schema.sql`, `lookup.sql` (reference data that stays) and `sample.sql` (the
+demo scenario) apart (author: as on the C++ side), `purge_sample.sql`, `build_db.py` (every row through the rules),
 `<name>.sqlite`, the rules for the reference engine with `test_rules.py` (scenarios, `--prove`), and `Rules.incl`
 (the same rules in FutureBasic). Its steps: [database] -> [generated and built on a Mac] -> [screenshots, page on
 the site, download] -> [post to the list].
@@ -257,7 +258,7 @@ the site, download] -> [post to the list].
 | Telecom - Northstar Mobile: travel plans priced from roaming agreements | done (39 rules) | | | |
 | Flight planner for amateur pilots | | | | |
 | Asset management for oil and gas | | | | |
-| National customs clearance | | | | |
+| National customs clearance - set in Bermuda: duty, pre-clearance, the port gate | done (35 rules) | | | |
 
 - [ ] The GitHub Pages site (repository name from the author): a page per sample - what it is, its user stories,
   screenshots, the download
@@ -269,9 +270,10 @@ the site, download] -> [post to the list].
 - [ ] Oil and gas assets: the database (sites, assets, responsible organisations, operating hours, maintenance
   schedules and work orders, sensors, readings, controllers, alarms); rules for maintenance due, alarms, lock-outs;
   simulated devices first, Raspberry Pi / Arduino later
-- [ ] Customs clearance: the database (a country's tariff schedule, shipments, declarations, carriers, trucks with
-  transponders, drivers, containers and seals, registered routes, crossings, inspections); rules for duty,
-  pre-clearance matching, validity on the date of crossing
+- [ ] Customs: build it on a Mac (New Project from `customs.sqlite`, Generate App, its `Rules.incl`); release the red-lane
+  entry after an inspection, let the stopped truck out after correcting the seal
+- [ ] Purge sample data from a generated app or the Studio: a command that runs the sample's `purge_sample.sql` (and
+  an app built lookup-only from the start) - so a sample becomes a real system
 
 ## Ideas
 

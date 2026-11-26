@@ -6,6 +6,25 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Customs sample (Bermuda); lookup data and sample data apart
+
+- The author chose customs clearance next, set in Bermuda. No land border: goods arrive by sea and air, and
+  pre-clearance is at the port gate - transponder read, seal matching the declared one, truck and driver
+  cleared on the day, a registered and approved route. `samples/Customs`: 15 tables, 35 rules - duty from
+  the tariff (copied rates), the declaration's totals and balance, the deferment bond, the green and red
+  lanes, release (goods, lane or inspection, no failed inspection), and `Movement.Reason`: the first gate
+  check that fails, recomputed when its source changes. 41 scenarios; `--prove` 35 of 35. Sample duty rates
+  in Bermuda's style, not the official tariff; companies and people made up.
+- Learned: constraints of a parent run in the same save (the importer's bond refused a release before the
+  entry's own inspection rule) - scenarios must isolate the rule they test; delete actions run in declared
+  order - refuse (payments) before cascading (lines), or the cascade changes the entry and another rule
+  refuses it for the wrong reason.
+- The author: as on the C++ side, the schema and the data are separate files, lookup data (stays) apart from
+  sample data (the demo scenario), which can be purged. Both samples now have `lookup.sql`, `sample.sql`
+  (plain INSERTs of the typed columns) and `purge_sample.sql`; `samples/sample_loader.py` replays them
+  through the rules (forward references deferred, guarded statuses last); `--lookup-only`. The rebuilt
+  databases are identical to the earlier ones, table by table; the purge leaves exactly the lookup-only build.
+
 ## 2026-11-26 — The sample applications: one lifecycle, use case by use case
 
 - The author: a SQLite database for each use case (Telecom, the flight planner, oil and gas assets, customs

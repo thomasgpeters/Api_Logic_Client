@@ -63,10 +63,13 @@ plan with phones, cannot be deleted.
 | | |
 |---|---|
 | `schema.sql` | the tables (the source of truth) |
+| `lookup.sql` | the **lookup data** that stays: zones, countries, partner networks, roaming agreements, plan offers |
+| `sample.sql` | the **sample data**, the demo scenario: customers, accounts, plans, phones, usage, travel plans |
+| `purge_sample.sql` | removes the sample data and keeps the lookup data |
 | `telecom.sqlite` | the database - every row put in through the rules |
-| `build_db.py` | makes `telecom.sqlite`: the seed data, inserted through the rules |
+| `build_db.py` | makes `telecom.sqlite` from the three files; `--lookup-only` for an empty carrier, ready to use |
 | `telecom_rules.py` | the rules, run here by `tools/logic_reference.py`'s engine (LogicBank for FutureBasic, function for function) |
-| `test_rules.py` | 30 scenarios; `--prove` leaves each rule out in turn and needs a scenario to fail |
+| `test_rules.py` | 32 scenarios (and the purge); `--prove` leaves each rule out in turn and needs a scenario to fail |
 | `Rules.incl` | the same rules in FutureBasic, for the generated app |
 
 ## Building the app
@@ -81,8 +84,8 @@ plan with phones, cannot be deleted.
 ## Checking the rules here
 
 ```
-python3 samples/Telecom/build_db.py            # remake telecom.sqlite
-python3 samples/Telecom/test_rules.py          # 30 scenarios
+python3 samples/Telecom/build_db.py            # remake telecom.sqlite (--lookup-only: without the demo scenario)
+python3 samples/Telecom/test_rules.py          # 32 scenarios
 python3 samples/Telecom/test_rules.py --prove  # 39 rules, each tested
 ```
 `tools/run_tests.sh` runs both, and lints `Rules.incl` with the runtime.
