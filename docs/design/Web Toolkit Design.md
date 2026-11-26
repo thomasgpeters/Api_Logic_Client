@@ -21,6 +21,29 @@ that supports FutureBASIC in the logic side of the web, so we can eliminate the 
 - **The business logic in FB:** the rules (LogicBank for FutureBasic), the queries (the SQL Generator) and the event
   handlers are FB code on the server; the browser only shows the page and sends the clicks.
 
+## The pattern: FastCGI, with a FutureBasic app behind it (author, 2026-11-26)
+
+```
+Browser --HTTPS--> nginx (or Apache) --FastCGI--> the FB app (long-running, on a Mac)
+                   TLS, HTTP parsing, static        requests in -> widgets -> HTML (or JSON) out;
+                   files, limits, compression       the business logic in FB (LogicBank, the SQL Generator)
+```
+
+- **nginx does the risky parts:** TLS, HTTP parsing, slow or hostile clients, size limits, static files (CSS, `web.js`,
+  pictures), compression. It is free (BSD licence).
+- **The FB app answers requests:** method, path, query, cookies and body in; HTML built by the widgets (or JSON for
+  event updates) out. It runs in the background (no window), kept running by `launchd`.
+- **FastCGI is an open, published protocol:** binary records over a local socket - a few hundred lines of FB (and C) to
+  read and write them. No licence.
+- **Scale:** nginx can balance several copies of the FB app; sessions then live in SQLite so any copy serves any user.
+- **Cocoa:**
+  - Foundation (strings, dictionaries, JSON, dates, regular expressions, URLs) is used throughout.
+  - AppKit's controls cannot draw themselves as HTML, so the web widgets are our own. Their calls read like FB's Cocoa
+    statements (`fn WebButton( page, @"add", @"Add One" )`), so they feel familiar to FB programmers.
+- **The proof:** `src/MacTests/Web Server Test.fb` answers HTTP itself, which proves the core (an FB socket server
+  answering from FB code). The FastCGI version replaces only that connection layer: nginx in front, FastCGI records
+  instead of HTTP text.
+
 ## The idea
 
 In Wt, a developer writes only C++: a tree of widgets (`WText`, `WPushButton`, `WLineEdit`, `WTable`), with signals

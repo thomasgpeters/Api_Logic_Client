@@ -8,6 +8,9 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ## 2026-11-26 — Feasibility: web applications in FutureBasic, replacing Wt
 
+- The author's pattern: FastCGI, with nginx in front and a long-running FB app behind it answering requests with
+  HTML from our own widgets; Foundation throughout (`design/Web Toolkit Design.md` -> The pattern).
+
 - The author asked whether a standalone web server and web UI, with the business logic in FB, could replace Wt and
   its licence: a feasibility question for now.
 - `docs/design/Web Toolkit Design.md` covers:
