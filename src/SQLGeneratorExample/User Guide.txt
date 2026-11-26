@@ -119,15 +119,73 @@ fn SQLGenClose( db )
 ```
 Values come back as Cocoa objects: INTEGER and REAL as NSNumber, TEXT as NSString, BLOB as NSData, NULL as NSNull. The step-by-step calls under SQLGenExecute (SQLGenPrepare, SQLGenBind, SQLGenStep, SQLGenColumnValue, SQLGenFinalize) are there for your own loops.
 
-# In your app
-Copy these files into your project folder and add them to the project, in this order (FB needs a function defined before it is used):
+# Using the SQL Generator in your own app
+Everything below is done in the FutureBasic editor and the Finder - no other tool is needed. The SQL Generator is four FutureBasic source files: copy them, drag them into your project, link SQLite, and call the functions.
+
+## 1. Copy the four files
+From this folder (or the download), copy these files into your own project's folder, next to your other source files:
 ```
-DataObject.glbl            constants: operators, AND / OR, value types
-DataObject_Super.incl      the builders: describe the statement
-DataObject.incl            the SQL: GenerateSelectSQL and the others
-SQL Generator SQLite.incl  runs it on SQLite (optional: use your own)
+DataObject.glbl            the constants: operators, AND / OR, value types
+DataObject_Super.incl      the builders: describe a statement
+DataObject.incl            the SQL: GenerateSelectSQL and the others, QueryParameterValues
+SQL Generator SQLite.incl  runs the SQL on SQLite (leave it out if you have your own SQLite code)
 ```
-Add `-lsqlite3` to the compiler options in **Build Settings** when you use the SQLite file.
+
+## 2. Drag them into your project
+- Open your project in the FutureBasic editor, so its **project window** - the list of its files - is on screen.
+- Select the four files in the Finder and **drag them into the project window**.
+- Put them in this order, **above your own files**: FutureBasic builds a project from the top of the list to the bottom, and a function has to be defined before anything uses it. Drag a file up or down in the list to move it.
+```
+DataObject.glbl            (with your other .glbl files, near the top)
+DataObject_Super.incl
+DataObject.incl
+SQL Generator SQLite.incl
+... your own files ...
+```
+The example's own project, **SQLGeneratorExample.fbeproj**, is set up this way: open it and look at its project window.
+
+## 3. Link SQLite
+Open **Build Settings** and add this to **Compiler options**:
+```
+-lsqlite3 -Wno-unused-command-line-argument
+```
+The first links the SQLite library that comes with macOS. The second stops clang from saying "-lsqlite3: linker input unused" once for every file (FutureBasic passes the compiler options to every compile). Only the SQLite runner needs it.
+
+## Or: a single-file program
+A program that is one .fb file, not a project, includes the files at its top and sets the option with #build (which works in single files only). Keep the four files in the same folder as the .fb file:
+```
+include "DataObject.glbl"
+include "DataObject_Super.incl"
+include "DataObject.incl"
+include "SQL Generator SQLite.incl"
+#build CompilerOptions @"-lsqlite3 -Wno-unused-command-line-argument"
+```
+**SQL Generator - Smallest Program.fb** in this folder is exactly that, in about 60 lines: open it in FutureBasic and run it - it makes a table, adds three people with one INSERT, and reads back the ones with a balance over 100.
+
+## 4. Open your database and make its tables
+```
+ptr db
+fn SQLGenOpen( @"/Users/you/Library/Application Support/My App/my.sqlite", YES, @db )   // YES: create the file
+fn SQLGenExecute( db, @"CREATE TABLE IF NOT EXISTS person ( id INTEGER PRIMARY KEY, surName TEXT, balance REAL )", NULL, NULL )
+```
+A new database file is empty: create its tables with plain SQL first (CREATE TABLE IF NOT EXISTS is harmless when they exist). Build the path from the Application Support folder rather than typing it.
+
+## 5. Describe, generate, run
+```
+query = fn InitQueryDictionary
+fn AddTableToQuery( query, @"person", @"p" )
+fn AddColumnToQuery( query, @"p.surName", @"Surname" )
+fn AddFilterToQuery( query, @"p", @"balance", fn NumberWithDouble( 100.0 ), _realType, 0, _isGreaterThan, 0 )
+rows = fn MutableArrayNew
+fn SQLGenExecute( db, fn GenerateSelectSQL( query ), fn QueryParameterValues( query ), rows )
+```
+Every function is explained above, one by one.
+
+## Good to know
+- **Names it uses.** Functions starting Init..., Add..., Generate..., Query..., QuoteSQLName and SQLGen...; constants `_isEqual` to `_isNotLike`, `_and`, `_or`, `_nullType` to `_blobType`, `_sqlGenOK`, `_sqlGenROW`, `_sqlGenDONE`. Give your own functions and constants other names.
+- **Your own SQLite code instead.** Leave out SQL Generator SQLite.incl and the compiler options; prepare the SQL, then bind the values of `fn QueryParameterValues( statement )` to its `?` placeholders, in order, starting at 1.
+- **A newer version.** Copy the four files again over the old ones; nothing else changes.
+- **Errors.** When SQLGenExecute returns something other than `_sqlGenDONE`, `fn SQLGenErrorMessage( db )` says why; the SQL and the message are also logged.
 
 # What it does for you
 - **Parameterized.** Values never go into the SQL text: they are bound to `?` placeholders. No SQL injection, no quoting of names like O'Brien.

@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — SQL Generator example: how to put the module in your own app
+
+- The author: the example needs further instructions for including the module's files in one's
+  own application - in the plain FutureBasic editor, by drag and drop (open source users will not
+  have the Studio). The Help (`User Guide.txt`) has a new part, "Using the SQL Generator in your own
+  app": copy the four files; drag them into the project window above your own files, in build order
+  (FB builds the list from the top; definition before use); Build Settings > Compiler options
+  `-lsqlite3 -Wno-unused-command-line-argument` and why; the single-file way (`include` + `#build`,
+  which FB allows in single files only); opening the database and creating its tables; describe,
+  generate, run; the names the module uses, using your own SQLite code, updating, errors. The
+  README's section follows it in short.
+- `SQL Generator - Smallest Program.fb`: the module in the fewest lines - a single-file program
+  (an in-memory database, a table, one INSERT of three rows, a SELECT with a filter and an order).
+
 ## 2026-11-26 — Names: App Builder for FutureBasic, built as Studio for FB
 
 - The author: the product is **App Builder for FutureBasic** - without "Imagery", which the FB

@@ -54,15 +54,25 @@ launch with five made-up people. Reset Database makes it again.
 
 ## Use it in your own app
 
-Copy four files into your project folder and add them in this order (FutureBasic needs a function
-defined before it is used):
+All in the FutureBasic editor and the Finder - no other tool. The Help window (and `User Guide.txt`)
+has the full steps; in short:
 
-| File | What it holds |
-|---|---|
-| `DataObject.glbl` | the constants: operators, AND / OR, value types |
-| `DataObject_Super.incl` | the builders: describe the statement |
-| `DataObject.incl` | the SQL: `GenerateSelectSQL` and the others, `QueryParameterValues` |
-| `SQL Generator SQLite.incl` | optional: runs the SQL on SQLite (add `-lsqlite3` in Build Settings) |
+1. **Copy** these four files into your project's folder:
+
+   | File | What it holds |
+   |---|---|
+   | `DataObject.glbl` | the constants: operators, AND / OR, value types |
+   | `DataObject_Super.incl` | the builders: describe the statement |
+   | `DataObject.incl` | the SQL: `GenerateSelectSQL` and the others, `QueryParameterValues` |
+   | `SQL Generator SQLite.incl` | optional: runs the SQL on SQLite |
+
+2. **Drag them into your project's window** in the FutureBasic editor, **above your own files**, in
+   the order above (FutureBasic builds from the top of the list down, and a function must be defined
+   before it is used). `SQLGeneratorExample.fbeproj` shows the order.
+3. **Link SQLite:** Build Settings > Compiler options: `-lsqlite3 -Wno-unused-command-line-argument`.
+4. **Open the database and create its tables** with plain SQL (`CREATE TABLE IF NOT EXISTS ...`);
+   a new database file is empty.
+5. **Describe, generate, run:**
 
 ```
 query = fn InitQueryDictionary
@@ -76,8 +86,13 @@ rows = fn MutableArrayNew
 fn SQLGenExecute( db, sql, fn QueryParameterValues( query ), rows )   // rows: dictionaries, "Surname" -> value
 ```
 
-The user guide inside the app covers every function: joins, every filter operator, INSERT
-(one row or an array of dictionaries), UPDATE and DELETE.
+**A single-file program** (no project) includes the four files at its top and links SQLite with
+`#build CompilerOptions @"-lsqlite3 -Wno-unused-command-line-argument"`.
+**`SQL Generator - Smallest Program.fb`** is a complete one, about 60 lines: open it in FutureBasic
+and run it.
+
+The Help window explains every function one by one: joins, every filter operator, INSERT (one row
+or an array of dictionaries), UPDATE and DELETE, and the SQLite runner.
 
 ## How a statement is described
 
@@ -106,6 +121,7 @@ filters for a few values; the generator writes queries, not schemas (create tabl
 | | |
 |---|---|
 | `DataObject.glbl`, `DataObject_Super.incl`, `DataObject.incl`, `SQL Generator SQLite.incl` | the module |
+| `SQL Generator - Smallest Program.fb` | the module in the fewest lines: a single-file program to open and run |
 | `CRM Database.incl` | the example database: tables and sample people |
 | `CRM Examples.incl`, `Example Code.txt` | the ten examples, and the FB each one shows |
 | `Example Output.incl`, `Rich Text.incl` | the coloured output and the SQL-command-line tables |
