@@ -22,6 +22,19 @@ Enterprise a separate private build that swaps `Edition.incl`). Nothing is built
 - **Generated apps never check a licence.** Licences gate App Builder's features only. A generated app, with
   its copy of LogicBank for FutureBasic, runs anywhere.
 
+## Pricing (author, 2026-11-26)
+
+- **An annual subscription under $299.** The exact price is to be set.
+- **Monthly costs 20% more:** the annual price / 12 x 1.2. At $299 a year, that would be $24.92 / month x 1.2 =
+  $29.90 / month.
+- **The free modules are the reason to subscribe.** The SQL Generator, LogicBank for FutureBasic and the Web
+  Toolkit are free (MIT). With them, you write your own rules and pages; App Builder automates both from the model
+  (`Free Modules Design.md`).
+- **Not yet public.** The marketing repository keeps unpublished prices out until the author says they are public.
+- **Open (for the author):**
+  - Is this the Enterprise subscription, with Lite staying a free registered licence?
+  - Which edition generates web apps? Proposed: the subscription, as feature bit 9 below.
+
 ## Why signed licences, and which signature
 
 The License Server's tokens today (`XXXX-XXXX-MMMM-XXXX-XXXX`) have two problems for App Builder:
@@ -81,9 +94,11 @@ Fleet's `docs/LICENSING.md`).
 | 6 | Authorization rules (row-level security, grants by role) | Enterprise |
 | 7 | Rule governance: versions, sign-off, an audit trail | Enterprise |
 | 8 | AI through the ALS project's `genai-logic`; team prompts and settings | Enterprise |
-| 9–15 | reserved | |
+| 9 | The web target: App Builder builds the pages for the Web Toolkit (forms, lists, bindings, rules) from the model - proposed (author, 2026-11-26: "That's why it's incentive to buy the subscription"); the edition is for the author to confirm | Enterprise (proposed) |
+| 10–15 | reserved | |
 
-- **Lite is `0x0003`.** **Enterprise is `0x01FF`** (all of the above).
+- **Lite is `0x0003`.** **Enterprise is `0x01FF`** (bits 0-8); with the web target, `0x03FF`. `Licence.incl` already
+  treats unknown bits as features it does not offer yet, so a licence carrying bit 9 works today.
 - **Trials:** a trial is an Enterprise licence that expires, as the License Server's 30-day trials already work.
 - **The split between editions:** `Editions and Licensing.md` → *Rules: where the line is*; this table is that
   split, in bits.

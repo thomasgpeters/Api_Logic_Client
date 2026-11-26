@@ -11,8 +11,8 @@ without redeploying them).
 | Page | From |
 |---|---|
 | `/` | the free modules, App Builder, the samples |
-| `/sql-generator/`, `/logicbank/` | each module's README, its download, its user guide |
-| `/help/sql-generator/`, `/help/logicbank/` | each example's `User Guide.txt` (the markup the apps' Help uses), with its diagram |
+| `/sql-generator/`, `/logicbank/`, `/web-toolkit/` | each module's README, its download, its user guide (the Web Toolkit: the module and the Orders example, two downloads) |
+| `/help/sql-generator/`, `/help/logicbank/`, `/help/web-toolkit/` | each example's (the Web Toolkit: the module's) `User Guide.txt` (the markup the apps' Help uses), with its diagram |
 | `/samples/`, `/samples/<name>/` | each sample's README and download |
 | `/app-builder/` | Lite and Enterprise; registration on the Imagery License Server (`LICENCE_SERVER` + `LICENCE_PAGE`, read from `Licence.incl`) |
 | `/downloads/*.zip` | each module's example folder and each sample folder |

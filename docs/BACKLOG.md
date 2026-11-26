@@ -44,7 +44,12 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [ ] Server push (a long poll or WebSocket) for changes another visitor makes; for now: refresh on visible / shown.
 - [ ] HTTPS without nginx (Apple's Network framework); sessions in SQLite for several app copies behind nginx.
 - [ ] Widgets: tabs, a dialog, a date picker beyond the browser's, charts, a map; file upload and download.
-- [ ] The name ("Web Toolkit for FutureBasic" is a working name); free or licensed; its page on the site.
+- [x] Free (MIT), the third free module (author, 2026-11-26): its user guide, its page and downloads on the site, the
+      About Imagery window in its example.
+- [ ] The name ("Web Toolkit for FutureBasic" is a working name); its own public repository.
+- [ ] **Pricing** (author, 2026-11-26): an annual subscription under $299 (the exact price to set), monthly 20% more.
+      To confirm: is it the Enterprise subscription, and is the web target (feature bit 9, proposed) in it? Then the
+      License Server's product and the site's App Builder page.
 
 ## Waiting on the author
 

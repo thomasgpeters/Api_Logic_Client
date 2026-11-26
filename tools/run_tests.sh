@@ -72,7 +72,7 @@ sqlgen_same() {
 }
 run "SQL Generator: one module, identical in the runtime, the example project and Test_Xib_View" sqlgen_same
 about_same() {
-    for app in SQLGeneratorExample LogicBankExample; do
+    for app in SQLGeneratorExample LogicBankExample WebToolkitExample; do
         for f in "About Imagery.incl" "About Imagery.txt" imagery_logo.png imagery_logo_white.png; do
             cmp -s "$here/src/Shared/$f" "$here/src/$app/$f" || { echo "differs: src/$app/$f"; return 1; }
         done

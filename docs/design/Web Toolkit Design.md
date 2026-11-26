@@ -170,6 +170,6 @@ fn WebServe( 8080, @fn BuildPage )
 ## Open questions (for the author)
 
 - **The name:** "Web Toolkit for FutureBasic" is a working name.
-- **Free and open (like the other two modules), or Imagery's own, licensed product?** Owning it outright is the
-  point of replacing Wt; how it is shared is a separate choice.
+- ~~Free and open, or licensed?~~ **Decided (author, 2026-11-26): free, MIT, the third free module.** App Builder
+  automating the pages is what is sold (`Free Modules Design.md`, `Licensing Design.md` -> Pricing).
 - **The first real app to build with it:** something internal on the author's network, to drive the widget list.

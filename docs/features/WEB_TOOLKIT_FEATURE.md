@@ -13,6 +13,19 @@ In the same session the author also asked for:
 - an FB app template for the events in and out of FastCGI;
 - a core that is dynamic and tied to no data model, because App Builder will target a desktop app or a web app.
 
+## Free, and what App Builder adds (author, 2026-11-26)
+
+The Web Toolkit is a free module (MIT), like the SQL Generator and LogicBank for FutureBasic:
+- **The module:** the widgets, the template, the Layout Tool, the Orders example and its user guide
+  (`src/WebToolkit/User Guide.txt`, also the module's page on fb.imagery-business-systems.com).
+- **With the module alone,** you write your own pages: the widgets or layouts, the bindings, the event functions.
+- **App Builder (subscription)** builds them from the model: a page per entity, laid out as `.webxib`, with its
+  bindings and rules. Pricing: `docs/design/Licensing Design.md` -> Pricing.
+
+The Orders example has the About Imagery Business Systems window, as the other free modules' examples do (its
+application menu). The template's `Pages.incl` gained three small functions for the app's own menus and windows:
+`AppMenusBuild`, `AppMenu` and `AppDialog`.
+
 ## How it works
 
 ```

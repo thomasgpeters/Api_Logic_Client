@@ -6,6 +6,21 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — The Web Toolkit is the third free module; pricing
+
+- **The author:** the Web Toolkit is a free module, like the other two. Those who take it write their own pages;
+  App Builder automates them, "that's why it's incentive to buy the subscription".
+- **Pricing:** an annual subscription under $299, monthly 20% more. This is recorded in `Licensing Design.md` ->
+  Pricing, with two questions for the author: is it the Enterprise subscription, and is the web target (feature
+  bit 9, proposed) in it? It is kept out of the marketing repository until it is public.
+- **The module:**
+  - its user guide (`src/WebToolkit/User Guide.txt`);
+  - its page on the site (`make_site.py`: the module, the Orders example and the guide, each downloadable);
+  - the About Imagery window in the Orders example (checked identical by `run_tests.sh`).
+- **The template:** gained `AppMenusBuild`, `AppMenu` and `AppDialog`, so an app's own menus and windows need no
+  change to the shared `Server Window.incl`.
+- Commit 573c365 (XIB layouts and the Layout Tool) preceded this.
+
 ## 2026-11-26 — Web Toolkit: XIB layouts and the layout tool
 
 - The author: "go ahead with the XIB templates and layout tool". A XIB is now a web page's layout:

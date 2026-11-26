@@ -35,6 +35,10 @@ MODULES = [
     {'slug': 'logicbank', 'name': 'LogicBank for FutureBasic', 'folder': 'src/LogicBankExample', 'zip': 'LogicBank-for-FutureBasic-Example.zip',
      'blurb': 'Your business logic, handled in one place: sums, counts, formulas, copies, constraints and delete actions, '
               'declared once and enforced on every save. Like your bank - what you put in, you can take out, and the arithmetic is done for you.'},
+    {'slug': 'web-toolkit', 'name': 'Web Toolkit for FutureBasic', 'folder': 'src/WebToolkit', 'zip': 'Web-Toolkit-for-FutureBasic.zip',
+     'example': 'src/WebToolkitExample', 'example_zip': 'Web-Toolkit-Orders-Example.zip',
+     'blurb': 'Web applications written in FutureBasic: widgets, events answered in the background (AJAX), a page lifecycle, '
+              'pages laid out in XIB files with the Layout Tool. Your business logic runs in FB, on the server, behind nginx.'},
 ]
 SAMPLES = [('Telecom', 'A mobile carrier\'s travel plans, priced from its roaming agreements.'),
            ('Customs', 'Automated customs clearance, set in Bermuda: duty, risk lanes, release and the port gate.'),
@@ -220,7 +224,7 @@ def page(title, body, depth, description=''):
 <body>
 <header><a href="{up}index.html"><picture><source srcset="{up}images/imagery_logo_white.png" media="(prefers-color-scheme: dark)"><img src="{up}images/imagery_logo.png" alt="Imagery Business Systems"></picture></a>
 <a class="site" href="{up}index.html">FutureBasic tools</a>
-<nav><a href="{up}sql-generator/index.html">SQL Generator</a><a href="{up}logicbank/index.html">LogicBank</a><a href="{up}app-builder/index.html">App Builder</a><a href="{up}samples/index.html">Samples</a></nav></header>
+<nav><a href="{up}sql-generator/index.html">SQL Generator</a><a href="{up}logicbank/index.html">LogicBank</a><a href="{up}web-toolkit/index.html">Web Toolkit</a><a href="{up}app-builder/index.html">App Builder</a><a href="{up}samples/index.html">Samples</a></nav></header>
 <main>
 {body}
 </main>
@@ -269,8 +273,16 @@ def build(out):
         folder = os.path.join(ROOT, m['folder'])
         zip_folder(folder, os.path.join(out, 'downloads', m['zip']), os.path.basename(m['folder']))
         readme = open(os.path.join(folder, 'README.md'), encoding='utf-8').read()
-        body = after_title(markdown_to_html(readme), f'<p><a class="button" href="../downloads/{m["zip"]}">Download the example (zip)</a>'
-                           f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>')
+        if m.get('example'):
+            # a module with its example apart: the module (its template and tools), and the example
+            zip_folder(os.path.join(ROOT, m['example']), os.path.join(out, 'downloads', m['example_zip']), os.path.basename(m['example']))
+            buttons = (f'<p><a class="button" href="../downloads/{m["zip"]}">Download the module (zip)</a>'
+                       f'<a class="button secondary" href="../downloads/{m["example_zip"]}">Download the example (zip)</a>'
+                       f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>')
+        else:
+            buttons = (f'<p><a class="button" href="../downloads/{m["zip"]}">Download the example (zip)</a>'
+                       f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>')
+        body = after_title(markdown_to_html(readme), buttons)
         write(out, f'{m["slug"]}/index.html', page(m['name'], body, 1, m['blurb']))
         help_dir = os.path.join(out, 'help', m['slug'])
         os.makedirs(help_dir, exist_ok=True)
@@ -310,14 +322,16 @@ the data binding, and the business rules - ready to open in the FutureBasic edit
 </tbody></table>
 <p>The free modules are App Builder's foundations: every app it builds carries the SQL Generator and LogicBank for FutureBasic.
 With the modules alone you write your rules by hand; App Builder writes them from plain sentences, checks them against your model,
-tests every rule, and builds the app around them.</p>""", 1, 'Build a complete FutureBasic app from your database.'))
+tests every rule, and builds the app around them.</p>
+<p>The same goes for the web (coming): with the Web Toolkit alone you write each page yourself; App Builder will build the pages
+from your model - forms, lists, bindings and rules - for a web app beside, or instead of, the Mac app.</p>""", 1, 'Build a complete FutureBasic app from your database.'))
 
     # the home page
     module_cards = ''.join(f'<div class="card"><span class="tag">free &middot; MIT</span><h3><a href="{m["slug"]}/index.html">{esc(m["name"])}</a></h3>'
                            f'<p>{esc(m["blurb"])}</p><p><a href="downloads/{m["zip"]}">Download</a> &middot; <a href="help/{m["slug"]}/index.html">User guide</a></p></div>'
                            for m in MODULES)
     write(out, 'index.html', page('FutureBasic tools', f"""<h1>Tools for FutureBasic programmers</h1>
-<p class="lead">From Imagery Business Systems: two free modules for your own apps, sample applications that show them at work,
+<p class="lead">From Imagery Business Systems: three free modules for your own apps, sample applications that show them at work,
 and App Builder, which builds a whole app from your database.</p>
 <h2>Free modules</h2>
 <div class="cards">{module_cards}</div>
@@ -327,7 +341,7 @@ and App Builder, which builds a whole app from your database.</p>
 <p><a href="{register}">Register</a> &middot; <a href="app-builder/index.html">Lite and Enterprise</a></p></div>
 <div class="card"><span class="tag">samples</span><h3><a href="samples/index.html">Sample applications</a></h3>
 <p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, with their databases, rules and tests.</p></div></div>""", 0,
-        'Free FutureBasic modules - the SQL Generator and LogicBank for FutureBasic - and App Builder for FutureBasic.'))
+        'Free FutureBasic modules - the SQL Generator, LogicBank for FutureBasic and the Web Toolkit - and App Builder for FutureBasic.'))
     return out
 
 

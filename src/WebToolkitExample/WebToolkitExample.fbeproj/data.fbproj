@@ -7,6 +7,9 @@ resources "Model.json"
 resources "CustomerPanel.webxib"
 resources "OrderPanel.webxib"
 resources "ItemPanel.webxib"
+resources "About Imagery.txt"
+resources "imagery_logo.png"
+resources "imagery_logo_white.png"
 // "Globals" 1
 include "Web App.glbl"
 // "LogicBank for FutureBasic" 1
@@ -25,6 +28,7 @@ include "Web Events.incl"
 include "Web Layout.incl"
 include "Web Binding.incl"
 // "App" 1
+include "About Imagery.incl"
 include "Pages.incl"
 include "Server Window.incl"
 // "Main" 1
