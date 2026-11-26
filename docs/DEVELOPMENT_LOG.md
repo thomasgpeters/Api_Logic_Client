@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Flight Planner sample (VFR in New England)
+
+- `samples/FlightPlanner`: 7 tables, 44 rules, 45 scenarios, `--prove` 44 of 44; the same pattern as Telecom and
+  Customs (schema, lookup, sample, purge; `build_db.py` through the rules; `Rules.incl` in FB, linted with the runtime).
+  A leg's distance and true course by the great circle (haversine, initial bearing) from the airports'
+  coordinates; magnetic course, ground speed, minutes and fuel; the VFR hemispheric altitude rule (14 CFR 91.159),
+  runway length; the plan's totals, the reserve (30 / 45 minutes, 91.151) and the margin; `NoGoReason` - no legs,
+  medical, night currency (61.57), annual, altitude, runway, fuel - and filing needs a GO; the logbook from closed
+  plans; position reports for a flown track and other traffic (for the Map view).
+- Learned: FB's `sin`, `cos` and `asin` are keywords (radians), `atan2( y, x )`, `sqrt`, `floor`, `fmod` and `M_PI`
+  come from math.incl. Rounding is `floor( x + 0.5 )` in both the reference and FB, so the numbers agree.
+- Next (author): research both domains (flight planning; customs clearance and automated release) and elaborate
+  the two samples from it.
+
 ## 2026-11-26 — Customs sample (Bermuda); lookup data and sample data apart
 
 - The author chose customs clearance next, set in Bermuda. No land border: goods arrive by sea and air, and

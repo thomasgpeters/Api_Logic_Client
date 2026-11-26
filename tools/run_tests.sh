@@ -111,7 +111,7 @@ sample_lint() {
     cp "$here/samples/$1/Rules.incl" "$t/"
     python3 "$here/tools/fblint.py" --headers "$headers" "$t"; r=$?; rm -rf "$t"; return $r
 }
-for sample in Telecom Customs; do
+for sample in Telecom Customs FlightPlanner; do
     run "$sample sample: its scenarios through the rules, and the purge of its sample data" python3 "$here/samples/$sample/test_rules.py"
     run "$sample sample: every rule proven (each left out must fail a scenario)" python3 "$here/samples/$sample/test_rules.py" --prove
     run "$sample sample: Rules.incl lints with the runtime" sample_lint "$sample"

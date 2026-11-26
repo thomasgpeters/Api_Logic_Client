@@ -257,7 +257,7 @@ the site, download] -> [post to the list].
 | Sample | Database | App on a Mac | On the site | Posted |
 |---|---|---|---|---|
 | Telecom - Northstar Mobile: travel plans priced from roaming agreements | done (39 rules) | | | |
-| Flight planner for amateur pilots | | | | |
+| Flight planner for amateur pilots - VFR in New England: great circle, wind, fuel and reserve, go / no-go | done (44 rules) | | | |
 | Asset management for oil and gas | | | | |
 | National customs clearance - set in Bermuda: duty, pre-clearance, the port gate | done (35 rules) | | | |
 
@@ -266,8 +266,12 @@ the site, download] -> [post to the list].
 - [ ] Telecom: build it on a Mac: New Project from `telecom.sqlite`, Generate App, copy `Rules.incl` over
   `FBapp/Rules.incl`, build; buy a quote, try one over the credit limit, add a country with no service (Kenya)
 - [ ] Telecom: its Page Layouts once they exist (a Travel Planner page); its Map view (countries carry latitude and longitude)
-- [ ] Flight planner: the database (pilots, aircraft and their performance, airports, waypoints, flight plans and
-  legs, position reports); rules for distance, time and fuel against range and reserve
+- [x] Flight planner: the database (pilots, aircraft and their performance, airports, flight plans and legs,
+  position reports with other traffic); 44 rules - great-circle distance and course, wind, time, fuel and the
+  reserve, VFR altitudes, runways, medical, night currency, the annual, go / no-go, the logbook (2026-11-26)
+- [ ] Flight planner, elaborated from the domain research (author, 2026-11-26): see the research notes when they land
+- [ ] Customs, elaborated from the domain research (author, 2026-11-26: automated clearance, auto-release)
+- [ ] Flight planner: build it on a Mac; its Map view (legs between airports, the track replayed, other traffic)
 - [ ] Oil and gas assets: the database (sites, assets, responsible organisations, operating hours, maintenance
   schedules and work orders, sensors, readings, controllers, alarms); rules for maintenance due, alarms, lock-outs;
   simulated devices first, Raspberry Pi / Arduino later
