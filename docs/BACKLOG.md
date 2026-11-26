@@ -156,6 +156,22 @@ Enterprise at the ALS project.
 - [ ] The Studio's own ALS fetch (the running-server form) uses the form's base URL and credentials (still a hard-coded host and `admin` / `p`), and waits for login before fetching
 - [ ] Kafka (author, 2026-11-25; already used behind ALS in the author's other applications): first through ALS's own Kafka integration (the app keeps talking JSON:API); then a plain-HTTP messaging module in FB for Kafka's REST Proxy, and Redis through an HTTP gateway (Webdis, Upstash) - publish / poll, set / get over URLSession
 
+## AI Assistant - rules in natural language, controls suggested (author, 2026-11-26; `design/AI Assistant Design.md`)
+
+A rule is a sentence in the model's own names; the sentence is the source of truth, and the AI translates it into
+LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in ALS (Enterprise).
+- [ ] LogicBank for FutureBasic as a module of its own (as LogicBank is to ALS): folder, README, example, tests
+- [ ] The neutral expression language for formulas / constraints / where (FB and Python generated from it);
+  `Rules.json` keeps each rule's sentence
+- [ ] The rules check in FB (port of `rules_bridge.py check`), with the engine's limits the samples found
+- [ ] The AI connector (FB, URLSession, key in the Keychain, prompts as Templates, answers saved in `<project>/AI/`)
+- [ ] Rules page: grounded sentences (type-ahead from the model), Translate, approve
+- [ ] Suggest Rules; the evaluation on Telecom, Customs and Flight Planner (sentences from their READMEs)
+- [ ] Suggest Controls into `Design.json`
+- [ ] Enterprise: `declare_logic.py` from the same rules, sentences as comments; the scenarios run against ALS
+- [ ] Decisions for the author: edition; provider; ALS `genai-logic` for Enterprise; the expression language;
+  the module's name
+
 ## Rules - Logic for FutureBasic (`design/Logic Engine Design.md`, ROADMAP Phase 5)
 
 Done: the engine (formulas, constraints, sums / counts with delta and re-parenting, parent

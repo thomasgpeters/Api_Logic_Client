@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — AI Assistant designed: rules as sentences in the model's language
+
+- The author: a schema brings no rules, so an AI connector in App Builder. Rules are natural language using the
+  model's entities and attributes, and the same rules go to ALS as `declare_logic.py`. LogicBank for FutureBasic
+  should be a module of its own, as LogicBank is to ALS. Design: `docs/design/AI Assistant Design.md`.
+  - The sentence is the source of truth, grounded in the model as it is typed.
+  - The AI translates it into the engine's rule kinds, or asks a question when the sentence is ambiguous.
+  - App Builder checks and the user approves each translation.
+  - A neutral expression language generates both FB and Python.
+  - Suggest Rules and Suggest Controls (into `Design.json`).
+  - The three samples are the evaluation set.
+  - Generation never calls the AI.
+
 ## 2026-11-26 — Customs elaborated from the research: automated clearance
 
 - `samples/Customs` rebuilt: 22 tables, 93 rules, 88 scenarios, `--prove` 93 of 93.
