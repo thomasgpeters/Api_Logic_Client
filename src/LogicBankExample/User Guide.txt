@@ -2,7 +2,8 @@
 Business rules for your data, declared once and enforced on every save. You say what must be true - an order's total is the sum of its items, a customer's balance never exceeds the credit limit - and LogicBank for FutureBasic keeps it true, however and in whatever order the data changes.
 
 ## Why "LogicBank"?
-Think of your bank. What you put in, you can take out again: you trust the bank to keep it safe and exact. And you never work out your own balance, interest or charges - the bank does that arithmetic for you, on every transaction, by its rules. LogicBank does the same for your data: you put your records in, its rules keep every total, balance and limit correct on every save, and whatever you take out is right.
+**Logic**: your business logic - the rules of your business, what must always be true about your data - is handled here, in one place, instead of being scattered through your windows and buttons.
+**Bank**: think of your bank. What you put in, you can take out again: you trust the bank to keep it safe and exact. And you never work out your own balance, interest or charges - the bank does that arithmetic for you, on every transaction, by its rules. LogicBank does the same for your data: you put your records in, its rules keep every total, balance and limit correct on every save, and whatever you take out is right.
 
 It is a free, open-source module (MIT), inspired by LogicBank for API Logic Server and rewritten for FutureBasic. This example shows it on three objects kept in memory: Customer, Order and Item.
 

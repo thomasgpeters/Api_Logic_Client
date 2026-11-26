@@ -5,7 +5,9 @@ an order's total is the sum of its items, a customer's balance never exceeds the
 keeps it true however, and in whatever order, the data changes. A save that would break a rule is refused and
 rolled back, with a message for the user.
 
-**Why "LogicBank"?** Think of your bank. What you put in, you can take out again: you trust the bank to keep it
+**Why "LogicBank"?** *Logic*: your business logic - the rules of your business, what must always be true about
+your data - is handled here, in one place, instead of being scattered through your windows and buttons. *Bank*:
+think of your bank. What you put in, you can take out again: you trust the bank to keep it
 safe and exact. And you never work out your own balance, interest or charges - the bank does that arithmetic for
 you, on every transaction, by its rules. LogicBank does the same for your data: you put your records in, its rules
 keep every total, balance and limit correct on every save, and whatever you take out is right.
