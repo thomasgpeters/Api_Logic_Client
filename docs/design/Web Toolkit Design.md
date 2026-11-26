@@ -1,7 +1,10 @@
 # Web Toolkit for FutureBasic (working name): web applications written in FB, the way Wt does it in C++
 
-Status: **a feasibility study** (author, 2026-11-26: "just a feasibility question at this point"); the question is
-answered on a Mac by `src/MacTests/Web Server Test.fb`. Nothing beyond the test is planned until the author decides. Author, 2026-11-26: "create a web
+Status: **the module is built** (author, 2026-11-26: "Create the widget library for all of the HTML controls, including
+the event handlers..."): `src/WebToolkit/` (the core, optional binding, `web.js`, themes), an app template and the Orders
+example - lint-clean and tested here, not yet compiled on a Mac. How it works, every call, and the tests:
+`docs/features/WEB_TOOLKIT_FEATURE.md`. It began as a feasibility study (`src/MacTests/Web Server Test.fb`,
+`FastCGI Test.fb`). Author, 2026-11-26: "create a web
 system, a web interface, a website application with FutureBASIC ... similar to Wt and C++". A new module, from scratch:
 nothing like it exists for FutureBasic (no web-server example or HTTP library in FutureBasic_Documentation's 578
 examples or its headers).
@@ -142,15 +145,27 @@ fn WebServe( 8080, @fn BuildPage )
 
 ## The plan
 
-1. **Proof (now):** `src/MacTests/Web Server Test.fb`. A single-file program: the C server and an FB handler; a page
+1. **Proof (done):** `src/MacTests/Web Server Test.fb`. A single-file program: the C server and an FB handler; a page
    with a counter button and a greeting field, updated without reloading. It answers whether FB can serve a page and
    take a click - and how it behaves (Safari and Chrome, several tabs, many clicks).
 2. **The server:** `Web Server.incl`, with requests and responses as dictionaries, static files, cookies, limits, and
    its own tests.
-3. **Widgets, sessions, events, rendering, `web.js`, themes:** the core, with an example app (the counter, a form, a
+3. **Widgets, sessions, events, rendering, `web.js`, themes (built, 2026-11-26):** the core, with an example app (the counter, a form, a
    table from SQLite through the SQL Generator).
 4. **The module:** a README, a user guide, an example, MIT (author's call); the About Imagery window; a page on the site.
 5. **Later:** templates, server push, charts and maps; App Builder generating web pages.
+
+## Decisions (author, 2026-11-26, while the module was built)
+
+- **AJAX:** every widget is asynchronous; events go to FB with `fetch`, and the answers change the page in place.
+- **A page lifecycle** (shown, hidden, visible, leaving, ended), so work is saved back to FB and the database, and the
+  page behaves as people expect: unsaved changes are guarded, and auto-saving forms save themselves.
+- **An app template** for the FB side: the events in and out of FastCGI, so an app is one file, `Pages.incl`.
+- **Dynamic, tied to no data model:** the core knows no entity; binding to a model is an optional module. App Builder
+  will offer two targets, **Desktop app** and **Web app**, both compiled by FutureBasic: one model, one set of rules,
+  two event models (FB's own `on dialog`, and FastCGI events).
+- **Next: XIB files as page templates**, so one layout - made in Interface Builder or App Builder's Form designer -
+  serves both targets (`WEB_TOOLKIT_FEATURE.md` -> Planned).
 
 ## Open questions (for the author)
 

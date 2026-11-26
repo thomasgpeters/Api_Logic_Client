@@ -6,6 +6,31 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Web Toolkit for FutureBasic: the widget library, the lifecycle, the app template
+
+- The author: the widget library for all HTML controls, with event handlers back to FB and binding to the
+  database - FB as the middleware, serving pages that behave as any normal page. Added during the work:
+  - every widget AJAX;
+  - a page lifecycle so data is saved back;
+  - an FB app template for the events in and out of FastCGI;
+  - the core tied to no data model, because App Builder will target a desktop or a web app;
+  - XIB files as page templates, with a layout tool (designed, next).
+- What was built:
+  - `src/WebToolkit/`: Server (the tested FastCGI core, verbatim), Session, Widgets (16 kinds), Render (escaped HTML,
+    Bootstrap class names), Events (routing, CGI answers, the lifecycle, `WebStart`), Binding (optional: forms and
+    tables through LogicBank), `web.js`, `web.css` (four themes as tokens).
+  - The template: `src/WebToolkit/Template/`.
+  - The example: `src/WebToolkitExample/` (Orders on the LogicBank example's model and rules).
+- Tests:
+  - `tools/web_toolkit_reference.py`: the protocol in Python, and `web.js` in headless Chromium, 30 checks.
+  - `run_tests.sh` also checks that the copies are identical.
+- Learned:
+  - **Define before use** shapes the module: the core cannot call the binding, so the binding registers two hooks
+    (field edited, save dirty) when a form is first bound. That is also what keeps the core free of any data model.
+  - **`data` is an FB keyword** (so are `line`, `text`, `record`, `select`, `button`): fblint caught `line`.
+  - **Beacons:** `navigator.sendBeacon` with a JSON Blob carries the cookie, so "leaving" reaches the FB app without
+    an answer awaited.
+
 ## 2026-11-26 — Feasibility: web applications in FutureBasic, replacing Wt
 
 - The author's pattern: FastCGI, with nginx in front and a long-running FB app behind it answering requests with

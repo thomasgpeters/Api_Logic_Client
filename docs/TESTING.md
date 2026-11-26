@@ -56,6 +56,21 @@ and ends with `logic test: 70 scenarios, 0 failed`. It works on `~/Desktop/Logic
 a copy; run `make_logic_test.py` again for a fresh one. Paste the Build Log or the NSLog lines
 into a session when something fails.
 
+### Web Toolkit: the template and the Orders example (`docs/features/WEB_TOOLKIT_FEATURE.md`)
+
+Here: `tools/web_toolkit_reference.py --test` (in `run_tests.sh`) drives `web.js` in headless Chromium against a Python
+reference of the protocol (30 checks); `--serve 8099` shows its page. On a Mac:
+1. Build `src/WebToolkitExample/WebToolkitExample.fbeproj` and run it.
+2. In that folder, `nginx -c "$PWD/nginx.conf" -p "$PWD"`, then open http://127.0.0.1:8088/.
+3. Report:
+   - a customer's credit limit lowered below the balance: refused, with the message;
+   - an item added: the total and the balance follow;
+   - Ship Today;
+   - a second browser sees the changes after switching back;
+   - an item typed, then the tab switched: it is saved;
+   - the theme menu.
+4. Also build `src/WebToolkit/Template` once.
+
 ### FastCGI Test (the pattern: nginx in front of a FutureBasic program)
 
 `tools/check_fastcgi_core.py` (in `run_tests.sh`) compiles the program's FastCGI core here and runs it behind nginx. On a

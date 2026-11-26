@@ -20,6 +20,7 @@ import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FB = os.path.join(HERE, '..', 'src', 'MacTests', 'FastCGI Test.fb')
+MODULE = os.path.join(HERE, '..', 'src', 'WebToolkit', 'Web Server.incl')
 
 HARNESS = r'''
 #include <stdio.h>
@@ -146,8 +147,8 @@ http {
 '''
 
 
-def core_source():
-    text = open(FB, encoding='utf-8').read().replace('\r', '\n')
+def core_source(path=FB):
+    text = open(path, encoding='utf-8').read().replace('\r', '\n')
     start = text.index('/* --- FastCGI core')
     end = text.index('/* --- end FastCGI core --- */')
     return text[start:end]
@@ -176,6 +177,9 @@ def main():
         unit = subprocess.run([exe], capture_output=True, text=True)
         print(unit.stdout, end='')
         failed = unit.returncode != 0
+        same = os.path.exists(MODULE) and core_source(MODULE) == core_source()
+        print(('PASS  ' if same else 'FAIL  ') + 'the Web Toolkit\'s Web Server.incl carries the same core')
+        failed = failed or not same
         nginx = shutil.which('nginx') or ('/usr/sbin/nginx' if os.path.exists('/usr/sbin/nginx') else None)
         params = next((p for p in ('/etc/nginx/fastcgi_params', '/opt/homebrew/etc/nginx/fastcgi_params', '/usr/local/etc/nginx/fastcgi_params') if os.path.exists(p)), None)
         if not nginx or not params:

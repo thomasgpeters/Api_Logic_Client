@@ -89,6 +89,27 @@ logicbank_same() {
 }
 run "LogicBank for FutureBasic: the module, identical in the runtime and the example project" logicbank_same
 run "web: the FastCGI core (compiled here; behind nginx when it is installed)" python3 "$here/tools/check_fastcgi_core.py"
+web_same() {
+    for d in "src/WebToolkit/Template" "src/WebToolkitExample"; do
+        for f in "Web Server.incl" "Web Session.incl" "Web Widgets.incl" "Web Render.incl" "Web Events.incl" "Web Binding.incl"; do
+            cmp -s "$here/src/WebToolkit/$f" "$here/$d/$f" || { echo "differs: $d/$f"; return 1; }
+        done
+        for f in web.js web.css; do
+            cmp -s "$here/src/WebToolkit/Resources/$f" "$here/$d/$f" || { echo "differs: $d/$f"; return 1; }
+        done
+        for f in "Server Window.incl" "Web App.glbl" "Web App.main"; do
+            cmp -s "$here/src/WebToolkit/Template/$f" "$here/$d/$f" || { echo "differs: $d/$f"; return 1; }
+        done
+    done
+    for f in "Data Model.incl" "Logic Rules.incl" "Logic Row.incl" "Logic Engine.incl"; do
+        cmp -s "$here/src/Runtime/$f" "$here/src/WebToolkitExample/$f" || { echo "differs: src/WebToolkitExample/$f"; return 1; }
+    done
+    for f in "Data Memory.incl" "Rules.incl" "Model.json"; do
+        cmp -s "$here/src/LogicBankExample/$f" "$here/src/WebToolkitExample/$f" || { echo "differs: src/WebToolkitExample/$f"; return 1; }
+    done
+}
+run "web: the Web Toolkit, identical in the module, its app template and the Orders example" web_same
+run "web: web.js against the toolkit's protocol, in headless Chromium (tools/web_toolkit_reference.py)" python3 "$here/tools/web_toolkit_reference.py" --test
 run "licences: the reference signs and verifies (valid, tampered, expired, another product, another key)" python3 "$here/tools/licence_reference.py" --test
 run "licences: the Mac test program carries Licence.incl's verify part unchanged" python3 "$here/tools/licence_reference.py" --mac-test-check
 run "LogicBank example: the story's every value, worked out by the reference engine" python3 "$here/tools/logicbank_example_reference.py"

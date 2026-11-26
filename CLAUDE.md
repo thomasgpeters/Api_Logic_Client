@@ -58,6 +58,11 @@ mode work without extra code).
   (`docs/features/LOGICBANK_MODULE_FEATURE.md`; its story is checked by `tools/logicbank_example_reference.py`).
 - `src/Shared/` — files shared by the free modules' sample apps, identical in each (`run_tests.sh` checks): `About Imagery.incl`
   + `About Imagery.txt` + the logos - the *About Imagery Business Systems* window (`docs/design/Free Modules Design.md`).
+- `src/WebToolkit/` — Web Toolkit for FutureBasic (working name, MIT): web apps in FB behind nginx (FastCGI). The core
+  (`Web Server/Session/Widgets/Render/Events.incl`) knows no data model; `Web Binding.incl` (optional) binds forms and
+  tables through LogicBank for FutureBasic; `Resources/web.js` (AJAX, the page lifecycle) and `web.css` (themes);
+  `Template/` (the app template: the developer writes `Pages.incl`). `src/WebToolkitExample/` (Orders) is built from it.
+  Copies are identical (`run_tests.sh`); `tools/web_toolkit_reference.py` tests web.js (`docs/features/WEB_TOOLKIT_FEATURE.md`).
 - `src/MacTests/` — single-file FB programs that answer a question on a Mac before a feature is built on it (`MapKit Points Test.fb`: how FB serves MapKit's point views); see `docs/TESTING.md`.
 - `src/Enterprise/` — the Enterprise edition, in this repository for now (author, 2026-11-25; a private
   repository when it is sold): `DataObject_JSONAPI.incl` (the SQL Generator's JSON:API side: the same

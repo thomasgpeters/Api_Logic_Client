@@ -25,6 +25,22 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 7. Then the Studio review (context menus), the generated app's toolbar, window layouts, users and
    roles.
 
+## Web Toolkit for FutureBasic (`docs/features/WEB_TOOLKIT_FEATURE.md`)
+
+- [x] The module: FastCGI server, sessions, widgets, rendering, events (AJAX), the page lifecycle, optional binding
+      through LogicBank for FutureBasic, `web.js`, themes; the app template; the Orders example (2026-11-26).
+- [ ] **On a Mac:** build the template and the example; run them behind nginx; send the Build Log.
+- [ ] **XIB files as page templates** (author, 2026-11-26): `WebLoadXib` - a XIB's controls as widgets, frames as
+      responsive rows, identifiers as widget ids; one layout for the desktop and web targets.
+- [ ] **A layout tool:** App Builder's Form designer (or Interface Builder) lays out the page; a preview in a web view.
+- [ ] **App Builder's target:** Desktop app or Web app; the web target generates `Pages.incl` (forms and tables per
+      entity), `Web App.glbl`, the toolkit and `nginx.conf` from the model.
+- [ ] Data through the SQL Generator (SQLite) in a web app, as in generated desktop apps (`Data Records.incl`).
+- [ ] Server push (a long poll or WebSocket) for changes another visitor makes; for now: refresh on visible / shown.
+- [ ] HTTPS without nginx (Apple's Network framework); sessions in SQLite for several app copies behind nginx.
+- [ ] Widgets: tabs, a dialog, a date picker beyond the browser's, charts, a map; file upload and download.
+- [ ] The name ("Web Toolkit for FutureBasic" is a working name); free or licensed; its page on the site.
+
 ## Waiting on the author
 
 - [ ] **Bug:** Form layout popup - choosing "3 columns" pops back to "automatic". Diagnostics are in
