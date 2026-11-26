@@ -240,7 +240,31 @@ Everything needed is in `design/Editions and Licensing.md`. In this order:
 5. [ ] License Server (its own repository): product `imagery_logicbank_studio_fb`, bit 0 `enterprise`.
 6. [ ] The paid build: project file, release, distribution from the License Server.
 
+## Telecom sample (author, 2026-11-26; `samples/Telecom/README.md`)
+
+- [x] Model, seed data and 39 business rules: roaming prices from partner agreements, travel plans, the credit
+  limit, plan lines, shared data; tested here (30 scenarios, every rule proven); `Rules.incl` in FB
+- [ ] Build it on a Mac: New Project from `telecom.sqlite`, Generate App, copy `Rules.incl` over `FBapp/Rules.incl`,
+  build; buy a quote, try one over the credit limit, add a country with no service (Kenya)
+- [ ] Its Page Layouts once they exist: a Travel Planner page (customer, phone, countries, dates, the price)
+- [ ] Its Map view: countries and partner networks on the map (countries carry latitude and longitude)
+
 ## Ideas
+
+- **National customs clearance** (author, 2026-11-26; a separate application, from the author's earlier work in
+  the customs clearance industry): for any country's customs service - the US, Bermuda or another with its own
+  tariffs. Shipments crossing the border; pre-clearance: trucks with transponders, pre-cleared drivers, the declared
+  contents of containers, container seals, routes registered in advance with the country's customs. Tariffs and the
+  clearance checks are a natural fit for the rules engine; routes and crossings for the map
+- **Asset management for oil and gas** (author, 2026-11-26; a separate application): pumps, wells and equipment
+  spread over many locations, on a map; the organisation responsible for each asset's maintenance; operating hours;
+  an IoT interface between the assets' sensors and controllers, with control screens that pop up. The first version
+  simulates the IoT side; later, real devices built on the author's Raspberry Pi and Arduino boards, with logic of
+  their own. Shares the Map view's groundwork, and the rules engine (maintenance due by operating hours, alarms)
+- **Flight planner for amateur pilots** (author, 2026-11-26; a separate application, begun earlier by the author
+  with Rahul): aircraft on a MapKit map with their position, heading (vector) and altitude, moving across the
+  screen; airports and locations; zoom along the flight path; other aircraft nearby. A fun exercise for MapKit
+  in FutureBasic - it shares the Map view's groundwork (`design/Map View Design.md`, `src/MacTests/MapKit Points Test.fb`)
 
 - LogicBank for FutureBasic: offer it back to Val Huber's project (above, waiting on the author).
 - The ALS model's relationships make a Lite app possible from an ALS project too: its

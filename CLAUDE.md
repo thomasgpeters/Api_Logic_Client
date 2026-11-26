@@ -98,6 +98,8 @@ mode work without extra code).
   `als_project_reference.py` (the Open ALS Project screen: folders, files, GitHub, the Studio model),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
+- `samples/Telecom/` — the second sample model (author, 2026-11-26): a mobile carrier, travel plans priced from roaming
+  agreements - 39 business rules, tested (`test_rules.py`, `--prove`) and in FB (`Rules.incl`); `telecom.sqlite` built through the rules.
 
 One concern per file, aptly named — in `src/` and in what the generator emits.
 

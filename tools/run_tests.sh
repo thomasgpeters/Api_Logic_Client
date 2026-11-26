@@ -103,6 +103,16 @@ if [ -n "${ALS_PROJECTS:-}" ] && [ -x "${ALS_PYTHON:-}" ]; then
 else
     echo; echo "== Enterprise: models.py reader vs SQLAlchemy - skipped (set ALS_PROJECTS and ALS_PYTHON)"
 fi
+# the Telecom sample (samples/Telecom): its rules, scenario by scenario and every rule proven; its FB rules lint with the runtime
+run "Telecom sample: 30 scenarios through the rules" python3 "$here/samples/Telecom/test_rules.py"
+run "Telecom sample: every rule proven (each left out must fail a scenario)" python3 "$here/samples/Telecom/test_rules.py" --prove
+telecom_lint() {
+    t=$(mktemp -d)
+    for f in "Data SQLite.incl" DataObject.glbl DataObject_Super.incl DataObject.incl "Data Model.incl" "Data Records.incl" "Logic Rules.incl" "Logic Row.incl" "Logic Engine.incl"; do cp "$here/src/Runtime/$f" "$t/"; done
+    cp "$here/samples/Telecom/Rules.incl" "$t/"
+    python3 "$here/tools/fblint.py" --headers "$headers" "$t"; r=$?; rm -rf "$t"; return $r
+}
+run "Telecom sample: Rules.incl lints with the runtime" telecom_lint
 run "generated pages: App Pages.incl, as AppPagesSource writes it, lints with the runtime and templates" python3 "$here/tools/check_app_pages.py" "$docs"
 run "model diagram: the ERD page draws the model and rules, opens / closes, drags, selects" python3 "$here/tools/check_erd_page.py" "$db"
 

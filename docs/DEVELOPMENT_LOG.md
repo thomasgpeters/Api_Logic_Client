@@ -6,6 +6,23 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Telecom sample: travel plans priced from roaming agreements, 39 rules
+
+- The author: a second application from a database, to show the business rules on a real-world case
+  unlike orders and products - a mobile carrier: customers, accounts, plans, phones (a phone is part of
+  a plan); networks matter for roaming abroad; customers buy a travel plan for their countries and dates,
+  priced from the carrier's agreements with partner networks. `samples/Telecom`.
+- The pricing engine is rules over data: a country's cost per day at its preferred agreement's rates,
+  the zone's markup and a rounding step; a trip's countries copy the day price (a quote keeps it), are
+  free in the home zone; purchased trips add up phone -> plan -> account against the credit limit. LogicBank
+  has no max/min aggregate, so the design uses formulas, copies, sums and constraints only.
+- Every seed row goes in through the rules (`build_db.py`, the reference engine): the database's prices and
+  totals are the rules' own. 30 scenarios, `--prove` 39 of 39; FB `Rules.incl` lints with the runtime. Days
+  between ISO dates in FB with the Julian day formula and `fix` (FB's `int` rounds) - checked against
+  Python's calendar over 20,000 days.
+- Backlog: four more applications from the author - the flight planner, oil and gas asset management, national
+  customs clearance (with the Telecom sample's Map and Page Layouts items).
+
 ## 2026-11-26 — SQL Generator example: how to put the module in your own app
 
 - The author: the example needs further instructions for including the module's files in one's
