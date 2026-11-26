@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — The free modules and the About Imagery window
+
+- The author: the SQL Generator and LogicBank for FutureBasic are free modules, downloadable from the GitHub Pages
+  site, each with a sample app. Both apps have *About Imagery Business Systems…*, describing Imagery's FutureBasic
+  work. App Builder is the licensed app Imagery resells. Design: `docs/design/Free Modules Design.md`.
+- `src/Shared/About Imagery.incl`:
+  - one self-contained window: the logo following light and dark mode, the text from the resource
+    `About Imagery.txt` (simple markup), *Visit the Website*, Close;
+  - added to the SQL Generator example's application menu and build order;
+  - `run_tests.sh` checks the copies are identical.
+- Learned: FB's application menu takes items after its required separator (`menu _mApplication, item,, title`,
+  FBExamples MainMenu). A window closes with the `window close` statement.
+
 ## 2026-11-26 — Licensing designed: one app, signed licences from the Imagery License Server
 
 - The author: App Builder is one app for Lite and Enterprise, the Enterprise features gated by the licence. Lite is

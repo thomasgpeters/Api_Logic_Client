@@ -71,6 +71,15 @@ sqlgen_same() {
     echo "SQL Generator: the copies are identical"
 }
 run "SQL Generator: one module, identical in the runtime, the example project and Test_Xib_View" sqlgen_same
+about_same() {
+    for app in SQLGeneratorExample; do
+        for f in "About Imagery.incl" "About Imagery.txt" imagery_logo.png imagery_logo_white.png; do
+            cmp -s "$here/src/Shared/$f" "$here/src/$app/$f" || { echo "differs: src/$app/$f"; return 1; }
+        done
+    done
+    echo "About Imagery: the copies are identical"
+}
+run "About Imagery: one window, identical in src/Shared and each module's example app" about_same
 run "pill buttons: one module, identical in the Studio and the runtime" cmp "$here/src/AppBuilder/Pill Buttons.incl" "$here/src/Runtime/Pill Buttons.incl"
 run "logic engine: scenarios (Python reference)" python3 "$here/tools/logic_reference.py" --test "$db"
 run "logic engine: every rule proven (each rule left out must fail a scenario)" python3 "$here/tools/logic_reference.py" --prove "$db"
