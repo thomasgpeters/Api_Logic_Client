@@ -6,6 +6,30 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Web Toolkit: XIB layouts and the layout tool
+
+- The author: "go ahead with the XIB templates and layout tool". A XIB is now a web page's layout:
+  - `WebLoadLayout` (`Web Layout.incl`) reads a `.webxib` and makes its widgets: controls, labels joined to their
+    fields, rows in twelfths, boxes as cards or forms, an empty named label as a message band, Identifiers as
+    widget ids.
+  - The layout tool (`src/WebToolkit/Layout Tool/Layout Tool.html`) lays them out, previews them as the web shows
+    them, writes the FB code, and saves `.xib` and `.webxib`.
+  - The Orders example is laid out in three `.webxib` panels (a table beside a form, each).
+- The rules have one reference (`tools/web_layout_reference.py`) and three implementations, each tested against it:
+  - Python (the reference itself);
+  - the Objective-C in `Web Layout.incl`, compiled here with GNUstep: `tools/check_web_layout.py`;
+  - the tool's JavaScript, in Chromium: `tools/check_layout_tool.py`.
+
+  The comparisons use the reference's test layout and the repository's 15 XIBs, which all lay out with unique ids.
+- Commit 752eb47 (the widget library) preceded this.
+- Learned:
+  - **FB compiles a `.xib` resource into a nib,** so there is no XML at run time. Hence `.webxib`: the same file
+    under another name, copied as it is (to confirm on a Mac).
+  - **GNUstep's runtime has no object literals or subscripts,** so the Objective-C is written without them. It then
+    compiles here and on a Mac alike.
+  - **Python's `round()` rounds halves to even,** while C and JavaScript round them up. The reference uses
+    `floor( x + 0.5 )` so that the three agree on spans.
+
 ## 2026-11-26 — Web Toolkit for FutureBasic: the widget library, the lifecycle, the app template
 
 - The author: the widget library for all HTML controls, with event handlers back to FB and binding to the

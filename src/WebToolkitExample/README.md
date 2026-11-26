@@ -14,5 +14,8 @@ you switch tabs (the page lifecycle). Open the page in two browsers: they share 
 2. `brew install nginx`, then in this folder: `nginx -c "$PWD/nginx.conf" -p "$PWD"`.
 3. Open http://127.0.0.1:8088/.
 
+The page is laid out in three XIB files - `CustomerPanel.webxib`, `OrderPanel.webxib`, `ItemPanel.webxib` - which
+the layout tool (`../WebToolkit/Layout Tool/Layout Tool.html`) or Interface Builder edits; `Pages.incl` binds them.
+
 The data is in memory (`Data Memory.incl`), so every start begins with the same three customers.
 Built from `../WebToolkit/Template/`; the toolkit: `../WebToolkit/README.md`. MIT License - see LICENSE.

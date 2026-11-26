@@ -62,6 +62,8 @@ mode work without extra code).
   (`Web Server/Session/Widgets/Render/Events.incl`) knows no data model; `Web Binding.incl` (optional) binds forms and
   tables through LogicBank for FutureBasic; `Resources/web.js` (AJAX, the page lifecycle) and `web.css` (themes);
   `Template/` (the app template: the developer writes `Pages.incl`). `src/WebToolkitExample/` (Orders) is built from it.
+  `Web Layout.incl`: pages laid out in XIB files (`.webxib`), rules in `tools/web_layout_reference.py`, its Objective-C
+  compiled here with GNUstep (`tools/check_web_layout.py`); `Layout Tool/Layout Tool.html` lays them out (`tools/check_layout_tool.py`).
   Copies are identical (`run_tests.sh`); `tools/web_toolkit_reference.py` tests web.js (`docs/features/WEB_TOOLKIT_FEATURE.md`).
 - `src/MacTests/` — single-file FB programs that answer a question on a Mac before a feature is built on it (`MapKit Points Test.fb`: how FB serves MapKit's point views); see `docs/TESTING.md`.
 - `src/Enterprise/` — the Enterprise edition, in this repository for now (author, 2026-11-25; a private

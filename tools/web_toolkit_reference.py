@@ -98,6 +98,8 @@ class Session:
         p = w['props']
         if p.get('visible') is False:
             a += ' hidden'
+        if p.get('span'):
+            a += f' data-fb-span="{p["span"]}"'
         if 'entity' in p and w['kind'] == 'container':
             a += ' data-fb-bound'
             if p.get('dirty'):

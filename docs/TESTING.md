@@ -71,6 +71,12 @@ reference of the protocol (30 checks); `--serve 8099` shows its page. On a Mac:
    - the theme menu.
 4. Also build `src/WebToolkit/Template` once.
 
+The layouts:
+- Here: `tools/web_layout_reference.py --test`, `tools/check_web_layout.py` (GNUstep:
+  `apt install libgnustep-base-dev`) and `tools/check_layout_tool.py` (Chromium).
+- On a Mac: the example shows its three panels (FB copied the `.webxib` files). Open `src/WebToolkit/Layout Tool/Layout
+  Tool.html` in Safari, open `CustomerPanel.webxib`, move a field, Save .xib, and open that file in Xcode.
+
 ### FastCGI Test (the pattern: nginx in front of a FutureBasic program)
 
 `tools/check_fastcgi_core.py` (in `run_tests.sh`) compiles the program's FastCGI core here and runs it behind nginx. On a

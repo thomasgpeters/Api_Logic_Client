@@ -164,8 +164,8 @@ fn WebServe( 8080, @fn BuildPage )
 - **Dynamic, tied to no data model:** the core knows no entity; binding to a model is an optional module. App Builder
   will offer two targets, **Desktop app** and **Web app**, both compiled by FutureBasic: one model, one set of rules,
   two event models (FB's own `on dialog`, and FastCGI events).
-- **Next: XIB files as page templates**, so one layout - made in Interface Builder or App Builder's Form designer -
-  serves both targets (`WEB_TOOLKIT_FEATURE.md` -> Planned).
+- **XIB files as page templates, and a layout tool** (built): one layout, made in Interface Builder or the layout tool,
+  serves both targets (`WEB_TOOLKIT_FEATURE.md` -> XIB layouts and the layout tool).
 
 ## Open questions (for the author)
 

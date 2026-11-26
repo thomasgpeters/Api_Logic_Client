@@ -25,9 +25,11 @@ end fn
 - **Start here:** copy `Template/` (an FB project), write your page in `Pages.incl`, build, start nginx with
   `Template/nginx.conf`.
 - **The example:** `../WebToolkitExample/` (orders, with business rules).
+- **Layouts:** lay a page out in a XIB with `Layout Tool/Layout Tool.html` (or Interface Builder), save it as
+  `.webxib`, add it to Resources, and `fn WebLoadLayout( session, @"page", @"MyLayout" )`.
 - **The reference:** `docs/features/WEB_TOOLKIT_FEATURE.md`.
 
-Files: `Web Server.incl`, `Web Session.incl`, `Web Widgets.incl`, `Web Render.incl`, `Web Events.incl` (the core,
+Files: `Web Server.incl`, `Web Session.incl`, `Web Widgets.incl`, `Web Render.incl`, `Web Events.incl`, `Web Layout.incl` (the core,
 which knows no data model), `Web Binding.incl` (optional: forms and tables through LogicBank for FutureBasic), and
 `Resources/web.js`, `Resources/web.css`.
 

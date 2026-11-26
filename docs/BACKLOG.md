@@ -30,9 +30,14 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [x] The module: FastCGI server, sessions, widgets, rendering, events (AJAX), the page lifecycle, optional binding
       through LogicBank for FutureBasic, `web.js`, themes; the app template; the Orders example (2026-11-26).
 - [ ] **On a Mac:** build the template and the example; run them behind nginx; send the Build Log.
-- [ ] **XIB files as page templates** (author, 2026-11-26): `WebLoadXib` - a XIB's controls as widgets, frames as
-      responsive rows, identifiers as widget ids; one layout for the desktop and web targets.
-- [ ] **A layout tool:** App Builder's Form designer (or Interface Builder) lays out the page; a preview in a web view.
+- [x] **XIB files as page templates** (2026-11-26): `WebLoadLayout` (`Web Layout.incl`), the rules in
+      `tools/web_layout_reference.py`, the Objective-C tested with GNUstep; the Orders example laid out in three `.webxib`.
+- [x] **The layout tool** (2026-11-26): `src/WebToolkit/Layout Tool/Layout Tool.html` - design, web preview, FB code,
+      saving `.xib` and `.webxib`; tested in Chromium.
+- [ ] **On a Mac:** FB copies `.webxib` resources unchanged; a XIB saved by the layout tool opens in Interface Builder.
+- [ ] App Builder opens the layout tool on an entity's Form (a web view; saving into the project); the web target
+      writes `.webxib` from the generated Form XIBs.
+- [ ] Layouts: tab views, split views, a stack view as a row or column; a "fill" rule for full-width fields.
 - [ ] **App Builder's target:** Desktop app or Web app; the web target generates `Pages.incl` (forms and tables per
       entity), `Web App.glbl`, the toolkit and `nginx.conf` from the model.
 - [ ] Data through the SQL Generator (SQLite) in a web app, as in generated desktop apps (`Data Records.incl`).

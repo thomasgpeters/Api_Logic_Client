@@ -11,6 +11,7 @@ include "Web Session.incl"
 include "Web Widgets.incl"
 include "Web Render.incl"
 include "Web Events.incl"
+include "Web Layout.incl"
 // "App" 1
 include "Pages.incl"
 include "Server Window.incl"

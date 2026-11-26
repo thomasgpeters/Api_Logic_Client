@@ -4,6 +4,9 @@ resources "Info.plist"
 resources "web.js"
 resources "web.css"
 resources "Model.json"
+resources "CustomerPanel.webxib"
+resources "OrderPanel.webxib"
+resources "ItemPanel.webxib"
 // "Globals" 1
 include "Web App.glbl"
 // "LogicBank for FutureBasic" 1
@@ -19,6 +22,7 @@ include "Web Session.incl"
 include "Web Widgets.incl"
 include "Web Render.incl"
 include "Web Events.incl"
+include "Web Layout.incl"
 include "Web Binding.incl"
 // "App" 1
 include "Pages.incl"

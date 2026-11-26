@@ -91,7 +91,7 @@ run "LogicBank for FutureBasic: the module, identical in the runtime and the exa
 run "web: the FastCGI core (compiled here; behind nginx when it is installed)" python3 "$here/tools/check_fastcgi_core.py"
 web_same() {
     for d in "src/WebToolkit/Template" "src/WebToolkitExample"; do
-        for f in "Web Server.incl" "Web Session.incl" "Web Widgets.incl" "Web Render.incl" "Web Events.incl" "Web Binding.incl"; do
+        for f in "Web Server.incl" "Web Session.incl" "Web Widgets.incl" "Web Render.incl" "Web Events.incl" "Web Layout.incl" "Web Binding.incl"; do
             cmp -s "$here/src/WebToolkit/$f" "$here/$d/$f" || { echo "differs: $d/$f"; return 1; }
         done
         for f in web.js web.css; do
@@ -110,6 +110,9 @@ web_same() {
 }
 run "web: the Web Toolkit, identical in the module, its app template and the Orders example" web_same
 run "web: web.js against the toolkit's protocol, in headless Chromium (tools/web_toolkit_reference.py)" python3 "$here/tools/web_toolkit_reference.py" --test
+run "web: the layout rules - XIB to web page (tools/web_layout_reference.py)" python3 "$here/tools/web_layout_reference.py" --test
+run "web: Web Layout.incl's XIB reader, compiled with GNUstep, against the rules (tools/check_web_layout.py)" python3 "$here/tools/check_web_layout.py"
+run "web: the layout tool in headless Chromium - preview, editing, saving (tools/check_layout_tool.py)" python3 "$here/tools/check_layout_tool.py"
 run "licences: the reference signs and verifies (valid, tampered, expired, another product, another key)" python3 "$here/tools/licence_reference.py" --test
 run "licences: the Mac test program carries Licence.incl's verify part unchanged" python3 "$here/tools/licence_reference.py" --mac-test-check
 run "LogicBank example: the story's every value, worked out by the reference engine" python3 "$here/tools/logicbank_example_reference.py"
