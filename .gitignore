@@ -6,3 +6,4 @@ build_temp_*/
 *.app/
 
 __pycache__/
+site/

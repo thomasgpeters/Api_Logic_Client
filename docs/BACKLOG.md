@@ -166,7 +166,10 @@ LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in AL
 - [ ] Verify on a Mac: the LogicBank example builds and its story matches `tools/logicbank_example_reference.py`;
   Help, Diagram, Preview, Export; About Imagery (in both examples)
 - [x] About Imagery Business Systems window (`src/Shared`), in the SQL Generator example's application menu
-- [ ] `ABOUT_IMAGERY_SITE` (src/Shared/About Imagery.incl) set once the GitHub Pages repository is named
+- [x] `ABOUT_IMAGERY_SITE` = https://fb.imagery-business-systems.com/ (the author's own server, not GitHub Pages)
+- [x] The site, generated: `tools/make_site.py` (`features/SITE_FEATURE.md`) - [ ] published on the author's server
+- [ ] Web Help: the examples' Help windows load `/help/<module>/` in a web view, the bundled guide when offline; the
+  About Imagery window from the site too (author, 2026-11-26)
 - [ ] The neutral expression language for formulas / constraints / where (FB and Python generated from it);
   `Rules.json` keeps each rule's sentence
 - [ ] The rules check in FB (port of `rules_bridge.py check`), with the engine's limits the samples found

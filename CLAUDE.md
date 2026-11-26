@@ -99,7 +99,7 @@ mode work without extra code).
   `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
   `check_erd_page.py` (test: the model diagram page in headless Chromium),
   `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
-  `licence_reference.py` (licences: issue, verify, the Mac test program), `logicbank_example_reference.py` (the LogicBank example's model, rules and story on the reference engine), `make_logicbank_svg.py` (its Help diagram),
+  `make_site.py` (Imagery's FutureBasic site, fb.imagery-business-systems.com, built from the repository into `site/`), `licence_reference.py` (licences: issue, verify, the Mac test program), `logicbank_example_reference.py` (the LogicBank example's model, rules and story on the reference engine), `make_logicbank_svg.py` (its Help diagram),
   `make_sql_generator_svg.py` (draws `docs/design/SQL Generator Object Model.svg`), `svg_to_png.js` (an SVG as a 2x PNG, light colours: the example's Help diagram),
   `als_contract.py` (test: the API Logic Server contract, against a running server),
   `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),

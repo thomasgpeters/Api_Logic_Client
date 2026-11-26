@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Imagery's FutureBasic site, generated
+
+- The author hosts the site on his own server at `fb.imagery-business-systems.com` (a domain name, so the host can
+  change without redeploying the apps). `ABOUT_IMAGERY_SITE` points there.
+- `tools/make_site.py` builds the static site from the repository:
+  - the home page;
+  - each module's page (README, download, user guide);
+  - the examples' user guides as web pages (`User Guide.txt`'s markup), ready for web Help;
+  - the samples' pages and zips;
+  - App Builder's page, with registration on the License Server.
+
+  Standard library only. Checked in Chromium: light and dark, phone width, tables and nested lists.
+
 ## 2026-11-26 — Licensing built in App Builder; logging gated everywhere
 
 - Licensing (`docs/features/LICENSING_FEATURE.md`):
