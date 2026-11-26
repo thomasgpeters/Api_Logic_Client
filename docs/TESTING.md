@@ -67,7 +67,7 @@ lines of details and an (i) button; paste the `MapTest:` lines from the log
 
 | Check | How | Passing |
 |---|---|---|
-| Generator builds and runs | open `src/Generator/Api Logic Client.fbeproj`, build | builds; window opens |
+| Generator builds and runs | open `src/AppBuilder/Studio for FB.fbeproj`, build | builds; window opens |
 | New Project | Create Project → Choose… a database → Create | tables summary; entity list and definitions |
 | Workspace | Help → Show Workspace in Finder | `<project>/Project.json`, `Database/<db>`, `Design.json` after an edit |
 | Designer adjustments | edit a Title or a width in the attribute table | `Design.json` written; kept after reopening |

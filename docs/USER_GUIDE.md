@@ -1,4 +1,4 @@
-# Imagery LogicBank Studio for FutureBasic — User Guide
+# App Builder for FutureBasic — User Guide
 
 *Turn a data model into a native Mac app with business rules, written in FutureBasic.*
 
@@ -29,7 +29,7 @@
 
 ## 1. What it does
 
-Imagery LogicBank Studio for FutureBasic reads a **data model** — the tables, columns, keys
+App Builder for FutureBasic reads a **data model** — the tables, columns, keys
 and relationships of a SQLite database, or the model of an
 [API Logic Server](https://apilogicserver.github.io/Docs/) (ALS) project — and generates a
 complete **FutureBasic project** for it:
@@ -57,7 +57,7 @@ readable FB; your own code lives in files that regeneration never touches.
 
 ## 3. Getting started
 
-1. Open `src/Generator/Api Logic Client.fbeproj` in the FutureBasic editor and build it.
+1. Open `src/AppBuilder/Studio for FB.fbeproj` in the FutureBasic editor and build it.
    (The project file keeps its old name for now; the app shows its new one.)
 2. The window opens on the **Welcome** page: **Create Project**, **Open Project…**, and your
    **Recent Projects** (double-click one to open it).
@@ -111,7 +111,7 @@ Everything lives in your Application Support folder — *Help → Show Workspace
 opens it (`~/Library` is hidden in Finder):
 
 ```
-~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/
+~/Library/Application Support/App Builder for FutureBasic/
 ├── Recent Projects.json           the Welcome page's list
 └── workspace/
     └── <name> Project/            one folder per project — back it up, and you have it all
@@ -209,7 +209,7 @@ From the *Model* menu:
 
 **On first launch** (and whenever they are missing), the Studio copies the runtime and templates
 (`src/Runtime`, `src/Templates`) from the repository it was built in, which it finds from where its
-own app sits, into its own folder: `~/Library/Application Support/Imagery LogicBank Studio for
+own app sits, into its own folder: `~/Library/Application Support/App Builder for
 FutureBasic/workspace/Runtime` and `…/Templates`, creating the folders as needed. Only when it cannot
 find the repository does it ask you to choose the Api_Logic_Client folder you cloned (not a folder in
 Library). While the Studio runs from the repository it was built in, *Generate App* copies them from there
@@ -578,7 +578,7 @@ list (and names it); the Control popup needs an attribute selected in the table.
 | | Show Generated App in Finder | ⌥⌘G | a project |
 | | Update Runtime and Templates… | ⌥⌘U | |
 | Window | Minimize · Zoom · Close | ⌘M · · ⌘W | |
-| Help | Imagery LogicBank Studio Help (this guide) | ⌘? | |
+| Help | App Builder Help (this guide) | ⌘? | |
 | | Show Workspace in Finder | ⇧⌘K | |
 
 **Crumb trail:** along the top of the window, where you are — *Projects › Northwind › address*

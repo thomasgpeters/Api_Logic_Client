@@ -2,7 +2,7 @@
 
 Two embeddable parts per entity, each a self-contained custom view.
 
-**Where:** `src/Generator/XIB Generator.incl` (`XibViewDocument`, `XibListDocument`);
+**Where:** `src/AppBuilder/XIB Generator.incl` (`XibViewDocument`, `XibListDocument`);
 layout rules in `Type Mapping.incl`.
 
 | Part | File | Contents | Tags |

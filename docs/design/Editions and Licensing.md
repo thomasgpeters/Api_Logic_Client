@@ -41,7 +41,7 @@ no edition test.
 
 | Where | What |
 |---|---|
-| This repository (public) | the Studio; `src/Generator/Edition.incl`, the **Lite-only** edition hook; the runtime for Lite (`App Data Lite.incl`, the data runtime, the rules engine, the shell) |
+| This repository (public) | the Studio; `src/AppBuilder/Edition.incl`, the **Lite-only** edition hook; the runtime for Lite (`App Data Lite.incl`, the data runtime, the rules engine, the shell) |
 | Private repository (to create) | its own `Edition.incl` (offers Enterprise when the licence allows, adds its runtime files and start-up), `App Data Enterprise.incl`, its sign-in window, the `declare_logic.py` export step, and the paid build's project file |
 
 The paid build is the same Studio with one file replaced: its project lists the private

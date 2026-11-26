@@ -127,7 +127,7 @@ Gw
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vvD-dp-JRr">
                                 <rect key="frame" x="140" y="310" width="440" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Imagery LogicBank Studio" id="g9l-YR-smA">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="App Builder for FutureBasic" id="g9l-YR-smA">
                                     <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

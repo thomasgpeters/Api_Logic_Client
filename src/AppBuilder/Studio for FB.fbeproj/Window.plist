@@ -6,9 +6,9 @@
 	<string>{{605, 142}, {560, 746}}</string>
 	<key>API Interface.incl</key>
 	<string>{{624, 52}, {969, 1003}}</string>
-	<key>Api Logic Client.fbeproj</key>
+	<key>Studio for FB.fbeproj</key>
 	<string>{{208, 435}, {259, 623}}</string>
-	<key>Api Logic Client.main</key>
+	<key>Studio for FB.main</key>
 	<string>{{384, 84}, {560, 746}}</string>
 	<key>EventHandlers.incl</key>
 	<string>{{593, 56}, {944, 924}}</string>

@@ -36,11 +36,11 @@ The files are read over plain HTTPS from `raw.githubusercontent.com`.
 
 | | |
 |---|---|
-| `src/Generator/ALSProjectView.xib` | the page: name, ALS project field, Read, Folder…, Model File…, the drop zone's box and label, summary, API Server, From a Running Server…, Cancel, Create |
-| `src/Generator/Open ALS Project.incl` | the page's actions; `ALSProjectSetUp` makes the drop zone |
-| `src/Generator/ALS Project.incl` | finding the model (folder, file, GitHub), keeping the copy, `ALSProjectStudioModel` |
-| `src/Generator/ALS Model.incl` | parsing it (`ALSModelFromModelsPy`, `ALSModelFromYAML`, `ALSModelFromText`); moved here from `src/Enterprise/` - the Studio reads it |
-| `src/Generator/Project Actions.incl` | `LoadALSModel` (the project's copy -> the Studio model); `LoadModelFile` opens `.py` / `.yaml` with it |
+| `src/AppBuilder/ALSProjectView.xib` | the page: name, ALS project field, Read, Folder…, Model File…, the drop zone's box and label, summary, API Server, From a Running Server…, Cancel, Create |
+| `src/AppBuilder/Open ALS Project.incl` | the page's actions; `ALSProjectSetUp` makes the drop zone |
+| `src/AppBuilder/ALS Project.incl` | finding the model (folder, file, GitHub), keeping the copy, `ALSProjectStudioModel` |
+| `src/AppBuilder/ALS Model.incl` | parsing it (`ALSModelFromModelsPy`, `ALSModelFromYAML`, `ALSModelFromText`); moved here from `src/Enterprise/` - the Studio reads it |
+| `src/AppBuilder/Project Actions.incl` | `LoadALSModel` (the project's copy -> the Studio model); `LoadModelFile` opens `.py` / `.yaml` with it |
 | `tools/als_project_reference.py` | the reference, function for function, and its test |
 
 ## Decisions

@@ -45,7 +45,7 @@ Positions, open / closed entities, the zoom and the theme are remembered in the 
 
 | Part | File |
 |---|---|
-| The command | `src/Generator/ERD Generator.incl` (FutureBasic): `ErdShow` → `ErdWritePage` fills the template's `/*__ERD_DATA__*/null` with `{ title, resources, rules }` — the model as the generator holds it (`gProjectDictionary`) and `Rules.json` — and opens the page with `WorkspaceOpenURL` |
+| The command | `src/AppBuilder/ERD Generator.incl` (FutureBasic): `ErdShow` → `ErdWritePage` fills the template's `/*__ERD_DATA__*/null` with `{ title, resources, rules }` — the model as the generator holds it (`gProjectDictionary`) and `Rules.json` — and opens the page with `WorkspaceOpenURL` |
 | The page | `src/Templates/ERD/Model ERD.html` (bundled with the generator's Templates): sections THEMES, MODEL, LAYOUT, DRAW, INTERACTION, EXPORT; one file, no network, no libraries |
 | Menu | `Menus.incl` `_iShowModelDiagram`; `EventHandlers.incl` |
 | Test | `tools/check_erd_page.py` (test only): fills the page as `ErdWritePage` does and drives it in headless Chromium |

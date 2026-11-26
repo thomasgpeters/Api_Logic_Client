@@ -1,6 +1,6 @@
 # Projects: Open Project and Recent Projects
 
-**Where:** `src/Generator/Project Workspace.incl` (folders, `Project.json`),
+**Where:** `src/AppBuilder/Project Workspace.incl` (folders, `Project.json`),
 `Recent Projects.incl` (the list), `Project Actions.incl` (`OpenProject`,
 `OpenRecentProject`, `OpenProjectSettingsFile`, `LoadModelFile`), `WelcomeView.xib`
 (Open Project… button tag 101, Recent Projects table tag 102), *Model* menu.
@@ -25,7 +25,7 @@ the top of Recent Projects.
 **If the model file has moved**, an alert offers *Locate…*; the chosen file becomes the
 new `source`.
 
-**Recent Projects** — `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/Recent Projects.json`,
+**Recent Projects** — `~/Library/Application Support/App Builder for FutureBasic/Recent Projects.json`,
 newest first, at most 10, one entry per `Project.json` path:
 
 ```json

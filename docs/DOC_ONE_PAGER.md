@@ -1,8 +1,8 @@
-<p align="center"><img src="../src/Generator/imagery_logo.png" alt="Imagery Business Systems logo" width="120"></p>
+<p align="center"><img src="../src/AppBuilder/imagery_logo.png" alt="Imagery Business Systems logo" width="120"></p>
 
 <p align="center"><sub>IMAGERY BUSINESS SYSTEMS · FOR THE FUTUREBASIC COMMUNITY</sub></p>
 
-# Imagery LogicBank Studio for FutureBasic
+# App Builder for FutureBasic
 
 **Point it at a database. Get a native Mac app in FutureBasic, with its screens, its data access
 and its business rules written for you, in code you can read and keep.**
@@ -23,7 +23,7 @@ transaction, whichever screen or code made the change.
 ```mermaid
 flowchart LR
     M["<b>A data model</b><br/>SQLite database<br/>or API Logic Server project"]
-    S["<b>Imagery LogicBank Studio</b><br/>on your Mac<br/>model diagram · screen design<br/>business rules · branding"]
+    S["<b>App Builder for FutureBasic</b><br/>on your Mac<br/>model diagram · screen design<br/>business rules · branding"]
     P["<b>A FutureBasic project</b><br/>XIB screens and bindings · app shell<br/>data runtime · LogicBank for FutureBasic<br/>your own files, never overwritten"]
     A["<b>Your Mac app</b><br/>native Cocoa · light and dark<br/>rules enforced on every save"]
     M --> S --> P -->|build in FutureBasic| A

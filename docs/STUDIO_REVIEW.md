@@ -74,13 +74,13 @@ Grouped by what the developer is working on: the project, its model, what it gen
 
 | Menu | Items |
 |---|---|
-| **Imagery LogicBank Studio** | About, (Preferences… when there are preferences), Hide, Quit |
+| **App Builder for FutureBasic** | About, (Preferences… when there are preferences), Hide, Quit |
 | **Project** | New Project… ⌘N · Open Project… ⌘O · Recent Projects · Clear Recent Projects — Close Project ⇧⌘W · Project Settings… ⌘; · Show Project in Finder · Delete Project… |
 | **Edit** | FB's standard edit menu |
 | **Model** | Open SQLite Database… ⌘D · Open API Logic Server Metadata… ⌘J — Show Model Diagram ⇧⌘D — Import Rules… · Export Rules… |
 | **Generate** | Generate App ⌘G — Generate XIBs ⇧⌘X · Generate XIB for *Customer* ⌘E (names the selected entity) · Generate Binding Code ⌘B — Show Generated App in Finder — Update Runtime and Templates… |
 | **Window** | Minimize ⌘M · Zoom · Close ⌘W |
-| **Help** | Imagery LogicBank Studio Help (the user guide) · Show Workspace in Finder |
+| **Help** | App Builder Help (the user guide) · Show Workspace in Finder |
 
 "Open One Xib" leaves the menus (a developer's tool; it can stay behind a debug flag).
 

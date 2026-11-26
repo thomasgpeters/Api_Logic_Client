@@ -1,6 +1,6 @@
 # Generate Commands
 
-**Where:** *Model* menu (`src/Generator/Menus.incl`, `EventHandlers.incl`),
+**Where:** *Model* menu (`src/AppBuilder/Menus.incl`, `EventHandlers.incl`),
 `GenerateProjectParts` in `Project Actions.incl`, `AppGenerate` in `App Generator.incl`.
 
 | Command | Key | Writes |
@@ -10,7 +10,7 @@
 | Generate Binding Code | ⌘B | `<Entity> Binding.incl` for every entity |
 | Generate App | ⌘G | all of the above + `Model.json`, the FB project, `<project>.main`, runtime copies, starting templates |
 
-Output: `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/FBapp/`
+Output: `~/Library/Application Support/App Builder for FutureBasic/workspace/<project>/FBapp/`
 (`<project>/` itself holds the project's settings: `Project.json`, `Design.json`) (the workspace — see `docs/design/Generator App Design.md`;
 *Help → Show Workspace in Finder* opens it). Every entity's model entry is always built
 (tags and sizes are needed by binding code and `Model.json`); only the requested

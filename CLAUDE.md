@@ -1,9 +1,12 @@
-# Api Logic Client — Imagery LogicBank Studio for FutureBasic
+# Api Logic Client — App Builder for FutureBasic
 
-The product's name is **Imagery LogicBank Studio for FutureBasic** (shown in the app; `Branding.incl`).
-The Studio's Application Support folder is `Imagery LogicBank Studio for FutureBasic` (author,
-2026-11-24; an old `Api_Logic_Client` folder is moved over on first launch). The repository and the
-FB project file keep the name Api_Logic_Client until the author renames them (backlog).
+The product's name is **App Builder for FutureBasic** (shown in the app; `Branding.incl`).
+The Studio's Application Support folder is `App Builder for FutureBasic` (author, 2026-11-26:
+the product is "App Builder for FutureBasic", without "Imagery" - the FB community knows the tool,
+not the company; earlier folders, `Imagery LogicBank Studio for FutureBasic` and `Api_Logic_Client`,
+are moved over on first launch). Imagery LogicBank Studio is a different product (C++/Wt). The built app
+is **Studio for FB** (`src/AppBuilder/Studio for FB.fbeproj`, author 2026-11-26). The repository keeps
+the name Api_Logic_Client until the author renames it (backlog).
 
 A **FutureBasic** (FBE, macOS/Cocoa) generator. It reads an API Logic Server
 (ALS) project's model (`/metadata?include=attributes`) and generates a complete
@@ -16,7 +19,7 @@ theme-able (generated XIBs use macOS system/catalog colors, so light and dark
 mode work without extra code).
 
 ## Repo layout
-- `src/Generator/` — the FB project (`Api Logic Client.fbeproj`): open it in the FB
+- `src/AppBuilder/` — the FB project (`Studio for FB.fbeproj`, which builds Studio for FB.app): open it in the FB
   editor. Its `data.fbproj` (inside the `.fbeproj` bundle) is the build order: an
   `.incl` must come *before* any file that calls it (FB needs definition before use).
   - `Pill Buttons.incl` — Mac-style pill (capsule) push buttons: AppKit's capsule on macOS 26, drawn by the layer on 15; identical to `src/Runtime`'s copy.
@@ -51,7 +54,7 @@ mode work without extra code).
 - `src/MacTests/` — single-file FB programs that answer a question on a Mac before a feature is built on it (`MapKit Points Test.fb`: how FB serves MapKit's point views); see `docs/TESTING.md`.
 - `src/Enterprise/` — the Enterprise edition, in this repository for now (author, 2026-11-25; a private
   repository when it is sold): `DataObject_JSONAPI.incl` (the SQL Generator's JSON:API side: the same
-  statement dictionaries -> ALS requests, on the model `src/Generator/ALS Model.incl` reads). The contract: `docs/design/ALS Contract.md`;
+  statement dictionaries -> ALS requests, on the model `src/AppBuilder/ALS Model.incl` reads). The contract: `docs/design/ALS Contract.md`;
   references and tests: `tools/als_contract.py`, `tools/jsonapi_reference.py`, `tools/models_py_reference.py`.
 - `src/Runtime/` — our FB code copied into every generated app. Not bundled into the Studio
   (author, 2026-11-24): `Studio Library.incl` copies `src/Runtime` and `src/Templates` into the
@@ -98,7 +101,7 @@ mode work without extra code).
 
 One concern per file, aptly named — in `src/` and in what the generator emits.
 
-Generated apps go to `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/FBapp/`; the project's settings (`Project.json`, `Design.json`) to `<project>/`; settings will live in `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/`, secrets in the Keychain (see `docs/design/Generator App Design.md`). The app bundle is never written to. macOS only.
+Generated apps go to `~/Library/Application Support/App Builder for FutureBasic/workspace/<project>/FBapp/`; the project's settings (`Project.json`, `Design.json`) to `<project>/`; settings will live in `~/Library/Application Support/App Builder for FutureBasic/`, secrets in the Keychain (see `docs/design/Generator App Design.md`). The app bundle is never written to. macOS only.
 
 ## Related repositories
 - **thomasgpeters/FutureBasic_Documentation** (private) — the FB reference. See References.
@@ -170,7 +173,7 @@ These apply to hand-written code **and to everything the generator emits**.
   suggest `git stash`, then `git fetch origin && git merge --ff-only origin/<branch>`,
   and give such commands in separate code blocks.
 - Fix root causes in the shared pattern too: a bug found in Test_Xib_View
-  usually exists in `src/Generator/` or `src/Runtime/` (and vice versa).
+  usually exists in `src/AppBuilder/` or `src/Runtime/` (and vice versa).
 - Keep the docs current with each change: add or update the feature's
   `docs/features/<NAME>_FEATURE.md`, add a `docs/DEVELOPMENT_LOG.md` entry (newest
   first, with commit hashes and discoveries), tick or add `docs/BACKLOG.md` items,

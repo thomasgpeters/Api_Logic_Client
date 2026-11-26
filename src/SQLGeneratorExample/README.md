@@ -118,5 +118,5 @@ Needs FutureBasic 7 on a Mac (built with 7.0.38, Apple Silicon, macOS 15 or late
 ---
 
 MIT License. Copyright (c) 2026 Imagery Business Systems, LLC. The SQL Generator comes from
-Imagery LogicBank Studio for FutureBasic, where it reads and writes the database of every
+App Builder for FutureBasic, where it reads and writes the database of every
 generated app.

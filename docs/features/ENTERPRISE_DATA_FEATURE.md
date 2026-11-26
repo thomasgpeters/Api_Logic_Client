@@ -8,7 +8,7 @@ So the pages, bindings and examples do not know which edition they run on.
 
 | | |
 |---|---|
-| `src/Generator/ALS Model.incl` (the Studio reads it too: `features/ALS_PROJECT_FEATURE.md`) | the model from `database/models.py` (every ALS project; the only model file from 17.04 on: `ALSModelFromModelsPy`, read as text, never run), or from `app_model.yaml` (ALS 17.3 and earlier) or `admin.yaml`; `ALSModelFromText` tells them apart by their contents: attributes, primary keys, relationships (name, direction, resource, fks), the display column (`favorite` / `user_key`). Line by line by indentation, the design of the C++ Studio's `Model::fromAppModelYaml` |
+| `src/AppBuilder/ALS Model.incl` (the Studio reads it too: `features/ALS_PROJECT_FEATURE.md`) | the model from `database/models.py` (every ALS project; the only model file from 17.04 on: `ALSModelFromModelsPy`, read as text, never run), or from `app_model.yaml` (ALS 17.3 and earlier) or `admin.yaml`; `ALSModelFromText` tells them apart by their contents: attributes, primary keys, relationships (name, direction, resource, fks), the display column (`favorite` / `user_key`). Line by line by indentation, the design of the C++ Studio's `Model::fromAppModelYaml` |
 | `src/Enterprise/DataObject_JSONAPI.incl` | `GenerateJSONAPISelect / Insert / InsertRows / Update / Delete`, `JSONAPIPagePath`, `JSONAPIRowsFromAnswer`, `JSONAPILastError` |
 | `src/Runtime/ALS Client.incl` | sends the requests (Bearer token, paging, errors) |
 | `tools/jsonapi_reference.py` | the reference and its test: 19 checks against a running server |

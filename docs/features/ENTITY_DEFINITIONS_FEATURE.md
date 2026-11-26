@@ -3,8 +3,8 @@
 Shows the model and the generator's recommendations before anything is
 generated, and lets the designer adjust them.
 
-**Where:** the attribute table in `src/Generator/ProjectDetailView.xib` (tag 2100);
-rules and adjustments in `src/Generator/Type Mapping.incl`; display, editing and
+**Where:** the attribute table in `src/AppBuilder/ProjectDetailView.xib` (tag 2100);
+rules and adjustments in `src/AppBuilder/Type Mapping.incl`; display, editing and
 persistence in `Project Actions.incl` (`DisplayObjectAttributeList`,
 `DesignCellEdited`, `DesignSave`, `DesignLoad`).
 
@@ -30,7 +30,7 @@ Selecting an entity shows a summary — `Customer — key Id (assigned) — Orde
 
 An edit is stored in the attribute's `design` dictionary (`title`, `fbType`,
 `formControl`, `formWidth`, `listWidth`); clearing a cell returns to the
-recommendation. All adjustments are saved to `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/Design.json`:
+recommendation. All adjustments are saved to `~/Library/Application Support/App Builder for FutureBasic/workspace/<project>/Design.json`:
 
 ```json
 { "Customer": { "CompanyName": { "title": "Company", "listWidth": "180" } } }

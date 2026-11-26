@@ -22,7 +22,7 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jd8-dr-AVM">
                                 <rect key="frame" x="182" y="316" width="440" height="31"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Imagery LogicBank Studio" id="ozt-Mt-1Er">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="App Builder for FutureBasic" id="ozt-Mt-1Er">
                                     <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

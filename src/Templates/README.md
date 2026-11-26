@@ -13,7 +13,7 @@ All are copied only when missing, so the developer's edits survive regeneration.
 `Windows.incl` (`BuildWindows`: the shell window plus a `nibview` per entity Form part)
 follows the same rule but is generated from the model, since its `nibview` lines name the parts.
 
-Generated every time (`src/Generator/App Generator.incl`): `data.fbproj` (groups Runtime,
+Generated every time (`src/AppBuilder/App Generator.incl`): `data.fbproj` (groups Runtime,
 Model, Bindings, Resources, Controller, View, Main) and `<project>.main`, which stays short:
 
 ```

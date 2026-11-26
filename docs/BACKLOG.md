@@ -34,7 +34,6 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [ ] Map view (backlogged; MapKit decided): run `src/MacTests/MapKit Points Test.fb`; location columns for Northwind's test data and their names; layer colours; the bubble's details and menu actions (`design/Map View Design.md`)
 - [ ] Enterprise licensing option (A / B / C, see Parked)
 - [ ] Proposal to Val Huber: percentage offer + the name "LogicBank for FutureBasic"
-- [ ] Rename the FB project and its `.main` to the product name (later)
 
 ## Verify on a Mac - everything built since the last Mac build
 
@@ -143,7 +142,7 @@ Enterprise at the ALS project.
 
 - [x] The ALS contract measured against a running server: `design/ALS Contract.md`, `tools/als_contract.py` (25 checks); `ALS Client.incl` follows it
 - [x] The SQL Generator's JSON:API side (`src/Enterprise/DataObject_JSONAPI.incl`, `features/ENTERPRISE_DATA_FEATURE.md`); `AddOrderToQuery` on both sides
-- [x] The ALS model from `database/models.py`, parsed as text (never run): `ALSModelFromModelsPy` (`src/Generator/ALS Model.incl`), tested against SQLAlchemy on Northwind and CRM; older `class X(SAFRSBaseX, Base)` too
+- [x] The ALS model from `database/models.py`, parsed as text (never run): `ALSModelFromModelsPy` (`src/AppBuilder/ALS Model.incl`), tested against SQLAlchemy on Northwind and CRM; older `class X(SAFRSBaseX, Base)` too
 - [x] API Logic Server Project page (`features/ALS_PROJECT_FEATURE.md`): folder, model file or public GitHub repository; typed, chosen or dropped; a copy in `<project>/ALS Model/`; lookups from the relationships, display columns from `admin.yaml`
 - [ ] **Next:** `App Data Enterprise.incl`: the App Data interface over ALS (list with paging, lookups, save with `S_CheckSum` + re-read, remove, login), answers on the main thread; records keep the JSON:API id
 - [ ] Connection: the server's address (the page's API Server, `baseURL`), login paths; a sign-in window for the header's Log In; the token for the session, a remembered password in the Keychain
@@ -202,12 +201,13 @@ Server Project; runtime and templates in the workspace.
 - [ ] Git via `/usr/bin/git` (NSTask): init / commit on generation, status, push / pull; GitHub REST (create repo, pull requests)
 - [ ] Settings groups for ALS / APIs, AI / LLM providers, SMTP notifications
 - [ ] Generator offers `build_db.py`-style database creation for generated apps
-- [ ] Rename the rest to the product name (author, later): the FB project and its `.main`, the bundle id
+- [x] Names (author, 2026-11-26): the product is **App Builder for FutureBasic** (no "Imagery": the FB community knows the tool, not the company); the built app is **Studio for FB** (`Studio for FB.fbeproj` / `.main`); `src/Generator` is `src/AppBuilder`; the Application Support folder follows the product name (earlier folders moved over)
+- [ ] Still to rename, when wanted: the repository (`Api_Logic_Client`) and the bundle id
 
 ## Installing the Studio
 
 - [ ] Installer for a release: the Studio app plus the runtime and templates, put into
-  `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/` (a `.pkg` with a
+  `~/Library/Application Support/App Builder for FutureBasic/workspace/` (a `.pkg` with a
   per-user postinstall, or a first-launch copy from the disk image), so users need no repository
 
 ## Tooling

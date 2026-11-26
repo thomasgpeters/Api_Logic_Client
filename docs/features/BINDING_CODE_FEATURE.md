@@ -2,7 +2,7 @@
 
 Readable, generated FB that moves records between data and the XIB parts.
 
-**Where:** `src/Generator/Binding Generator.incl` writes `<Entity> Binding.incl`;
+**Where:** `src/AppBuilder/Binding Generator.incl` writes `<Entity> Binding.incl`;
 helpers in `src/Runtime/Binding Support.incl` (copied into every generated app).
 
 A **record** is a dictionary keyed by attribute name — a SQLite row or ALS

@@ -20,7 +20,7 @@ if len(sys.argv)>1 and sys.argv[1] in ('-h','--help'):
     print(__doc__); sys.exit(0)
 DOCS=sys.argv[1] if len(sys.argv)>1 else os.path.join(ROOT,'..','FutureBasic_Documentation')
 if not os.path.isdir(DOCS): DOCS=os.path.join(ROOT,'..','futurebasic_documentation')
-gen=open(os.path.join(ROOT,'src','Generator','App Generator.incl'),newline='').read().replace('\r','\n')
+gen=open(os.path.join(ROOT,'src','AppBuilder','App Generator.incl'),newline='').read().replace('\r','\n')
 src=gen[gen.index('local fn AppPagesSource('):]
 src=src[:src.index('\nend fn = s\n')+len('\nend fn = s')]
 body=src[src.index('long               index')+len('long               index'):src.rindex('end fn = s')]
