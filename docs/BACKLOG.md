@@ -6,10 +6,11 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 
 ## Priorities (proposal, 2026-11-25 - the author decides)
 
-1. **A green Mac build.** Everything since the last build (2026-11-24) is lint-clean and tested
-   here but not compiled: the Studio's menus, toolbar and crumb trail, the Form designer's three
-   features, the API Logic Server Project page, pill buttons, and a generated app. One build of
-   the Studio and one generated app, then the Build Log and the checklist below.
+1. **Generate an app and build it** (the author built Studio for FB and the SQL Generator example on 2026-11-25:
+   the build bugs were fixed together and both came up). Still to do on the Mac: generate an app with Studio for FB
+   - Telecom or Customs, which bring their business rules - build it and run it; and build again to take in what
+   landed after that build (the rename to `src/AppBuilder/Studio for FB.fbeproj`, value lists with codes, the record
+   popover, the example's Help window).
 2. **The open bug:** the Form layout popup "pops back to automatic" (needs the log lines below).
 3. **Modern look controls** for generated Forms (the author's current interest): toggle switch,
    combo box, date / time display, calendar picker, colour picker. Each follows the Form
