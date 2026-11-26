@@ -51,171 +51,252 @@ def scenarios(base):
         results.append((name, bool(ok), detail))
 
     D = lambda d, i, cols: one(d, f'select {cols} from Declaration where Id={i}')
+    I = lambda d, i, cols: one(d, f'select {cols} from Importer where Id={i}')
     M = lambda d, i: one(d, f'select Lane, Reason from Movement where Id={i}')
+    why = lambda d, i: D(d, i, 'ReleaseReason')
 
-    # --- duty ---------------------------------------------------------------------------------
-    run('duty from the tariff: beef 5%, grapes 5%, milk powder 0% -> 475, plus the 30 fee -> 505',
-        lambda d, l: (D(d, 1, 'TotalDuty, ProcessingFee, AmountDue') == (475.0, 30.0, 505.0), D(d, 1, 'TotalDuty, ProcessingFee, AmountDue')))
+    def steps(*changes):
+        """apply (verb, table, record) in turn; returns (ok, message)"""
+        def apply(l):
+            for verb, table, record in changes:
+                if not getattr(l, verb)(table, record):
+                    return False, l.message
+            return True, ''
+        return apply
+
+    def refused(verb, table, record, text):
+        def body(d, l):
+            ok = getattr(l, verb)(table, record)
+            return (not ok) and text in l.message, l.message
+        return body
+
+    def reason_after(i, text, *changes):
+        """after the changes, the declaration's release reason contains text ('' = releasable)"""
+        def body(d, l):
+            ok, message = steps(*changes)(l)
+            if not ok:
+                return False, message
+            r = why(d, i)
+            return (r is None and D(d, i, 'Releasable') == 1) if text == '' else (text in (r or '')), r
+        return body
+
+    fix_d8 = [('update', 'MasterBill', {'Id': 4, 'Packages': 22}), ('update', 'Permit', {'Id': 7, 'Status': 'A'})]
+    exam_d8 = ('insert', 'Inspection', {'Id': 100, 'DeclarationId': 8, 'Kind': 'P', 'InspectedDate': '2026-11-27', 'Officer': 'M. Tucker', 'Result': 'P'})
+    doc_d5 = ('insert', 'Inspection', {'Id': 100, 'DeclarationId': 5, 'Kind': 'D', 'InspectedDate': '2026-11-26', 'Officer': 'R. Wilson', 'Result': 'P'})
+
+    # --- reference data -------------------------------------------------------------------------------
+    run('a negative duty rate is refused', refused('update', 'Tariff', {'Code': '9503.00', 'DutyRate': -5}, 'cannot be negative'))
+    run('an exchange rate of 0 is refused', refused('update', 'ExchangeRate', {'Id': 8, 'Rate': 0}, 'more than 0'))
+    run('a tariff heading in use cannot be deleted', refused('delete', 'Tariff', {'Code': '0201.10'}, 'used by declarations'))
+
+    # --- value and duty ---------------------------------------------------------------------------------
+    run('value is the price paid x the week\'s rate: 2,400 GBP of whisky at 1.27 is 3,048.00',
+        lambda d, l: (one(d, 'select Value from DeclarationLine where Id=4') == 3048.0 and D(d, 2, 'Rate') == 1.27, one(d, 'select Value from DeclarationLine where Id=4')))
+    run('a rate for another week is refused', refused('update', 'Declaration', {'Id': 2, 'ExchangeRateId': 4}, 'not the week'))
+
+    def rate_corrected(d, l):
+        ok = l.update('ExchangeRate', {'Id': 3, 'Rate': 1.30})
+        return ok and one(d, 'select Value from DeclarationLine where Id=4') == 3120.0 and D(d, 2, 'TotalValue') == 5070.0, (l.message, D(d, 2, 'TotalValue'))
+    run('the week\'s rate is corrected: the values follow', rate_corrected)
+    run('ad valorem: beef 8,100 at 5 % = 405.00; grapes 112.50; milk powder free',
+        lambda d, l: ([one(d, f'select Duty from DeclarationLine where Id={i}') for i in (1, 2, 3)] == [405.0, 0.0, 112.5], None))
+    run('specific: whisky 120 l at 30.00 = 3,600.00; wine 300 l at 8.50 = 2,550.00',
+        lambda d, l: ([one(d, f'select Duty from DeclarationLine where Id={i}') for i in (4, 5)] == [3600.0, 2550.0], None))
+
+    def compound(d, l):
+        ok = l.insert('DeclarationLine', {'Id': 100, 'DeclarationId': 5, 'TariffCode': '2402.20', 'CountryCode': 'US', 'Quantity': 2, 'InvoiceValue': 200})
+        return ok and one(d, 'select Duty from DeclarationLine where Id=100') == 520.0, (l.message, one(d, 'select Duty from DeclarationLine where Id=100'))
+    run('compound: cigarettes 10 % of 200 + 2 x 250.00 = 520.00', compound)
+
+    def stepped(d, l):
+        ok = l.insert('DeclarationLine', {'Id': 100, 'DeclarationId': 5, 'TariffCode': '8703.23', 'CountryCode': 'JP', 'Quantity': 1, 'InvoiceValue': 25000})
+        return ok and one(d, 'select Duty from DeclarationLine where Id=100') == 30000.0, (l.message, one(d, 'select Duty from DeclarationLine where Id=100'))
+    run('stepped: a 25,000 car - 75 % of the first 10,000 and 150 % above = 30,000.00', stepped)
 
     def rate_change(d, l):
         ok = l.update('Tariff', {'Code': '0201.10', 'DutyRate': 10.0})
-        same = D(d, 1, 'TotalDuty') == 475.0
-        ok = ok and l.insert('DeclarationLine', {'Id': 100, 'DeclarationId': 8, 'TariffCode': '0201.10', 'CountryCode': 'US', 'Quantity': 10, 'Value': 1000.0})
-        return ok and same and one(d, 'select Duty from DeclarationLine where Id=100') == 100.0, (l.message, D(d, 1, 'TotalDuty'))
-    run('a tariff rate changes: lines already declared keep their rate, new lines use the new one', rate_change)
+        ok = ok and l.insert('DeclarationLine', {'Id': 100, 'DeclarationId': 4, 'TariffCode': '0201.10', 'CountryCode': 'US', 'Quantity': 10, 'InvoiceValue': 100})
+        return ok and one(d, 'select Duty from DeclarationLine where Id=1') == 405.0 and one(d, 'select Duty from DeclarationLine where Id=100') == 10.0, l.message
+    run('a tariff rate changes: lines already declared keep theirs, new lines use the new one', rate_change)
+    run('wharfage: 1.25 % of the value - beef 101.25', lambda d, l: (one(d, 'select Wharfage from DeclarationLine where Id=1') == 101.25, None))
+    run('no wharfage on personal baggage', lambda d, l: (D(d, 9, 'TotalWharfage') == 0.0, D(d, 9, 'TotalWharfage')))
 
-    def value_change(d, l):
-        ok = l.update('DeclarationLine', {'Id': 1, 'Value': 9000.0})        # beef: 9000 x 5% = 450
-        return ok and D(d, 1, 'TotalDuty, Balance') == (520.0, 45.0) and one(d, 'select DeferredBalance from Importer where Id=1') == 45.0, (l.message, D(d, 1, 'TotalDuty, Balance'))
-    run('a value is corrected: the duty, the balance and the importer\'s deferred balance follow', value_change)
+    def port_rate(d, l):
+        ok = l.update('PortOfEntry', {'Id': 1, 'WharfageRate': 1.5})
+        ok = ok and l.insert('Arrival', {'Id': 100, 'CarrierId': 1, 'PortOfEntryId': 1, 'VoyageNumber': 'BW-2701', 'ExpectedDate': '2027-01-05'})
+        return ok and one(d, 'select WharfageRate from Arrival where Id=1') == 1.25 and one(d, 'select WharfageRate from Arrival where Id=100') == 1.5 and D(d, 1, 'WharfageRate') == 1.25, l.message
+    run('the port changes its wharfage: arrivals already in keep theirs', port_rate)
+    run('the entry adds up: 11,750.00 value, 517.50 duty, 146.88 wharfage, 664.38 due; CIF 13,670.00 for statistics',
+        lambda d, l: (D(d, 1, 'TotalValue, TotalDuty, TotalWharfage, AmountDue, CifValue, LineCount') == (11750.0, 517.5, 146.88, 664.38, 13670.0, 3), D(d, 1, 'TotalValue, TotalDuty, TotalWharfage, AmountDue, CifValue, LineCount')))
+    run('a resident\'s allowance: 300 of 570.00 takes 31.18 off 59.25 duty',
+        lambda d, l: (D(d, 9, 'Allowance, AllowanceDuty, AmountDue') == (300.0, 31.18, 28.07), D(d, 9, 'Allowance, AllowanceDuty, AmountDue')))
+    run('a visitor\'s allowance is 50', lambda d, l: (l.update('Declaration', {'Id': 9, 'Declarant': 'V'}) and D(d, 9, 'Allowance, AllowanceDuty') == (50.0, 5.2), D(d, 9, 'Allowance, AllowanceDuty')))
+    run('a personal declaration says resident or visitor', refused('update', 'Declaration', {'Id': 9, 'Declarant': None}, 'resident (R) or visitor (V)'))
+    run('relief (CPC 4071): the hospital\'s medicines pay no duty, only wharfage',
+        lambda d, l: (D(d, 6, 'TotalDuty, AmountDue, Balance, ReliefApproved') == (0.0, 75.0, 0.0, 1), D(d, 6, 'TotalDuty, AmountDue, Balance, ReliefApproved')))
+    run('relief claimed by an importer not approved for it is refused',
+        refused('update', 'DeclarationLine', {'Id': 10, 'ReliefClaimed': 1}, 'not approved for duty relief'))
+    run('a line with no quantity is refused', refused('update', 'DeclarationLine', {'Id': 10, 'Quantity': 0}, 'more than 0'))
+    run('a negative value is refused', refused('update', 'DeclarationLine', {'Id': 10, 'InvoiceValue': -1}, 'cannot be negative'))
+    run('an unknown tariff heading is refused', refused('insert', 'DeclarationLine', {'Id': 100, 'DeclarationId': 5, 'TariffCode': '9999.99', 'CountryCode': 'US', 'Quantity': 1, 'InvoiceValue': 5}, 'no tariff heading'))
 
-    run('the entry\'s value is its lines\' values: 8100 + 1400 + 2250 = 11750',
-        lambda d, l: (D(d, 1, 'TotalValue, LineCount') == (11750.0, 3), D(d, 1, 'TotalValue, LineCount')))
+    # --- payments and statements ------------------------------------------------------------------------
+    run('a payment brings the balance down', lambda d, l: (l.insert('Payment', {'Id': 100, 'DeclarationId': 5, 'PaidDate': '2026-11-26', 'Amount': 462.5}) and D(d, 5, 'Paid, Balance') == (462.5, 1000.0), D(d, 5, 'Paid, Balance')))
+    run('paying more than is due is refused', refused('insert', 'Payment', {'Id': 100, 'DeclarationId': 5, 'PaidDate': '2026-11-26', 'Amount': 2000}, 'more than the'))
+    run('a payment must be more than 0', refused('insert', 'Payment', {'Id': 100, 'DeclarationId': 5, 'PaidDate': '2026-11-26', 'Amount': 0}, 'more than 0'))
+    run('a payment is for a declaration or a statement, not both', refused('insert', 'Payment', {'Id': 100, 'DeclarationId': 5, 'StatementId': 1, 'PaidDate': '2026-11-26', 'Amount': 5}, 'declaration or for a statement'))
+    run('a statement adds up its released declarations: Harbour Provisions owes 664.38 for November',
+        lambda d, l: (one(d, 'select Total, Paid, Balance from Statement where Id=1') == (664.38, 0.0, 664.38) and I(d, 1, 'StatementBalance') == 664.38, one(d, 'select Total, Paid, Balance from Statement where Id=1')))
+    run('a statement cannot be closed while it owes', refused('update', 'Statement', {'Id': 1, 'Status': 'C'}, 'still owes'))
 
-    def empty_entry(d, l):
-        ok = l.insert('Declaration', {'Id': 100, 'ImporterId': 1, 'ArrivalId': 5, 'EntryNumber': 'BDA-26-10499', 'LodgedDate': '2026-11-26', 'Status': 'L'})
-        ok = ok and l.insert('Inspection', {'Id': 100, 'DeclarationId': 100, 'InspectedDate': '2026-12-01', 'Officer': 'R. Wilson', 'Result': 'P'})
-        return ok and not l.update('Declaration', {'Id': 100, 'Status': 'R'}) and 'declares no goods' in l.message, l.message
-    run('an entry that declares no goods cannot be released, even inspected', empty_entry)
+    def statement_paid(d, l):
+        ok = l.insert('Payment', {'Id': 100, 'StatementId': 1, 'PaidDate': '2026-12-15', 'Amount': 664.38})
+        ok = ok and l.update('Statement', {'Id': 1, 'Status': 'C'})
+        return ok and I(d, 1, 'StatementBalance') == 0.0, (l.message, I(d, 1, 'StatementBalance'))
+    run('the statement is paid and closed: the importer owes nothing on statement', statement_paid)
+    run('a statement for an importer who does not pay on statements is refused', refused('insert', 'Statement', {'Id': 100, 'ImporterId': 3, 'Period': '2026-11', 'DueDate': '2026-12-21'}, 'does not pay on statements'))
+    run('a declaration on another importer\'s statement is refused', refused('update', 'Declaration', {'Id': 3, 'StatementId': 2}, 'another importer'))
+    run('the bond: 10 % of the year\'s duty, at least 10,000; Somers has no bond',
+        lambda d, l: (I(d, 2, 'YearDuty, RequiredBond, BondSufficient') == (6150.0, 10000.0, 1) and I(d, 3, 'BondSufficient') == 0, I(d, 2, 'YearDuty, RequiredBond, BondSufficient')))
 
-    run('a payment brings the balance down: paid in full, nothing owed',
-        lambda d, l: (D(d, 1, 'Paid, Balance') == (505.0, 0.0), D(d, 1, 'Paid, Balance')))
-    run('a payment must be more than 0',
-        lambda d, l: (not l.insert('Payment', {'Id': 100, 'DeclarationId': 5, 'PaidDate': '2026-11-26', 'Amount': 0}) and 'more than 0' in l.message, l.message))
+    def bond_short(d, l):
+        ok, message = steps(*fix_d8, exam_d8, ('update', 'Importer', {'Id': 2, 'BondAmount': 8000}), ('update', 'Declaration', {'Id': 8, 'StatementId': 2}))(l)
+        released = l.update('Declaration', {'Id': 8, 'Status': 'R'})
+        return ok and not released and 'more than its bond' in l.message, (message, l.message)
+    run('Island Spirits\' wine on its statement would owe more than its 8,000 bond: release refused - pay first', bond_short)
 
-    # --- the lanes ------------------------------------------------------------------------------
-    run('lodged before arrival, registered importer, licences in order: pre-cleared, green lane',
-        lambda d, l: (D(d, 1, 'PreCleared, Lane') == (1, 'G'), D(d, 1, 'PreCleared, Lane')))
-    run('lodged after the goods arrived: red lane',
-        lambda d, l: (D(d, 3, 'PreCleared, Lane') == (0, 'R'), D(d, 3, 'PreCleared, Lane')))
-    run('an importer not registered with customs: red lane',
-        lambda d, l: (D(d, 6, 'Lane') == 'R' and D(d, 6, 'MissingLicences') == 0, D(d, 6, 'Lane')))
-    run('whisky without a liquor licence: a missing licence, red lane',
-        lambda d, l: (D(d, 7, 'MissingLicences, Lane') == (1, 'R'), D(d, 7, 'MissingLicences, Lane')))
+    def bond_ok(d, l):
+        ok, message = steps(*fix_d8, exam_d8, ('update', 'Declaration', {'Id': 8, 'StatementId': 2}), ('update', 'Declaration', {'Id': 8, 'Status': 'R'}))(l)
+        return ok and I(d, 2, 'StatementBalance, YearDuty') == (9639.16, 9550.0), (message, I(d, 2, 'StatementBalance, YearDuty'))
+    run('within its 10,000 bond: released on the statement; the year\'s duty grows', bond_ok)
 
-    def licence_added(d, l):
-        line = one(d, 'select Id from DeclarationLine where DeclarationId=7')
-        ok = l.update('DeclarationLine', {'Id': line, 'LicenceNumber': 'LIQ-2026-201'})
-        return ok and D(d, 7, 'MissingLicences, PreCleared, Lane') == (0, 1, 'G'), (l.message, D(d, 7, 'MissingLicences, PreCleared, Lane'))
-    run('the licence is added: the entry is pre-cleared, green lane', licence_added)
+    # --- the manifest -------------------------------------------------------------------------------------
+    run('a master bill\'s house bills: 25 manifested, 22 in its house bills - the manifest does not add up',
+        lambda d, l: (one(d, 'select HouseCount, HousePackages, ManifestMatch from MasterBill where Id=4') == (2, 22, 0) and 'manifest does not add up' in why(d, 8), why(d, 8)))
+    run('the manifest is corrected: the next reason shows - a missing permit', reason_after(8, 'need an agency permit', fix_d8[0]))
+    run('a house bill knows its arrival', lambda d, l: (one(d, 'select ArrivalId from HouseBill where Id=7') == 4 and D(d, 7, 'MasterBillId') == 4, None))
+    run('a house bill of another arrival is refused', refused('update', 'Declaration', {'Id': 5, 'HouseBillId': 1}, 'another arrival'))
+    run('the security filing on the day of lading is late: 20 risk points for Somers',
+        lambda d, l: (one(d, 'select LateFiling from HouseBill where Id=4') == 1 and D(d, 4, 'RiskScore, Lane') == (35, 'Y'), D(d, 4, 'RiskScore, Lane')))
+    run('filed two days ahead after all: 15 points, green', lambda d, l: (l.update('HouseBill', {'Id': 4, 'SecurityFiled': '2026-11-20'}) and D(d, 4, 'RiskScore, Lane') == (15, 'G'), D(d, 4, 'RiskScore, Lane')))
+    run('a declared house bill cannot be deleted', refused('delete', 'HouseBill', {'Id': 1}, 'is declared'))
 
-    def registered(d, l):
-        ok = l.update('Importer', {'Id': 6, 'Registered': 1})
-        return ok and D(d, 6, 'Lane') == 'G', (l.message, D(d, 6, 'Lane'))
-    run('the importer registers: its entry lodged before arrival turns green', registered)
+    def master_cascade(d, l):
+        ok, message = steps(('insert', 'MasterBill', {'Id': 100, 'ArrivalId': 5, 'Number': 'NIA-120-00092', 'Packages': 1}),
+                            ('insert', 'HouseBill', {'Id': 100, 'MasterBillId': 100, 'Number': 'HB-9', 'Consignee': 'X', 'Packages': 1, 'LadingDate': '2026-11-26'}),
+                            ('delete', 'MasterBill', {'Id': 100}))(l)
+        return ok and one(d, 'select count(*) from HouseBill where Id=100') == 0, message
+    run('deleting a master bill takes its house bills', master_cascade)
+    run('an arrival with containers cannot be deleted', refused('delete', 'Arrival', {'Id': 1}, 'still has containers'))
+    run('an arrival with bills of lading cannot be deleted', refused('delete', 'Arrival', {'Id': 3}, 'bills of lading'))
 
-    def late_arrival(d, l):
-        ok = l.update('Arrival', {'Id': 4, 'ArrivalDate': '2026-11-24'})     # the ship came early: entry 7 now lodged after
-        line = one(d, 'select Id from DeclarationLine where DeclarationId=7')
-        ok = ok and l.update('DeclarationLine', {'Id': line, 'LicenceNumber': 'LIQ-2026-201'})
-        return ok and D(d, 7, 'Lane') == 'R', (l.message, D(d, 7, 'PreCleared, Lane'))
-    run('the ship arrives before the entry was lodged: no pre-clearance', late_arrival)
+    # --- risk and lanes ------------------------------------------------------------------------------------
+    run('green: Harbour Provisions, a trusted trader (AEO), from the US: risk 0',
+        lambda d, l: (D(d, 1, 'RiskScore, Lane') == (0, 'G'), D(d, 1, 'RiskScore, Lane')))
+    run('blue: the hospital\'s entry, a trusted trader chosen for audit, released now',
+        lambda d, l: (D(d, 6, 'Lane, Status') == ('B', 'R'), D(d, 6, 'Lane, Status')))
+    run('not chosen for audit: green', lambda d, l: (l.update('Declaration', {'Id': 6, 'AuditFlag': 0}) and D(d, 6, 'Lane') == 'G', D(d, 6, 'Lane')))
+    run('yellow: new this year, from China, phones at 80 each (reference 300) - 15 + 15 + 20 = 50',
+        lambda d, l: (D(d, 5, 'RiskScore, Lane, UndervaluedLines') == (50, 'Y', 1), D(d, 5, 'RiskScore, Lane, UndervaluedLines')))
+    run('the phones re-valued at 200 each: 30, still yellow; registered over a year: 15, green',
+        lambda d, l: (l.update('DeclarationLine', {'Id': 11, 'InvoiceValue': 10000}) and D(d, 5, 'RiskScore') == 30
+                      and l.update('Importer', {'Id': 4, 'RegisteredSince': '2025-01-01'}) and D(d, 5, 'RiskScore, Lane') == (15, 'G'), D(d, 5, 'RiskScore, Lane')))
+    run('red: unregistered, from Colombia, a broken seal - 30 + 20 + 15 + 40 = 105',
+        lambda d, l: (D(d, 7, 'RiskScore, Lane') == (105, 'R'), D(d, 7, 'RiskScore, Lane')))
+    run('the importer registers and the seal checks out: 30 + 15 = 45, yellow',
+        lambda d, l: (l.update('Importer', {'Id': 5, 'Registered': 1, 'RegisteredSince': '2026-11-20'}) and l.update('Container', {'Id': 5, 'SealIntact': 1}) and D(d, 7, 'RiskScore, Lane') == (45, 'Y'), D(d, 7, 'RiskScore, Lane')))
+    run('Colombia\'s risk weight is lowered: the score follows', lambda d, l: (l.update('Country', {'Code': 'CO', 'RiskWeight': 10}) and D(d, 7, 'RiskScore') == 85, D(d, 7, 'RiskScore')))
+    run('random selection: Island Spirits\' wine, risk 5, drawn to red',
+        lambda d, l: (D(d, 8, 'RiskScore, Lane') == (5, 'R') and l.update('Declaration', {'Id': 8, 'RandomDraw': 0.5}) and D(d, 8, 'Lane') == 'G', D(d, 8, 'Lane')))
 
-    # --- release ----------------------------------------------------------------------------------
-    run('a red-lane entry cannot be released without an inspection',
-        lambda d, l: (not l.update('Declaration', {'Id': 7, 'Status': 'R'}) and 'must pass an inspection' in l.message, l.message))
-    def failed(d, l):
-        ok = l.update('Importer', {'Id': 6, 'Registered': 1})        # registered: the green lane ...
-        ok = ok and l.insert('Payment', {'Id': 100, 'DeclarationId': 6, 'PaidDate': '2026-11-26', 'Amount': 655.0})   # ... and paid: only the failed inspection is left
-        return ok and not l.update('Declaration', {'Id': 6, 'Status': 'R'}) and 'failed an inspection' in l.message, l.message
-    run('an entry that failed an inspection cannot be released, even green and paid', failed)
+    def penalty(d, l):
+        ok = l.insert('Inspection', {'Id': 100, 'DeclarationId': 5, 'Kind': 'P', 'InspectedDate': '2026-11-26', 'Officer': 'M. Tucker', 'Result': 'F', 'Notes': 'Phones undervalued'})
+        ok = ok and l.insert('Declaration', {'Id': 100, 'ImporterId': 4, 'ArrivalId': 3, 'CountryCode': 'CN', 'ExchangeRateId': 2, 'EntryNumber': 'BDA-26-10490',
+                                             'LodgedDate': '2026-11-27', 'Status': 'L'})
+        return ok and one(d, 'select Penalty from Inspection where Id=100') == 25 and D(d, 5, 'Penalties, FailedInspections, RiskScore') == (25, 1, 50) \
+            and I(d, 4, 'PenaltyPoints, CompliancePoints') == (25, 75) and 'failed an inspection' in why(d, 5) and D(d, 100, 'CompliancePoints, RiskScore') == (75, 43), \
+            (l.message, D(d, 5, 'Penalties, FailedInspections, RiskScore'), I(d, 4, 'PenaltyPoints, CompliancePoints'), D(d, 100, 'CompliancePoints, RiskScore'))
+    run('a failed examination holds the entry and costs the importer 25 points: its next entry scores 12.5 higher', penalty)
 
-    def inspected(d, l):
-        ok = l.insert('Inspection', {'Id': 100, 'DeclarationId': 7, 'InspectedDate': '2026-11-27', 'Officer': 'M. Tucker', 'Result': 'P'})
-        ok = ok and l.update('Declaration', {'Id': 7, 'Status': 'R'})
-        return ok and one(d, 'select DeferredBalance from Importer where Id=2') == 8740.0, (l.message, one(d, 'select DeferredBalance from Importer where Id=2'))
-    run('inspected and passed: released on the importer\'s bond (3910 + 4830 owed, within 10000)', inspected)
+    # --- release ------------------------------------------------------------------------------------------
+    def empty(d, l):
+        ok = l.insert('Declaration', {'Id': 100, 'ImporterId': 1, 'ArrivalId': 1, 'CountryCode': 'US', 'ExchangeRateId': 2, 'EntryNumber': 'BDA-26-10499', 'LodgedDate': '2026-11-26', 'Status': 'L'})
+        return ok and why(d, 100) == 'It declares no goods' and not l.update('Declaration', {'Id': 100, 'Status': 'R'}) and 'not released' in l.message, (l.message, why(d, 100))
+    run('an entry that declares no goods cannot be released', empty)
+    run('prohibited goods (pistols) are never released', lambda d, l: (why(d, 7).startswith('Prohibited goods') and D(d, 7, 'ProhibitedLines') == 1, why(d, 7)))
+    run('the pistols seized and taken off: next, the manifest', reason_after(7, 'manifest does not add up', ('delete', 'DeclarationLine', {'Id': 15})))
+    run('manifest corrected: next, the open hold on the broken seal', reason_after(7, '1 hold(s) open', ('delete', 'DeclarationLine', {'Id': 15}), fix_d8[0]))
+    run('the hold is lifted: next, the red lane\'s examination',
+        reason_after(7, 'Red lane', ('delete', 'DeclarationLine', {'Id': 15}), fix_d8[0], ('update', 'Hold', {'Id': 1, 'Open': 0})))
+    run('an agency hold names its agency', refused('insert', 'Hold', {'Id': 100, 'DeclarationId': 5, 'Source': 'A', 'Reason': 'Check'}, 'names its agency'))
+    run('a hold of the Ministry of Health on the phones holds the entry',
+        reason_after(5, '1 hold(s) open', ('insert', 'Hold', {'Id': 100, 'DeclarationId': 5, 'Source': 'A', 'AgencyCode': 'HLTH', 'Reason': 'Batteries: safety check', 'Open': 1})))
+    run('the wine waits for its liquor licence: a permit pending', reason_after(8, 'need an agency permit', fix_d8[0]))
+    run('a permit from the wrong agency is refused', refused('insert', 'Permit', {'Id': 100, 'DeclarationLineId': 16, 'AgencyCode': 'ENV', 'Number': 'ENV-1'}, 'another agency'))
+    run('the licence is approved; the red lane still needs an examination', reason_after(8, 'Red lane', *fix_d8))
+    run('examined and passed: unpaid', reason_after(8, '3427.25 unpaid', *fix_d8, exam_d8))
+    run('an X-ray scan counts as an examination',
+        reason_after(8, 'unpaid', *fix_d8, ('insert', 'Inspection', {'Id': 100, 'DeclarationId': 8, 'Kind': 'X', 'InspectedDate': '2026-11-27', 'Result': 'P'})))
+    run('a document check does not clear the red lane',
+        reason_after(8, 'Red lane', *fix_d8, ('insert', 'Inspection', {'Id': 100, 'DeclarationId': 8, 'Kind': 'D', 'InspectedDate': '2026-11-27', 'Result': 'P'})))
+    run('yellow: the electronics need a document check', lambda d, l: (why(d, 5) == 'Yellow lane: it must pass a document check', why(d, 5)))
+    run('the documents pass: 1,462.50 unpaid', reason_after(5, '1462.50 unpaid', doc_d5))
 
-    run('released unpaid without a bond is refused: pay first',
-        lambda d, l: (not l.update('Declaration', {'Id': 5, 'Status': 'R'}) and 'deferment bond' in l.message, l.message))
+    def paid_release(d, l):
+        ok, message = steps(doc_d5, ('insert', 'Payment', {'Id': 100, 'DeclarationId': 5, 'PaidDate': '2026-11-26', 'Amount': 1462.5}),
+                            ('update', 'Declaration', {'Id': 5, 'Status': 'R'}))(l)
+        return ok and D(d, 5, 'Status, Releasable, PassedChecks') == ('R', 1, 1), (message, D(d, 5, 'Status, Releasable'))
+    run('paid: released', paid_release)
+    run('not releasable: release refused, with the reason', refused('update', 'Declaration', {'Id': 5, 'Status': 'R'}, 'not released: Yellow lane'))
+    run('lodged before arrival: the goods have not arrived', lambda d, l: (why(d, 3) == 'The goods have not arrived', why(d, 3)))
 
-    def pay_then_release(d, l):
-        ok = l.insert('Payment', {'Id': 100, 'DeclarationId': 5, 'PaidDate': '2026-11-26', 'Amount': 7820.0})
-        ok = ok and l.update('Declaration', {'Id': 5, 'Status': 'R'})
-        return ok and D(d, 5, 'Status, Balance') == ('R', 0.0), (l.message, D(d, 5, 'Status, Balance'))
-    run('paid in full, then released', pay_then_release)
+    def on_arrival(d, l):
+        ok, message = steps(('update', 'Arrival', {'Id': 2, 'ArrivedDate': '2026-11-27'}))(l)
+        releasable = D(d, 3, 'Releasable')
+        ok = ok and l.update('Declaration', {'Id': 3, 'Status': 'R'})
+        return ok and releasable == 1 and one(d, 'select Total from Statement where Id=1') == 1486.88, (message, l.message, releasable)
+    run('the ship docks: the pre-lodged beef is releasable at once - released, on the November statement', on_arrival)
 
-    def over_bond(d, l):
-        ok = l.insert('DeclarationLine', {'Id': 100, 'DeclarationId': 4, 'TariffCode': '8708.99', 'CountryCode': 'JP', 'Quantity': 100, 'Value': 50000.0})
-        return not ok and 'deferment bond' in l.message, l.message
-    run('adding goods to a released entry past the importer\'s bond is refused', over_bond)
-
-    # --- lines and reference data ----------------------------------------------------------------------
-    run('a line with no quantity is refused',
-        lambda d, l: (not l.insert('DeclarationLine', {'Id': 100, 'DeclarationId': 8, 'TariffCode': '3004.90', 'CountryCode': 'US', 'Quantity': 0, 'Value': 10.0}) and 'Quantity' in l.message, l.message))
-    run('a negative value is refused',
-        lambda d, l: (not l.insert('DeclarationLine', {'Id': 100, 'DeclarationId': 8, 'TariffCode': '3004.90', 'CountryCode': 'US', 'Quantity': 1, 'Value': -5.0}) and 'negative' in l.message, l.message))
-    run('an unknown tariff heading is refused',
-        lambda d, l: (not l.insert('DeclarationLine', {'Id': 100, 'DeclarationId': 8, 'TariffCode': '9999.99', 'CountryCode': 'US', 'Quantity': 1, 'Value': 5.0}) and 'no tariff heading' in l.message, l.message))
-    run('a duty rate over 100% is refused',
-        lambda d, l: (not l.update('Tariff', {'Code': '9503.00', 'DutyRate': 120.0}) and 'between 0 and 100' in l.message, l.message))
-
-    def fee_copy(d, l):
-        ok = l.update('PortOfEntry', {'Id': 1, 'ProcessingFee': 45.0})
-        ok = ok and l.insert('Arrival', {'Id': 100, 'CarrierId': 1, 'PortOfEntryId': 1, 'VoyageNumber': 'BW-2701', 'ArrivalDate': '2027-01-05'})
-        return ok and D(d, 1, 'ProcessingFee') == 30.0 and one(d, 'select ProcessingFee from Arrival where Id=100') == 45.0, l.message
-    run('the port raises its fee: new arrivals pay it, entries already lodged keep theirs', fee_copy)
-
-    # --- deleting ---------------------------------------------------------------------------------------
-    run('an entry with payments cannot be deleted',
-        lambda d, l: (not l.delete('Declaration', {'Id': 1}) and 'has payments' in l.message, l.message))
+    # --- deleting -----------------------------------------------------------------------------------------
+    run('an entry with payments cannot be deleted', refused('delete', 'Declaration', {'Id': 6}, 'has payments'))
+    run('an entry that went through the gate cannot be deleted', refused('delete', 'Declaration', {'Id': 1}, 'moved through the gate'))
+    run('an inspected entry cannot be deleted', lambda d, l: (l.insert('Inspection', {'Id': 100, 'DeclarationId': 4, 'Kind': 'D', 'InspectedDate': '2026-11-26', 'Result': 'P'}) and not l.delete('Declaration', {'Id': 4}) and 'was inspected' in l.message, l.message))
 
     def delete_entry(d, l):
-        ok = l.delete('Declaration', {'Id': 7})
-        return ok and one(d, 'select count(*) from DeclarationLine where DeclarationId=7') == 0 and one(d, 'select DeclarationCount from Importer where Id=2') == 1, l.message
-    run('deleting an entry deletes its lines; the importer counts one fewer', delete_entry)
-    run('an importer with declarations cannot be deleted',
-        lambda d, l: (not l.delete('Importer', {'Id': 1}) and 'has declarations' in l.message, l.message))
-    run('an arrival with containers cannot be deleted',
-        lambda d, l: (not l.delete('Arrival', {'Id': 5}) and 'still has containers' in l.message, l.message))
+        ok = l.insert('Hold', {'Id': 100, 'DeclarationId': 4, 'Source': 'C', 'Reason': 'Check'}) and l.delete('Declaration', {'Id': 3})
+        ok = ok and l.delete('Declaration', {'Id': 4})
+        return ok and one(d, 'select count(*) from DeclarationLine where DeclarationId in (3, 4)') == 0 and one(d, 'select count(*) from Permit where Id=5') == 0 \
+            and one(d, 'select count(*) from Hold where Id=100') == 0 and I(d, 3, 'DeclarationCount') == 0, l.message
+    run('deleting an entry takes its lines, their permits and its holds', delete_entry)
+    run('an importer counts its declarations: Harbour Provisions 2, Island Spirits 2, Somers 1',
+        lambda d, l: ([I(d, i, 'DeclarationCount') for i in (1, 2, 3)] == [2, 2, 1], [I(d, i, 'DeclarationCount') for i in (1, 2, 3)]))
+    run('an importer with declarations cannot be deleted', refused('delete', 'Importer', {'Id': 1}, 'has declarations'))
 
-    # --- the gate --------------------------------------------------------------------------------------
-    run('a released entry, cleared truck and driver, seal matching, approved route: through the gate',
-        lambda d, l: (M(d, 1) == ('G', None) and one(d, 'select Status from Movement where Id=1') == 'O', M(d, 1)))
-    run('held goods wait at the gate; the gate stays closed',
-        lambda d, l: (M(d, 7)[0] == 'R' and not l.update('Movement', {'Id': 7, 'Status': 'O'}) and 'gate stays closed' in l.message, (M(d, 7), l.message)))
+    def importer_statements(d, l):
+        ok = l.insert('Importer', {'Id': 100, 'Name': 'New Co', 'OnStatement': 1, 'BondAmount': 5000})
+        ok = ok and l.insert('Statement', {'Id': 100, 'ImporterId': 100, 'Period': '2026-11', 'DueDate': '2026-12-21'})
+        return ok and not l.delete('Importer', {'Id': 100}) and 'has statements' in l.message, l.message
+    run('an importer with statements cannot be deleted', importer_statements)
 
-    def release_opens(d, l):
-        ok = l.insert('Movement', {'Id': 100, 'DeclarationId': 5, 'ContainerId': 6, 'TruckId': 1, 'DriverId': 1, 'RouteId': 6,
-                                   'MoveDate': '2026-11-26', 'TransponderRead': 1, 'ObservedSeal': 'NI-77310', 'Status': 'W'})
-        before = M(d, 100)
-        ok = ok and l.insert('Payment', {'Id': 100, 'DeclarationId': 5, 'PaidDate': '2026-11-26', 'Amount': 7820.0}) and l.update('Declaration', {'Id': 5, 'Status': 'R'})
-        return ok and before[0] == 'R' and M(d, 100) == ('G', None) and l.update('Movement', {'Id': 100, 'Status': 'O'}), (l.message, before, M(d, 100))
-    run('a truck waiting at the gate goes through as soon as the entry is released', release_opens)
+    # --- the gate ------------------------------------------------------------------------------------------
+    run('released, cleared truck and driver, seal matching, approved route: through the gate', lambda d, l: (M(d, 1) == ('G', None), M(d, 1)))
+    run('held goods wait at the gate; it stays closed',
+        lambda d, l: (M(d, 3) == ('R', 'The goods are not released yet') and not l.update('Movement', {'Id': 3, 'Status': 'O'}) and 'gate stays closed' in l.message, M(d, 3)))
 
-    def seal(d, l):
-        before = M(d, 5)
-        ok = l.update('Movement', {'Id': 5, 'ObservedSeal': 'CS0049925'})
-        return ok and 'does not match' in before[1] and M(d, 5) == ('G', None), (l.message, before, M(d, 5))
-    run('a seal that does not match stops the truck; read again correctly, it goes', seal)
-
-    def transponder(d, l):
-        ok = l.update('Movement', {'Id': 1, 'TransponderRead': 0, 'Status': 'W'})
-        return ok and M(d, 1) == ('R', "The truck's transponder was not read"), (l.message, M(d, 1))
-    run('the transponder was not read: the truck is stopped', transponder)
-
-    def clearances(d, l):
-        first = M(d, 6)[1]
-        ok = l.update('Truck', {'Id': 3, 'ClearedUntil': '2027-11-30'})        # the truck is cleared again ...
-        second = M(d, 6)[1]
-        ok = ok and l.update('Driver', {'Id': 3, 'ClearedUntil': '2027-11-30'})   # ... and its driver
-        return ok and 'truck' in first and 'driver' in second and M(d, 6) == ('G', None), (l.message, first, second, M(d, 6))
-    run('a lapsed truck clearance, then a lapsed driver clearance: renewed one by one, the truck goes', clearances)
-
-    def never_cleared(d, l):
-        ok = l.update('Movement', {'Id': 1, 'TruckId': 5, 'Status': 'W'})
-        return ok and 'truck is not cleared' in M(d, 1)[1], (l.message, M(d, 1))
-    run('a truck never cleared is stopped', never_cleared)
-
-    def route(d, l):
-        ok = l.update('Route', {'Id': 5, 'Approved': 1})
-        return ok and M(d, 4) == ('G', None), (l.message, M(d, 4))
-    run('customs approves the route: the truck waiting on it can go', route)
-
-    run('a movement with a container its entry does not declare is refused',
-        lambda d, l: (not l.insert('Movement', {'Id': 100, 'DeclarationId': 1, 'ContainerId': 2, 'TruckId': 1, 'DriverId': 1, 'RouteId': 1,
-                                                'MoveDate': '2026-11-26', 'TransponderRead': 1, 'ObservedSeal': 'BW1182034', 'Status': 'W'})
-                      and 'is not the one' in l.message, l.message))
+    def gate_checks(d, l):
+        ok = l.insert('Movement', {'Id': 100, 'DeclarationId': 2, 'ContainerId': 2, 'TruckId': 3, 'DriverId': 3, 'RouteId': 5,
+                                   'MoveDate': '2026-11-27', 'TransponderRead': 0, 'ObservedSeal': 'BW1182000', 'Status': 'W'})
+        seen = [M(d, 100)[1]]
+        for table, record in (('Movement', {'Id': 100, 'TransponderRead': 1}), ('Movement', {'Id': 100, 'ObservedSeal': 'BW1182099'}),
+                              ('Truck', {'Id': 3, 'ClearedUntil': '2027-11-30'}), ('Driver', {'Id': 3, 'ClearedUntil': '2027-11-30'}), ('Route', {'Id': 5, 'Approved': 1})):
+            ok = ok and l.update(table, record)
+            seen.append(M(d, 100)[1])
+        expect = ["The truck's transponder was not read", 'Seal BW1182000 does not match the declared seal BW1182099', 'The truck is not cleared on 2026-11-27',
+                  'The driver is not cleared on 2026-11-27', 'The route is not registered and approved', None]
+        return ok and seen == expect and l.update('Movement', {'Id': 100, 'Status': 'O'}), (l.message, seen)
+    run('the gate checks in turn - transponder, seal, truck, driver, route - each fixed, the truck goes', gate_checks)
+    run('a container the entry does not declare is refused',
+        refused('insert', 'Movement', {'Id': 100, 'DeclarationId': 1, 'ContainerId': 2, 'TruckId': 1, 'DriverId': 1, 'RouteId': 1, 'MoveDate': '2026-11-26', 'ObservedSeal': 'BW1182099', 'Status': 'W'}, 'is not the one'))
 
     shutil.rmtree(folder, ignore_errors=True)
     return results

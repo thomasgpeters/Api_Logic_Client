@@ -1,92 +1,177 @@
-# Customs sample: Bermuda customs clearance
+# Customs sample: Bermuda customs clearance, automated
 
-A national customs clearance system, set in **Bermuda** - a sample model for App Builder for FutureBasic,
-built to show LogicBank for FutureBasic on a real-world case with rules that carry legal weight: duty,
-pre-clearance, release, and the decision at the port gate. Bermuda has no land border: goods arrive **by sea**
-(containers into the Port of Hamilton and Dockyard) and **by air** (L.F. Wade International), and pre-clearance
-happens at the port gate. The duty rates are **sample rates in Bermuda's style** - not the official tariff;
-the shipping lines, hauliers, importers and people are made up.
+A national customs clearance system with **automated clearance**, set in **Bermuda**, a sample model for App
+Builder for FutureBasic. It shows LogicBank for FutureBasic on rules that carry legal weight:
+- valuation and duty;
+- the manifest;
+- risk scoring into lanes;
+- release, the bond;
+- the decision at the port gate.
+
+How modern systems do it (US CBP, the WCO, ASYCUDA, Bermuda's own notices), with sources:
+`docs/research/Customs Clearance Research.md`.
+
+Bermuda has no land border. Goods arrive:
+- **by sea**: containers into the Port of Hamilton, Dockyard and St. George's;
+- **by air**: L.F. Wade International.
+
+The duty rates and risk weights are **sample values in Bermuda's style**, not the official tariff or risk
+profile. The companies and people are made up.
 
 ## User stories
 
-- **As an importer**, I lodge my declaration before the ship arrives; with a registered customs number and
-  every licence my goods need, it is **pre-cleared** - the green lane.
-- **As an importer**, I see the duty on every line (the tariff's rate on the value), the processing fee, what
-  I have paid and what I still owe.
-- **As a bonded importer**, my goods can be released before I pay, as long as what I owe stays within my
-  **deferment bond**.
-- **As a customs officer**, a declaration lodged late, by an unregistered importer, or missing a licence is in
-  the **red lane**: I must inspect it before it can be released, and a failed inspection holds it.
-- **As a customs officer**, when the tariff changes, entries already declared keep the rate they were declared at.
-- **As the gate**, a truck goes out only when its goods are released, its **transponder** was read, the **seal**
-  read matches the one declared, the **truck and the driver** are cleared on the day, and the **route** is
-  registered and approved - otherwise it is stopped, and told why.
-- **As a haulier**, as soon as the goods are released (or my clearance is renewed, or my route approved), my
-  truck waiting at the gate may go.
+- **As an importer or a broker**, I lodge a declaration, ideally before the ship arrives.
+  - Each line's value is the price I paid (FOB), converted at the week's exchange rate.
+  - Duty is ad valorem, per unit (alcohol), both (cigarettes), or stepped (cars), plus 1.25 % wharfage.
+- **As a charity approved for relief** (CPC 4071), my goods pay no duty, only wharfage.
+- **As a resident home from a trip**, my personal allowance (300; a visitor's 50) comes off, and baggage pays
+  no wharfage.
+- **As customs**, every declaration is risk-scored. The lane follows the score:
+
+  | Lane | Meaning |
+  |---|---|
+  | Green | Released automatically |
+  | Yellow | A document check |
+  | Red | A physical examination or an X-ray scan |
+  | Blue | A trusted trader's entry: released now, audited later |
+
+  The score adds up from:
+  - the country;
+  - the importer's compliance record;
+  - unregistered, or first-time;
+  - goods valued far under their reference price;
+  - a broken seal;
+  - a late security filing.
+
+  A random draw sends a few entries to red whatever the score.
+- **As customs**, nothing is released while:
+  - the goods have not arrived;
+  - the manifest does not add up;
+  - a hold is open;
+  - an agency's permit is missing (the Ministry of Health, the Environment department, the Liquor Licence
+    Authority);
+  - an inspection failed;
+  - the lane's check has not passed;
+  - the duty is unpaid.
+
+  Prohibited goods are never released. Each entry says what it is waiting for.
+- **As automatic release**, the moment the last reason goes, the entry is releasable: when the ship docks, a
+  permit is approved, an examination passes, a payment lands. A failed examination costs the importer
+  compliance points for its next entries.
+- **As a bonded importer**, I pay monthly, on a statement, as long as what my open statements owe stays
+  within my bond.
+- **As the gate**, a truck goes out only with:
+  - released goods;
+  - its transponder read;
+  - the declared seal;
+  - a cleared truck and driver;
+  - an approved route.
 
 ## The model
 
 ```
-Country     Tariff          PortOfEntry ─< Arrival ─< Container          Carrier ─< Arrival
-   │           │                 │            │           │                 └──< Truck
-   └────< DeclarationLine >──────┼────────────┼───────────┤
-                │                │            │           │
-Importer ─< Declaration >────────┼────────────┘           │
-               │  ├─< Payment     └──< Route              │
-               │  ├─< Inspection          │               │
-               └──┴─< Movement >──────────┴── Truck, Driver, Container
+Country, Currency ─< ExchangeRate          Agency ─< Tariff ─< DeclarationLine ─< Permit
+PortOfEntry ─< Arrival ─< MasterBill ─< HouseBill ─< Declaration ─< DeclarationLine
+                  └─< Container ──────────────────────────┤ ├─< Hold, Inspection, Payment
+Importer ─< Statement ─< Declaration, Payment               └─< Movement >── Truck, Driver, Route, Container
+Broker ─< Declaration
 ```
 
-## The rules (35, every one tested)
+## The rules (93, every one tested)
 
-**Duty.** A line copies its tariff's rate and licence requirement when declared; `Duty` = Value × rate. The
-declaration adds its lines up (`TotalValue`, `TotalDuty`, `LineCount`), plus the port's processing fee (copied
-from the arrival, which copied it from the port); `Paid` is its payments, `Balance` what is left.
+**Value and duty.**
+- A line copies its tariff's rates, agency, prohibited flag and reference price when it is declared. A later
+  tariff change leaves it alone.
+- `Value` = the invoice value × the week's rate, rounded first.
+- `Duty` = ad valorem (stepped above `StepAbove`) + quantity × the specific rate. It is 0 with relief, and
+  relief is refused unless the importer is approved.
+- `Wharfage` = 1.25 % of the value, except on a personal declaration.
+- The declaration adds its lines up and keeps `CifValue` (+ freight and insurance) for statistics.
+- `AllowanceDuty` is the allowance's share of the duty. `AmountDue`, `Paid`, `Balance` follow.
+- The exchange rate must be the week of lodging. A payment is for a declaration or for a statement, and is
+  never more than is due.
 
-**The lanes.** `MissingLicences` counts the lines that need a licence and have none. `PreCleared` - lodged before
-the goods arrived, by a registered importer, with every licence, with goods; `Lane` is G or R. Release needs goods,
-the green lane or a passed inspection, and no failed inspection.
+**The manifest.**
+- A master bill counts its house bills' packages: they must add up to the manifested packages.
+- A house bill whose security filing was less than a day before lading is late.
 
-**The bond.** `Importer.DeferredBalance` is what its released declarations still owe; it may not exceed the
-`BondAmount` - so goods without a bond must be paid before release.
+**Risk and lanes.**
+- `RiskScore` adds up:
 
-**The gate.** `Movement.Reason` is the first check that fails - goods not released, transponder not read, seal
-not matching, truck or driver not cleared on the day, route not approved - and `Lane` is G only without one. A
-truck goes out (`Status` O) only in the green lane, with the container its entry declares. Every one of these
-recomputes when its source changes: a release, a renewed clearance, an approved route.
+  | Factor | Points |
+  |---|---|
+  | The country's risk weight | as set per country |
+  | The importer's compliance points (when lodged) | half of what it is short of 100 |
+  | Not registered | +20 |
+  | First-time (registered less than a year) | +15 |
+  | A trusted trader (AEO) | −30 |
+  | Each undervalued line | +20 |
+  | A broken seal | +40 |
+  | A late filing | +20 |
 
-**Checks and deletes.** Rates between 0 and 100 %; quantities above 0, values not negative, tariff headings that
-exist; payments above 0. An entry with payments cannot be deleted (one without takes its lines with it); nor an
-importer with declarations, nor an arrival with containers.
+- `Lane`:
+  - red under a random draw of 0.03;
+  - else green under 30, yellow under 60, red above;
+  - blue for an AEO entry chosen for audit.
+- A failed inspection costs 25 compliance points.
+
+**Release.** `ReleaseReason` is the first of these that applies, and `Releasable` is 1 when none does:
+1. no goods;
+2. prohibited goods;
+3. not arrived;
+4. the manifest;
+5. open holds;
+6. missing permits;
+7. a failed inspection;
+8. red without a passed examination;
+9. yellow without a passed check;
+10. unpaid, and not on a statement.
+
+`Status` R (released) is allowed only when releasable.
+
+**The bond.**
+- `StatementBalance` (the open statements) may not exceed the bond.
+- `RequiredBond` = 10 % of the year's duty, at least 10,000, with a `BondSufficient` flag.
+- A statement closes only when paid.
+
+**The gate.**
+- `Movement.Reason` is the first check that fails: released, transponder, seal, truck, driver, route.
+- `Lane` G lets the truck out. The container must be the one the entry declares.
+
+**Deleting.**
+- An entry with payments, a gate movement or an inspection stays. Otherwise it takes its lines, their permits
+  and its holds.
+- Importers with declarations or statements stay.
+- Arrivals with containers or bills of lading stay.
+- Declared house bills and tariffs in use stay.
+
+## The demo scenario (`sample.sql`)
+
+| Entry | Importer, goods | Where it stands |
+|---|---|---|
+| 1 | Harbour Provisions (AEO): beef, milk powder, grapes, lodged before arrival | green, released on its statement, out of the gate |
+| 2 | Island Spirits: whisky and wine from the UK, in pounds | green, released on its statement, out of the gate |
+| 3 | Harbour Provisions: beef and bread, the ship still at sea | releasable the moment the ship docks |
+| 4 | Somers Building Supply: cement and lumber from China, filed late | yellow, not arrived |
+| 5 | Paget Electronics (new): laptops, and phones at 80 each | yellow: a document check, then pay |
+| 6 | Bermuda Hospital Trust (AEO, relief): medicines | blue: released, audit later |
+| 7 | Coral Reef Imports (unregistered, Colombia), broken seal, with pistols | red: prohibited goods, then the manifest, the hold, the examination |
+| 8 | Island Spirits: rosé from France, drawn at random | red: the manifest, the licence pending, an examination |
+| 9 | Jane Outerbridge, home from a trip | yellow: the resident's 300 allowance |
 
 ## Files
 
-| | |
-|---|---|
-| `schema.sql` | the tables (the source of truth) |
-| `lookup.sql` | the **lookup data** that stays: countries, the tariff, ports of entry, carriers, registered routes |
-| `sample.sql` | the **sample data**, the demo scenario: importers, arrivals and containers, declarations, payments, inspections, trucks, drivers, movements at the gate |
-| `purge_sample.sql` | removes the sample data and keeps the lookup data |
-| `customs.sqlite` | the database - every row put in through the rules |
-| `build_db.py` | makes `customs.sqlite` from the three files; `--lookup-only` for an empty, ready-to-use system |
-| `customs_rules.py` | the rules, run here by `tools/logic_reference.py`'s engine (LogicBank for FutureBasic, function for function) |
-| `test_rules.py` | 41 scenarios (and the purge); `--prove` leaves each rule out in turn and needs a scenario to fail |
-| `Rules.incl` | the same rules in FutureBasic, for the generated app |
+- `schema.sql`: the tables.
+- `lookup.sql`: countries, currencies and weekly rates, agencies, the tariff, ports, carriers, brokers and
+  routes. It stays when the sample data is purged.
+- `sample.sql`: the demo scenario. `purge_sample.sql` removes it.
+- `build_db.py`: builds `customs.sqlite`, every row through the rules. Entries are released, and trucks go
+  out, at the end. `--lookup-only` leaves the scenario out.
+- `customs_rules.py`: the rules (the reference).
+- `test_rules.py`: 88 scenarios. `--prove` leaves each rule out in turn; a scenario must then fail.
+- `Rules.incl`: the same rules in FB, for the generated app's `Rules.incl`.
 
-## Building the app
-
-1. In Studio for FB: **New Project** → choose `samples/Customs/customs.sqlite` → Create.
-2. **Generate App.**
-3. Copy `samples/Customs/Rules.incl` over the generated app's `FBapp/Rules.incl` (the starting template; it is never
-   overwritten after that).
-4. Open the generated project in FutureBasic and build. In the app: release entry BDA-26-10430 (refused: red lane),
-   add an inspection, release it; at the gate, correct the seal on the stopped truck and let it out.
-
-## Checking the rules here
-
+```bash
+python3 samples/Customs/build_db.py
+python3 samples/Customs/test_rules.py --prove
 ```
-python3 samples/Customs/build_db.py            # remake customs.sqlite (--lookup-only: without the demo scenario)
-python3 samples/Customs/test_rules.py          # 41 scenarios
-python3 samples/Customs/test_rules.py --prove  # 35 rules, each tested
-```
-`tools/run_tests.sh` runs both, and lints `Rules.incl` with the runtime.

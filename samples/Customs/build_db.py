@@ -25,10 +25,11 @@ from logic_reference import Data, Logic          # noqa: E402
 import sample_loader                              # noqa: E402
 import customs_rules                              # noqa: E402
 
-LOOKUP = ['Country', 'Tariff', 'PortOfEntry', 'Carrier', 'Route']
-SAMPLE = ['Importer', 'Arrival', 'Container', 'Declaration', 'DeclarationLine', 'Payment', 'Inspection', 'Truck', 'Driver', 'Movement']
-# lodged first, then its goods, payments and inspections, then released or held; a truck waits at the
-# gate first, then goes through or is stopped - in this order, as in the app
+LOOKUP = ['Country', 'Currency', 'ExchangeRate', 'Agency', 'Tariff', 'PortOfEntry', 'Carrier', 'Broker', 'Route']
+SAMPLE = ['Importer', 'Statement', 'Arrival', 'MasterBill', 'HouseBill', 'Container', 'Declaration', 'DeclarationLine', 'Permit',
+          'Hold', 'Inspection', 'Payment', 'Truck', 'Driver', 'Movement']
+# lodged first, then its goods, permits, holds, inspections and payments, then released (as automatic release
+# would); a truck waits at the gate first, then goes out - in this order, as in the app
 INITIAL = {'Declaration': {'Status': 'L'}, 'Movement': {'Status': 'W'}}
 
 

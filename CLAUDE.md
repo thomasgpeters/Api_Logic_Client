@@ -100,8 +100,8 @@ mode work without extra code).
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 - `samples/<Name>/` — the sample applications (author, 2026-11-26), one use case each: `Telecom` (a mobile carrier's travel
-  plans priced from roaming agreements, 39 rules), `Customs` (Bermuda customs clearance: duty, pre-clearance, the port
-  gate, 35 rules), `FlightPlanner` (VFR flights in New England: wind triangle, weight and balance, runways, weather, currency, go / no-go, 104 rules). Each: `schema.sql`; `lookup.sql` (reference data that stays) and `sample.sql` (the demo scenario) apart,
+  plans priced from roaming agreements, 39 rules), `Customs` (Bermuda customs clearance, automated: FOB duty, manifest, risk
+  lanes, release, bond, the port gate, 93 rules), `FlightPlanner` (VFR flights in New England: wind triangle, weight and balance, runways, weather, currency, go / no-go, 104 rules). Each: `schema.sql`; `lookup.sql` (reference data that stays) and `sample.sql` (the demo scenario) apart,
   as on the C++ side, with `purge_sample.sql`; `build_db.py` (every row through the rules, `--lookup-only`); the rules
   (`<name>_rules.py`, tested by `test_rules.py` and `--prove`) and the same rules in FB (`Rules.incl`).
   `samples/sample_loader.py` replays the SQL files through the rules.

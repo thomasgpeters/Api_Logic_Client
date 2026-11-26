@@ -259,7 +259,7 @@ the site, download] -> [post to the list].
 | Telecom - Northstar Mobile: travel plans priced from roaming agreements | done (39 rules) | | | |
 | Flight planner for amateur pilots - VFR in New England: wind triangle, weight and balance, runways, weather, currency, go / no-go | done (104 rules) | | | |
 | Asset management for oil and gas | | | | |
-| National customs clearance - set in Bermuda: duty, pre-clearance, the port gate | done (35 rules) | | | |
+| National customs clearance - set in Bermuda: FOB value and duty, manifest, risk lanes, automated release, bond, the port gate | done (93 rules) | | | |
 
 - [ ] The GitHub Pages site (repository name from the author): a page per sample - what it is, its user stories,
   screenshots, the download
@@ -275,7 +275,12 @@ the site, download] -> [post to the list].
 - [ ] Enterprise: Flight Service filing, simulated in the ALS project (author, 2026-11-26) - file, amend, cancel,
   activate, close, extend; the ICAO message from a FlightPlan; overdue -> QALQ -> INREQ -> ALNOT on read.
   Design: `docs/design/Flight Service Filing Design.md`
-- [ ] Customs, elaborated from the domain research (author, 2026-11-26: automated clearance, auto-release)
+- [x] Customs, elaborated from the domain research (author, 2026-11-26: automated clearance, auto-release) - duty
+  on the price paid (FOB) at the week's rate, specific / compound / stepped rates, wharfage, relief, personal
+  allowances; master and house bills; agency permits, holds, prohibited goods; risk score and lanes (green,
+  yellow, red, blue, random); release reasons; statements within the bond - 93 rules
+- [ ] Automatic release in the generated app (and in ALS for Enterprise): release every Releasable declaration
+  when something changes (a ship docks, a permit is approved, a payment lands) - the rules say which
 - [ ] Flight planner: build it on a Mac; its Map view (legs between airports, the track replayed, other traffic)
 - [ ] Oil and gas assets: the database (sites, assets, responsible organisations, operating hours, maintenance
   schedules and work orders, sensors, readings, controllers, alarms); rules for maintenance due, alarms, lock-outs;

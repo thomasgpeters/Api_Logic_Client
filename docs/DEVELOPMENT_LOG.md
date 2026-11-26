@@ -6,6 +6,28 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Customs elaborated from the research: automated clearance
+
+- `samples/Customs` rebuilt: 22 tables, 93 rules, 88 scenarios, `--prove` 93 of 93.
+  - Value on the price paid (FOB, Bermuda's Public Notice 17) at the week's exchange rate, rounded first.
+  - Ad valorem, specific, compound and stepped rates.
+  - Wharfage 1.25 %; none on personal baggage.
+  - Relief for approved importers; resident and visitor allowances.
+  - Master and house bills with a manifest check; late security filing.
+  - Agency permits, holds, prohibited goods.
+  - Risk score and lanes: green, yellow, red, blue, plus a random draw.
+  - `ReleaseReason` / `Releasable`: automatic release is the app releasing what the rules call releasable.
+  - Monthly statements within the bond; required bond.
+  - The port gate, kept.
+- Learned:
+  - A child's formula that reads its parent's aggregate sees it before the child is counted. Ten house bills
+    reading their master bill's "manifest match" kept a stale value. Read the aggregate from the row that
+    needs it, not through the child: the declaration copies `MasterBillId` and reads the master bill.
+  - A cycle (an inspection lowers the importer's points, which raise the same entry's risk) leaves the
+    entry's own score stale. Break it the way the domain does: score with the points as they were when the
+    entry was lodged (a copy rule).
+  - CIF (in the earlier sample) was wrong for Bermuda: duty is on the transaction value.
+
 ## 2026-11-26 — Flight Planner elaborated from the research; Flight Service filing designed
 
 - The author asked for research on both samples' domains, then for everything it suggested. Research notes:

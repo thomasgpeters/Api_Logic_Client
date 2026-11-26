@@ -4,10 +4,15 @@
 DELETE FROM "Movement";
 DELETE FROM "Driver";
 DELETE FROM "Truck";
-DELETE FROM "Inspection";
 DELETE FROM "Payment";
+DELETE FROM "Inspection";
+DELETE FROM "Hold";
+DELETE FROM "Permit";
 DELETE FROM "DeclarationLine";
 DELETE FROM "Declaration";
 DELETE FROM "Container";
+DELETE FROM "HouseBill";
+DELETE FROM "MasterBill";
 DELETE FROM "Arrival";
+DELETE FROM "Statement";
 DELETE FROM "Importer";
