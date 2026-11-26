@@ -88,6 +88,7 @@ logicbank_same() {
     echo "LogicBank for FutureBasic: the copies are identical"
 }
 run "LogicBank for FutureBasic: the module, identical in the runtime and the example project" logicbank_same
+run "web: the FastCGI core (compiled here; behind nginx when it is installed)" python3 "$here/tools/check_fastcgi_core.py"
 run "licences: the reference signs and verifies (valid, tampered, expired, another product, another key)" python3 "$here/tools/licence_reference.py" --test
 run "licences: the Mac test program carries Licence.incl's verify part unchanged" python3 "$here/tools/licence_reference.py" --mac-test-check
 run "LogicBank example: the story's every value, worked out by the reference engine" python3 "$here/tools/logicbank_example_reference.py"

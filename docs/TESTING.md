@@ -56,6 +56,13 @@ and ends with `logic test: 70 scenarios, 0 failed`. It works on `~/Desktop/Logic
 a copy; run `make_logic_test.py` again for a fresh one. Paste the Build Log or the NSLog lines
 into a session when something fails.
 
+### FastCGI Test (the pattern: nginx in front of a FutureBasic program)
+
+`tools/check_fastcgi_core.py` (in `run_tests.sh`) compiles the program's FastCGI core here and runs it behind nginx. On a
+Mac: `brew install nginx`, copy `src/MacTests/FastCGI Test nginx.conf` to `/opt/homebrew/etc/nginx/servers/`,
+`brew services restart nginx`, run `src/MacTests/FastCGI Test.fb`, open http://127.0.0.1:8088/ - the same reports as
+the Web Server Test below.
+
 ### Web Server Test (feasibility: a web app in FutureBasic, `docs/design/Web Toolkit Design.md`)
 
 Open `src/MacTests/Web Server Test.fb` in FB and run it; click Open in Browser (http://127.0.0.1:8080/). Report:
