@@ -62,6 +62,43 @@ longer copied into generated apps. They are the starting point of the Enterprise
 to the private repository when it exists. They are already public in this repository's history,
 which is acceptable: they are a thin JSON:API client for an open-source server.
 
+## Rules: where the line is (author, 2026-11-26)
+
+The split is not by rule kind: it is by **where the rules run and who shares them**.
+- **Lite** covers everything about defining, testing and running rules for one person, on one Mac, against one
+  SQLite database.
+- **Enterprise** covers everything about rules that many people share through a server: enforced there,
+  exchanged with API Logic Server, connected to other systems, secured and governed.
+
+LogicBank for FutureBasic is an open module, so holding rule kinds back from Lite would only cripple the free
+product.
+
+| Feature | Edition | Why |
+|---|---|---|
+| The engine, LogicBank for FutureBasic: every rule kind (formula, constraint, sum, count, copy, parent check, delete actions, events) | Lite | the open module; without it a Lite app has no behaviour |
+| Rules page, `Rules.json`, the rules check, `Rules.incl` generated | Lite | authoring is the point of App Builder |
+| Rules as sentences in the model's names, with model-name suggestions while typing | Lite | how users write rules (`AI Assistant Design.md`) |
+| Explain and the logic log | Lite | needed to trust the rules |
+| Rules on the model diagram | Lite | documentation for the one user |
+| Scenarios, `--prove`, test data that can be purged | Lite | testing is part of writing rules |
+| In-app actions on rule results (e.g. *Release all releasable*) | Lite | local, started by the user |
+| AI Assistant: Translate, Suggest Rules, Suggest Controls, with the user's own key | Lite | a bare schema becomes a working app; the user pays the AI provider |
+| Import and export of `declare_logic.py` | Enterprise | only meaningful with an ALS project, the Enterprise catalyst |
+| Enforcement on the server (ALS is the authority) | Enterprise | three tiers |
+| Equivalence of the FB and ALS rules (the same scenarios against both) | Enterprise | only when both exist |
+| Multi-user correctness: concurrent saves, one transaction across clients | Enterprise | needs a server |
+| Integration events: web services, mail, messaging (e.g. Flight Service filing) | Enterprise | they run on the server, with its secrets; Lite keeps local row and commit events |
+| Scheduled and background rules (release when a ship docks, overdue alerts) | Enterprise | something must run when no app is open |
+| Authorization rules: row-level security, grants by role | Enterprise | ALS security; meaningless for one user |
+| Rule governance: versions, sign-off, an audit trail, roles | Enterprise | a team's concern (Imagery LogicBank Studio's ground) |
+| AI through ALS's `genai-logic`, plus shared prompts and settings for a team | Enterprise | AI on the server, for an organisation |
+
+**An Enterprise client also runs the rules locally, as a preview.** The app shows "this would be refused" as you
+type, using LogicBank for FutureBasic, while the server makes the final decision.
+
+**Upgrading carries the rules over.** The same sentences work in both editions: moving a project from Lite to
+Enterprise exports its rules to `declare_logic.py` unchanged.
+
 ## Licensing (decision for later)
 
 Decided (author, 2026-11-24): the Studio checks the licence **offline** (it never calls the

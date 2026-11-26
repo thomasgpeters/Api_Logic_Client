@@ -160,17 +160,21 @@ Enterprise at the ALS project.
 
 A rule is a sentence in the model's own names; the sentence is the source of truth, and the AI translates it into
 LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in ALS (Enterprise).
-- [ ] LogicBank for FutureBasic as a module of its own (as LogicBank is to ALS): folder, README, example, tests
+- [ ] LogicBank for FutureBasic as a module of its own (as LogicBank is to ALS): folder, README, example, tests,
+  MIT licence - published on the FB list like the SQL Generator (author, 2026-11-26)
 - [ ] The neutral expression language for formulas / constraints / where (FB and Python generated from it);
   `Rules.json` keeps each rule's sentence
 - [ ] The rules check in FB (port of `rules_bridge.py check`), with the engine's limits the samples found
-- [ ] The AI connector (FB, URLSession, key in the Keychain, prompts as Templates, answers saved in `<project>/AI/`)
+- [ ] The AI connector (FB, URLSession, key in the Keychain, prompts as Templates, answers saved in `<project>/AI/`):
+  Claude first, behind a narrow interface; every edition, the user's own key
 - [ ] Rules page: grounded sentences (type-ahead from the model), Translate, approve
 - [ ] Suggest Rules; the evaluation on Telecom, Customs and Flight Planner (sentences from their READMEs)
 - [ ] Suggest Controls into `Design.json`
-- [ ] Enterprise: `declare_logic.py` from the same rules, sentences as comments; the scenarios run against ALS
-- [ ] Decisions for the author: edition; provider; ALS `genai-logic` for Enterprise; the expression language;
-  the module's name
+- [ ] Enterprise: `declare_logic.py` from the same rules, sentences as comments; the scenarios run against ALS;
+  translation through the ALS project's `genai-logic` when it has it, else the Studio's connector
+- [ ] Enterprise: the client previews the rules locally (LogicBank for FutureBasic) while the server decides
+- [x] Decisions (author, 2026-11-26): every edition with the user's own key; Claude first; Enterprise both routes;
+  the neutral expression language; the module published. The rules split: `design/Editions and Licensing.md`
 
 ## Rules - Logic for FutureBasic (`design/Logic Engine Design.md`, ROADMAP Phase 5)
 

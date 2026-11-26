@@ -206,22 +206,18 @@ scenario. That makes them a test of the Assistant:
 The prompts are tuned against these numbers before the feature ships, and kept in `run_tests.sh` with a
 recorded answer (no network in the test).
 
-## Open decisions (for the author)
+## Decisions (author, 2026-11-26)
 
-- **Edition:**
-  - all editions with the user's own key;
-  - or Enterprise only;
-  - or a paid feature in either.
-- **Provider:** Claude only to begin, or a pluggable connector from the start.
-- **Imagery LogicBank Studio** (C++/Wt) never calls a language model itself; it asks ALS's `genai-logic`.
-  - For Enterprise, App Builder could do the same: send the sentence to the ALS project's `genai-logic`.
-    The ALS side then writes `declare_logic.py`, and App Builder imports it.
-  - Lite has no server, so it needs the direct connector.
-  - Should the two products agree here?
-- **The expression language:** adopt it (and retire FB bodies in `Rules.json`), or keep FB bodies and
-  translate them.
-- **LogicBank for FutureBasic as a module:** its name, its folder, and whether it is published on its own like
-  the SQL Generator.
+- **Edition:** every edition gets the Assistant (Translate, Suggest Rules, Suggest Controls), using the user's own
+  API key. The rules split between editions is in `Editions and Licensing.md` → *Rules: where the line is*.
+- **Provider:** Claude first, behind a narrow connector interface, so others can be added later without changing the
+  Studio.
+- **Enterprise route:** both. The ALS project's `genai-logic` when the server has it (as Imagery LogicBank Studio
+  does); otherwise the Studio's own connector, then export to `declare_logic.py`.
+- **Expressions:** the neutral expression language. FB and Python are both generated from it; the FB bodies in
+  `Rules.json` are retired step by step.
+- **The module:** LogicBank for FutureBasic gets its own folder, README, example, tests and MIT licence, like the SQL
+  Generator, and is published on the FB list. App Builder and the generated apps use it.
 
 ## Plan
 

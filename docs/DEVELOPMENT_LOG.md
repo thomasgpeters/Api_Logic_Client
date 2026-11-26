@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Rules: the line between Lite and Enterprise; the AI Assistant's decisions
+
+- The author drew the line for rules by where they run and who shares them (`docs/design/Editions and Licensing.md`):
+  - **Lite** defines, tests and runs rules on one Mac: the whole engine, authoring, sentences, Explain, scenarios,
+    and the AI Assistant with the user's own key.
+  - **Enterprise** covers rules shared through a server: enforcement, `declare_logic.py` import and export,
+    equivalence tests, multi-user, integration and scheduled rules, authorization, governance, `genai-logic`.
+  - An Enterprise client previews the rules locally.
+- AI Assistant decisions:
+  - Claude first, behind a narrow interface.
+  - Enterprise uses both routes (ALS `genai-logic`, else the Studio's connector).
+  - The neutral expression language.
+  - LogicBank for FutureBasic is published as its own module.
+
 ## 2026-11-26 — AI Assistant designed: rules as sentences in the model's language
 
 - The author: a schema brings no rules, so an AI connector in App Builder. Rules are natural language using the
