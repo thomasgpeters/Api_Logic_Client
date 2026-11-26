@@ -5,6 +5,19 @@ its customers, accounts, plans and phones - and **travel plans** priced from its
 with partner networks abroad (made up, in real countries). Built to show LogicBank for FutureBasic on
 a real-world case quite unlike orders and products.
 
+## User stories
+
+- **As a customer going abroad**, I describe my trip - the countries and my dates in each - and see what a
+  travel plan costs before I buy it.
+- **As a customer**, I buy the travel plan; it is billed to my account, unless that would take me over my
+  credit limit.
+- **As a customer**, I cancel a trip I bought, and it comes off my bill.
+- **As a family on a shared plan**, we see how much of our data we have used, and how much we are over.
+- **As the carrier's pricing team**, when a partner network changes its rates, or we change a zone's markup,
+  every country's day price follows - and the quotes customers already have keep their prices.
+- **As the carrier**, I never sell a trip to a country where we have no partner network, nor to a suspended phone.
+- **As an account manager**, I add a phone to a plan only when the plan has a free line.
+
 ## The model
 
 ```

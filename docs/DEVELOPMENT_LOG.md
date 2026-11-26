@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — The sample applications: one lifecycle, use case by use case
+
+- The author: a SQLite database for each use case (Telecom, the flight planner, oil and gas assets, customs
+  clearance), made right first; App Builder generates each business application; each is added as a
+  sample to the GitHub Pages site and posted on the FutureBasic list - the whole lifecycle, many use cases
+  and user stories. `BACKLOG.md` -> Sample applications: the parts every sample has (as `samples/Telecom`),
+  its steps, and a table of the four. The Telecom README gained its user stories.
+
 ## 2026-11-26 — Telecom sample: travel plans priced from roaming agreements, 39 rules
 
 - The author: a second application from a database, to show the business rules on a real-world case

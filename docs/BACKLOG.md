@@ -240,14 +240,38 @@ Everything needed is in `design/Editions and Licensing.md`. In this order:
 5. [ ] License Server (its own repository): product `imagery_logicbank_studio_fb`, bit 0 `enterprise`.
 6. [ ] The paid build: project file, release, distribution from the License Server.
 
-## Telecom sample (author, 2026-11-26; `samples/Telecom/README.md`)
+## Sample applications - the whole lifecycle, use case by use case (author, 2026-11-26)
 
-- [x] Model, seed data and 39 business rules: roaming prices from partner agreements, travel plans, the credit
-  limit, plan lines, shared data; tested here (30 scenarios, every rule proven); `Rules.incl` in FB
-- [ ] Build it on a Mac: New Project from `telecom.sqlite`, Generate App, copy `Rules.incl` over `FBapp/Rules.incl`,
-  build; buy a quote, try one over the credit limit, add a country with no service (Kenya)
-- [ ] Its Page Layouts once they exist: a Travel Planner page (customer, phone, countries, dates, the price)
-- [ ] Its Map view: countries and partner networks on the map (countries carry latitude and longitude)
+Each use case is a SQLite database first, made right for it; App Builder then generates its business
+application; it is built and run on a Mac; it is published as a sample on the GitHub Pages site and
+announced on the FutureBasic list. Many use cases and user stories, through the whole lifecycle.
+
+Every sample has the same parts (`samples/<Name>/`, as `samples/Telecom`): `README.md` (the use case, its
+**user stories**, the model, the rules), `schema.sql`, `build_db.py` (the seed data, put in through the rules),
+`<name>.sqlite`, the rules for the reference engine with `test_rules.py` (scenarios, `--prove`), and `Rules.incl`
+(the same rules in FutureBasic). Its steps: [database] -> [generated and built on a Mac] -> [screenshots, page on
+the site, download] -> [post to the list].
+
+| Sample | Database | App on a Mac | On the site | Posted |
+|---|---|---|---|---|
+| Telecom - Northstar Mobile: travel plans priced from roaming agreements | done (39 rules) | | | |
+| Flight planner for amateur pilots | | | | |
+| Asset management for oil and gas | | | | |
+| National customs clearance | | | | |
+
+- [ ] The GitHub Pages site (repository name from the author): a page per sample - what it is, its user stories,
+  screenshots, the download
+- [ ] Telecom: build it on a Mac: New Project from `telecom.sqlite`, Generate App, copy `Rules.incl` over
+  `FBapp/Rules.incl`, build; buy a quote, try one over the credit limit, add a country with no service (Kenya)
+- [ ] Telecom: its Page Layouts once they exist (a Travel Planner page); its Map view (countries carry latitude and longitude)
+- [ ] Flight planner: the database (pilots, aircraft and their performance, airports, waypoints, flight plans and
+  legs, position reports); rules for distance, time and fuel against range and reserve
+- [ ] Oil and gas assets: the database (sites, assets, responsible organisations, operating hours, maintenance
+  schedules and work orders, sensors, readings, controllers, alarms); rules for maintenance due, alarms, lock-outs;
+  simulated devices first, Raspberry Pi / Arduino later
+- [ ] Customs clearance: the database (a country's tariff schedule, shipments, declarations, carriers, trucks with
+  transponders, drivers, containers and seals, registered routes, crossings, inspections); rules for duty,
+  pre-clearance matching, validity on the date of crossing
 
 ## Ideas
 
