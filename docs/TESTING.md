@@ -56,6 +56,15 @@ and ends with `logic test: 70 scenarios, 0 failed`. It works on `~/Desktop/Logic
 a copy; run `make_logic_test.py` again for a fresh one. Paste the Build Log or the NSLog lines
 into a session when something fails.
 
+### Web Server Test (feasibility: a web app in FutureBasic, `docs/design/Web Toolkit Design.md`)
+
+Open `src/MacTests/Web Server Test.fb` in FB and run it; click Open in Browser (http://127.0.0.1:8080/). Report:
+- does the page appear;
+- does Add One count up without reloading;
+- does Greet show `<b>Bob</b>` as typed (not bold);
+- two tabs, many fast clicks: does it keep up (the window counts the requests);
+- anything the window or the NSLog window says.
+
 ## 2b. On a Mac — MapKit points (before the Map view is built)
 
 Open `src/MacTests/MapKit Points Test.fb` in FB and run it. Five points (three customers in blue,

@@ -321,6 +321,11 @@ the site, download] -> [post to the list].
 - [ ] Purge sample data from a generated app or the Studio: a command that runs the sample's `purge_sample.sql` (and
   an app built lookup-only from the start) - so a sample becomes a real system
 
+## Web Toolkit for FutureBasic - feasibility (author, 2026-11-26; `design/Web Toolkit Design.md`)
+
+- [ ] Run `src/MacTests/Web Server Test.fb` on a Mac: can FB serve a page and take its clicks? (a standalone
+  replacement for Wt, no Wt licence - a feasibility question for now)
+
 ## Ideas
 
 - **National customs clearance** (author, 2026-11-26; a separate application, from the author's earlier work in

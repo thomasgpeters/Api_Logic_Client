@@ -6,6 +6,22 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Feasibility: web applications in FutureBasic, replacing Wt
+
+- The author asked whether a standalone web server and web UI, with the business logic in FB, could replace Wt and
+  its licence: a feasibility question for now.
+- `docs/design/Web Toolkit Design.md` covers:
+  - the purpose: replace Wt, clean-room, no Wt code or licence;
+  - what FB offers;
+  - an architecture in Wt's spirit: sessions, widget dictionaries, events through `@fn`, incremental updates, a
+    small `web.js`, CSS themes;
+  - security, HTTPS (a proxy at first, then Apple's Network framework), and the limits.
+- `src/MacTests/Web Server Test.fb` is the proof: a C HTTP server (`BeginCFunction`, BSD sockets, GCD on the main
+  queue) calls an FB handler through an `@fn` pointer. The page is a counter and a greeting, updated without reloading.
+- Learned:
+  - FB has no web-server example or HTTP library.
+  - `BeginCDeclaration` / `BeginCFunction` ... `EndC` with `toolbox fn` brings in C the size of a small server.
+
 ## 2026-11-26 — Imagery's FutureBasic site, generated
 
 - The author hosts the site on his own server at `fb.imagery-business-systems.com` (a domain name, so the host can
