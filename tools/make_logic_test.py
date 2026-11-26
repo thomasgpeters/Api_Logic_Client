@@ -149,10 +149,10 @@ end globals
 void local fn Check( testName as CFStringRef, passed as BOOL, detail as CFStringRef )
 gTestsRun++
 if ( passed )
-NSLog( @"PASS  %@", testName )
+if ( isLoggingOn ) then NSLog( @"PASS  %@", testName )
 else
 gTestsFailed++
-NSLog( @"FAIL  %@   [%@]", testName, detail )
+if ( isLoggingOn ) then NSLog( @"FAIL  %@   [%@]", testName, detail )
 end if
 end fn
 
@@ -543,7 +543,7 @@ if ( fn DataOpen( NULL ) )
 fn RunScenarios
 fn RunAggregateScenarios
 fn RunStep3Scenarios
-NSLog( @"logic test: %ld scenarios, %ld failed", gTestsRun, gTestsFailed )
+if ( isLoggingOn ) then NSLog( @"logic test: %ld scenarios, %ld failed", gTestsRun, gTestsFailed )
 end if
 HandleEvents
 '''
