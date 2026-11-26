@@ -1,32 +1,32 @@
 # Customs sample: Bermuda customs clearance, automated
 
-A national customs clearance system with **automated clearance**, set in **Bermuda**, a sample model for App
-Builder for FutureBasic. It shows LogicBank for FutureBasic on rules that carry legal weight:
+This sample model for App Builder for FutureBasic is a national customs clearance system with **automated
+clearance**, set in **Bermuda**. We chose it to show LogicBank for FutureBasic on rules that carry legal weight:
 - valuation and duty;
 - the manifest;
 - risk scoring into lanes;
 - release, the bond;
 - the decision at the port gate.
 
-How modern systems do it (US CBP, the WCO, ASYCUDA, Bermuda's own notices), with sources:
-`docs/research/Customs Clearance Research.md`.
+If you'd like to know how modern systems do it (US CBP, the WCO, ASYCUDA, Bermuda's own notices), the research
+and its sources are in `docs/research/Customs Clearance Research.md`.
 
-Bermuda has no land border. Goods arrive:
+Bermuda has no land border, so goods arrive in one of two ways:
 - **by sea**: containers into the Port of Hamilton, Dockyard and St. George's;
 - **by air**: L.F. Wade International.
 
-The duty rates and risk weights are **sample values in Bermuda's style**, not the official tariff or risk
-profile. The companies and people are made up.
+Please keep in mind that the duty rates and risk weights are **sample values in Bermuda's style**. They
+aren't the official tariff or risk profile. The companies and people are made up.
 
 ## User stories
 
-- **As an importer or a broker**, I lodge a declaration, ideally before the ship arrives.
+- As an importer or a broker, I lodge a declaration, ideally before the ship arrives.
   - Each line's value is the price I paid (FOB), converted at the week's exchange rate.
   - Duty is ad valorem, per unit (alcohol), both (cigarettes), or stepped (cars), plus 1.25 % wharfage.
-- **As a charity approved for relief** (CPC 4071), my goods pay no duty, only wharfage.
-- **As a resident home from a trip**, my personal allowance (300; a visitor's 50) comes off, and baggage pays
+- As a charity approved for relief (CPC 4071), my goods pay no duty, only wharfage.
+- As a resident home from a trip, my personal allowance (300; a visitor's 50) comes off, and baggage pays
   no wharfage.
-- **As customs**, every declaration is risk-scored. The lane follows the score:
+- As customs, I risk-score every declaration, and the lane follows the score:
 
   | Lane | Meaning |
   |---|---|
@@ -35,7 +35,7 @@ profile. The companies and people are made up.
   | Red | A physical examination or an X-ray scan |
   | Blue | A trusted trader's entry: released now, audited later |
 
-  The score adds up from:
+  The score is the sum of points for:
   - the country;
   - the importer's compliance record;
   - unregistered, or first-time;
@@ -43,8 +43,8 @@ profile. The companies and people are made up.
   - a broken seal;
   - a late security filing.
 
-  A random draw sends a few entries to red whatever the score.
-- **As customs**, nothing is released while:
+  A random draw also sends a few entries to red, whatever their score.
+- As customs, I release nothing while:
   - the goods have not arrived;
   - the manifest does not add up;
   - a hold is open;
@@ -54,13 +54,13 @@ profile. The companies and people are made up.
   - the lane's check has not passed;
   - the duty is unpaid.
 
-  Prohibited goods are never released. Each entry says what it is waiting for.
-- **As automatic release**, the moment the last reason goes, the entry is releasable: when the ship docks, a
-  permit is approved, an examination passes, a payment lands. A failed examination costs the importer
-  compliance points for its next entries.
-- **As a bonded importer**, I pay monthly, on a statement, as long as what my open statements owe stays
+  Prohibited goods are never released. Each entry tells you what it's waiting for.
+- As automatic release, I make an entry releasable the moment its last reason goes away, whether that's the
+  ship docking, a permit approved, an examination passed or a payment landing. A failed examination costs the
+  importer compliance points for its next entries.
+- As a bonded importer, I pay monthly, on a statement, as long as what my open statements owe stays
   within my bond.
-- **As the gate**, a truck goes out only with:
+- As the gate, I let a truck out only with:
   - released goods;
   - its transponder read;
   - the declared seal;
@@ -80,23 +80,23 @@ Broker ─< Declaration
 ## The rules (93, every one tested)
 
 **Value and duty.**
-- A line copies its tariff's rates, agency, prohibited flag and reference price when it is declared. A later
-  tariff change leaves it alone.
+- A line copies its tariff's rates, agency, prohibited flag and reference price when it's declared, and a
+  later tariff change leaves it alone.
 - `Value` = the invoice value × the week's rate, rounded first.
-- `Duty` = ad valorem (stepped above `StepAbove`) + quantity × the specific rate. It is 0 with relief, and
+- `Duty` = ad valorem (stepped above `StepAbove`) + quantity × the specific rate. It's 0 with relief, and
   relief is refused unless the importer is approved.
 - `Wharfage` = 1.25 % of the value, except on a personal declaration.
 - The declaration adds its lines up and keeps `CifValue` (+ freight and insurance) for statistics.
-- `AllowanceDuty` is the allowance's share of the duty. `AmountDue`, `Paid`, `Balance` follow.
-- The exchange rate must be the week of lodging. A payment is for a declaration or for a statement, and is
-  never more than is due.
+- `AllowanceDuty` is the allowance's share of the duty, and `AmountDue`, `Paid` and `Balance` follow from it.
+- The exchange rate has to be the one for the week of lodging. A payment is for a declaration or for a
+  statement, and is never more than what's due.
 
 **The manifest.**
-- A master bill counts its house bills' packages: they must add up to the manifested packages.
-- A house bill whose security filing was less than a day before lading is late.
+- A master bill counts its house bills' packages, which have to add up to the manifested packages.
+- A house bill is late when its security filing came less than a day before lading.
 
 **Risk and lanes.**
-- `RiskScore` adds up:
+- `RiskScore` adds up these points:
 
   | Factor | Points |
   |---|---|
@@ -111,11 +111,11 @@ Broker ─< Declaration
 
 - `Lane`:
   - red under a random draw of 0.03;
-  - else green under 30, yellow under 60, red above;
+  - otherwise green under 30, yellow under 60, red above;
   - blue for an AEO entry chosen for audit.
 - A failed inspection costs 25 compliance points.
 
-**Release.** `ReleaseReason` is the first of these that applies, and `Releasable` is 1 when none does:
+**Release.** `ReleaseReason` is the first of these that applies, and `Releasable` is 1 when none of them does:
 1. no goods;
 2. prohibited goods;
 3. not arrived;
@@ -127,20 +127,20 @@ Broker ─< Declaration
 9. yellow without a passed check;
 10. unpaid, and not on a statement.
 
-`Status` R (released) is allowed only when releasable.
+`Status` R (released) is allowed only when the entry is releasable.
 
 **The bond.**
-- `StatementBalance` (the open statements) may not exceed the bond.
+- `StatementBalance` (the open statements) may not go over the bond.
 - `RequiredBond` = 10 % of the year's duty, at least 10,000, with a `BondSufficient` flag.
-- A statement closes only when paid.
+- A statement closes only once it's paid.
 
 **The gate.**
 - `Movement.Reason` is the first check that fails: released, transponder, seal, truck, driver, route.
-- `Lane` G lets the truck out. The container must be the one the entry declares.
+- `Lane` G lets the truck out, and the container has to be the one the entry declares.
 
 **Deleting.**
-- An entry with payments, a gate movement or an inspection stays. Otherwise it takes its lines, their permits
-  and its holds.
+- An entry with payments, a gate movement or an inspection stays. Any other entry takes its lines, their
+  permits and its holds with it.
 - Importers with declarations or statements stay.
 - Arrivals with containers or bills of lading stay.
 - Declared house bills and tariffs in use stay.
@@ -163,9 +163,9 @@ Broker ─< Declaration
 
 - `schema.sql`: the tables.
 - `lookup.sql`: countries, currencies and weekly rates, agencies, the tariff, ports, carriers, brokers and
-  routes. It stays when the sample data is purged.
-- `sample.sql`: the demo scenario. `purge_sample.sql` removes it.
-- `build_db.py`: builds `customs.sqlite`, every row through the rules. Entries are released, and trucks go
+  routes. It stays when you purge the sample data.
+- `sample.sql`: the demo scenario, which `purge_sample.sql` removes.
+- `build_db.py`: builds `customs.sqlite`, putting every row through the rules. Entries are released, and trucks go
   out, at the end. `--lookup-only` leaves the scenario out.
 - `customs_rules.py`: the rules (the reference).
 - `test_rules.py`: 88 scenarios. `--prove` leaves each rule out in turn; a scenario must then fail.

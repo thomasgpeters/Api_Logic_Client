@@ -1,15 +1,15 @@
 # Web Toolkit for FutureBasic
-Web applications written in FutureBasic. You write FB - the widgets of a page, and the functions their events call - and the toolkit serves the page to any browser. The page behaves as any modern page: each click goes to your FB code in the background (AJAX), and only what changed comes back, with no reloads. Your business logic runs in FB, on the server.
+Web applications written in FutureBasic. You write FB (the widgets of a page, and the functions their events call) and the toolkit serves the page to any browser. The page behaves the way you'd expect a modern page to: each click goes to your FB code in the background (AJAX), only what changed comes back, and nothing reloads. Your business logic runs in FB, on the server.
 
-It is a free, open-source module (MIT) from Imagery Business Systems. With the module you write your pages by hand, as this guide shows. App Builder for FutureBasic builds them for you from your model.
+It's a free, open-source module (MIT) from Imagery Business Systems. With the module you write your pages by hand, as this guide shows, and App Builder for FutureBasic builds them for you from your model.
 
 ## How it fits together
 ```
 Browser --HTTPS--> nginx --FastCGI--> your FB app (the Web Toolkit)
 ```
-- **nginx** (free) speaks HTTP and HTTPS to the browsers, and FastCGI to your app on 127.0.0.1:9000.
+- **nginx** (free) talks HTTP and HTTPS to the browsers, and FastCGI to your app on 127.0.0.1:9000.
 - **Your app** is an FB program that keeps running: a session for each visitor, the widgets of each session's page, and your event functions.
-- **web.js and web.css** are the browser's half: sending events, applying the changes, and the themes.
+- **web.js and web.css** are the browser's half. They send the events, apply the changes and hold the themes.
 
 ## Your first page
 Copy the Template folder, open Web App.fbeproj in FutureBasic, and write your page in Pages.incl.
@@ -26,8 +26,8 @@ fn WebOn( session, @"greet", @"clicked", @fn GreetClicked )
 end fn
 ```
 Build and run it, start nginx with the template's nginx.conf, and open http://127.0.0.1:8088/.
-- **BuildPage** runs once for each new visitor. Every widget is placed in a parent: "page", or a container's id.
-- **An event function** receives the session, the widget's id and the event's value. Every field's value comes with each event, so WebValue reads what the visitor sees.
+- **BuildPage** runs once for each new visitor. Every widget goes in a parent, either "page" or a container's id.
+- **An event function** gets the session, the widget's id and the event's value. Every field's value comes along with each event, so WebValue reads what the visitor sees.
 - **Changing a property** (WebSetText, WebSetValue, WebSetEnabled ...) sends only that change to the browser.
 
 ## The widgets
@@ -35,7 +35,7 @@ Build and run it, start nginx with the template's nginx.conf, and open http://12
 - **Text:** WebHeading, WebText, WebLabel, WebLink, WebImage, WebDivider, WebMessage (a message band).
 - **Input:** WebButton, WebField (text, email, password, number, date, time, datetime-local, color, range, search, tel, url), WebTextArea, WebCheckbox, WebRadioGroup, WebSelect.
 - **Data:** WebTable (columns, rows, a selected row), WebList.
-A widget has a role (primary, secondary, danger, success, warning, info), never a colour. The theme decides how a role looks: light, dark, colourful or base, or the visitor's own setting (WebSetTheme).
+You give a widget a role (primary, secondary, danger, success, warning, info) rather than a colour. The theme decides how each role looks: light, dark, colourful or base, or the visitor's own setting (WebSetTheme).
 
 ## Events
 Connect a function with WebOn( session, widgetId, event, @fn Name ).
@@ -47,12 +47,12 @@ Connect a function with WebOn( session, widgetId, event, @fn Name ).
 - **submitted**: a form.
 
 ## The page's lifecycle
-Events on the widget "page" tell you where the visitor is:
-- **shown**: the page was sent - "first" for a new visitor, "again" on a reload. Show fresh data here.
+Events on the widget "page" let you know where the visitor is:
+- **shown**: the page was sent, with "first" for a new visitor and "again" on a reload. This is a good place to show fresh data.
 - **hidden** and **visible**: the visitor switched to another tab or window, and came back.
 - **leaving**: the page was closed or left.
 - **ended**: the session was idle for two hours (WebOnSessionEnd).
-While the page is visible the session is kept alive; if it ends anyway, the page says so and starts again.
+While the page is visible, the session is kept alive. If it ends anyway, the page says so and starts again.
 
 ## Pages bound to your data
 With Web Binding.incl and LogicBank for FutureBasic, a form edits a record and every save runs your business rules:
@@ -62,11 +62,11 @@ fn WebBindField( session, @"orderForm", @"orderShipped", @"ShippedDate" )
 fn WebTableShowEntity( session, @"orders", @"Order", NULL, @[ @"Id" ] )
 if ( fn WebFormSave( session, @"orderForm" ) ) then fn WebTableRefresh( session, @"orders" )
 ```
-- A rule that refuses a save shows its message in the form's message band, and what the visitor typed stays.
-- A form with unsaved changes asks before the page is left. WebFormAutoSave makes a form save itself when the page is hidden or left.
+- When a rule refuses a save, its message appears in the form's message band, and what the visitor typed stays put.
+- A form with unsaved changes asks before the visitor leaves the page. WebFormAutoSave makes a form save itself when the page is hidden or left.
 
 ## Layouts in XIB files
-Instead of placing widgets in code, lay a page out in a XIB - the file Interface Builder edits - and load it:
+If you'd rather not place widgets in code, lay the page out in a XIB (the file Interface Builder edits) and load it:
 ```
 fn WebLoadLayout( session, @"page", @"CustomerPanel" )
 fn WebOn( session, @"customerSave", @"clicked", @fn CustomerSave )
@@ -76,13 +76,13 @@ fn WebOn( session, @"customerSave", @"clicked", @fn CustomerSave )
 - Controls side by side become a row; on a phone they stack.
 - A box becomes a card, or a form when it holds fields.
 - An empty label with an Identifier becomes a message band.
-The Layout Tool (Layout Tool.html, in any browser) lays them out, shows the page as the web will, and writes the FB code. Save as .webxib and add the file to your app's Resources.
+The Layout Tool (Layout Tool.html, in any browser) lays them out, shows you the page as the web will, and writes the FB code. Save it as .webxib and add the file to your app's Resources.
 
 ## The example
-The Orders example keeps customers, orders and items, with LogicBank for FutureBasic's rules. Its page is laid out in three XIB files and bound in Pages.incl. Lower a credit limit below a balance and the page shows the rule's message; add an item and the totals follow. Open it in two browsers: they share the data.
+The Orders example keeps customers, orders and items, with LogicBank for FutureBasic's rules. Its page is laid out in three XIB files and bound in Pages.incl. Try lowering a credit limit below a balance, and the page shows you the rule's message; add an item, and the totals follow. If you open it in two browsers, they share the data.
 
 ## Security
-- Every text is escaped: nothing a visitor types is ever sent back as HTML.
+- Every piece of text is escaped, so nothing a visitor types is ever sent back as HTML.
 - The page runs no inline script, and every event must carry the session's token.
 - The session cookie cannot be read by scripts.
-- Use HTTPS in nginx (Let's Encrypt) for any page outside your own network.
+- Please use HTTPS in nginx (Let's Encrypt) for any page outside your own network.

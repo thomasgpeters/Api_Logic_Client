@@ -1,24 +1,29 @@
 # LogicBank for FutureBasic
 
-Business rules for your FutureBasic app, declared once and enforced on every save. You say what must be true -
-an order's total is the sum of its items, a customer's balance never exceeds the credit limit - and the engine
-keeps it true however, and in whatever order, the data changes. A save that would break a rule is refused and
-rolled back, with a message for the user.
+Business rules for your FutureBasic app, declared once and enforced on every save. You tell it what must be
+true (an order's total is the sum of its items, say, or a customer's balance never goes over the credit
+limit) and the engine keeps it true however the data changes, and in whatever order. If a save would break a
+rule, it's refused and rolled back, with a message you can show.
 
-**Why "LogicBank"?** *Logic*: your business logic - the rules of your business, what must always be true about
-your data - is handled here, in one place, instead of being scattered through your windows and buttons. *Bank*:
-think of your bank. What you put in, you can take out again: you trust the bank to keep it
-safe and exact. And you never work out your own balance, interest or charges - the bank does that arithmetic for
-you, on every transaction, by its rules. LogicBank does the same for your data: you put your records in, its rules
-keep every total, balance and limit correct on every save, and whatever you take out is right.
+## Why "LogicBank"?
 
-Free and open source (MIT), from Imagery Business Systems. Inspired by
-[LogicBank](https://github.com/valhuber/LogicBank) for API Logic Server (also open source), rewritten for
-FutureBasic: rules are FB functions, the engine is FB.
+The *Logic* part is your business logic: the rules of your business, the things that must always be true
+about your data. LogicBank looks after them in one place, so they aren't scattered through your windows and
+buttons.
+
+The *Bank* part is like your own bank. You trust it to keep what you put in safe and exact, and to give it
+back when you ask. You also never have to work out your own balance, interest or charges, because the bank
+does that arithmetic for you on every transaction, by its rules. LogicBank does the same for your data. You
+put your records in, its rules keep every total, balance and limit correct on every save, and whatever you
+take out is right.
+
+It's free and open source (MIT), from Imagery Business Systems. We were inspired by
+[LogicBank](https://github.com/valhuber/LogicBank) for API Logic Server (also open source) and rewrote it for
+FutureBasic, so the rules are FB functions and the engine is FB too.
 
 ## The example app
 
-Three objects - **Customer**, **Order** and **Item** - kept in memory, with no database. A story of thirteen
+The example keeps three objects in memory, Customer, Order and Item, with no database. A story of thirteen
 saves runs step by step:
 - placing an order and adding items;
 - changing a quantity;
@@ -27,9 +32,10 @@ saves runs step by step:
 - a discount copied when the order was placed;
 - deletes prevented and cascaded.
 
-After each step the objects are shown, with what the rules maintain. **Help** (the ? button) explains every kind
-of rule with examples, shows the rules diagram, and opens in Preview or exports as PDF / Rich Text. *About Imagery
-Business Systems…* in the application menu tells what else Imagery makes for FutureBasic.
+After each step you'll see the objects and what the rules keep up to date for them. Help (the ? button)
+explains every kind of rule with examples and shows the rules diagram; you can open it in Preview or export
+it as PDF or Rich Text. *About Imagery Business Systems…* in the application menu tells you what else we make
+for FutureBasic.
 
 Open `LogicBankExample.fbeproj` in the FutureBasic editor and build (FB 7.0.38 or later, macOS 15 or later).
 
@@ -56,28 +62,28 @@ Open `LogicBankExample.fbeproj` in the FutureBasic editor and build (FB 7.0.38 o
 | `Story.incl`, `Rich Text.incl`, `Help.incl`, `User Guide.txt`, `LogicBank Diagram.png` | the example: the story, styled output, the Help window |
 | `About Imagery.incl`, `About Imagery.txt` | the *About Imagery Business Systems* window |
 
-For SQLite instead of memory, use `Data SQLite.incl`, the SQL Generator's `DataObject` files and
-`Data Records.incl` (from App Builder's runtime, or the SQL Generator example) in place of `Data Memory.incl`, and
-add `-lsqlite3` to the compiler options. The engine and your rules do not change.
+If you'd rather use SQLite than memory, put `Data SQLite.incl`, the SQL Generator's `DataObject` files and
+`Data Records.incl` (from App Builder's runtime, or the SQL Generator example) in place of
+`Data Memory.incl`, and add `-lsqlite3` to the compiler options. The engine and your rules stay as they are.
 
 ## Using it in your own app
 
-With the plain FutureBasic editor:
-1. **Drag the files into your project, in this order:** `Data Model.incl`, `Data Memory.incl` (or the SQLite
+All you need is the plain FutureBasic editor:
+1. Drag the files into your project, in this order: `Data Model.incl`, `Data Memory.incl` (or the SQLite
    files), `Logic Rules.incl`, `Logic Row.incl`, `Logic Engine.incl`.
-2. **Add your `Model.json` to the project's resources.**
-3. **Write your `Rules.incl`** after the module's files.
-4. **When the app starts,** call `fn DeclareRules`, then `fn LogicActivate`.
-5. **Save with** `LogicInsert`, `LogicUpdate` and `LogicDelete`, and show `LogicMessage` when a save is refused.
+2. Add your `Model.json` to the project's resources.
+3. Write your `Rules.incl` after the module's files.
+4. When the app starts, call `fn DeclareRules`, then `fn LogicActivate`.
+5. Save with `LogicInsert`, `LogicUpdate` and `LogicDelete`, and show `LogicMessage` when a save is refused.
 
 The user guide (Help) has every call, with examples.
 
 ## Writing rules by hand, or with App Builder
 
-With the module alone, you write the rules in FB and test them yourself. **App Builder for FutureBasic** (licensed,
-from Imagery) writes them from sentences in your model's own names, checks them against the model, tests every
-rule with scenarios, and builds the whole app around them.
+With the module on its own, you write the rules in FB and test them yourself. If you'd like help with that,
+**App Builder for FutureBasic** (licensed, from Imagery) writes them from sentences in your model's own
+names, checks them against the model, tests every rule with scenarios, and builds the whole app around them.
 
 ## Licence
 
-MIT - see `LICENSE`. Copyright (c) 2026 Imagery Business Systems, LLC.
+MIT; see `LICENSE`. Copyright (c) 2026 Imagery Business Systems, LLC.

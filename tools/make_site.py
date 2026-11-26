@@ -30,19 +30,19 @@ YEAR = '2026'
 
 MODULES = [
     {'slug': 'sql-generator', 'name': 'SQL Generator', 'folder': 'src/SQLGeneratorExample', 'zip': 'SQL-Generator-Example.zip',
-     'blurb': 'Describe a SELECT, INSERT, UPDATE or DELETE as a dictionary - tables, columns, filters, joins - and get safe, '
-              'parameterized SQL for SQLite. Names are quoted for you; every value is bound, never pasted into the SQL.'},
+     'blurb': 'Describe a SELECT, INSERT, UPDATE or DELETE as a dictionary (its tables, columns, filters and joins) and get safe, '
+              'parameterized SQL for SQLite. Names are quoted for you, and every value is bound rather than pasted into the SQL.'},
     {'slug': 'logicbank', 'name': 'LogicBank for FutureBasic', 'folder': 'src/LogicBankExample', 'zip': 'LogicBank-for-FutureBasic-Example.zip',
-     'blurb': 'Your business logic, handled in one place: sums, counts, formulas, copies, constraints and delete actions, '
-              'declared once and enforced on every save. Like your bank - what you put in, you can take out, and the arithmetic is done for you.'},
+     'blurb': 'Your business logic, looked after in one place. Sums, counts, formulas, copies, constraints and delete actions are '
+              'declared once and enforced on every save. It works like your bank: what you put in, you can take out, and the arithmetic is done for you.'},
     {'slug': 'web-toolkit', 'name': 'Web Toolkit for FutureBasic', 'folder': 'src/WebToolkit', 'zip': 'Web-Toolkit-for-FutureBasic.zip',
      'example': 'src/WebToolkitExample', 'example_zip': 'Web-Toolkit-Orders-Example.zip',
-     'blurb': 'Web applications written in FutureBasic: widgets, events answered in the background (AJAX), a page lifecycle, '
-              'pages laid out in XIB files with the Layout Tool. Your business logic runs in FB, on the server, behind nginx.'},
+     'blurb': 'Web applications written in FutureBasic, with widgets, events answered in the background (AJAX), a page lifecycle, '
+              'and pages you can lay out in XIB files with the Layout Tool. Your business logic runs in FB, on the server, behind nginx.'},
 ]
 SAMPLES = [('Telecom', 'A mobile carrier\'s travel plans, priced from its roaming agreements.'),
            ('Customs', 'Automated customs clearance, set in Bermuda: duty, risk lanes, release and the port gate.'),
-           ('FlightPlanner', 'VFR flight planning: wind, weight and balance, runways, weather and a go / no-go.')]
+           ('FlightPlanner', 'VFR flight planning: wind, weight and balance, runways, weather and a go / no-go decision.')]
 SKIP = {'__pycache__', '.DS_Store'}
 
 CSS = """:root { --bg:#ffffff; --fg:#1d1d1f; --soft:#5f6368; --line:#d2d2d7; --card:#f5f5f7; --accent:#0a63c9; --code:#f0f0f3; }
@@ -218,7 +218,7 @@ def page(title, body, depth, description=''):
     up = '../' * depth
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{esc(title)} - Imagery Business Systems for FutureBasic</title>
+<title>{esc(title)} &middot; Imagery Business Systems for FutureBasic</title>
 <meta name="description" content="{html.escape(description or title)}">
 <link rel="stylesheet" href="{up}styles.css"></head>
 <body>
@@ -291,7 +291,7 @@ def build(out):
                 shutil.copy(os.path.join(folder, f), os.path.join(help_dir, f))
         guide = open(os.path.join(folder, 'User Guide.txt'), encoding='utf-8').read()
         write(out, f'help/{m["slug"]}/index.html',
-              page(m['name'] + ' - User Guide', guide_to_html(guide, '') + f'\n<p><a class="button" href="../../downloads/{m["zip"]}">Download the example (zip)</a></p>', 2))
+              page(m['name'] + ': User Guide', guide_to_html(guide, '') + f'\n<p><a class="button" href="../../downloads/{m["zip"]}">Download the example (zip)</a></p>', 2))
 
     # the samples
     cards = []
@@ -303,15 +303,15 @@ def build(out):
         body = after_title(markdown_to_html(readme), f'<p><a class="button" href="../../downloads/{zip_name}">Download the sample (zip)</a></p>')
         write(out, f'samples/{name.lower()}/index.html', page(name + ' sample', body, 2, blurb))
         cards.append(f'<div class="card"><h3><a href="{name.lower()}/index.html">{esc(name)}</a></h3><p>{esc(blurb)}</p></div>')
-    write(out, 'samples/index.html', page('Sample applications', '<h1>Sample applications</h1>\n<p class="lead">Each is a SQLite database with its business rules, '
-          'its tests, and the same rules in FutureBasic - built to show what LogicBank for FutureBasic does on a real problem.</p>\n'
+    write(out, 'samples/index.html', page('Sample applications', '<h1>Sample applications</h1>\n<p class="lead">We built these to show what LogicBank for FutureBasic does on a real problem. '
+          'Each one is a SQLite database with its business rules and its tests, and the same rules in FutureBasic.</p>\n'
           f'<div class="cards">{"".join(cards)}</div>', 1))
 
     # App Builder
     register = licence_server()
     write(out, 'app-builder/index.html', page('App Builder for FutureBasic', f"""<h1>App Builder for FutureBasic</h1>
 <p class="lead">A Mac app that builds a complete FutureBasic application from your database: the windows and forms, the lists,
-the data binding, and the business rules - ready to open in the FutureBasic editor and build.</p>
+the data binding and the business rules, ready for you to open in the FutureBasic editor and build.</p>
 <p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Enterprise</a></p>
 <table><thead><tr><th></th><th>Lite</th><th>Enterprise</th></tr></thead><tbody>
 <tr><td>Licence</td><td>free, with registration</td><td>paid</td></tr>
@@ -320,28 +320,28 @@ the data binding, and the business rules - ready to open in the FutureBasic edit
 <tr><td>Rules</td><td>written, checked and tested in App Builder</td><td>the same, and shared with your Python project (declare_logic.py)</td></tr>
 <tr><td>AI assistant (coming)</td><td>rules from sentences in your model's names, with your own key</td><td>also through API Logic Server's genai-logic</td></tr>
 </tbody></table>
-<p>The free modules are App Builder's foundations: every app it builds carries the SQL Generator and LogicBank for FutureBasic.
-With the modules alone you write your rules by hand; App Builder writes them from plain sentences, checks them against your model,
-tests every rule, and builds the app around them.</p>
-<p>The same goes for the web (coming): with the Web Toolkit alone you write each page yourself; App Builder will build the pages
-from your model - forms, lists, bindings and rules - for a web app beside, or instead of, the Mac app.</p>""", 1, 'Build a complete FutureBasic app from your database.'))
+<p>App Builder stands on the free modules, and every app it builds carries the SQL Generator and LogicBank for FutureBasic.
+With the modules on their own, you write your rules by hand. App Builder writes them for you from plain sentences, checks them
+against your model, tests every rule, and builds the app around them.</p>
+<p>We're working on the same for the web, though it isn't ready yet. With the Web Toolkit on its own you write each page yourself;
+App Builder will build the pages from your model (forms, lists, bindings and rules) for a web app beside the Mac app, or in its place.</p>""", 1, 'Build a complete FutureBasic app from your database.'))
 
     # the home page
     module_cards = ''.join(f'<div class="card"><span class="tag">free &middot; MIT</span><h3><a href="{m["slug"]}/index.html">{esc(m["name"])}</a></h3>'
                            f'<p>{esc(m["blurb"])}</p><p><a href="downloads/{m["zip"]}">Download</a> &middot; <a href="help/{m["slug"]}/index.html">User guide</a></p></div>'
                            for m in MODULES)
     write(out, 'index.html', page('FutureBasic tools', f"""<h1>Tools for FutureBasic programmers</h1>
-<p class="lead">From Imagery Business Systems: three free modules for your own apps, sample applications that show them at work,
-and App Builder, which builds a whole app from your database.</p>
+<p class="lead">We're Imagery Business Systems, and we make these for FutureBasic programmers on the Mac. There are three free
+modules for your own apps, sample applications that show them at work, and App Builder, which builds a whole app from your database.</p>
 <h2>Free modules</h2>
 <div class="cards">{module_cards}</div>
 <h2>App Builder for FutureBasic</h2>
 <div class="cards"><div class="card"><span class="tag">Lite free &middot; Enterprise licensed</span><h3><a href="app-builder/index.html">App Builder</a></h3>
-<p>Windows, forms, lists, data binding and business rules, generated from your database. Rules from plain sentences, checked and tested.</p>
+<p>Windows, forms, lists, data binding and business rules, generated from your database. You write rules as plain sentences, and App Builder checks and tests them.</p>
 <p><a href="{register}">Register</a> &middot; <a href="app-builder/index.html">Lite and Enterprise</a></p></div>
 <div class="card"><span class="tag">samples</span><h3><a href="samples/index.html">Sample applications</a></h3>
-<p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, with their databases, rules and tests.</p></div></div>""", 0,
-        'Free FutureBasic modules - the SQL Generator, LogicBank for FutureBasic and the Web Toolkit - and App Builder for FutureBasic.'))
+<p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, each with its database, rules and tests.</p></div></div>""", 0,
+        'Free FutureBasic modules (the SQL Generator, LogicBank for FutureBasic and the Web Toolkit) and App Builder for FutureBasic.'))
     return out
 
 

@@ -1,22 +1,22 @@
 # LogicBank for FutureBasic
-Business rules for your data, declared once and enforced on every save. You say what must be true - an order's total is the sum of its items, a customer's balance never exceeds the credit limit - and LogicBank for FutureBasic keeps it true, however and in whatever order the data changes.
+Business rules for your data, declared once and enforced on every save. You tell it what must be true (an order's total is the sum of its items, say, or a customer's balance never goes over the credit limit) and LogicBank for FutureBasic keeps it true, however the data changes and in whatever order.
 
 ## Why "LogicBank"?
-**Logic**: your business logic - the rules of your business, what must always be true about your data - is handled here, in one place, instead of being scattered through your windows and buttons.
-**Bank**: think of your bank. What you put in, you can take out again: you trust the bank to keep it safe and exact. And you never work out your own balance, interest or charges - the bank does that arithmetic for you, on every transaction, by its rules. LogicBank does the same for your data: you put your records in, its rules keep every total, balance and limit correct on every save, and whatever you take out is right.
+**Logic** is your business logic: the rules of your business, the things that must always be true about your data. LogicBank looks after them here, in one place, so they aren't scattered through your windows and buttons.
+**Bank** is like your own bank. You trust it to keep what you put in safe and exact, and to give it back when you ask. You also never have to work out your own balance, interest or charges, because the bank does that arithmetic for you on every transaction, by its rules. LogicBank does the same for your data. You put your records in, its rules keep every total, balance and limit correct on every save, and whatever you take out is right.
 
-It is a free, open-source module (MIT), inspired by LogicBank for API Logic Server and rewritten for FutureBasic. This example shows it on three objects kept in memory: Customer, Order and Item.
+It's a free, open-source module (MIT). We were inspired by LogicBank for API Logic Server and rewrote it for FutureBasic. This example shows it at work on three objects kept in memory: Customer, Order and Item.
 
 ![LogicBank Diagram]
 
 ## How it fits together
-- **Your rules** (Rules.incl): one DeclareRules function that declares every rule. Formulas and constraints are small FB functions; sums, counts, copies, parent checks and delete actions are declared by name.
+- **Your rules** (Rules.incl): one DeclareRules function that declares every rule. Formulas and constraints are small FB functions, while sums, counts, copies, parent checks and delete actions are declared by name.
 - **The engine** (Logic Rules.incl, Logic Row.incl, Logic Engine.incl): checks the rules against the model when they are activated, orders the formulas, and runs the right rules on every save.
-- **The model** (Data Model.incl and the resource Model.json): the entities, their fields, keys, and the relationships between them - which Order belongs to which Customer.
-- **The data layer**: Data Memory.incl keeps the objects in memory (this example); Data Records.incl keeps them in SQLite, through the SQL Generator. The engine is the same either way.
+- **The model** (Data Model.incl and the resource Model.json): the entities, their fields and keys, and the relationships between them, such as which Order belongs to which Customer.
+- **The data layer**: Data Memory.incl keeps the objects in memory (as this example does), and Data Records.incl keeps them in SQLite, through the SQL Generator. The engine is the same either way.
 
 ## Saving through the rules
-You never write a record directly: you hand it to the engine, which runs the rules and saves it - or refuses, and puts everything back.
+You never write a record yourself. You hand it to the engine, which runs the rules and saves it, or refuses and puts everything back as it was.
 ```
 CFMutableDictionaryRef item = fn MutableDictionaryNew
 MutableDictionarySetObjectForKey( item, fn NumberWithLong( 1 ), @"OrderId" )
@@ -25,16 +25,16 @@ MutableDictionarySetObjectForKey( item, fn NumberWithDouble( 2 ), @"Quantity" )
 MutableDictionarySetObjectForKey( item, fn NumberWithDouble( 100 ), @"UnitPrice" )
 if ( fn LogicInsert( @"Item", item ) == NO ) then alert 1, NSAlertStyleWarning, @"Not saved", fn LogicMessage, @[@"OK"], NO
 ```
-- **LogicInsert( entity, record )**: inserts; a generated key is set in the record.
+- **LogicInsert( entity, record )**: inserts the record, and sets a generated key in it.
 - **LogicUpdate( entity, record, NULL )**: the record holds the key and the fields that change; the others keep their values.
-- **LogicDelete( entity, keyValues )**: deletes, with the delete actions.
-- **LogicMessage**: why the last save was refused, for the user.
-One save is one transaction: when any rule refuses - here, or in a parent the save changed - every change it made is rolled back.
+- **LogicDelete( entity, keyValues )**: deletes the record, with its delete actions.
+- **LogicMessage**: why the last save was refused, ready to show the person using your app.
+One save is one transaction. When any rule refuses, whether here or in a parent the save changed, every change the save made is rolled back.
 
 ## The rules, one kind at a time
 
 ## Formula: a value worked out from the row
-An Item's amount is its quantity times its price, less the order's discount. The function reads the row and returns the value; the last argument lists what it depends on, so the engine recomputes it only when one of those changes. "Order.Discount" is a field of the parent: when the order's discount changes, every item of the order is recomputed.
+An Item's amount is its quantity times its price, less the order's discount. The function reads the row and returns the value. The last argument lists what it depends on, so the engine recomputes it only when one of those changes. "Order.Discount" is a field of the parent, so when the order's discount changes, every item of the order is recomputed.
 ```
 local fn ItemAmount( logicRow as LogicRowRef ) as CFTypeRef
 double amount = fn LogicDouble( logicRow, @"Quantity" ) * fn LogicDouble( logicRow, @"UnitPrice" ) * ( 100.0 - fn LogicParentDouble( logicRow, @"Order", @"Discount" ) ) / 100.0
@@ -44,12 +44,12 @@ fn LogicFormula( @"Item", @"Amount", @fn ItemAmount, @[ @"Quantity", @"UnitPrice
 ```
 
 ## Sum and count: a parent adds up its children
-An Order's total is the sum of its items' amounts; its item count, their count. Nothing is re-added from scratch: when one item changes, the engine adjusts the order by the difference - and saves the order through its own rules, which in turn adjust the customer.
+An Order's total is the sum of its items' amounts, and its item count is how many there are. Nothing is added up again from scratch. When one item changes, the engine adjusts the order by the difference and saves the order through its own rules, which in turn adjust the customer.
 ```
 fn LogicSum( @"Order", @"AmountTotal", @"ItemList", @"Amount", NULL )
 fn LogicCount( @"Order", @"ItemCount", @"ItemList", NULL )
 ```
-A **where** function counts only some children. A customer's balance is the total of its orders not yet shipped; shipping an order takes it out of the balance at once.
+A **where** function counts only some children. A customer's balance is the total of its orders not yet shipped, so shipping an order takes it out of the balance straight away.
 ```
 local fn OrderUnshipped( logicRow as LogicRowRef ) as BOOL
 end fn = fn LogicIsEmpty( logicRow, @"ShippedDate" )
@@ -59,7 +59,7 @@ fn LogicCount( @"Customer", @"UnshippedOrders", @"OrderList", @fn OrderUnshipped
 ```
 
 ## Constraint: what must always be true
-A constraint is a function that answers YES when all is well. When it answers NO the save is refused, with the message - {Name} and {Balance} are filled in from the row - and everything rolls back. A constraint on a parent guards every child: adding an item to an order can be refused because the customer's balance would go over the limit.
+A constraint is a function that answers YES when all is well. When it answers NO, the save is refused with the message (where {Name} and {Balance} are filled in from the row) and everything rolls back. A constraint on a parent looks after every child too, so adding an item to an order can be refused because the customer's balance would go over the limit.
 ```
 local fn CustomerWithinCredit( logicRow as LogicRowRef ) as BOOL
 end fn = ( fn LogicDouble( logicRow, @"Balance" ) <= fn LogicDouble( logicRow, @"CreditLimit" ) )
@@ -68,7 +68,7 @@ fn LogicConstraint( @"Customer", @fn CustomerWithinCredit, @"{Name}'s balance {B
 ```
 
 ## Copy: a parent's value, kept as it was
-An order copies the customer's discount when it is placed. Unlike a formula, a copy does not follow later changes: when Alice's discount goes up, her earlier order keeps the discount it was placed with. (A copy is made again if the row moves to another parent.)
+An order copies the customer's discount when it's placed. A copy doesn't follow later changes the way a formula does, so when Alice's discount goes up, her earlier order keeps the discount it was placed with. (The copy is made again if the row moves to another parent.)
 ```
 fn LogicCopy( @"Order", @"Discount", @"Customer", @"Discount" )
 ```
@@ -88,7 +88,7 @@ fn LogicDeleteAction( @"Order", @"ItemList", @"cascade", NULL )
 ```
 
 ## Events: your own code at a save
-A row event runs during the save (it can set values); a commit event runs once the save has been kept - to send a message, write a log, refresh a window.
+A row event runs during the save, and can set values. A commit event runs once the save has been kept, which is the place to send a message, write a log or refresh a window.
 ```
 fn LogicRowEvent( @"Order", @fn OrderSaving )
 fn LogicCommitEvent( @"Order", @fn OrderSaved )
@@ -97,20 +97,20 @@ fn LogicCommitEvent( @"Order", @fn OrderSaved )
 ## What a rule reads (Logic Row.incl)
 - **LogicDouble( logicRow, field )**, **LogicLong**, **LogicString**, **LogicValue**: the row's field.
 - **LogicIsEmpty( logicRow, field )**: the field is empty.
-- **LogicOldValue( logicRow, field )**, **LogicChanged( logicRow, field )**: before this save; whether it changes.
+- **LogicOldValue( logicRow, field )**, **LogicChanged( logicRow, field )**: the value before this save, and whether it changes.
 - **LogicIsInsert / LogicIsUpdate / LogicIsDelete( logicRow )**: what the save is.
 - **LogicParentDouble( logicRow, role, field )**, **LogicParentString**, **LogicParentValue**: a field of the parent (role: "Order", "Customer").
 
 ## Activating the rules
-Declare the rules, then activate them once, when the app starts. Activation checks every name against the model - entities, fields, child lists, parent roles - and puts the formulas in order; a rule that does not fit the model is reported in the NSLog window, and no save runs until it is fixed.
+Declare the rules, then activate them once, when the app starts. Activation checks every name against the model (entities, fields, child lists, parent roles) and puts the formulas in order. If a rule doesn't fit the model, it's reported in the NSLog window, and no save runs until it's fixed.
 ```
 fn DeclareRules
 if ( fn LogicActivate == NO ) then alert 1, NSAlertStyleWarning, @"The rules could not be activated.", @"See the NSLog window.", @[@"OK"], NO
 ```
-Logging is off by default: every NSLog is gated on isLoggingOn, a global in the app's own globals file (NO to begin with). Story > Log to NSLog turns it on: the engine then writes every rule it runs to the NSLog window, indented as one save chains to the next, and the story is written there too. In your own app, set isLoggingOn = YES in your globals while you develop.
+Logging is off by default. Every NSLog is gated on isLoggingOn, a global in the app's own globals file, which starts out as NO. Story > Log to NSLog turns it on, and the engine then writes every rule it runs to the NSLog window, indented as one save leads to the next. The story is written there too. In your own app, set isLoggingOn = YES in your globals while you develop.
 
 ## The model: Model.json
-The model names each entity's fields and keys and its relationships: on the child, the parent role (toone: "Customer"); on the parent, the child list (tomany: "OrderList"); and the fields that link them.
+The model names each entity's fields and keys and its relationships. The child has the parent role (toone: "Customer"), the parent has the child list (tomany: "OrderList"), and both name the fields that link them.
 ```
 { "name": "Order", "keys": [ "Id" ], "keyKind": "autoincrement",
   "fields": [ { "name": "Id" }, { "name": "CustomerId" }, { "name": "ShippedDate" }, ... ],
@@ -120,12 +120,12 @@ The model names each entity's fields and keys and its relationships: on the chil
 ```
 
 ## Using LogicBank for FutureBasic in your own app
-With the plain FutureBasic editor:
+All you need is the plain FutureBasic editor:
 - Drag the module's files into your project, in this order: Data Model.incl; Data Memory.incl (or, for SQLite: Data SQLite.incl, the SQL Generator's DataObject files, and Data Records.incl); Logic Rules.incl; Logic Row.incl; Logic Engine.incl.
 - Add your Model.json to the project's resources (for SQLite, set "database" to the file's path).
 - Write your Rules.incl after them, and call DeclareRules and LogicActivate when the app starts.
-- Save with LogicInsert, LogicUpdate and LogicDelete; show LogicMessage when a save is refused.
+- Save with LogicInsert, LogicUpdate and LogicDelete, and show LogicMessage when a save is refused.
 - For SQLite, add -lsqlite3 to the Build Settings' compiler options.
 
 ## Writing rules by hand, or with App Builder
-With the module alone, you write the rules in FB, as above, and test them yourself. **App Builder for FutureBasic** writes them for you from sentences in your model's own names - "an order's total is the sum of its items' amounts" - checks them against the model, tests every rule with scenarios, and builds the whole app around them: windows, lists, forms and data binding. See Imagery's FutureBasic page (in the application menu: About Imagery Business Systems).
+With the module on its own, you write the rules in FB, as above, and test them yourself. If you'd like help, **App Builder for FutureBasic** writes them for you from sentences in your model's own names, such as "an order's total is the sum of its items' amounts". It checks them against the model, tests every rule with scenarios, and builds the whole app around them, with its windows, lists, forms and data binding. You'll find more on Imagery's FutureBasic page (About Imagery Business Systems, in the application menu).

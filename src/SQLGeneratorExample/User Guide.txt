@@ -1,53 +1,53 @@
 # The SQL Generator for FutureBasic
-**Use a SQL database from FutureBasic without writing SQL.** You describe each statement with Cocoa dictionaries and arrays - the tables, the columns, how tables join, the filters, the order - and the SQL Generator writes the SQL for you, with every value kept apart from it in `?` placeholders. The same dictionaries you build for a query are the rows you get back, so data goes in and comes out in one shape. This window explains the model, then every function, one by one.
+**Use a SQL database from FutureBasic without writing SQL.** You describe each statement with Cocoa dictionaries and arrays (the tables, the columns, how the tables join, the filters and the order) and the SQL Generator writes the SQL for you, keeping every value apart from it in `?` placeholders. The rows you get back are dictionaries too, the same shape as the ones you build, so your data goes in and comes out alike. This window explains the model first, then each function in turn.
 
 ![SQL Generator Diagram]
-The object model: a statement is a dictionary of arrays, each entry a small dictionary. **View Diagram** shows it full size.
+The object model: a statement is a dictionary of arrays, and each entry is a small dictionary. **View Diagram** shows it full size.
 
 ## How it fits together
-A SELECT is a dictionary (InitQueryDictionary) with arrays inside it: the tables, the columns, the joins, the filters and the sort order. Each Add... function adds one dictionary to one array. GenerateSelectSQL reads the arrays and writes the SQL; QueryParameterValues lists the values for its `?` placeholders, in order. INSERT, UPDATE and DELETE are a dictionary each, with the same filter entries. A runner (SQL Generator SQLite.incl here) sends the SQL and the values to the database and gives rows back as dictionaries.
+A SELECT is a dictionary (InitQueryDictionary) with arrays inside it for the tables, the columns, the joins, the filters and the sort order. Each Add... function adds one dictionary to one array. GenerateSelectSQL reads the arrays and writes the SQL, and QueryParameterValues lists the values for its `?` placeholders, in order. INSERT, UPDATE and DELETE are a dictionary each, with the same filter entries. A runner (here, SQL Generator SQLite.incl) sends the SQL and the values to the database and hands the rows back to you as dictionaries.
 
 # The functions, one by one
 
 ## Describing a SELECT
-**fn InitQueryDictionary** - a new, empty query; every SELECT starts here.
+**fn InitQueryDictionary**: a new, empty query. Every SELECT starts here.
 ```
 query = fn InitQueryDictionary
 ```
-**fn AddTableToQuery( query, tableName, aliasName )** - a table to read from, and the short name (alias) the other functions use for it.
+**fn AddTableToQuery( query, tableName, aliasName )**: a table to read from, and the short name (alias) the other functions use for it.
 ```
 fn AddTableToQuery( query, @"person", @"p" )
 ```
-**fn AddColumnToQuery( query, columnName, aliasName )** - a column to return, as alias.column, and its name in the result rows.
+**fn AddColumnToQuery( query, columnName, aliasName )**: a column to return, written alias.column, and its name in the result rows.
 ```
 fn AddColumnToQuery( query, @"p.surName", @"Surname" )
 ```
-**fn AddAssociationToQuery( query, leftAlias, leftColumn, rightAlias, rightColumn, operator )** - how two tables join (`_isEqual` for a join).
+**fn AddAssociationToQuery( query, leftAlias, leftColumn, rightAlias, rightColumn, operator )**: how two tables join (use `_isEqual` for a join).
 ```
 fn AddAssociationToQuery( query, @"a", @"personID", @"p", @"id", _isEqual )
 ```
-**fn AddFilterToQuery( query, alias, column, value, type, 0, operator, logic )** - one condition of the WHERE clause. The value goes to a `?` placeholder, never into the SQL. `logic` joins it to the one before: `_and` (or 0) or `_or`.
+**fn AddFilterToQuery( query, alias, column, value, type, 0, operator, logic )**: one condition of the WHERE clause. The value goes to a `?` placeholder and never into the SQL. `logic` joins it to the condition before it: `_and` (or 0) or `_or`.
 ```
 fn AddFilterToQuery( query, @"p", @"balance", fn NumberWithDouble( 100.0 ), _realType, 0, _isGreaterThan, 0 )
 ```
-- **operator**: `_isEqual`, `_isNotEqual`, `_isLessThan`, `_isGreaterThan`, `_isLessThanOrEqual`, `_isGreaterThanOrEqual`, `_isLike`, `_isNotLike`, `_isNull`, `_isNotNull` (the last two take no value: pass NULL)
+- **operator**: `_isEqual`, `_isNotEqual`, `_isLessThan`, `_isGreaterThan`, `_isLessThanOrEqual`, `_isGreaterThanOrEqual`, `_isLike`, `_isNotLike`, `_isNull`, `_isNotNull` (the last two take no value, so pass NULL)
 - **type**: `_textType`, `_integerType`, `_realType`, `_blobType`, `_nullType`
 
-**fn AddOrderToQuery( query, alias, column, descending )** - one column of the ORDER BY, most important first; YES sorts it descending.
+**fn AddOrderToQuery( query, alias, column, descending )**: one column of the ORDER BY, the most important first. YES sorts it descending.
 ```
 fn AddOrderToQuery( query, @"p", @"surName", NO )
 ```
-**fn GenerateSelectSQL( query )** - the SELECT statement the query describes.
+**fn GenerateSelectSQL( query )**: the SELECT statement the query describes.
 ```
 sql = fn GenerateSelectSQL( query )
 // SELECT "p"."surName" AS "Surname" FROM "person" AS "p" WHERE "p"."balance" > ? ORDER BY "p"."surName"
 ```
 
 ## Adding a row: INSERT
-**fn InitInsertIntoDictionary** - a new, empty INSERT.
-**fn AddTableToInsert( statement, tableName )** - the table the row goes into.
-**fn AddColumnToInsert( statement, columnName, value, type )** - one column and its value (NULL for SQL NULL).
-**fn GenerateInsertIntoSQL( statement )** - the INSERT statement, or NULL when the table or the columns are missing.
+**fn InitInsertIntoDictionary**: a new, empty INSERT.
+**fn AddTableToInsert( statement, tableName )**: the table the row goes into.
+**fn AddColumnToInsert( statement, columnName, value, type )**: one column and its value (NULL for SQL NULL).
+**fn GenerateInsertIntoSQL( statement )**: the INSERT statement, or NULL when the table or the columns are missing.
 ```
 statement = fn InitInsertIntoDictionary
 fn AddTableToInsert( statement, @"person" )
@@ -57,24 +57,24 @@ sql = fn GenerateInsertIntoSQL( statement )
 ```
 
 ## Adding many rows at once
-The opposite of a SELECT: an array of dictionaries, column to value, goes in as one INSERT.
-**fn InitInsertRowsDictionary** - a new, empty multi-row INSERT.
-**fn AddRowsToInsert( statement, rows )** - the rows (an array of dictionaries); their keys become the columns, sorted. A column a row has no value for goes in as NULL.
-**fn SetInsertColumns( statement, columnNames )** - the columns and their order yourself, instead of the rows' keys.
-**fn GenerateInsertRowsSQL( statement )** - one INSERT with a ( ?, ? ) group per row.
+This is a SELECT turned around: an array of dictionaries, column to value, goes in as one INSERT.
+**fn InitInsertRowsDictionary**: a new, empty multi-row INSERT.
+**fn AddRowsToInsert( statement, rows )**: the rows (an array of dictionaries). Their keys become the columns, sorted, and a column a row has no value for goes in as NULL.
+**fn SetInsertColumns( statement, columnNames )**: choose the columns and their order yourself, instead of using the rows' keys.
+**fn GenerateInsertRowsSQL( statement )**: one INSERT with a ( ?, ? ) group per row.
 ```
 statement = fn InitInsertRowsDictionary
 fn AddTableToInsert( statement, @"person" )
 fn AddRowsToInsert( statement, rows )
 sql = fn GenerateInsertRowsSQL( statement )
 ```
-For thousands of rows, insert a few hundred at a time inside one transaction.
+If you have thousands of rows, insert a few hundred at a time inside one transaction.
 
 ## Changing rows: UPDATE
-**fn InitUpdateDictionary** - a new, empty UPDATE.
-**fn AddTableToUpdate( statement, tableName )** - the table.
-**fn AddColumnToUpdate( statement, columnName, value, type )** - one column and its new value.
-**fn GenerateUpdateSQL( statement )** - the UPDATE statement. It needs at least one filter (AddFilterToQuery, with an empty alias `@""`); without one it returns NULL, so it can never change a whole table by accident.
+**fn InitUpdateDictionary**: a new, empty UPDATE.
+**fn AddTableToUpdate( statement, tableName )**: the table.
+**fn AddColumnToUpdate( statement, columnName, value, type )**: one column and its new value.
+**fn GenerateUpdateSQL( statement )**: the UPDATE statement. It needs at least one filter (AddFilterToQuery, with an empty alias `@""`). Without one it returns NULL, so it can never change a whole table by accident.
 ```
 statement = fn InitUpdateDictionary
 fn AddTableToUpdate( statement, @"person" )
@@ -84,9 +84,9 @@ sql = fn GenerateUpdateSQL( statement )
 ```
 
 ## Removing rows: DELETE
-**fn InitDeleteFromDictionary** - a new, empty DELETE.
-**fn AddTableToDelete( statement, tableName )** - the table.
-**fn GenerateDeleteFromSQL( statement )** - the DELETE statement; like UPDATE, NULL without a filter.
+**fn InitDeleteFromDictionary**: a new, empty DELETE.
+**fn AddTableToDelete( statement, tableName )**: the table.
+**fn GenerateDeleteFromSQL( statement )**: the DELETE statement. Like UPDATE, it returns NULL without a filter.
 ```
 statement = fn InitDeleteFromDictionary
 fn AddTableToDelete( statement, @"contact" )
@@ -95,18 +95,18 @@ sql = fn GenerateDeleteFromSQL( statement )
 ```
 
 ## The values and the names
-**fn QueryParameterValues( statement )** - the values for the `?` placeholders of any statement above, in placeholder order: the column values, then the rows of a multi-row INSERT, then the filters.
-**fn QueryNull** - SQL NULL as a value (a Cocoa array or dictionary cannot hold NULL itself).
-**fn QuoteSQLName( name )** - a table or column name quoted for SQL: `Order` becomes `"Order"`, `a.id` becomes `"a"."id"`. The generator does this for every name; a name already quoted is kept.
+**fn QueryParameterValues( statement )**: the values for the `?` placeholders of any statement above, in placeholder order. The column values come first, then the rows of a multi-row INSERT, then the filters.
+**fn QueryNull**: SQL NULL as a value (a Cocoa array or dictionary can't hold NULL itself).
+**fn QuoteSQLName( name )**: a table or column name quoted for SQL, so `Order` becomes `"Order"` and `a.id` becomes `"a"."id"`. The generator does this for every name, and keeps a name that's already quoted as it is.
 
 ## Running it on SQLite (SQL Generator SQLite.incl)
-The generator only writes SQL; this file is one way to run it. Use your own SQLite code instead if you have some.
-**fn SQLGenOpen( path, create, @db )** - open a database file (":memory:" for one in memory); YES creates it when missing. Returns `_sqlGenOK` when it opened.
-**fn SQLGenExecute( db, sql, values, rows )** - run one statement with its values; when `rows` is a mutable array, each result row is added to it as a dictionary (column name or alias to value). Returns `_sqlGenDONE` when it ran.
-**fn SQLGenChanges( db )** - the rows the last INSERT, UPDATE or DELETE changed.
-**fn SQLGenLastInsertID( db )** - the id of the last row inserted.
-**fn SQLGenErrorMessage( db )** - SQLite's message for the last error.
-**fn SQLGenClose( db )** - close the database.
+The generator only writes SQL, and this file is one way to run it. If you already have SQLite code of your own, you're welcome to use that instead.
+**fn SQLGenOpen( path, create, @db )**: opens a database file (":memory:" for one in memory). YES creates it when it's missing. It returns `_sqlGenOK` when the database opened.
+**fn SQLGenExecute( db, sql, values, rows )**: runs one statement with its values. When `rows` is a mutable array, each result row is added to it as a dictionary (column name or alias to value). It returns `_sqlGenDONE` when the statement ran.
+**fn SQLGenChanges( db )**: how many rows the last INSERT, UPDATE or DELETE changed.
+**fn SQLGenLastInsertID( db )**: the id of the last row inserted.
+**fn SQLGenErrorMessage( db )**: SQLite's message for the last error.
+**fn SQLGenClose( db )**: closes the database.
 ```
 ptr db
 rows = fn MutableArrayNew
@@ -117,10 +117,10 @@ for row in rows
 next
 fn SQLGenClose( db )
 ```
-Values come back as Cocoa objects: INTEGER and REAL as NSNumber, TEXT as NSString, BLOB as NSData, NULL as NSNull. The step-by-step calls under SQLGenExecute (SQLGenPrepare, SQLGenBind, SQLGenStep, SQLGenColumnValue, SQLGenFinalize) are there for your own loops.
+Values come back as Cocoa objects: INTEGER and REAL as NSNumber, TEXT as NSString, BLOB as NSData, NULL as NSNull. The step-by-step calls underneath SQLGenExecute (SQLGenPrepare, SQLGenBind, SQLGenStep, SQLGenColumnValue, SQLGenFinalize) are there if you want to write your own loops.
 
 # Using the SQL Generator in your own app
-Everything below is done in the FutureBasic editor and the Finder - no other tool is needed. The SQL Generator is four FutureBasic source files: copy them, drag them into your project, link SQLite, and call the functions.
+You can do all of this in the FutureBasic editor and the Finder; you won't need any other tool. The SQL Generator is four FutureBasic source files. You copy them, drag them into your project, link SQLite, and call the functions.
 
 ## 1. Copy the four files
 From this folder (or the download), copy these files into your own project's folder, next to your other source files:
@@ -132,9 +132,9 @@ SQL Generator SQLite.incl  runs the SQL on SQLite (leave it out if you have your
 ```
 
 ## 2. Drag them into your project
-- Open your project in the FutureBasic editor, so its **project window** - the list of its files - is on screen.
+- Open your project in the FutureBasic editor, so that its **project window** (the list of its files) is on screen.
 - Select the four files in the Finder and **drag them into the project window**.
-- Put them in this order, **above your own files**: FutureBasic builds a project from the top of the list to the bottom, and a function has to be defined before anything uses it. Drag a file up or down in the list to move it.
+- Put them in this order, **above your own files**. FutureBasic builds a project from the top of the list to the bottom, and a function has to be defined before anything uses it. You can drag a file up or down in the list to move it.
 ```
 DataObject.glbl            (with your other .glbl files, near the top)
 DataObject_Super.incl
@@ -142,17 +142,17 @@ DataObject.incl
 SQL Generator SQLite.incl
 ... your own files ...
 ```
-The example's own project, **SQLGeneratorExample.fbeproj**, is set up this way: open it and look at its project window.
+The example's own project, **SQLGeneratorExample.fbeproj**, is set up this way, so you can open it and look at its project window.
 
 ## 3. Link SQLite
 Open **Build Settings** and add this to **Compiler options**:
 ```
 -lsqlite3 -Wno-unused-command-line-argument
 ```
-The first links the SQLite library that comes with macOS. The second stops clang from saying "-lsqlite3: linker input unused" once for every file (FutureBasic passes the compiler options to every compile). Only the SQLite runner needs it.
+The first links the SQLite library that comes with macOS. The second stops clang from saying "-lsqlite3: linker input unused" once for every file, since FutureBasic passes the compiler options to every compile. Only the SQLite runner needs them.
 
 ## Or: a single-file program
-A program that is one .fb file, not a project, includes the files at its top and sets the option with #build (which works in single files only). Keep the four files in the same folder as the .fb file:
+If your program is one .fb file rather than a project, include the files at its top and set the option with #build (which works in single files only). Keep the four files in the same folder as the .fb file:
 ```
 include "DataObject.glbl"
 include "DataObject_Super.incl"
@@ -160,7 +160,7 @@ include "DataObject.incl"
 include "SQL Generator SQLite.incl"
 #build CompilerOptions @"-lsqlite3 -Wno-unused-command-line-argument"
 ```
-**SQL Generator - Smallest Program.fb** in this folder is exactly that, in about 60 lines: open it in FutureBasic and run it - it makes a table, adds three people with one INSERT, and reads back the ones with a balance over 100.
+**SQL Generator - Smallest Program.fb** in this folder is exactly that, in about 60 lines. Open it in FutureBasic and run it: it makes a table, adds three people with one INSERT, and reads back the ones with a balance over 100.
 
 ## 4. Open your database and make its tables
 ```
@@ -168,7 +168,7 @@ ptr db
 fn SQLGenOpen( @"/Users/you/Library/Application Support/My App/my.sqlite", YES, @db )   // YES: create the file
 fn SQLGenExecute( db, @"CREATE TABLE IF NOT EXISTS person ( id INTEGER PRIMARY KEY, surName TEXT, balance REAL )", NULL, NULL )
 ```
-A new database file is empty: create its tables with plain SQL first (CREATE TABLE IF NOT EXISTS is harmless when they exist). Build the path from the Application Support folder rather than typing it.
+A new database file starts out empty, so create its tables with plain SQL first (CREATE TABLE IF NOT EXISTS does no harm when they already exist). It's best to build the path from the Application Support folder rather than typing it in.
 
 ## 5. Describe, generate, run
 ```
@@ -179,31 +179,31 @@ fn AddFilterToQuery( query, @"p", @"balance", fn NumberWithDouble( 100.0 ), _rea
 rows = fn MutableArrayNew
 fn SQLGenExecute( db, fn GenerateSelectSQL( query ), fn QueryParameterValues( query ), rows )
 ```
-Every function is explained above, one by one.
+You'll find every one of these functions explained above.
 
 ## Good to know
-- **Names it uses.** Functions starting Init..., Add..., Generate..., Query..., QuoteSQLName and SQLGen...; constants `_isEqual` to `_isNotLike`, `_and`, `_or`, `_nullType` to `_blobType`, `_sqlGenOK`, `_sqlGenROW`, `_sqlGenDONE`. Give your own functions and constants other names.
-- **Your own SQLite code instead.** Leave out SQL Generator SQLite.incl and the compiler options; prepare the SQL, then bind the values of `fn QueryParameterValues( statement )` to its `?` placeholders, in order, starting at 1.
-- **A newer version.** Copy the four files again over the old ones; nothing else changes.
-- **Errors.** When SQLGenExecute returns something other than `_sqlGenDONE`, `fn SQLGenErrorMessage( db )` says why; the SQL and the message are also logged.
+- **Names it uses.** Functions starting Init..., Add..., Generate..., Query..., QuoteSQLName and SQLGen...; constants `_isEqual` to `_isNotLike`, `_and`, `_or`, `_nullType` to `_blobType`, `_sqlGenOK`, `_sqlGenROW`, `_sqlGenDONE`. Please give your own functions and constants other names.
+- **Your own SQLite code instead.** Leave out SQL Generator SQLite.incl and the compiler options. Prepare the SQL, then bind the values of `fn QueryParameterValues( statement )` to its `?` placeholders, in order, starting at 1.
+- **A newer version.** Copy the four files again over the old ones. Nothing else needs to change.
+- **Errors.** When SQLGenExecute returns something other than `_sqlGenDONE`, `fn SQLGenErrorMessage( db )` tells you why. The SQL and the message are logged as well.
 
-# What it does for you
-- **Parameterized.** Values never go into the SQL text: they are bound to `?` placeholders. No SQL injection, no quoting of names like O'Brien.
-- **Names quoted.** Tables and columns are quoted, so names like `Order` or `Group`, or with spaces, just work.
-- **Safe by default.** An UPDATE or DELETE without a filter returns NULL instead of SQL (example 9).
-- **SQLite types kept.** Numbers come back as numbers, text as text, NULL as NSNull.
-- **Good to know.** IN writes a single `?`, so it matches one value: use OR filters for a few values. The generator writes queries, not schemas: create your tables with plain SQL (CRM Database.incl).
+# What it takes care of
+Values never go into the SQL text; they're bound to `?` placeholders. That means no SQL injection, and no quoting trouble with names like O'Brien.
+Tables and columns are quoted, so names like `Order` or `Group`, or names with spaces, just work.
+An UPDATE or DELETE without a filter returns NULL instead of SQL (you can see this in example 9).
+SQLite's types come back as they went in: numbers as numbers, text as text, NULL as NSNull.
+Two limits to keep in mind. IN writes a single `?`, so it matches one value; use OR filters when you have a few. And the generator writes queries, leaving the schema to you, so create your tables with plain SQL (as CRM Database.incl does).
 
 # This example
-The window opens with all ten examples run, in one scrolling output: for each, the FutureBasic that builds its dictionaries, then the SQL, the values and what came back. **Run All** (Return or Command-R) runs them again; the **Examples** menu runs one at a time (Command-1 to Command-0); **Clear** (Command-K) empties the output; **Reset Database** makes the database again (examples 6, 7, 8 and 10 change it); **Examples > Log to NSLog** writes the output, and the SQL Generator's own messages, to the NSLog window too (isLoggingOn, NO by default: every NSLog is gated on it).
-The database is `~/Library/Application Support/SQL Generator Example/crm.sqlite`, made on first launch:
+When the window opens, all ten examples have already run, in one scrolling output. For each one you'll see the FutureBasic that builds its dictionaries, then the SQL, the values and what came back. **Run All** (Return or Command-R) runs them again, and the **Examples** menu runs one at a time (Command-1 to Command-0). **Clear** (Command-K) empties the output. **Reset Database** makes the database again, which is handy because examples 6, 7, 8 and 10 change it. **Examples > Log to NSLog** writes the output, and the SQL Generator's own messages, to the NSLog window as well (through isLoggingOn, which is NO by default; every NSLog is gated on it).
+The database is `~/Library/Application Support/SQL Generator Example/crm.sqlite`, made the first time you launch the app:
 ```
 person   id, type, givenName, middleName, surName, balance
 address  id, personID -> person.id, type, street, apartment, city, state, zip
 contact  id, personID -> person.id, type, contact
 ```
-The five people in it are made up. Even its sample rows go in through the generator's INSERT builder.
-This Help: **Open in Preview** shows it as a PDF in Preview (to read, mark up or print); **Export…** saves it as PDF, or as Rich Text with the diagram for TextEdit, Pages or Word.
+The five people in it are made up, and even their rows go in through the generator's INSERT builder.
+This Help window can be read elsewhere too. **Open in Preview** shows it as a PDF in Preview, where you can read, mark up or print it, and **Export…** saves it as PDF, or as Rich Text with the diagram for TextEdit, Pages or Word.
 
 # Licence
-MIT. Use it in free or commercial apps, change it, share it; keep the copyright notice. Copyright (c) 2026 Imagery Business Systems, LLC.
+MIT. You're welcome to use it in free or commercial apps, change it and share it; just keep the copyright notice. Copyright (c) 2026 Imagery Business Systems, LLC.
