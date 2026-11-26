@@ -6,6 +6,32 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Flight Planner elaborated from the research; Flight Service filing designed
+
+- The author asked for research on both samples' domains, then for everything it suggested. Research notes:
+  `docs/research/Flight Planning Research.md`, `docs/research/Customs Clearance Research.md` (c52efcc).
+- `samples/FlightPlanner` rebuilt: 14 tables, 104 rules, 104 scenarios, `--prove` 104 of 104.
+  - Wind triangle per leg.
+  - Weight and balance from loading stations, with a sloped forward CG limit.
+  - Runways: takeoff and landing distance at the density altitude (x 1.5), crosswind with the gust.
+  - Weather: flight category and the VFR minimums by airspace, tighter for students.
+  - NOTAMs that close an airport.
+  - Medical expiry from exam date and age, or BasicMed; flight review.
+  - Landings and night landings in 90 days from the logbook. Night currency counts only with passengers
+    (the research's correction).
+  - Student solo, cross-country and Class B endorsements.
+  - Annual, transponder, ELT and battery; the 100-hour inspection for hire.
+  - Draft - Filed - Active - Closed (old-value constraint), ETA and the search-and-rescue time.
+  - Each leg's `Problem`; the plan's `NoGoReason`.
+- Learned:
+  - Recency windows ("90 days") need a reference date the rules can see. Without max / min aggregates the
+    "third-latest landing" cannot be found, so the logbook counts back from the pilot's `AsOf` date (today in
+    the app), and a child formula reads it from the parent.
+  - The data loader steps a status through its life cycle (`STEPS`) when a rule guards the transitions.
+- The author: file the plan with the FAA, simulated, Enterprise only, inside ALS. Researched: Leidos Flight
+  Service web services (REST / SOAP, vendor access only), the ICAO fields, the life cycle (expiry after 2 hours,
+  overdue at ETA + 30, QALQ, INREQ, ALNOT). Designed: `docs/design/Flight Service Filing Design.md`. Built later.
+
 ## 2026-11-26 — Flight Planner sample (VFR in New England)
 
 - `samples/FlightPlanner`: 7 tables, 44 rules, 45 scenarios, `--prove` 44 of 44; the same pattern as Telecom and

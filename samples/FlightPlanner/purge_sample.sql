@@ -3,6 +3,11 @@
 
 DELETE FROM "PositionReport";
 DELETE FROM "Leg";
+DELETE FROM "Endorsement";
+DELETE FROM "LoadItem";
 DELETE FROM "FlightPlan";
+DELETE FROM "Weather";
+DELETE FROM "AircraftStation";
 DELETE FROM "Aircraft";
+DELETE FROM "LogbookEntry";
 DELETE FROM "Pilot";

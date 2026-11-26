@@ -24,10 +24,11 @@ from logic_reference import Data, Logic          # noqa: E402
 import sample_loader                              # noqa: E402
 import flight_rules                               # noqa: E402
 
-LOOKUP = ['Airport', 'AircraftType']
-SAMPLE = ['Pilot', 'Aircraft', 'FlightPlan', 'Leg', 'PositionReport']
+LOOKUP = ['Airport', 'Runway', 'Notam', 'AircraftType']
+SAMPLE = ['Pilot', 'LogbookEntry', 'Aircraft', 'AircraftStation', 'Weather', 'FlightPlan', 'LoadItem', 'Endorsement', 'Leg', 'PositionReport']
 DEFER = {}
-INITIAL = {'FlightPlan': {'Status': 'D'}}         # a draft first, its legs, then filed or closed
+INITIAL = {'FlightPlan': {'Status': 'D'}}         # a draft first, its legs and load, then on to its status ...
+STEPS = {'F': 'F', 'A': 'FA', 'C': 'FAC'}         # ... one step at a time: Draft - Filed - Active - Closed
 
 
 def build(path, with_sample=True):
@@ -47,8 +48,8 @@ def build(path, with_sample=True):
     if with_sample:
         later, finals = sample_loader.replay(logic, data, sample_loader.read_rows(schema, os.path.join(HERE, 'sample.sql')), SAMPLE, DEFER, INITIAL)
         sample_loader.apply(logic, later, 'sample')
-        for table in INITIAL:
-            sample_loader.apply(logic, [(table, r) for r in finals.get(table, [])], 'sample status')
+        for r in finals.get('FlightPlan', []):
+            sample_loader.apply(logic, [('FlightPlan', {'Id': r['Id'], 'Status': step}) for step in STEPS[r['Status']]], 'sample status')
     data.db.close()
     return path
 

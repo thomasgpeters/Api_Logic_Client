@@ -257,7 +257,7 @@ the site, download] -> [post to the list].
 | Sample | Database | App on a Mac | On the site | Posted |
 |---|---|---|---|---|
 | Telecom - Northstar Mobile: travel plans priced from roaming agreements | done (39 rules) | | | |
-| Flight planner for amateur pilots - VFR in New England: great circle, wind, fuel and reserve, go / no-go | done (44 rules) | | | |
+| Flight planner for amateur pilots - VFR in New England: wind triangle, weight and balance, runways, weather, currency, go / no-go | done (104 rules) | | | |
 | Asset management for oil and gas | | | | |
 | National customs clearance - set in Bermuda: duty, pre-clearance, the port gate | done (35 rules) | | | |
 
@@ -269,7 +269,12 @@ the site, download] -> [post to the list].
 - [x] Flight planner: the database (pilots, aircraft and their performance, airports, flight plans and legs,
   position reports with other traffic); 44 rules - great-circle distance and course, wind, time, fuel and the
   reserve, VFR altitudes, runways, medical, night currency, the annual, go / no-go, the logbook (2026-11-26)
-- [ ] Flight planner, elaborated from the domain research (author, 2026-11-26): see the research notes when they land
+- [x] Flight planner, elaborated from the domain research (author, 2026-11-26): wind triangle, weight and balance,
+  runways (takeoff / landing distance at density altitude, crosswind), weather minimums, NOTAMs, medical / BasicMed,
+  flight review, currency from the logbook, student endorsements, inspections, the plan's life cycle - 104 rules
+- [ ] Enterprise: Flight Service filing, simulated in the ALS project (author, 2026-11-26) - file, amend, cancel,
+  activate, close, extend; the ICAO message from a FlightPlan; overdue -> QALQ -> INREQ -> ALNOT on read.
+  Design: `docs/design/Flight Service Filing Design.md`
 - [ ] Customs, elaborated from the domain research (author, 2026-11-26: automated clearance, auto-release)
 - [ ] Flight planner: build it on a Mac; its Map view (legs between airports, the track replayed, other traffic)
 - [ ] Oil and gas assets: the database (sites, assets, responsible organisations, operating hours, maintenance

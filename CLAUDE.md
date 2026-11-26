@@ -75,7 +75,8 @@ mode work without extra code).
 - `src/Templates/` — starting files for generated apps, copied only when missing
   (from `workspace/Templates`, see above): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`, `App/Theme.incl` (the colours), `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
-- `docs/design/` — `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
+- `docs/research/` — domain research behind the samples (flight planning, customs clearance), with sources.
+- `docs/design/` — `Flight Service Filing Design.md` (Enterprise: the simulated FAA filing interface in ALS), `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
 - `docs/design/architecture.svg` — the end-to-end diagram, drawn by `tools/make_architecture_svg.py` (edit the script, not the SVG).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
@@ -100,7 +101,7 @@ mode work without extra code).
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 - `samples/<Name>/` — the sample applications (author, 2026-11-26), one use case each: `Telecom` (a mobile carrier's travel
   plans priced from roaming agreements, 39 rules), `Customs` (Bermuda customs clearance: duty, pre-clearance, the port
-  gate, 35 rules), `FlightPlanner` (VFR flights in New England: great circle, wind, fuel, go / no-go, 44 rules). Each: `schema.sql`; `lookup.sql` (reference data that stays) and `sample.sql` (the demo scenario) apart,
+  gate, 35 rules), `FlightPlanner` (VFR flights in New England: wind triangle, weight and balance, runways, weather, currency, go / no-go, 104 rules). Each: `schema.sql`; `lookup.sql` (reference data that stays) and `sample.sql` (the demo scenario) apart,
   as on the C++ side, with `purge_sample.sql`; `build_db.py` (every row through the rules, `--lookup-only`); the rules
   (`<name>_rules.py`, tested by `test_rules.py` and `--prove`) and the same rules in FB (`Rules.incl`).
   `samples/sample_loader.py` replays the SQL files through the rules.
