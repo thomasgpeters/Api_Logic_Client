@@ -107,7 +107,7 @@ Declare the rules, then activate them once, when the app starts. Activation chec
 fn DeclareRules
 if ( fn LogicActivate == NO ) then alert 1, NSAlertStyleWarning, @"The rules could not be activated.", @"See the NSLog window.", @[@"OK"], NO
 ```
-Story > Log the Engine's Steps turns on isLoggingOn: the engine then writes every rule it runs to the NSLog window, indented as one save chains to the next.
+Logging is off by default: every NSLog is gated on isLoggingOn, a global in the app's own globals file (NO to begin with). Story > Log to NSLog turns it on: the engine then writes every rule it runs to the NSLog window, indented as one save chains to the next, and the story is written there too. In your own app, set isLoggingOn = YES in your globals while you develop.
 
 ## The model: Model.json
 The model names each entity's fields and keys and its relationships: on the child, the parent role (toone: "Customer"); on the parent, the child list (tomany: "OrderList"); and the fields that link them.

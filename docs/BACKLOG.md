@@ -253,12 +253,15 @@ Server Project; runtime and templates in the workspace.
 
 ## Licensing - one app, licensed through the Imagery License Server (author, 2026-11-26; `design/Licensing Design.md`)
 
-1. [ ] The Python reference: sign and verify test licences (ES256), tampered / expired / other product / bad signature
-2. [ ] `Licence.incl`: verify with `SecKeyCreateWithData` + `SecKeyVerifySignature`, keep in the Keychain,
-       `LicenceAllows( feature )`; replaces `Edition.incl`'s build-time swap; a Mac test program in `src/MacTests/`
-3. [ ] The Licence window and menu (Licence…, Enter Licence…, Upgrade to Enterprise…, Manage Licence Online…,
-       Remove Licence…), the Upgrade sheet, the edition in the About box
-4. [ ] The gate on every Enterprise command (shown with an "Enterprise" badge, not hidden); no generation without a licence
+1. [x] The Python reference: sign and verify test licences (ES256), tampered / expired / other product / bad signature
+       (`tools/licence_reference.py`, TEST keys in `tools/licence_test_keys`)
+2. [x] `Licence.incl`: verify with `SecKeyCreateWithData` + `SecKeyVerifySignature`, keep in the Keychain,
+       `LicenceAllows( feature )`; `Edition.incl` follows the licence; `src/MacTests/Licence Verify Test.fb`
+       (`features/LICENSING_FEATURE.md`) - [ ] verify on a Mac
+3. [x] The Licence window and menu (Licence…, Enter Licence…, Upgrade to Enterprise…, Manage Licence Online…,
+       Remove Licence…), the upgrade offer - [ ] the edition in the About box
+4. [x] The gate on every Enterprise command ("(Enterprise)" in the menu title, not hidden); no generation without a licence
+4a. [ ] Before release: the production public key in `LICENCE_PUBLIC_KEY`; confirm `LICENCE_SERVER` and its pages
 5. [ ] The `appbuilderfb://` URL scheme and the `.fblicence` document type
 6. [ ] License Server (its own repository): product `app_builder_fb` and its feature bits (Lite `0x0003`,
        Enterprise `0x01FF`), signed licences (ES256), the `/appbuilder` landing page, registration to download,

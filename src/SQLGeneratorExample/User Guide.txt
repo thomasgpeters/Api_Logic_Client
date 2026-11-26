@@ -195,7 +195,7 @@ Every function is explained above, one by one.
 - **Good to know.** IN writes a single `?`, so it matches one value: use OR filters for a few values. The generator writes queries, not schemas: create your tables with plain SQL (CRM Database.incl).
 
 # This example
-The window opens with all ten examples run, in one scrolling output: for each, the FutureBasic that builds its dictionaries, then the SQL, the values and what came back. **Run All** (Return or Command-R) runs them again; the **Examples** menu runs one at a time (Command-1 to Command-0); **Clear** (Command-K) empties the output; **Reset Database** makes the database again (examples 6, 7, 8 and 10 change it); **Examples > Also Log to NSLog** writes the output to the NSLog window too.
+The window opens with all ten examples run, in one scrolling output: for each, the FutureBasic that builds its dictionaries, then the SQL, the values and what came back. **Run All** (Return or Command-R) runs them again; the **Examples** menu runs one at a time (Command-1 to Command-0); **Clear** (Command-K) empties the output; **Reset Database** makes the database again (examples 6, 7, 8 and 10 change it); **Examples > Log to NSLog** writes the output, and the SQL Generator's own messages, to the NSLog window too (isLoggingOn, NO by default: every NSLog is gated on it).
 The database is `~/Library/Application Support/SQL Generator Example/crm.sqlite`, made on first launch:
 ```
 person   id, type, givenName, middleName, surName, balance

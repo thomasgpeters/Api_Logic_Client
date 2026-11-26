@@ -26,8 +26,8 @@ The rules engine that generated apps carry (`src/Runtime/Logic *.incl`), package
 - **The example's rules** (`Rules.incl`) cover formula (with a parent's value), sum and count (with a where),
   constraint, copy, parent check, and delete actions prevent and cascade.
 - **The story** (`Story.incl`) is thirteen saves, step by step (Next Step / Run the Whole Story / Start Again).
-  After each: the FB call, Saved or Refused (with `LogicMessage`), and the objects. *Log the Engine's Steps*
-  turns on `isLoggingOn`.
+  After each: the FB call, Saved or Refused (with `LogicMessage`), and the objects. *Log to NSLog*
+  turns on `isLoggingOn` (NO by default; every NSLog is gated on it).
 - **The Help window** (`Help.incl`, `Rich Text.incl`, from the SQL Generator example):
   - the user guide (`User Guide.txt`): every rule kind with examples, what a rule reads, activation,
     Model.json, using the module in your own app;

@@ -41,7 +41,7 @@ dictionaries; `metadata`, `results` unused). INSERT: `insertintotable` + `column
 A window (Run All, Clear, Reset Database, ?) and one scrolling rich-text output with every example run at launch (author, 2026-11-25: no example popup): the FB
 (purple), the SQL with a `sqlite>` prompt (blue), the values (teal), results as a SQL command line
 prints them (Menlo, `+---+` borders, numbers right-aligned, "n rows in set", "Query OK, 1 row
-affected"); also to NSLog (Examples > Also Log to NSLog). Help opens `User Guide.txt` in its own window (author, 2026-11-25): a heading and opening
+affected"); also to NSLog (Examples > Log to NSLog: `isLoggingOn`, NO by default). Help opens `User Guide.txt` in its own window (author, 2026-11-25): a heading and opening
 paragraph, the object model diagram (`SQL Generator Diagram.png`, made from the SVG by
 `tools/svg_to_png.js`, light colours, 2x; `![name]` in the markup), how it fits together, then
 every function one by one, the runner's too. **Open in Preview** writes it as a paginated PDF

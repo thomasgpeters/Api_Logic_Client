@@ -88,6 +88,8 @@ logicbank_same() {
     echo "LogicBank for FutureBasic: the copies are identical"
 }
 run "LogicBank for FutureBasic: the module, identical in the runtime and the example project" logicbank_same
+run "licences: the reference signs and verifies (valid, tampered, expired, another product, another key)" python3 "$here/tools/licence_reference.py" --test
+run "licences: the Mac test program carries Licence.incl's verify part unchanged" python3 "$here/tools/licence_reference.py" --mac-test-check
 run "LogicBank example: the story's every value, worked out by the reference engine" python3 "$here/tools/logicbank_example_reference.py"
 run "pill buttons: one module, identical in the Studio and the runtime" cmp "$here/src/AppBuilder/Pill Buttons.incl" "$here/src/Runtime/Pill Buttons.incl"
 run "logic engine: scenarios (Python reference)" python3 "$here/tools/logic_reference.py" --test "$db"

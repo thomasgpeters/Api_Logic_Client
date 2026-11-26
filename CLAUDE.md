@@ -31,7 +31,8 @@ mode work without extra code).
   - `XIB Generator.incl` — Form and List parts per entity; `Model Tags.incl`; model entries.
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
   - `Studio Library.incl` — the runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`): installed from the repository folder, updated from the Model menu; also `AppSupportFolderURL`.
-  - `Edition.incl` — which edition the Studio generates (this repo: Lite only). To be replaced by `Licence.incl`: one app for both editions, Enterprise features switched on by a signed licence from the Imagery License Server (`docs/design/Licensing Design.md`, author 2026-11-26).
+  - `Licence.incl` — the licence: ES256, verified offline (Security framework), kept in the Keychain, `LicenceAllows( feature )`; `Licence Window.incl` — the Licence menu and window, `LicenceGate` on licensed commands (`docs/features/LICENSING_FEATURE.md`). Test keys only here (`tools/licence_test_keys`).
+  - `Edition.incl` — which edition the Studio generates: Enterprise when the licence includes it.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
@@ -98,7 +99,7 @@ mode work without extra code).
   `rules_bridge.py` (declare_logic.py import / export, Rules.json check, FB rule generation),
   `check_erd_page.py` (test: the model diagram page in headless Chromium),
   `check_app_pages.py` (test: the generated App Pages.incl lints with the runtime),
-  `logicbank_example_reference.py` (the LogicBank example's model, rules and story on the reference engine), `make_logicbank_svg.py` (its Help diagram),
+  `licence_reference.py` (licences: issue, verify, the Mac test program), `logicbank_example_reference.py` (the LogicBank example's model, rules and story on the reference engine), `make_logicbank_svg.py` (its Help diagram),
   `make_sql_generator_svg.py` (draws `docs/design/SQL Generator Object Model.svg`), `svg_to_png.js` (an SVG as a 2x PNG, light colours: the example's Help diagram),
   `als_contract.py` (test: the API Logic Server contract, against a running server),
   `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),
@@ -153,7 +154,9 @@ These apply to hand-written code **and to everything the generator emits**.
 - Avoid deprecated syntax (`globals "file"`, `proc`, `def*` letter ranges, `index$`, `TextLabelWithTag`).
 - FB source files use classic-Mac **CR** line endings (convert to LF to edit,
   back to CR before committing). XIB, JSON, SQL and Python use LF.
-- Logging is gated on `isLoggingOn`.
+- Logging is gated: every `NSLog` - errors too - is `if ( isLoggingOn ) then NSLog( ... )`. `isLoggingOn` is NO by default,
+  declared in the app's own globals (generated apps: `App Globals.glbl`, a template; the Studio: `My Globals.glbl`;
+  the examples: their `.glbl`). `fblint` reports an ungated `NSLog` (single-file `.fb` tests, whose output is their log, are exempt).
 
 ## Data rules (SQLite and ALS)
 - `sqlite3_open` silently **creates an empty file** when the database is

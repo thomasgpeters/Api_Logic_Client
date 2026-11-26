@@ -1,0 +1,66 @@
+# Licensing: the licence in App Builder
+
+Status: built here (2026-11-26); not yet built on a Mac. The License Server's side is not built. Design:
+`docs/design/Licensing Design.md`.
+
+## What it does
+
+- **A licence is checked offline:** `src/AppBuilder/Licence.incl`.
+  - A licence is `<payload>.<signature>`. The payload is base64url JSON. The signature is ECDSA P-256 / SHA-256
+    (ANSI X9.62) of the payload's text.
+  - App Builder checks it with the public key in `LICENCE_PUBLIC_KEY`, through the Security framework:
+    `SecKeyCreateWithData`, `SecKeyVerifySignature`, `kSecKeyAlgorithmECDSASignatureMessageX962SHA256`.
+  - It then checks the product (`app_builder_fb`) and the expiry date.
+  - A licence is kept in the Keychain (service `App Builder for FutureBasic`, account `licence`).
+  - `LicenceAllows( _licenceFeature… )` answers from the payload's feature bits:
+
+    | Edition | Bits | Features |
+    |---|---|---|
+    | Lite | `0x0003` | core, AI |
+    | Enterprise | `0x01FF` | Lite's, plus ALS projects, the Enterprise runtime, rules exchange, integration, authorization, governance, genai-logic |
+- **The Licence window and menu:** `src/AppBuilder/Licence Window.incl`.
+  - The App Builder menu, after About: Licence…, Enter Licence…, Upgrade to Enterprise…, Manage Licence Online…,
+    Remove Licence….
+  - The window shows the licence in words (who, the edition, until when, each feature ticked or "Enterprise"). It
+    has a field to paste a licence, Get a Free Lite Licence, Upgrade, Manage Online, Remove and Close.
+  - At launch, without a valid licence, the window opens.
+- **The gates:** `fn LicenceGate( feature, what )`:
+  - New Project from API Logic Server… (menu and the New Project view's button), Open API Logic Server Metadata…:
+    ALS projects;
+  - Import / Export Rules: rules exchange;
+  - Generate App / XIBs / XIB / Binding (menu and toolbar): core, so nothing is generated without a licence.
+
+  A locked command stays in its menu with "(Enterprise)" after its title. Choosing it explains, and offers the
+  upgrade (or the Licence window, without a licence). `Edition.incl`'s `EditionEnterpriseAvailable` is the licence's
+  Enterprise runtime bit.
+- **The License Server's pages:** `LICENCE_SERVER` + `/appbuilder`, `/appbuilder/upgrade?lic=…`, `/account`. The
+  address (`https://license.imagery.com`, from the License Server's documents) is to confirm before release.
+
+## The keys
+
+`tools/licence_test_keys/TEST-ONLY-private.pem` is a TEST key, public in this repository. A licence signed with it
+proves nothing. `LICENCE_PUBLIC_KEY` holds its public half until the License Server makes the production key pair; its
+private key never leaves the server.
+
+## Verification
+
+- `tools/licence_reference.py --test` (in `run_tests.sh`) runs 10 cases:
+  - valid Lite and Enterprise licences;
+  - the last day, and the day after (expired);
+  - edited, another licence's signature, another key, another product;
+  - not a licence; pasted with spaces and new lines.
+- `src/MacTests/Licence Verify Test.fb` is written by `--mac-test`. It carries `Licence.incl`'s verify part unchanged
+  (`--mac-test-check`, in `run_tests.sh`) and the same 10 cases.
+- **On a Mac (to do):** the test program says PASS for each case.
+- **In the app (to do):**
+  - no licence: the window opens at launch; Generate asks for a licence;
+  - a Lite licence (`--issue lite`): ALS projects say Enterprise; Generate works;
+  - an Enterprise licence: everything opens;
+  - Remove, then relaunch;
+  - the Keychain item is in Keychain Access.
+
+## Not yet
+
+- The `appbuilderfb://` URL scheme and the `.fblicence` document type (the licence arrives by link or file).
+- The edition in the About box.
+- The License Server: the product, signing, the pages (its own repository).

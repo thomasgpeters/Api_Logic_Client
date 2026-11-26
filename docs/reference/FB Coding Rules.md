@@ -128,6 +128,12 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
     Toolbox name"): `TextViewAppendAttributedString` (a "Convenience" function in `TextView.incl`) -
     append to `fn TextViewTextStorage( tag )` with `MutableAttributedStringAppendAttributedString`
     instead. fblint keeps each one found by a Build Log in `NEWER_THAN_FB`, with its way round.
+27. **Every `NSLog` is gated on `isLoggingOn`** (author, 2026-11-26): `if ( isLoggingOn ) then NSLog( ... )`,
+    errors included, in hand-written code and in everything the generator emits. `isLoggingOn` is `NO` by default and
+    belongs to the app: declared in its own globals file (generated apps: `App Globals.glbl`, a template written once;
+    App Builder: `My Globals.glbl`; the examples: their `.glbl`), so the developer turns logging on in one place.
+    Modules (the SQL Generator, LogicBank for FutureBasic, the runtime) use it but never declare it. fblint reports an
+    ungated `NSLog`; single-file `.fb` tests, whose output is their log, are exempt.
 
 - **Mutable variables from getters need a cast.** `fn DictionaryObjectForKey` and
   `fn ArrayObjectAtIndex` return `CFTypeRef` (`const void *`); assigning one to a

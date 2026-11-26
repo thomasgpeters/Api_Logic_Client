@@ -6,6 +6,30 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Licensing built in App Builder; logging gated everywhere
+
+- Licensing (`docs/features/LICENSING_FEATURE.md`):
+  - `Licence.incl`: ES256 licences verified offline with the Security framework, kept in the Keychain,
+    `LicenceAllows`.
+  - `Licence Window.incl`: the Licence menu and window, and `LicenceGate` on ALS projects, rules exchange and every
+    Generate command. `Edition.incl` follows the licence.
+  - `tools/licence_reference.py`: issue and verify; 10 cases; it writes the Mac test program, which carries
+    `Licence.incl`'s verify part unchanged.
+  - The keys here are TEST keys; the production pair is made on the License Server.
+- Logging (author): every `NSLog` - errors too - is gated on `isLoggingOn`, NO by default, declared in the app's own
+  globals.
+  - Generated apps get a new template, `App Globals.glbl` (first in the build order); the generated main no longer
+    sets `isLoggingOn = YES`.
+  - The runtime's `Data SQLite.incl` and the LogicBank example's `Data Memory.incl` no longer declare it. The Studio's
+    `My Globals.glbl` has it NO.
+  - The examples' "Log to NSLog" menu items toggle `isLoggingOn`; their separate flag is gone.
+  - Test_Xib_View likewise (279496a).
+  - 62 calls gated here, 21 in Test_Xib_View. `fblint` now reports an ungated `NSLog` (FB Coding Rules 27).
+- Learned:
+  - macOS verifies ECDSA P-256 natively (`kSecKeyAlgorithmECDSASignatureMessageX962SHA256`, DER signatures - what
+    OpenSSL and Python's `cryptography` produce). The Security framework is `include "Tlbx Security.incl"`.
+  - Rather than an output parameter, a verify function reports why it refused in a global (`gLicenceVerifyProblem`).
+
 ## 2026-11-26 — LogicBank for FutureBasic as a free module, with its example app
 
 - The author: LogicBank's sample is its own app, on three objects that never touch a database - Customer, Order,
