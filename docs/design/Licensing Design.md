@@ -24,16 +24,24 @@ Enterprise a separate private build that swaps `Edition.incl`). Nothing is built
 
 ## Pricing (author, 2026-11-26)
 
-- **An annual subscription under $299.** The exact price is to be set.
-- **Monthly costs 20% more:** the annual price / 12 x 1.2. At $299 a year, that would be $24.92 / month x 1.2 =
-  $29.90 / month.
-- **The free modules are the reason to subscribe.** The SQL Generator, LogicBank for FutureBasic and the Web
-  Toolkit are free (MIT). With them, you write your own rules and pages; App Builder automates both from the model
-  (`Free Modules Design.md`).
-- **Not yet public.** The marketing repository keeps unpublished prices out until the author says they are public.
-- **Open (for the author):**
-  - Is this the Enterprise subscription, with Lite staying a free registered licence?
-  - Which edition generates web apps? Proposed: the subscription, as feature bit 9 below.
+One price list for every Imagery application (the License Server's `docs/plans/CONCURRENT_USER_TIERS.md`). It is
+introductory for the first year, and customers keep it as long as they renew without a break. Not yet public: the
+marketing repository keeps unpublished prices out.
+
+| Tier | App Builder: developer seats | Annual | Monthly (annual / 12 + 20%) |
+|---|---|---:|---:|
+| Starter | up to 5 | $299 | $29.90 |
+| Team | up to 25 | $499 | $49.90 |
+| Unlimited | no limit | $899 | $89.90 |
+| Added seat (Starter only) | +1 each | $59 | $5.90 |
+
+- **Lite stays free** on registration. **Enterprise is sold on the tiers,** counted as developer seats: a desktop app
+  has no concurrent sign-ins.
+- **The licence will carry `tier` and `seats`.** `Licence.incl` reads the payload as a dictionary, so the new claims
+  need no change to verification; showing them in the Licence window is a small follow-up.
+- **The free modules are the reason to subscribe.** The SQL Generator, LogicBank for FutureBasic and the Web Toolkit
+  are free (MIT). With them you write your own rules and pages; App Builder automates both (`Free Modules Design.md`).
+- **The web target** (feature bit 9, below) is in Enterprise.
 
 ## Why signed licences, and which signature
 
@@ -94,7 +102,7 @@ Fleet's `docs/LICENSING.md`).
 | 6 | Authorization rules (row-level security, grants by role) | Enterprise |
 | 7 | Rule governance: versions, sign-off, an audit trail | Enterprise |
 | 8 | AI through the ALS project's `genai-logic`; team prompts and settings | Enterprise |
-| 9 | The web target: App Builder builds the pages for the Web Toolkit (forms, lists, bindings, rules) from the model - proposed (author, 2026-11-26: "That's why it's incentive to buy the subscription"); the edition is for the author to confirm | Enterprise (proposed) |
+| 9 | The web target: App Builder builds the pages for the Web Toolkit (forms, lists, bindings, rules) from the model (author, 2026-11-26: "That's why it's incentive to buy the subscription") | Enterprise |
 | 10–15 | reserved | |
 
 - **Lite is `0x0003`.** **Enterprise is `0x01FF`** (bits 0-8); with the web target, `0x03FF`. `Licence.incl` already

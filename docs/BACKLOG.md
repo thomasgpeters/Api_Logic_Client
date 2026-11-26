@@ -47,9 +47,9 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [x] Free (MIT), the third free module (author, 2026-11-26): its user guide, its page and downloads on the site, the
       About Imagery window in its example.
 - [ ] The name ("Web Toolkit for FutureBasic" is a working name); its own public repository.
-- [ ] **Pricing** (author, 2026-11-26): an annual subscription under $299 (the exact price to set), monthly 20% more.
-      To confirm: is it the Enterprise subscription, and is the web target (feature bit 9, proposed) in it? Then the
-      License Server's product and the site's App Builder page.
+- [x] **Pricing decided** (author, 2026-11-26): Lite free; Enterprise on the company-wide tiers as developer seats
+      (`docs/design/Licensing Design.md` -> Pricing); the web target is in Enterprise.
+- [ ] The Licence window shows the licence's tier and seats; the License Server issues them (its L36).
 
 ## Waiting on the author
 
