@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Crash fix: globals keep their values (retain, release)
+
+- **The crash:** Studio for FB crashed on Generate App, in `LicenceFeaturesOf` (`objc_msgSend` on a freed object).
+  - **Why:** the licence's payload comes from `JSONSerializationJSONObjectWithData`, autoreleased, and was stored in the
+    global `gLicence`. FB's CF types are plain pointers, so the global did not retain it. The event that loaded the
+    licence ended, the payload was freed, and the next check read freed memory.
+- **The fix:** `LicenceKept` retains the new value and releases the old one, for `gLicence` and `gLicenceProblem`.
+- **The same in the other modules:**
+  - `DataKept` in the shared data module: `gDataEntities`, `gDataDatabasePath`, `gLogicMessage`. The copies in the
+    LogicBank and Web Toolkit examples are identical.
+  - `WebKept` in the Web Toolkit: the page builder, the hooks, the script and style text, the sessions.
+  - The Studio's `gAuthDictionary`.
+- **FB Coding Rules:** a global does not keep its value alive.
+
 ## 2026-11-27 — Build fixes: NSLog.incl where it was missing; fblint checks opt-in headers
 
 - **The author's build of the Web Toolkit example** stopped at 47 errors:

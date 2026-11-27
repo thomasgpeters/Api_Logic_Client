@@ -20,22 +20,26 @@ resources "AttributeDetailView.xib"
 resources "Toolbar.xib"
 // "Globals" 1
 include "My Globals.glbl"
-// "Includes" 1
+// "Look" 1
 include "Branding.incl"
 include "Pill Buttons.incl"
 include "Menus.incl"
+// "Licence" 1
 include "Licence.incl"
 include "Licence Window.incl"
+// "Model" 1
 include "Validations.incl"
 include "SQLite Access.incl"
 include "SQLite Model.incl"
 include "ALS Model.incl"
 include "Type Mapping.incl"
+// "Generators" 1
 include "XIB Generator.incl"
 include "Binding Generator.incl"
 include "Studio Library.incl"
 include "Edition.incl"
 include "App Generator.incl"
+// "Projects" 1
 include "Project Workspace.incl"
 include "ALS Project.incl"
 include "Rules Bridge.incl"
@@ -45,7 +49,9 @@ include "Project Settings.incl"
 include "Project Actions.incl"
 include "New Project.incl"
 include "Open ALS Project.incl"
+// "Server" 1
 include "API Interface.incl"
+// "Windows and Events" 1
 include "EventHandlers.incl"
 include "Windows.incl"
 // "Main" 1
