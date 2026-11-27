@@ -202,4 +202,15 @@ build with "Missing or invalid source file ... (error 1234 for Tlbx Security.inc
 - **Our file names never start with `Tlbx`** (author, 2026-11-27). `Tlbx ...` is FutureBasic's name for a toolbox: a header
   that wraps a C or Objective-C library or framework for FB. Our own files are named for what they do (`Licence.incl`,
   `SQLite Access.incl`). A real toolbox of ours, an FB wrapper over a C library such as nlohmann/json, could carry the prefix.
+- **A global does not keep its value alive** (2026-11-27: the Studio crashed in `LicenceFeaturesOf` on Generate App).
+  - FB's `CFDictionaryRef`, `CFStringRef` and the other CF types are plain pointers, so a global does not retain what it
+    is given.
+  - A value made for the moment is freed when the event ends: a parsed JSON object, a formatted string, a number, text
+    read from a file, a value taken out of such an object. The global then points at freed memory, and the next read
+    crashes.
+  - Keep such values with a "kept" function: it retains the new value and releases the old one. The modules have
+    `LicenceKept` (the Studio), `DataKept` (the data runtime and LogicBank for FutureBasic) and `WebKept` (the Web
+    Toolkit).
+  - Values made with `fn MutableDictionaryNew` / `fn MutableArrayNew` and kept in a global have not crashed so far, but
+    keeping them costs nothing.
 
