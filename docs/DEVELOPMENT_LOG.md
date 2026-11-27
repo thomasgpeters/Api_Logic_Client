@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Studio: the Welcome list without its box
+
+- **Author:** "I don't like the square box at all": the Recent Projects list should be transparent, with super-light
+  grid lines, on a card shaded a little lighter than the window in dark mode and a super-light grey in light mode.
+- `StudioQuietTable` (Branding.incl): the table's and scroll view's backgrounds cleared, no border, horizontal grid
+  lines at 6% of the label colour. `StudioCardColor` is now worked out from the window's own background (3.5% darker
+  in light mode, 7% lighter in dark), so it always stands apart from it. Waits for a Mac build.
+
 ## 2026-11-27 — The generated app's toolbar and search
 
 - **Author:** a toolbar at the top of the window, customisable as Mac toolbars are; its first item Search, linked to
