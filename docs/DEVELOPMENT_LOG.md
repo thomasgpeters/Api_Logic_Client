@@ -6,6 +6,13 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The lookup's info button: "View does not exist", the popover never opened
+
+- **The report** (author, a generated app): clicking the info button beside a lookup (Person) showed "View does not
+  exist" and no popover. The popover was an FB `popover` with tagged labels inside it, filled through those tags; one of
+  those look-ups failed. `RecordPopoverShow` (`Record Popover.incl`) now builds the popover in Cocoa: a heading and a
+  grid of titles and values, anchored to the info button itself, with no tags inside it. Waiting on the Mac.
+
 ## 2026-11-27 — The Studio's cards: "View does not exist ... tag: 110"
 
 - **The alert** (author, at launch): the cards were set up by the tags 110 and 111 given to their boxes in the XIBs;

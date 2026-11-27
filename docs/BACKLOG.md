@@ -67,6 +67,8 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 
 ## Waiting on the author
 
+- [ ] The new layout manager (author, 2026-11-27: "when I return, we need to implement the new layout manager"): which one to confirm first - the Studio's page layout (`features/RESPONSIVE_LAYOUT_FEATURE.md`), the generated app's page layout, or the Web Toolkit's Layout Tool
+
 - [ ] **Bug:** Form layout popup - choosing "3 columns" pops back to "automatic". Diagnostics are in
   (`DesignFormColumnsChosen`): the NSLog lines "Form layout popup: item …" and "Form layout of …"
 - [ ] A crash seen in the Studio (2026-11-24): the author is trying to reproduce it
