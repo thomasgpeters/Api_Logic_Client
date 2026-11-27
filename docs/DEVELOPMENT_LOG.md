@@ -6,6 +6,18 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Studio: Generate App's progress sheet
+
+- **Author:** Generate App needs a confirmation, a progress dialog with the steps enumerated, the bar moving forward
+  as each part is generated; "Generated" at the end and a Done button; no closing it while it generates.
+- **`Generate Progress.incl`** (new, before the generators in the build order): a Cocoa sheet on the Studio's window
+  with nine steps (screens, binding code, runtime and templates, model and About, main program and project file,
+  starting files, App Pages, runtime files, business rules), each marked waiting / under way / done / failed, a
+  determinate bar, the message and Done (dimmed until the end; Return closes it). Generation runs on the main
+  thread, so the sheet is redrawn after each step and held 0.18 s (the run loop in the modal-panel mode: no events
+  are handled meanwhile). `AppGenerate` calls `GenerateProgressStep( n )`; it does nothing for the other Generate
+  commands, which show no sheet. Waits for a Mac build.
+
 ## 2026-11-27 — Studio: the Welcome list without its box
 
 - **Author:** "I don't like the square box at all": the Recent Projects list should be transparent, with super-light

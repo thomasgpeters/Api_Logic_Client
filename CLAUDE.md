@@ -34,6 +34,7 @@ mode work without extra code).
   - `Licence.incl` — the licence: ES256, verified offline (Security framework; its calls declared at the top of `Licence.incl` itself, since FB's `Tlbx Security.incl` is newer than the author's FB), kept in the Keychain, `LicenceAllows( feature )`; `Licence Window.incl` — the Licence menu and window, `LicenceGate` on licensed commands (`docs/features/LICENSING_FEATURE.md`). Test keys only here (`tools/licence_test_keys`).
   - `Edition.incl` — which edition the Studio generates: Professional when the licence includes it.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
+  - `Generate Progress.incl` — Generate App's progress sheet (the steps ticked, a bar, Done when finished).
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
   - `Project Settings.incl` — the Project Settings view (`ProjectSettingsView.xib`): the About text (≤ 250 chars, the app's `Credits.rtf`) and branding (logo, tag-line, copyright for the app shell).

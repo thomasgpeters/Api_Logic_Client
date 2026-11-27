@@ -236,6 +236,10 @@ every time, so an app always gets the runtime App Builder was built with.
 | Generate Binding Code | ⌘B | `<Entity> Binding.incl` for every entity |
 | Generate App | ⌘G | all of the above, plus the project, the main program, `Model.json`, `Credits.rtf`, the runtime and the starting files |
 
+*Generate App* shows its progress in a sheet: each step listed and ticked as it is done, a bar that moves with
+them, and at the end **Generated** and a **Done** button that closes the sheet. Done stays dimmed until it has
+finished. If a step fails it is marked in red and the sheet says the app was not generated.
+
 Then open **`FBapp/<name>.fbeproj`** in FutureBasic and build it. The project is laid out in groups:
 
 | Group | Holds | Regenerated? |

@@ -153,8 +153,9 @@ Purpose: The entity-relationship diagram and its tools.
 ### F-01 Generate App
 Purpose: The generated project.
 Before: A project open.
-1. Generate menu, Generate App. -> A message says the app was generated.
-2. Generate menu, Show Generated App in Finder. -> FBapp/ holds <name>.fbeproj, the XIBs, the bindings, App Pages.incl, Model.json, README.md and the runtime files, Record Tiles.incl among them.
+1. Generate menu, Generate App. -> A sheet, "Generating <name>", lists nine steps; each is ticked in turn as the bar moves forward; Done is dimmed meanwhile.
+2. Wait for the end. -> Every step ticked, the bar full, the message "Generated"; Done is on; Return or a click on Done closes the sheet.
+3. Generate menu, Show Generated App in Finder. -> FBapp/ holds <name>.fbeproj, the XIBs, the bindings, App Pages.incl, Model.json, README.md and the runtime files, Record Tiles.incl among them.
 
 ### F-02 Build the generated app
 Purpose: The generated app builds and runs.
