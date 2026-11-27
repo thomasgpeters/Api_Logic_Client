@@ -199,7 +199,8 @@ Dates are stored as `1996-07-04`, times as `14:30:00`, and dates with times as
   header, its Dock icon and its About box. Select it and press Delete to remove it. **Without a
   picture, the symbol:** an SF Symbol for the header instead, with a preview beside it.
 - **Tag-line**: a short description under the app's name, up to 80 characters.
-- **Copyright**: at the foot of the navigation bar (`© <app name>` when empty).
+- **Copyright**: at the left of the footer (`© <app name>` when empty). Its company also heads the window's title:
+  *Imagery Business Systems, LLC | Northwind* (just the app's name when the copyright names no company).
 
 **Done** saves everything in `Project.json`. The project's heading in App Builder shows the same
 icon, the picture or else the symbol.
@@ -267,17 +268,19 @@ Every generated app has the same frame (`App Shell.incl`):
   control that suits the field: a **calendar** for a date (the records of that day); a **dropdown of
   the field's values** when it has only a few, such as a type or a status (worked out from the records);
   a **text box** for anything else (the records holding every word you type, any case, any accent).
-  The List narrows at once, the navigator counts only those records, and the footer says how many
-  match. *Show All* brings every record back; a new page starts a new search;
+  The List narrows at once, the navigator counts only those records, and the line under the window's
+  title says how many match. *Show All* brings every record back; a new page starts a new search;
 - a **dark blue navigation bar** on the left (darker in dark mode), with a button and an icon per
   entity; with many entities (twenty tables, say) the buttons scroll;
 - a **header** with the app icon, the app's name centred on it and the tag-line under it, and on
   the right the **theme menu** (System / Light / Dark) and **Log In** (connect it to your sign-in in
   `EventHandlers.incl`, `DoLogin`);
-- a **footer** with the **record navigator** (First, Previous, *Customer 3 of 91*, Next, Last), and a status
-  line (New, Save, Delete and Refresh are in the toolbar, and in the *Records* menu: ⌘N, ⌘S, ⌘R). A page opens on its first record, selected in the List with the focus there, so the arrow keys
-  move through the records too. Previous is dimmed on the first record and Next on the last. The copyright
-  is at the foot of the navigation bar;
+- a **footer** with the copyright on the left and the **record navigator** across the rest: First, Previous,
+  *Customer 3 of 91*, Next and Last, as pill buttons that share the width and stretch with the window. A page
+  opens on its first record, selected in the List with the focus there, so the arrow keys move through the
+  records too. First and Previous are dimmed on the first record, Next and Last on the last. What just
+  happened (*Saved.*, why a save was refused, *5 of 91 match*) shows under the window's title. New, Save,
+  Delete and Refresh are in the toolbar, and in the *Records* menu (⌘N, ⌘S, ⌘R);
 - the **page**: the entity's List in a card at the top and its Form in a card below, both the
   full width of the window.
 
