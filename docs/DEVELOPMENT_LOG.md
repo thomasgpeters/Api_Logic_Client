@@ -37,6 +37,9 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   heading hides while the Welcome page shows (`StudioUpdateCrumbs`), and the page takes its place (`FitWelcomeView`).
   The running API Logic Server form has the same treatment (author: "yes, same treatment for the server form"): the
   logo, the name and "A project from a running API Logic Server" above its box (`FitOwnHeadingView`).
+  Build error on the Mac: `CGRect r = gStudioHeadingFrame` became `= &gStudioHeadingFrame` (FB passes a global record
+  by address); the heading keeps only its left edge (`gStudioHeadingLeft`) and reads its frame from the view. fblint
+  now reports a record declared with a global record as its value.
   Project pages: the project's icon and name, no Imagery logo (author: "each project should have an ICON"): its
   picture from Project Settings, else its SF Symbol (`ProjectIconImage`, `ProjectShowHeading`), updated when
   Project Settings is closed.
