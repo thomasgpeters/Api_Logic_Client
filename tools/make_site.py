@@ -70,7 +70,7 @@ EDITION_FEATURES = [
         ('A project from an API Logic Server project: its folder, its model file, or a public GitHub repository', False, True, 'In testing'),
         ('Entity definitions: titles, controls, widths, form columns, icons; your changes kept', True, True, 'Available'),
         ('The model diagram: entities, relationships and rules', True, True, 'Available'),
-        ('Generate App, with its steps shown as it works', True, True, 'In testing'),
+        ('Generate App, with its steps shown as it works', True, True, 'Available'),
         ('Right-click menus and a Project menu that names what it acts on', True, True, 'In testing'),
     ]),
     ('The apps it builds', [

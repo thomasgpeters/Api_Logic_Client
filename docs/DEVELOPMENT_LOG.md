@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Generate App's progress sheet: tried on a Mac
+
+- **Author:** "the generate popup window looks fantastic." First build failed with "Unknown function
+  GenerateProgressStep": the FB editor had saved its own older `data.fbproj` over the pulled one, so the new
+  `Generate Progress.incl` was not in the project. Adding it back to the Generators group (before XIB Generator.incl)
+  fixed it. Lesson: a new source file means the editor's project list must include it - close the project before
+  pulling, or check `git status` on `data.fbproj` after.
+- The site's editions page: Generate App's progress moves from In testing to Available.
+
 ## 2026-11-27 — One coding style, checked
 
 - **Author:** make sure every lint test works, and one consistent coding style throughout the application and the
