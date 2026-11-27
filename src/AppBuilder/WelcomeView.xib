@@ -12,7 +12,7 @@
             <rect key="frame" x="0.0" y="0.0" width="684" height="416"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <box boxType="custom" cornerRadius="12" title="Box" tag="110" id="hSW-Qs-icP">
+                <box boxType="custom" cornerRadius="12" title="Box" id="hSW-Qs-icP">
                     <rect key="frame" x="20" y="20" width="644" height="274"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <view key="contentView" id="k3s-Lf-p5l">
