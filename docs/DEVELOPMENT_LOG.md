@@ -6,6 +6,12 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The Studio's cards: "View does not exist ... tag: 110"
+
+- **The alert** (author, at launch): the cards were set up by the tags 110 and 111 given to their boxes in the XIBs;
+  an NSBox is not a control, so the tags never reach it. Now `StudioCardAround` finds each box from a control inside
+  it (the Recent Projects table, the form's Project Name field) and styles it. Rule added to FB Coding Rules.
+
 ## 2026-11-27 — Documentation cleanup (author: "remove redundancies and fix wording to be professional but warm and readable")
 
 - **README** rewritten (bd477b6): what App Builder is, a four-step start, editions, the free modules, the repository,

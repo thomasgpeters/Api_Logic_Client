@@ -13,7 +13,7 @@
             <rect key="frame" x="0.0" y="0.0" width="684" height="416"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <box boxType="custom" cornerRadius="12" title="Box" tag="111" id="UkJ-R5-zc1">
+                <box boxType="custom" cornerRadius="12" title="Box" id="UkJ-R5-zc1">
                     <rect key="frame" x="20" y="20" width="644" height="274"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <view key="contentView" id="N5i-31-sSM">
