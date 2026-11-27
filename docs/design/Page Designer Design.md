@@ -74,6 +74,34 @@ The author's "parameter to set the current record in focus": a Detail part's rec
 - the part it follows (a parent, or the row chosen in a List of the same entity),
 - *(later)* a fixed filter (a status, the signed-in user), or a value passed from another page (drill-in).
 
+## Links between pages (drill-in)
+
+Author, 2026-11-27: "we need to be able to drag and drop a relationship or an association between pages; first thing
+that'll happen is it'll show you the relationship between the two pages based on relationships of the entities on
+those pages."
+
+- **In the designer:** drag a page in the Pages list onto another. A sheet lists the relationships between the two
+  pages (`page_associations`): from each part of the first page to the second page's driver (the part that receives
+  the record), the proposed one first, each in words - *"Customers -> Orders: the customer's orders"*, *"Order
+  Entry (its order) -> Customers: the order's customer"*, *"Order Entry (its Customers part) -> Customers: the same
+  customer"*. Choose one, give it a label (proposed: the other page's title, or the relationship's name for a
+  parent), and it is saved as one of the first page's `links`. Nothing in common: the sheet says so and nothing is
+  saved. A page can have several links; they are listed, and removed, on the page in the designer.
+- **In the generated app:** the part a link starts from has a *Go to* button in its card's title row (several links:
+  a menu), labelled with the link's label. It opens the other page for the part's current record: its driver shows
+  that record's children (Customers -> Orders: VINET's orders, the navigator over them, "Order 1 of 1"), its parent
+  (Orders -> Customers: the order's customer), or the same record. The crumb trail at the top shows where you came
+  from (*Customers / VINET / Orders*) and goes back; the header's Back button too. The other page opened from its
+  navigation-bar button shows all its records, as before.
+- In `Pages.json`: `links: [ { page, fromPart, how, relationship, fks, parentKeys, label } ]` on the page they start
+  from (the format in `tools/pages_reference.py`).
+
+Tested (`tools/pages_reference.py`): Customers -> Orders (VINET: 10248), Orders -> Customers (10249: Toms
+Spezialitäten), Order Entry -> Customers (from the order, and the same record from its Customers part), Order Entry
+-> Products (the line chosen, and its Products part), Products -> Order Entry and Categories -> Orders (nothing in
+common), Categories -> Products; the check reports a link to a missing page, to its own page, or along a
+relationship that does not exist.
+
 ## The invoice, as an example
 
 Page *Order Entry*: Order (Detail, driver) / Customer (Detail, follows Order as its parent, read-only) / OrderDetail
@@ -103,10 +131,11 @@ OrderDetail adds a line to the current order (its OrderId filled in); the rules 
    rows) and the three samples: the invoice page built from drops and resolved for an order; every relationship
    offered both ways.
 2. The designer in Studio for FB (Cocoa drag and drop: the palette as a drag source, the page as a drop target;
-   the sheet on drop).
+   the sheet on drop; a page dragged onto another, the sheet of their relationships). The links between pages are in
+   phase 1's reference already.
 3. Parts with a tag base (XIB and binding generators); today's pages regenerated the same way, so nothing changes
    for a project without `Pages.json`.
-4. The generated app: pages of parts, linking, the focus.
+4. The generated app: pages of parts, linking, the focus; the links between pages (Go to, the crumb trail, Back).
 5. The invoice example on Northwind (Order Entry) as a test scenario; then the samples (Customs: an entry with its
    lines and its fees).
 

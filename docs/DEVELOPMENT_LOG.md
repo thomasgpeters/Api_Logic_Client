@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The page designer: links between pages
+
+- **Author:** drag and drop a relationship between pages; the first thing shown is the relationship between the two
+  pages, from the relationships of their entities.
+- `tools/pages_reference.py`: `page_associations( model, a, b )` (from each part of a to b's driver: children,
+  parent, the same record; the proposed one first), `resolve_link` (b's driver records for a's current record), a
+  page's `links` in `Pages.json` and in the check. 13 more checks (49 in all): Customers -> Orders, Orders ->
+  Customers, the invoice page to Customers and to Products, pages with nothing in common, the check's three new
+  reports. The design (`design/Page Designer Design.md`, "Links between pages"): the sheet in the designer; Go to in
+  the part's card, the crumb trail and Back in the generated app.
+
 ## 2026-11-27 — The page designer, phase 1: Pages.json and the links
 
 - **Author:** the proposals accepted (Detail / List / List with detail; the toolbar on the part with the focus; the same

@@ -9,7 +9,9 @@ A project's pages are kept in <project>/Pages.json:
                               { "entity": "Customers", "display": "detail",
                                 "follows": { "part": 0, "how": "parent", "relationship": "Customers",
                                              "fks": ["CustomerID"], "parentKeys": ["CustomerID"] } },
-                              ... ] } ] }
+                              ... ],
+                   "links": [ { "page": "Customer Orders", "fromPart": 1, "how": "parent", "relationship": "Customers",
+                                "fks": ["CustomerID"], "parentKeys": ["CustomerID"], "label": "Customer" } ] } ] }
 
     display   detail (one record: the author's "scalar") | list | listDetail (a List and the Form of its row)
     follows   null for the page's driver (part 0: the navigator and the search move it) or a part that is not linked;
@@ -18,10 +20,19 @@ A project's pages are kept in <project>/Pages.json:
                 parent    this part shows the parent of that part's current record (their fks = its parentKeys)
                 same      the same entity: the row chosen in that part (a List)
 
+    links     (author, 2026-11-27) drill-in from this page to another: a page dragged onto another in the designer shows
+              the relationships between the two pages' entities; the one chosen becomes a link. At run time the
+              current record of the part fromPart opens the other page, whose driver shows, for it:
+                children  its children (Customers -> Orders: that customer's orders)
+                parent    its parent (Orders -> Customers: the order's customer)
+                same      the same record (a Customers part -> the Customers page)
+
 What this file is the reference for (the FB port lives in the Studio and the generated app):
     proposed_links( model, parts, entity )   the links offered when an entity is dropped on a page (first = proposed)
     default_pages( model )                   one page per table, List with detail (the Lite edition's pages, always)
+    page_associations( model, a, b )         the links a page dragged onto another can have (first = proposed)
     check_pages( model, pages )              what is wrong with a Pages.json ([] when nothing)
+    resolve_link( db, link, record )         the other page's driver records, for the current record of fromPart
     resolve_page( db, model, page, driver )  each part's records for a driver record, as the generated app shows them
 
     python3 tools/pages_reference.py db.sqlite                 the default pages, and the links between every two entities
@@ -59,6 +70,22 @@ def proposed_links(model, parts, entity):
             how = 'children' if rel['direction'] == 'toone' else 'parent'
             links.append({'part': index, 'how': how, 'relationship': rel['name'],
                           'fks': rel['fks'], 'parentKeys': rel['parentKeys']})
+    return links
+
+
+def page_associations(model, source, target):
+    """The links from page source to page target (a page dragged onto another): the relationships between any part of
+    source and target's driver (the part that receives the record), the proposed one first - source's parts in page
+    order, then the model's relationships. Empty: the two pages have nothing in common."""
+    links = []
+    receiver = target['parts'][0]['entity'] if target.get('parts') else None
+    if receiver is None:
+        return links
+    for index, part in enumerate(source.get('parts', [])):
+        for l in proposed_links(model, [{'entity': part['entity'], 'display': 'list'}], receiver):
+            label = target['title'] if l['how'] != 'parent' else (l['relationship'] or target['title'])
+            links.append({'page': target['title'], 'fromPart': index, 'how': l['how'], 'relationship': l['relationship'],
+                          'fks': l['fks'], 'parentKeys': l['parentKeys'], 'label': label})
     return links
 
 
@@ -104,6 +131,21 @@ def check_pages(model, pages):
             if not match:
                 problems.append(f'{at}: no relationship "{follows.get("relationship")}" ({follows.get("how")}) '
                                 f'between {entity} and {parts[target]["entity"]}')
+        by_title = {pg.get('title'): pg for pg in pages.get('pages', [])}
+        for k, link in enumerate(page.get('links', [])):
+            at = f'{where}, link {k + 1}'
+            target = by_title.get(link.get('page'))
+            if target is None:
+                problems.append(f'{at}: no page {link.get("page")!r}')
+                continue
+            if target is page:
+                problems.append(f'{at}: a link to its own page')
+                continue
+            ok = [l for l in page_associations(model, page, target) if l['fromPart'] == link.get('fromPart')
+                  and l['how'] == link.get('how') and l['relationship'] == link.get('relationship')]
+            if not ok:
+                problems.append(f'{at}: no relationship "{link.get("relationship")}" ({link.get("how")}) from part '
+                                f'{link.get("fromPart")} to {link.get("page")!r}')
     return problems
 
 
@@ -143,6 +185,17 @@ def resolve_page(db, model, page, driver):
         out.append({'entity': entity, 'display': part['display'], 'records': records})
         current.append(records[0] if records else None)
     return out
+
+
+def resolve_link(db, link, record, receiver):
+    """The other page's driver records when the link is followed from record (the current record of fromPart)."""
+    if link['how'] == 'same':
+        return [record]                                 # the same entity: the same row
+    if link['how'] == 'children':
+        where = ' AND '.join(f'{q(c)} = ?' for c in link['fks'])
+        return _rows(db, f'SELECT * FROM {q(receiver)} WHERE {where}', [record[k] for k in link['parentKeys']])
+    where = ' AND '.join(f'{q(c)} = ?' for c in link['parentKeys'])
+    return _rows(db, f'SELECT * FROM {q(receiver)} WHERE {where}', [record[k] for k in link['fks']])
 
 
 def drop(model, page, entity, display):
@@ -260,6 +313,44 @@ def run_tests():
     links = drop(model, page5, 'Employees', 'list')
     check('Employees twice (a manager and their staff): not offered yet (self-relationships later)',
           page5['parts'][1]['follows'] is None and links == [])
+
+    # links between pages: a page dragged onto another shows the relationships between them
+    customers = {'title': 'Customers', 'icon': None, 'parts': [{'entity': 'Customers', 'display': 'listDetail', 'follows': None}]}
+    orders = {'title': 'Orders', 'icon': None, 'parts': [{'entity': 'Orders', 'display': 'listDetail', 'follows': None}]}
+    products = {'title': 'Products', 'icon': None, 'parts': [{'entity': 'Products', 'display': 'listDetail', 'follows': None}]}
+    categories = {'title': 'Categories', 'icon': None, 'parts': [{'entity': 'Categories', 'display': 'listDetail', 'follows': None}]}
+    links = page_associations(model, customers, orders)
+    check('Customers -> Orders: the customer\'s orders', len(links) == 1 and links[0]['how'] == 'children'
+          and links[0]['fks'] == ['CustomerID'], links)
+    vinet = _rows(db, 'SELECT * FROM "Customers" WHERE "CustomerID" = \'VINET\'', ())[0]
+    check('followed from VINET: order 10248', [r['OrderID'] for r in resolve_link(db, links[0], vinet, 'Orders')] == [10248])
+    links = page_associations(model, orders, customers)
+    check('Orders -> Customers: the order\'s customer', len(links) == 1 and links[0]['how'] == 'parent', links)
+    order = _rows(db, 'SELECT * FROM "Orders" WHERE "OrderID" = 10249', ())[0]
+    check('followed from 10249: Toms Spezialitäten', [r['CompanyName'] for r in resolve_link(db, links[0], order, 'Customers')]
+          == ['Toms Spezialitäten'])
+    links = page_associations(model, page, customers)       # the invoice page -> Customers
+    check('Order Entry -> Customers: from the order (its customer) and from its Customers part (the same record)',
+          [(l['fromPart'], l['how']) for l in links] == [(0, 'parent'), (1, 'same')], links)
+    links = page_associations(model, page, products)
+    check('Order Entry -> Products: from the line chosen, and from its Products part',
+          [(l['fromPart'], l['how']) for l in links] == [(2, 'parent'), (3, 'same')], links)
+    links = page_associations(model, products, page)
+    check('Products -> Order Entry: nothing (Order Entry receives an Order; a product has lines, not orders)', links == [], links)
+    links = page_associations(model, categories, products)
+    check('Categories -> Products: the category\'s products', len(links) == 1 and links[0]['how'] == 'children', links)
+    check('Categories -> Orders: nothing in common', page_associations(model, categories, orders) == [])
+    customers['links'] = [page_associations(model, customers, orders)[0]]
+    page['links'] = [page_associations(model, page, products)[0]]
+    allp = {'pages': [customers, orders, products, page]}
+    check('pages with links pass the check', check_pages(model, allp) == [], check_pages(model, allp))
+    orders['links'] = [{'page': 'Nowhere', 'fromPart': 0, 'how': 'parent', 'relationship': 'Customers'},
+                       {'page': 'Orders', 'fromPart': 0, 'how': 'same', 'relationship': None},
+                       {'page': 'Products', 'fromPart': 0, 'how': 'parent', 'relationship': 'Products'}]
+    problems = check_pages(model, allp)
+    for needle in ("no page 'Nowhere'", 'a link to its own page', 'no relationship "Products" (parent) from part 0'):
+        check(f'the check reports: {needle}', any(needle in p for p in problems), problems)
+    del orders['links'], customers['links'], page['links']
 
     # the check finds what is wrong
     bad = {'pages': [{'title': 'X', 'parts': [
