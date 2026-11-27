@@ -100,6 +100,7 @@ mode work without extra code).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
 - `docs/DOC_ONE_PAGER.md` — the one-page introduction (keep it true with the user guide).
 - `docs/USER_GUIDE.md` — the user guide (keep it true when what a user sees or can do changes).
+- `docs/TEST_SCENARIOS.md` → `docs/TEST_SCENARIOS.pdf` (`tools/make_test_guide.py`) — the test scenario guide for testers: every feature, step by step, Pass / Fail (keep it true with the features).
 - `docs/features/` — one `<NAME>_FEATURE.md` per feature (how it works, where, decisions, verification).
 - `docs/ROADMAP.md` (phases), `docs/BACKLOG.md` (open items), `docs/DEVELOPMENT_LOG.md`
   (what was done and learned, newest first, with commits).

@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The test scenario guide (PDF)
+
+- **Asked** (author): "a test scenario guide to enable people to test and validate all the various features.
+  Professional style pdf document".
+- **Built:** `docs/TEST_SCENARIOS.md` (the source: 32 scenarios, 94 steps, in nine areas - the Studio's launch and
+  licence, projects, entity definitions, settings, the model diagram, generating, the generated app with its tiles,
+  the free modules, the checks without a Mac) and `tools/make_test_guide.py`, which builds `docs/TEST_SCENARIOS.pdf`:
+  a cover with the tester's record, a results summary, and each scenario's steps in a table with Pass / Fail boxes.
+
 ## 2026-11-27 — Generated apps: records as tiles beside the grid
 
 - **Asked** (author): a "grid-bag" of tiles beside the grid for multi-record results: popping style, the name as a

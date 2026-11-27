@@ -128,6 +128,12 @@ lines of details and an (i) button; paste the `MapTest:` lines from the log
 The feature pages (`features/*_FEATURE.md`) each end with their own "Verify on a Mac" list;
 `BACKLOG.md` → "Verify on a Mac" tracks what is still unchecked.
 
+## The test scenario guide (for testers, on a Mac)
+
+`docs/TEST_SCENARIOS.pdf`: every feature as a scenario with steps, what to expect, and Pass / Fail boxes, with a
+tester's record and a results summary. Its source is `docs/TEST_SCENARIOS.md`; rebuild the PDF after changing it:
+`python3 tools/make_test_guide.py` (needs reportlab). Keep it true when a feature changes.
+
 ## Adding tests
 
 - A new rule type or engine behaviour: add scenarios to `tools/logic_reference.py` **and** the
