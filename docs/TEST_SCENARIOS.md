@@ -25,7 +25,7 @@ Purpose: The Studio builds and opens on its Welcome page.
 Before: The repository cloned on the Mac; FutureBasic 7 installed.
 1. Open src/AppBuilder/Studio for FB.fbeproj in FutureBasic and build it. -> The Build Log ends without errors and the app starts.
 2. Look at the Welcome page. -> At the top: the Imagery logo, "App Builder for FutureBasic", and the tag-line under it. There is no second heading above it.
-3. Look below the heading. -> A rounded white card on the grey window (in dark mode a step lighter than the window): "Recent Projects", the list in the same style as every other table in the Studio and the generated apps (rows in alternating shades, no grid lines), then Open Project... and Create Project at the right, under the list. The column headings (Project, Model) are semibold, a little larger than the rows.
+3. Look below the heading. -> A rounded white card on the grey window (in dark mode a step lighter than the window): "Recent Projects", the list in the same style as every other table in the Studio and the generated apps (plain rows, a super-light line between them, no stripes), then Open Project... and Create Project at the right, under the list. The column headings (Project, Model) are semibold, a little larger than the rows.
 4. Switch the Mac between light and dark. -> The logo, the card and the text follow; the card still stands out from the window.
 5. Resize the window, down to its smallest. -> The card and the list stretch; the buttons stay at the right.
 
@@ -65,6 +65,7 @@ Purpose: The crumb trail and the heading follow the page.
 Before: A project open.
 1. Click Projects in the crumb trail. -> The Welcome page, with its own heading; the project's name is not shown.
 2. Click the toolbar's Entities. -> The project's entity definitions, with its icon and name in the heading.
+3. With the project open, click Projects (crumb trail or toolbar). -> The Projects page fills the whole width: the Objects list is hidden. Entities again: the list is back, the entity still selected.
 
 ### B-04 Open a project again
 Purpose: Recent Projects and Open Project.
@@ -170,8 +171,9 @@ Purpose: Regenerating never overwrites the files that are yours.
 ### G-01 The app's frame
 Purpose: Navigation bar, header, footer.
 1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a toolbar with Search, New, Save, Delete, Refresh; a footer with the copyright at its left and the record navigator across the rest (First, Previous, the record's number, Next, Last as pill buttons sharing the width).
-2. Use the theme menu: Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both.
-3. Click each navigation button. -> Each page shows its List card above its Form card, both filling the width.
+2. Use the theme menu at the right of the toolbar: Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both. The header is slim: the app's icon, name and tag-line.
+3. Click the green button (full screen), then Escape or the green button again. -> The app fills the screen: the List grows, the Form's fields and the List's columns widen, the navigator's pills spread across the footer; back to a window, everything returns.
+4. Click each navigation button. -> Each page shows its List card above its Form card, both filling the width.
 
 ### G-01b The window's title
 Purpose: Company | App.

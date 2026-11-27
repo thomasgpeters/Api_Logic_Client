@@ -6,6 +6,39 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The theme menu in the toolbar; a slimmer header; full screen
+
+- **Author:** the theme selector into the toolbar, to gain back the header's unused space; the app able to go full
+  screen, width and height, with responsive controls.
+- **Theme menu:** still made in `ShellBuildWindow` (FB popup, tag `_shellThemePopup`, its clicks to `ShellDoDialog`),
+  then the view of a toolbar item at the toolbar's right after a flexible space (`AppToolbarBuild`). FB's tag functions
+  do not look in the toolbar, so `ShellFindView` now searches the toolbar items' views too and the choice is read
+  through Cocoa (`ShellPopupIndex`).
+- **Header** 72 -> 56 points: the icon 40, the name 20 pt (centred on the icon, or with the tag-line under it), Log In
+  re-centred.
+- **Full screen:** `ShellAllowFullScreen` (`NSWindowCollectionBehaviorFullScreenPrimary`). Checked what stretches: the
+  cards and the content (autoresizing), the List (height and its columns, `uniform`), the Form's fields (width-sizable
+  with flexible margins, in the XIB generator), the navigator's five cells (proportional), the toolbar. Test scenario
+  G-01 step 3. Waits for a Mac build.
+
+## 2026-11-27 — Studio: the entity list hides on Projects with a project open
+
+- **Author** (several SQLite databases opened and imported - Northwind, Chinook, contacts): going back to Projects, the
+  last project's table list stayed beside the page. The list was hidden only with no project open. Now
+  `StudioUpdateCrumbs` shows it only when a project is open **and** one of its own pages is showing: Projects, New
+  Project and the API Logic Server pages fill the whole width. `ShowWelcome`, `ShowEntityDefinitions`,
+  `ShowNewProject` and `ShowOpenALSProject` update the layout themselves (`StudioUpdateCommands`), whichever way they are
+  reached (crumb, toolbar, menu, button).
+
+## 2026-11-27 — No stripes: plain rows, a super-light line between them
+
+- **Author:** "you took the liberty to set alternating row backgrounds. I don't like it, because it creates strips."
+  Undone everywhere, and the generated Lists' own stripes too: the XIB generator no longer writes
+  `alternatingRowBackgroundColors`; `StudioTableStyle` (Studio) and `ShellListHeadings` (generated Lists) set plain rows
+  with a horizontal line at 6% of the label colour (the look the author asked for on the Welcome list), the larger
+  headings kept. Lesson: the one style for every table was the author's to choose - asked for consistency, I picked the
+  generated Lists' stripes without asking.
+
 ## 2026-11-27 — One table style everywhere
 
 - **Author:** "match the grid on the welcome screen with the other grids in the app ... a little funny to have all those

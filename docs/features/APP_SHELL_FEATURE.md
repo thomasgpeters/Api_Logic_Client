@@ -17,8 +17,13 @@ Every app generated from a SQLite project opens in the same frame:
 
 - **Navigation bar** (left, dark blue): a white, bold button with an SF Symbol per entity; the
   current page is highlighted.
-- **Header:** the business logo, the app name and the tag-line on the left; the theme menu
-  (System / Light / Dark) and **Log In** on the right.
+- **Header** (56 points): the app icon (40), the app name and the tag-line on the left; **Log In** on the right
+  (Professional). The theme menu (System / Light / Dark) is in the toolbar, at its right (author, 2026-11-27): made in
+  `ShellBuildWindow`, moved into a toolbar item (`ToolbarItemSetView`); `ShellFindView` looks in the toolbar's items
+  too, and `ShellPopupIndex` reads its choice through Cocoa.
+- **Full screen** (`ShellAllowFullScreen`: `NSWindowCollectionBehaviorFullScreenPrimary`): the green button gives the
+  app its own space; every part stretches (autoresizing: the cards, the List's columns, the Form's fields, the
+  navigator's cells, the toolbar).
 - **Footer** (author, 2026-11-27): the copyright on the left, then the **record navigator** across the rest of the
   width: First, Previous, *"Customer 3 of 91"*, Next, Last, as pills in five equal cells that stretch with the window
   (`ShellNavigatorButton`, proportional autoresizing). A dimmed pill is also faded (alpha 0.4: on macOS 15 the layer
@@ -123,7 +128,7 @@ without a copyright the footer says `© <app name>` (at its left).
       picture; Done; reopen the project — all three come back; ⌘X cuts text, ⇧⌘X generates XIBs.
 - [ ] Generate App, build `FBapp/<name>.fbeproj`: the window has the nav bar, header (logo, name,
       tag-line, theme menu, Log In), footer; each nav button shows its page; a List's row fills the Form.
-- [ ] Theme menu: Light / Dark / System switch the window's appearance; the nav bar is dark blue, darker in Dark.
+- [ ] Theme menu (in the toolbar): Light / Dark / System switch the window's appearance; the nav bar is dark blue, darker in Dark.
 - [ ] The working area is a grey backdrop (near-black in Dark); the Form and the List sit on rounded cards, white (a
       lifted grey in Dark), with margins around and between them.
 - [ ] Resize: the nav bar keeps its width; header and footer stretch; the Form's fields and the List's columns spread
