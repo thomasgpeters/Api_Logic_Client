@@ -12,7 +12,7 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   file", error 1234), and every licence call failed with it.
 - **Learned:** FutureBasic_Documentation's headers can be newer than the author's FutureBasic. `Tlbx Security.incl` is
   dated 2026-05-05.
-- **The fix:** `src/AppBuilder/Licence Security.incl` declares the calls the licence uses: `include library
+- **The fix:** the top of `src/AppBuilder/Licence.incl` declares the calls the licence uses (first tried as a new file, `Licence Security.incl`: the editor, with the project open, never read it - the second build gave the same errors): `include library
   "Security"`, the C `#import`, the `system` constants and the `toolbox fn` declarations, written from Apple's
   headers.
   - `My Globals.glbl` no longer includes FB's header.

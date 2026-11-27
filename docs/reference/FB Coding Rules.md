@@ -189,6 +189,6 @@ build with "Missing or invalid source file ... (error 1234 for Tlbx Security.inc
   - a `BeginCDeclaration` with the framework's `#import`;
   - `system` constants and `toolbox fn` declarations, written from Apple's headers.
 
-  Example: `src/AppBuilder/Licence Security.incl`. Never also include FB's own header for the same framework: the
+  Example: the "Security declarations" at the top of `src/AppBuilder/Licence.incl`. Put such declarations in a file the project already lists: an editor with the project open does not see a newly added project file (2026-11-27). Never also include FB's own header for the same framework: the
   declarations would clash.
 
