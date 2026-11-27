@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The page designer, designed
+
+- **Author:** pages composed by dropping entities from a palette, each asked for its display (a list or a "scalar",
+  one record), linked to what is already on the page through the relationship, as an invoice page holds several
+  object types. This is the "new layout manager" asked for earlier (the backlog item now says so).
+- `design/Page Designer Design.md`: pages and parts (Detail, List, List with detail), links proposed from the
+  model's `toone` / `tomany` relationships, the driver and the parts that follow it, the invoice example, what the
+  generated app needs (above all: a part generated per page with its own tag base, the binding taking the base), five
+  phases, four open decisions. Nothing built yet.
+
 ## 2026-11-27 — The search dialog; a separator in the toolbar; a scrolling navigation bar (6b9fa7d)
 
 - **Author:** a scrolling navigation bar (the full Northwind, about twenty tables); a separator keeping Search apart
