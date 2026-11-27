@@ -12,6 +12,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   language, so the user gets a sense of what they're about to see"): short paragraphs, then **The rules, in plain
   words** - each rule in `Rules.incl` as one sentence, grouped item / order / customer - then **What you will see**
   (the thirteen steps, and the buttons). `StoryIntro`, `StoryRule` in `Story.incl`.
+- **Back to Projects with a project open** (author: the heading stayed): the heading follows the page now -
+  `ProjectShowHeading` (`Project Workspace.incl`): the product's name on the Projects page, the project's on its entities.
 - **Studio for FB, no project open:** the heading said "Untitled Project"; it now shows the product's name
   (`APP_DISPLAY_NAME`), in `MainWindow.xib` and when a project is closed (`ProjectResetToEmpty`).
 
