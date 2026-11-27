@@ -69,7 +69,8 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 
 - [ ] **The page designer** (author, 2026-11-27, the "new layout manager"): pages composed from entities dropped from a
       palette, each shown as a List, a Detail or both, linked through the model's relationships (an Order with its
-      customer and its lines on one page). Design: `design/Page Designer Design.md`; phases there; decisions open.
+      customer and its lines on one page). Professional only. Design: `design/Page Designer Design.md`; phase 1 done (`tools/pages_reference.py`); next: the
+      Pages view in the Studio (drag and drop, the sheet on drop).
 
 - [ ] **Bug:** Form layout popup - choosing "3 columns" pops back to "automatic". Diagnostics are in
   (`DesignFormColumnsChosen`): the NSLog lines "Form layout popup: item …" and "Form layout of …"

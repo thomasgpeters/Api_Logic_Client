@@ -19,7 +19,7 @@ Status words: **done** (built and tried on a Mac), **built** (written and checke
 | Records as tiles beside the grid (`Record Tiles.incl`) | built |
 | Crumb trail and page stack in the generated app | next |
 | Related lists in tabs (master and detail), drill-in | next |
-| The page designer: pages from entities, linked by relationships (`design/Page Designer Design.md`) | designed |
+| The page designer (Professional): pages from entities, linked by relationships (`design/Page Designer Design.md`) | phase 1 built; next |
 | Hook files for hand-written code (created only if missing) | |
 | `admin.yaml` hints: titles (the display column is done) | |
 

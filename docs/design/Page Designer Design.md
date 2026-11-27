@@ -8,7 +8,13 @@ Today App Builder generates one page per entity: its List above its Form. The pa
 compose pages from several entities, the way a real application is laid out: an Order with its customer and its lines
 on one page, an Employee with the orders they took.
 
-Status: **designed**, nothing built yet. The decisions marked *(confirm)* wait for the author.
+**Professional edition only** (author, 2026-11-27). The Lite edition keeps one page per entity (List with detail);
+it ignores a project's `Pages.json`. In the Studio the Pages view is behind `LicenceGate`, as API Logic Server
+projects are.
+
+Status: phase 1 built (`tools/pages_reference.py`: the `Pages.json` format, the links, a page resolved); the rest
+designed. The author accepted the proposals below (2026-11-27): the names Detail, List, List with detail; the
+toolbar on the part with the focus; the same entity twice on a page later; the Web Toolkit to share `Pages.json` later.
 
 ## Words
 
@@ -92,8 +98,10 @@ OrderDetail adds a line to the current order (its OrderId filled in); the rules 
 
 ## Phases
 
-1. `Pages.json` and the link rules, with a Python reference (`tools/pages_reference.py`) tested on Northwind and the
-   samples: the links proposed for every pair of entities.
+1. **Done:** `Pages.json` and the link rules, with a Python reference (`tools/pages_reference.py`, the format in its
+   header) tested on a Northwind fixture (`tools/fixtures/northwind.sql`: the classic schema and foreign keys, a few
+   rows) and the three samples: the invoice page built from drops and resolved for an order; every relationship
+   offered both ways.
 2. The designer in Studio for FB (Cocoa drag and drop: the palette as a drag source, the page as a drop target;
    the sheet on drop).
 3. Parts with a tag base (XIB and binding generators); today's pages regenerated the same way, so nothing changes
@@ -102,10 +110,10 @@ OrderDetail adds a line to the current order (its OrderId filled in); the rules 
 5. The invoice example on Northwind (Order Entry) as a test scenario; then the samples (Customs: an entry with its
    lines and its fees).
 
-## Open (author)
+## Decided (author, 2026-11-27)
 
-1. The display names: Detail (or Scalar, Form, Record), List, List with detail.
-2. Toolbar actions on the part with the focus (proposed), or always on the driver.
-3. Whether a page may hold the same entity twice (an Employee and their manager): proposed later.
-4. The page designer for the Web Toolkit target too (its Layout Tool lays out one page's controls; this designer
-   composes pages from entities): proposed later, the same `Pages.json`.
+1. Display names: Detail, List, List with detail.
+2. New, Save and Delete act on the part with the focus; the navigator on the driver.
+3. The same entity twice on a page (an employee and their manager): later.
+4. The Web Toolkit shares `Pages.json`: later.
+5. Professional edition only.

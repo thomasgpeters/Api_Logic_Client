@@ -6,6 +6,21 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The page designer, phase 1: Pages.json and the links
+
+- **Author:** the proposals accepted (Detail / List / List with detail; the toolbar on the part with the focus; the same
+  entity twice later; the Web Toolkit later); the page designer is **Professional only** (Lite keeps one page per
+  entity and ignores `Pages.json`).
+- `tools/pages_reference.py`: the `Pages.json` format (pages, parts with a display and what they follow), the links
+  proposed on a drop (`children` / `parent` from the model's `toone` / `tomany`, `same` for a Detail of a List's
+  row; parts in page order, the driver first), the default pages, the check, a page resolved from a driver record.
+  `tools/fixtures/northwind.sql`: the classic Northwind schema with its foreign keys (13 tables, `Order Details` with
+  its space, `Orders.ShipVia` -> `Shippers`) and a few rows. 36 checks: the invoice page built from drops and
+  resolved for 10248 (its customer, three lines, the first line's product, Buchanan, Federal Shipping) and 10249 (a
+  line whose product is missing shows none); every relationship of Northwind and the samples (12, 34, 21, 18) offered
+  both ways. In `run_tests.sh`.
+- Next: phase 2, the Pages view in the Studio.
+
 ## 2026-11-27 — The page designer, designed
 
 - **Author:** pages composed by dropping entities from a palette, each asked for its display (a list or a "scalar",
