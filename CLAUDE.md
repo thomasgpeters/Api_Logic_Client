@@ -162,6 +162,8 @@ These apply to hand-written code **and to everything the generator emits**.
 - Avoid deprecated syntax (`globals "file"`, `proc`, `def*` letter ranges, `index$`, `TextLabelWithTag`).
 - FB source files use classic-Mac **CR** line endings (convert to LF to edit,
   back to CR before committing). XIB, JSON, SQL and Python use LF.
+- **A global does not keep its value alive** (FB's CF types are plain pointers): use a local when one function is enough;
+  otherwise keep the value with the module's Kept fn (`LicenceKept`, `DataKept`, `WebKept`). `fblint` reports an object global set from a fn and not kept.
 - Logging is gated: every `NSLog` - errors too - is `if ( isLoggingOn ) then NSLog( ... )`. `isLoggingOn` is NO by default,
   declared in the app's own globals (generated apps: `App Globals.glbl`, a template; the Studio: `My Globals.glbl`;
   the examples: their `.glbl`). `fblint` reports an ungated `NSLog` (single-file `.fb` tests, whose output is their log, are exempt).

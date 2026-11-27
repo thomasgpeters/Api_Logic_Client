@@ -211,6 +211,13 @@ build with "Missing or invalid source file ... (error 1234 for Tlbx Security.inc
   - Keep such values with a "kept" function: it retains the new value and releases the old one. The modules have
     `LicenceKept` (the Studio), `DataKept` (the data runtime and LogicBank for FutureBasic) and `WebKept` (the Web
     Toolkit).
-  - Values made with `fn MutableDictionaryNew` / `fn MutableArrayNew` and kept in a global have not crashed so far, but
-    keeping them costs nothing.
+  - Values made with `fn MutableDictionaryNew` / `fn MutableArrayNew` are freed the same way: LogicBankExample crashed in
+    `DataMemoryCopyAll` (2026-11-27), its in-memory database made with `fn MutableDictionaryNew` and kept in a global.
+  - **First ask whether it needs to be a global** (author, 2026-11-27). A value used inside one function is a local
+    (the Studio's old scratch globals - `resourceList`, `projectFolderURL`, `keyEnumerator` and the rest - are locals now).
+    A global is for what a later event reads: the selected entity, the page's record, the rules, the theme.
+  - `fblint` reports a global of an object type set from a `fn` and not kept. A line that is right as it is says why:
+    `// within one event` (filled and emptied in one call chain, such as the rules engine's commit queue) or
+    `// kept by <who>` (the model dictionary holds it). A file can say it once: `// kept by ShellKeepTheme (App Shell.incl): gTheme*`.
+  - The theme's colours are kept by the runtime (`ShellKeepTheme`, when the window is built), so `Theme.incl` stays plain.
 

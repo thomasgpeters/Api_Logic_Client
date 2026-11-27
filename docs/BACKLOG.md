@@ -78,6 +78,7 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 
 The Studio
 - [x] Generator builds and runs (2026-11-16); runs again after the 2026-11-24 fixes
+- [ ] After the globals sweep (2026-11-27): the Studio, a generated app (Northwind), LogicBankExample (Story to the end), the Web Toolkit example and the SQL Generator example build and run without a crash
 - [ ] Menus regrouped, commands enabled by project / entity / attribute, keyboard shortcuts (`USER_GUIDE.md` §16)
 - [ ] Toolbar: Projects, Entities, Diagram, Generate, Settings; the crumb trail's buttons go back
 - [ ] New Project: Choose… shows the tables; Create opens the definitions
@@ -366,6 +367,12 @@ the site, download] -> [post to the list].
 
 ## Ideas
 
+- **An Imagery menu bar launcher** (author, 2026-11-27, from a screenshot of a "Qwik" launcher: one status-bar icon
+  whose menu lists a family of small apps, each with its icon): one Imagery icon in the menu bar listing the Imagery
+  FutureBasic apps installed (Studio for FB, the free modules' sample apps, generated apps), launching or bringing
+  each forward. Questions for the author: a separate small app or a part of the Studio; which apps it lists
+  (found in /Applications by bundle id prefix, or a list the Studio keeps); could generated apps offer the same
+  status item as an App Shell option
 - **National customs clearance** (author, 2026-11-26; a separate application, from the author's earlier work in
   the customs clearance industry): for any country's customs service - the US, Bermuda or another with its own
   tariffs. Shipments crossing the border; pre-clearance: trucks with transponders, pre-cleared drivers, the declared

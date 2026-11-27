@@ -83,7 +83,7 @@ def strip_strings_and_comments(line):
 FN_DEF = re.compile(r'^\s*(?:(void)\s+|(\w+)\s+)?local\s+fn\s+(\w+)(\s*\(.*?\))?(.*)$')
 
 
-def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=frozenset(), arity=None, object_params=None, global_names=None):
+def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=frozenset(), arity=None, object_params=None, global_names=None, object_globals=None):
     raw = open(path, 'rb').read()
     try:
         text = raw.decode('utf-8')
@@ -97,8 +97,26 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
     text = text.replace('\r\n', '\n').replace('\r', '\n')
 
     current = None            # (name, returns_type, def_line)
+    unkept = None             # (line, global): an object global just set from a fn, not yet seen kept
+    kept_globals = (object_globals or {}).get(os.path.dirname(path), set())
+    # a file may say once who keeps some globals: "// kept by ShellKeepTheme (App Shell.incl): gTheme*"
+    kept_elsewhere = [n.lower() for m in re.finditer(r'//\s*kept by [^:\n]*:\s*([\w*, ]+)$', text, re.M | re.I)
+                      for n in re.split(r'[,\s]+', m.group(1)) if n]
+    def kept_by_file(name):
+        return any(name.lower() == k or (k.endswith('*') and name.lower().startswith(k[:-1])) for k in kept_elsewhere)
     blocks = []               # open block statements: (kind, line)
     for no, line in code_lines(text):
+        # FB's globals hold plain pointers and do not retain: an object made for the moment (fn MutableArrayNew,
+        # a parsed file, a formatted string) is freed under the global when the event ends, and a later read
+        # crashes (2026-11-27: the Studio's licence, LogicBankExample's Data Memory). Keep it: fn <Module>Kept( new, old ),
+        # or fn CFRetain( global ) on the next line; "// within one event" on the line says it is not needed.
+        if unkept and not re.match(r'\s*fn\s+CFRetain\(\s*' + re.escape(unkept[1]) + r'\s*\)', line, re.I):
+            report(unkept[0], f'global {unkept[1]} is set from a fn but not kept: FB globals do not retain - use the module\'s Kept fn, '
+                              f'or fn CFRetain( {unkept[1]} ) on the next line (or mark the line "// within one event", or "// kept by <who>")')
+        unkept = None
+        km = re.search(r'(?:^\s*|\bthen\s+)(\w+)\s*=\s*(?:\(\s*\w+\s*\)\s*)?fn\s+\w+', strip_strings_and_comments(line))
+        if km and km.group(1).lower() in kept_globals and 'Kept(' not in line and 'within one event' not in line and 'kept by' not in line and not kept_by_file(km.group(1)):
+            unkept = (no, km.group(1))
         if re.match(r'(?i)^\s*cln\b', line):
             continue
         if re.match(r"^\s*'~'\d*\s*$", line):
@@ -186,6 +204,10 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
                         for i in (object_params or {}).get(name, []):
                             if i < len(args) and not re.match(r'\(\s*ObjectRef\s*\)|NULL\b', args[i]):
                                 report(no, f'{cm.group(1)}: argument {i + 1} is an ObjectRef - cast it: (ObjectRef){args[i][:30]}')
+        # FutureBasic 7.0.38 (the author's) does not know the newer type names: use the CF ones
+        # (before the fn-definition check below, which ends the line's checks: the parameters count too)
+        for tm in re.finditer(r'(?<![A-Za-z_])(StringRef|MutableStringRef|DictionaryRef|MutableDictionaryRef|ArrayRef|MutableArrayRef|DataRef|URLRef|NumberRef)\b', strip_strings_and_comments(line)):
+            report(no, f'{tm.group(1)} is unknown in FutureBasic 7.0.38 - use CF{tm.group(1)}')
         m = FN_DEF.match(line)
         if m:
             void, prefix_type, name, _params, tail = m.groups()
@@ -205,9 +227,6 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
         # an unsigned count minus 1 wraps around when the count is 0: the loop runs ~forever
         if re.search(r'\bto\s+fn\s+(ArrayCount|DictionaryCount|StringLength|DataLength|SetCount)\s*\(', strip_strings_and_comments(line)):
             report(no, 'for ... to fn ArrayCount( x ) - 1: the count is unsigned, so an empty x loops on - write to (long)fn ArrayCount( x ) - 1')
-        # FutureBasic 7.0.38 (the author's) does not know the newer type names: use the CF ones
-        for tm in re.finditer(r'(?<![A-Za-z_])(StringRef|MutableStringRef|DictionaryRef|MutableDictionaryRef|ArrayRef|MutableArrayRef|DataRef|URLRef|NumberRef)\b', strip_strings_and_comments(line)):
-            report(no, f'{tm.group(1)} is unknown in FutureBasic 7.0.38 - use CF{tm.group(1)}')
         if known_toolbox is not None and not re.match(r'(?i)^\s*(toolbox|system|#define)\b', line):
             code = strip_strings_and_comments(line)
             names = re.findall(r'\bfn\s+(\w+)', code)
@@ -448,6 +467,7 @@ def main(argv):
     local_fns = {n.lower() for n in local_fns}
     # global variable names: every declaration in a .glbl file and in begin globals ... end globals
     global_names = {}                       # folder (one project) -> names
+    object_globals = {}                     # folder -> the names of globals holding objects (CF / Cocoa refs)
     decl = re.compile(r'^\s*(?:[A-Z]\w*Ref|long|BOOL|double|NSInteger|NSUInteger|SInt64|SInt32|ptr|CGRect|CGFloat|CFRange|short|int|float|boolean|Str255)\s+(.*)$')
     for p in files:
         text = open(p, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
@@ -462,6 +482,8 @@ def main(argv):
                     for part in split_args(m.group(1)):
                         n = re.match(r'\s*(\w+)', part)
                         if n: global_names.setdefault(os.path.dirname(p), set()).add(n.group(1).lower())
+                        if n and re.match(r'\s*(CF\w+Ref|ColorRef|ImageRef|FontRef|CFTypeRef)\b', code) and not re.match(r'\s*CFRange\b', code):
+                            object_globals.setdefault(os.path.dirname(p), set()).add(n.group(1).lower())
     known = {n.lower() for n in toolbox_names(headers)} | {'nslog'} if headers else None
     fb_keywords = keywords(headers) if headers else set()
     arity = toolbox_arity(headers) if headers else None
@@ -469,7 +491,7 @@ def main(argv):
     problems = []
     for p in files:
         # single-file programs (.fb/.bas) may use #build; project files may not
-        problems += lint_file(p, not p.endswith(('.fb', '.bas')), known, local_fns, fb_keywords, arity, object_params, global_names)
+        problems += lint_file(p, not p.endswith(('.fb', '.bas')), known, local_fns, fb_keywords, arity, object_params, global_names, object_globals)
     for a in argv:
         for proj in glob.glob(os.path.join(a, '**', 'data.fbproj'), recursive=True) if os.path.isdir(a) else []:
             text = open(proj, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
