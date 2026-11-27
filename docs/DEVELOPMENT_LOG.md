@@ -14,6 +14,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   licence, projects, entity definitions, settings, the model diagram, generating, the generated app with its tiles,
   the free modules, the checks without a Mac) and `tools/make_test_guide.py`, which builds `docs/TEST_SCENARIOS.pdf`:
   a cover with the tester's record, a results summary, and each scenario's steps in a table with Pass / Fail boxes.
+- **On the site** (`tools/make_site.py`): `/downloads/Test-Scenario-Guide.pdf`, a card on the home page and a "Test it
+  yourself" section on the App Builder page.
 
 ## 2026-11-27 — Generated apps: records as tiles beside the grid
 

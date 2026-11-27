@@ -13,6 +13,7 @@ repository already holds, so the site and the apps never disagree:
     /samples/, /samples/<name>/   the sample applications: their READMEs, their downloads
     /app-builder/             App Builder: Lite and Professional, registration on the Imagery License Server
     /downloads/*.zip          each module's example app (MIT), each sample; the SQL Generator's module alone with a one-file demo
+    /downloads/Test-Scenario-Guide.pdf   the test scenario guide (docs/TEST_SCENARIOS.pdf)
 Standard library only (no packages to install). Imagery's name and logos are not licensed for reuse.
 """
 import html
@@ -338,6 +339,11 @@ def build(out):
           'Each one is a SQLite database with its business rules and its tests, and the same rules in FutureBasic.</p>\n'
           f'<div class="cards">{"".join(cards)}</div>', 1))
 
+    # the test scenario guide (docs/TEST_SCENARIOS.pdf, tools/make_test_guide.py): a download, linked below
+    guide_pdf = os.path.join(ROOT, 'docs', 'TEST_SCENARIOS.pdf')
+    if os.path.exists(guide_pdf):
+        shutil.copy(guide_pdf, os.path.join(out, 'downloads', 'Test-Scenario-Guide.pdf'))
+
     # App Builder
     register = licence_server()
     write(out, 'app-builder/index.html', page('App Builder for FutureBasic', f"""<h1>App Builder for FutureBasic</h1>
@@ -355,7 +361,11 @@ the data binding and the business rules, ready for you to open in the FutureBasi
 With the modules on their own, you write your rules by hand. App Builder writes them for you from plain sentences, checks them
 against your model, tests every rule, and builds the app around them.</p>
 <p>We're working on the same for the web, though it isn't ready yet. With the Web Toolkit on its own you write each page yourself;
-App Builder will build the pages from your model (forms, lists, bindings and rules) for a web app beside the Mac app, or in its place.</p>""", 1, 'Build a complete FutureBasic app from your database.'))
+App Builder will build the pages from your model (forms, lists, bindings and rules) for a web app beside the Mac app, or in its place.</p>
+<h2>Test it yourself</h2>
+<p>The test scenario guide walks you through every feature of App Builder, the apps it builds and the free modules, one
+step at a time: what to do, what you should see, and a box to tick. It's how we check a release, and you're welcome to use it.</p>
+<p><a class="button" href="../downloads/Test-Scenario-Guide.pdf">Download the test scenario guide (PDF)</a></p>""", 1, 'Build a complete FutureBasic app from your database.'))
 
     # the home page
     module_cards = ''.join(f'<div class="card"><span class="tag">free &middot; MIT</span><h3><a href="{m["slug"]}/index.html">{esc(m["name"])}</a></h3>'
@@ -371,7 +381,10 @@ modules for your own apps, sample applications that show them at work, and App B
 <p>Windows, forms, lists, data binding and business rules, generated from your database. You write rules as plain sentences, and App Builder checks and tests them.</p>
 <p><a href="{register}">Register</a> &middot; <a href="app-builder/index.html">Lite and Professional</a></p></div>
 <div class="card"><span class="tag">samples</span><h3><a href="samples/index.html">Sample applications</a></h3>
-<p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, each with its database, rules and tests.</p></div></div>""", 0,
+<p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, each with its database, rules and tests.</p></div>
+<div class="card"><span class="tag">PDF</span><h3><a href="downloads/Test-Scenario-Guide.pdf">Test scenario guide</a></h3>
+<p>Every feature, step by step: what to do, what you should see, and a box to tick. Use it to try things out, or to check a release.</p>
+<p><a href="downloads/Test-Scenario-Guide.pdf">Download the PDF</a></p></div></div>""", 0,
         'Free FutureBasic modules (the SQL Generator, LogicBank for FutureBasic and the Web Toolkit) and App Builder for FutureBasic.'))
     return out
 
