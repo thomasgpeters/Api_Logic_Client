@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — One table style everywhere
+
+- **Author:** "match the grid on the welcome screen with the other grids in the app ... a little funny to have all those
+  different styles." The Welcome list had been made transparent with grid lines (`StudioQuietTable`); the generated
+  Lists alternate their rows. Now one `StudioTableStyle` (Branding.incl) for the Studio's three tables - Recent
+  Projects, the entity list, the attribute table: alternating rows, no grid lines, 13 pt semibold headings in a 28 pt
+  header row - the look of the generated Lists (their XIBs alternate the rows; `ShellListHeadings` does their headings).
+
 ## 2026-11-27 — White panels in the Studio; larger column headings throughout
 
 - **Author** (screenshots of the Studio and a generated app): the Studio's panel with the table should be white, as the

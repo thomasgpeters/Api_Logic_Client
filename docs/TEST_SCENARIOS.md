@@ -25,7 +25,7 @@ Purpose: The Studio builds and opens on its Welcome page.
 Before: The repository cloned on the Mac; FutureBasic 7 installed.
 1. Open src/AppBuilder/Studio for FB.fbeproj in FutureBasic and build it. -> The Build Log ends without errors and the app starts.
 2. Look at the Welcome page. -> At the top: the Imagery logo, "App Builder for FutureBasic", and the tag-line under it. There is no second heading above it.
-3. Look below the heading. -> A rounded white card on the grey window (in dark mode a step lighter than the window): "Recent Projects", the list with no box of its own (the card shows through it, faint lines between the rows), then Open Project... and Create Project at the right, under the list. The column headings (Project, Model) are semibold, a little larger than the rows.
+3. Look below the heading. -> A rounded white card on the grey window (in dark mode a step lighter than the window): "Recent Projects", the list in the same style as every other table in the Studio and the generated apps (rows in alternating shades, no grid lines), then Open Project... and Create Project at the right, under the list. The column headings (Project, Model) are semibold, a little larger than the rows.
 4. Switch the Mac between light and dark. -> The logo, the card and the text follow; the card still stands out from the window.
 5. Resize the window, down to its smallest. -> The card and the list stretch; the buttons stay at the right.
 
