@@ -194,4 +194,12 @@ build with "Missing or invalid source file ... (error 1234 for Tlbx Security.inc
 - **No `#define` for a type the imported header defines** (`#define SecKeyRef as ptr` beside `#import
   <Security/Security.h>`). FB emits its own C `typedef` for it, and clang stops: "typedef redefinition with different
   types". Use the plain type (`ptr`, `CFStringRef`) in the declarations and the code (2026-11-27).
+- **`NSLog` needs `include "NSLog.incl"`,** and a name from a `Tlbx` header FB's own examples include by hand
+  (`Tlbx CFDateFormatter.incl`'s `CFDateFormatterRef`, `Tlbx MapKit.incl` ...) needs that header. The SQL Generator's
+  files include `NSLog.incl` themselves, so an app without them (the LogicBank and Web Toolkit examples, the web
+  template) includes it in its globals. `fblint` reports a name from an opt-in header the project never includes
+  (2026-11-27: the Web Toolkit example stopped at 44 "Unknown statement 'NSLog'" errors).
+- **Our file names never start with `Tlbx`** (author, 2026-11-27). `Tlbx ...` is FutureBasic's name for a toolbox: a header
+  that wraps a C or Objective-C library or framework for FB. Our own files are named for what they do (`Licence.incl`,
+  `SQLite Access.incl`). A real toolbox of ours, an FB wrapper over a C library such as nlohmann/json, could carry the prefix.
 

@@ -343,6 +343,89 @@ def build_order_problems(proj):
     return problems
 
 
+def opt_in_names(headers):
+    """Names FutureBasic knows only when a project includes the header: NSLog.incl and each Tlbx *.incl (with the files it
+    includes). A name also in a header every project gets (CocoaUI ...) is left out. -> {name.lower(): header}"""
+    if not headers or not os.path.isdir(headers): return {}
+    def names_in(text):
+        text = text.replace('\r', '\n')
+        found = set(re.findall(r'^\s*#define\s+(\w+)\s+as\b', text, re.M))
+        found |= set(re.findall(r'^\s*toolbox\s+(?:fn\s+)?(\w+)', text, re.M))
+        found |= set(re.findall(r'^\s*system\s+\w+\s+(\w+)', text, re.M))
+        return found
+    def read(path):
+        try: return open(path, 'rb').read().decode('utf-8', 'replace')
+        except OSError: return ''
+    def with_includes(path, seen):
+        if path in seen: return ''
+        seen.add(path)
+        text = read(path)
+        for inc in re.findall(r'^\s*include\s+"([^"]+)"', text.replace('\r', '\n'), re.M):
+            text += '\n' + with_includes(os.path.join(headers, inc), seen)
+        return text
+    opt = {}
+    # opt-in: the headers FutureBasic's own examples include by hand (FBExamples, beside Toolboxes), and two the author's
+    # builds showed need it (2026-11-27); every other header is loaded for every project
+    tops = {'NSLog.incl', 'Tlbx Security.incl', 'Tlbx CFDateFormatter.incl'}
+    examples = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(headers))), 'FBExamples')
+    for root, _dirs, fs in os.walk(examples):
+        for f in fs:
+            tops |= {h for h in re.findall(r'include\s+"(Tlbx [^"]+\.incl)"', read(os.path.join(root, f)).replace('\r', '\n'))}
+    tops = sorted(t for t in tops if os.path.exists(os.path.join(headers, t)))
+    every = set()
+    for root, _dirs, fs in os.walk(headers):
+        for f in fs:
+            path = os.path.join(root, f)
+            if f.endswith('.incl') and not any(path == os.path.join(headers, t) for t in tops):
+                if os.path.dirname(path) == headers or 'CocoaUI' in path:
+                    every |= {n.lower() for n in names_in(read(path))}
+    for top in tops:
+        for n in names_in(with_includes(os.path.join(headers, top), set())):
+            if n.lower() not in every: opt.setdefault(n.lower(), top)
+    return opt
+
+
+def opt_in_problems(project_files, opt):
+    """a name from an opt-in header (NSLog, a Tlbx header's) used where the project never includes that header"""
+    problems, included, declared = [], set(), set()
+    texts = {}
+    for p in project_files:
+        t = open(p, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n')
+        texts[p] = t
+        included |= set(re.findall(r'^\s*include\s+"([^"]+)"', t, re.M))
+        # a file it includes from beside it brings that file's includes too (the SQL Generator's files bring NSLog.incl)
+        for inc in re.findall(r'^\s*include\s+"([^"]+)"', t, re.M):
+            near = os.path.join(os.path.dirname(p), inc)
+            if os.path.isfile(near) and near not in project_files:
+                included |= set(re.findall(r'^\s*include\s+"([^"]+)"', open(near, 'rb').read().decode('utf-8', 'replace').replace('\r', '\n'), re.M))
+        declared |= {n.lower() for n in re.findall(r'^\s*(?:#define\s+(\w+)|toolbox\s+(?:fn\s+)?(\w+)|system\s+\w+\s+(\w+))', t, re.M) for n in n if n}
+    reported = set()
+    for p, t in texts.items():
+        in_c = in_block = False
+        for no, line in enumerate(t.split('\n'), 1):
+            if re.match(r'\s*Begin(CDeclaration|CFunction|CCode)', line): in_c = True
+            if in_c:
+                if re.match(r'\s*EndC', line): in_c = False
+                continue
+            if re.match(r'\s*cln\b', line): continue
+            # /* ... */ comments, over one line or many
+            if in_block:
+                if '*/' not in line: continue
+                line, in_block = line.split('*/', 1)[1], False
+            while '/*' in line:
+                before, after = line.split('/*', 1)
+                if '*/' in after: line = before + after.split('*/', 1)[1]
+                else: line, in_block = before, True
+            code = strip_strings_and_comments(line)
+            for w in re.findall(r'\b([A-Za-z_]\w*)\b', code):
+                h = opt.get(w.lower())
+                if h and h not in included and w.lower() not in declared and (w.lower(), h) not in reported:
+                    reported.add((w.lower(), h))
+                    problems.append(f'{p}:{no}: {w} comes from FutureBasic\'s "{h}", which this project never includes - '
+                                    f'include it in the globals (FB stops at "Unknown statement" / "Unknown variable")')
+    return problems
+
+
 def main(argv):
     if argv and argv[0] in ('-h', '--help'):
         print(__doc__)
@@ -400,6 +483,18 @@ def main(argv):
                                     f'(include "{im.group(2)}"), never in the project list (FutureBasic crashes)')
                 if re.match(r'\s*resources\s+"[^"]*\.(incl|glbl|bas)"', line):
                     problems.append(f'{proj}:{no}: an FB source file listed as a resource is compiled into the app - bundle its folder instead')
+    # names from opt-in headers (NSLog.incl, Tlbx *.incl): the project must include the header
+    opt = opt_in_names(headers)
+    if opt:
+        projects = set()
+        for a in argv:
+            for proj in glob.glob(os.path.join(a, '**', 'data.fbproj'), recursive=True) if os.path.isdir(a) else []:
+                projects.add(os.path.dirname(os.path.dirname(proj)))
+        for folder in sorted(projects):
+            members = [p for p in files if os.path.dirname(p) == folder]
+            problems += opt_in_problems(members, opt)
+        for p in files:
+            if p.endswith(('.fb', '.bas')): problems += opt_in_problems([p], opt)
     for line in problems: print(line)
     print(f'fblint: {len(files)} files, {len(problems)} problems')
     return 1 if problems else 0
