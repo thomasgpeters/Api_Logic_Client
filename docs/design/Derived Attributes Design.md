@@ -36,11 +36,18 @@ add up a child's in-memory amount.
 - **The generated app:** an in-memory attribute shows read-only on the Form and as a column (or tile detail) in the
   List, like any derived value.
 
-## In App Builder
+## In App Builder (author, 2026-11-27)
 
-On the entity page, **Add Derived Attribute...**: its name, its type, its rule, and **Storage: Stored / In memory**. An
-existing derived column can be switched to In memory (its column then stays in the database, unused, until removed).
-The model diagram marks in-memory attributes (an outline glyph beside the rule's).
+Derived attributes are not in the database to begin with: the developer adds them. On the entity page, **Add
+Attribute...** asks for its name, its type and its rule, and has one check box:
+
+- **Stored Value?** ticked: a column is added to the project's database copy (`ALTER TABLE ... ADD COLUMN`) and the
+  rule keeps it up to date on every save.
+- **Stored Value?** left unticked: no column; the rule manages the value in memory, on every read and every save.
+
+The box can be changed later: ticking it adds the column (filled on the next save of each record), unticking it leaves
+the column in the database unused. The author confirmed in-memory derived attributes as the norm for this kind of rules
+engine. The model diagram marks in-memory attributes (an outline glyph beside the rule's).
 
 ## Tests (before it is built in FB)
 
@@ -51,6 +58,6 @@ FB test project (`make_logic_test.py`), and the generated app on a Mac.
 ## Open (author)
 
 1. Which rule kinds may be in memory: formulas only, or sums and counts too (slower lists)? Proposed: all, with
-   App Builder warning for sums and counts.
-2. The default for a new derived attribute: Stored or In memory? Proposed: In memory for formulas, Stored for sums
-   and counts.
+   App Builder warning for sums and counts over large tables.
+2. Whether **Stored Value?** starts ticked or unticked when an attribute is added. Proposed: unticked for formulas,
+   ticked for sums and counts.
