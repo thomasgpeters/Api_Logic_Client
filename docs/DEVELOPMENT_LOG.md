@@ -12,6 +12,9 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   language, so the user gets a sense of what they're about to see"): short paragraphs, then **The rules, in plain
   words** - each rule in `Rules.incl` as one sentence, grouped item / order / customer - then **What you will see**
   (the thirteen steps, and the buttons). `StoryIntro`, `StoryRule` in `Story.incl`.
+- **The generated app's header** (author: the suggested icon does not show; the title should be centred on the icon):
+  the app name is centred up and down on the icon, tag-line or not; the tag-line sits under it, smaller (11 pt); the
+  symbol is drawn at 34 points (`ImageWithSymbolConfiguration`), not stretched from its text size. Waiting on the Mac.
 - **Back to Projects with a project open** (author: the heading stayed): the heading follows the page now -
   `ProjectShowHeading` (`Project Workspace.incl`): the product's name on the Projects page, the project's on its entities.
 - **Studio for FB, no project open:** the heading said "Untitled Project"; it now shows the product's name
