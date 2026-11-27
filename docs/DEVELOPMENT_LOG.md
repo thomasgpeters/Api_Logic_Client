@@ -35,6 +35,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   tag-line ("Business rules and native Mac apps from your data model", no longer repeating "for FutureBasic") are the
   page's own heading, above the box; the box holds Create Project, Open Project and Recent Projects. The window's
   heading hides while the Welcome page shows (`StudioUpdateCrumbs`), and the page takes its place (`FitWelcomeView`).
+  The running API Logic Server form has the same treatment (author: "yes, same treatment for the server form"): the
+  logo, the name and "A project from a running API Logic Server" above its box (`FitOwnHeadingView`).
   Project pages: the project's icon and name, no Imagery logo (author: "each project should have an ICON"): its
   picture from Project Settings, else its SF Symbol (`ProjectIconImage`, `ProjectShowHeading`), updated when
   Project Settings is closed.
