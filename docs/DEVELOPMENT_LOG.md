@@ -6,6 +6,28 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Three Mac reports: StringRef, the Web Toolkit's Objective-C, LogicBankExample's crash; globals swept
+
+- **Generated app (Northwind): "Unknown variable type StringRef"** in `App Shell.incl`'s colour provider, written from
+  the example in FB's `Color.incl`; that header now defines `StringRef` (2026-09-30), the author's FB 7.0.38 does not.
+  Fixed: `CFStringRef`. fblint had the check, but it ran after the fn-definition check, which ends a line's checks, so
+  parameters were never looked at; it runs first now.
+- **Web Toolkit example: clang "incompatible operand types (CFStringRef and NSString *)"** in `Web Render.incl`: the
+  `?: @""` stood outside the bridge cast. Now inside: `(__bridge CFStringRef)([... description] ?: @"")`. The
+  "discards qualifiers" warnings on `gWebSessions` / `gWebStylesheets`: the kept value is cast back to its mutable type.
+- **LogicBankExample crashed in `DataMemoryCopyAll`** (Story, Next): `Data Memory.incl`'s in-memory database, made with
+  `fn MutableDictionaryNew` and held in a global, was freed when the launch event ended. Kept with `DataKept` now, and
+  its snapshot too.
+- **Every global swept**, with a new fblint rule (an object global set from a fn and not kept). It found, besides the above:
+  - generated apps: `gLogicRules` (the rules, registered at launch), `gAppPageKeys` (the record Save and Delete act on),
+    the page lists, the lookups (`Binding Support.incl`, `Record Popover.incl`), the shell's pages and colour pairs,
+    the theme's colours (kept by `ShellKeepTheme` when the window is built, so `Theme.incl` stays plain);
+  - the Studio: the project dictionary, the project name, the crumb trail's actions, the ALS project's model text,
+    the selected entity (`objectName`); its scratch globals used inside one function are locals now (author: "if it's
+    only one call, why not a local variable?") and gone from `My Globals.glbl`;
+  - the SQL Generator example's code samples; the Professional JSON:API model and last error; *TXV*: `gDatabaseURL`.
+- **Learned:** the question to ask first is whether a value needs to be global at all.
+
 ## 2026-11-27 — Crash fix: globals keep their values (retain, release)
 
 - **The crash:** Studio for FB crashed on Generate App, in `LicenceFeaturesOf` (`objc_msgSend` on a freed object).

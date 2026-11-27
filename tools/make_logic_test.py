@@ -426,8 +426,8 @@ BOOL                 ok, allShipped, noneShipped, cascadeFound
 CFTypeRef            itemId
 
 gLogicRules = NULL
-gOrderRowEvents = fn MutableArrayNew
-gOrderCommitEvents = fn MutableArrayNew
+gOrderRowEvents = (CFMutableArrayRef)fn DataKept( fn MutableArrayNew, gOrderRowEvents )
+gOrderCommitEvents = (CFMutableArrayRef)fn DataKept( fn MutableArrayNew, gOrderCommitEvents )
 fn DeclareStep3Rules
 fn Check( @"step 3: activate", fn LogicActivate, @"" )
 cascadeFound = NO
