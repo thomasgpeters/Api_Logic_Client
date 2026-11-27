@@ -168,7 +168,7 @@ Purpose: Regenerating never overwrites the files that are yours.
 
 ### G-01 The app's frame
 Purpose: Navigation bar, header, footer.
-1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a footer with the record navigator and New, Save, Delete, Refresh; the copyright at the foot of the navigation bar.
+1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a toolbar with Search, New, Delete, Refresh; a footer with the record navigator and Save; the copyright at the foot of the navigation bar.
 2. Use the theme menu: Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both.
 3. Click each navigation button. -> Each page shows its List card above its Form card, both filling the width.
 
@@ -182,6 +182,16 @@ Purpose: A page opens on its first record, and the footer moves through them.
 6. New, fill in the Form, Save. -> The new customer is selected and shown.
 7. Delete it. -> The customer that took its place in the list is selected and shown.
 8. Click Products. -> "Product 1 of ..." and the first product shown.
+
+### G-02b The toolbar and search
+Purpose: Search follows the page; New, Delete and Refresh work from the toolbar.
+1. On Customers, look at the toolbar. -> Search (a magnifying glass) labelled "Search Customers", then New, Delete, Refresh.
+2. Click Search and type part of a company name. -> A search field under the item; the List narrows as you type; the footer says how many match; the first match is shown.
+3. Type a second word (a city). -> Only records with both words remain.
+4. Clear the field. -> Every record again.
+5. Click Products. -> The toolbar reads "Search Products"; the search is empty.
+6. Toolbar New, then Delete on a record you can spare. -> The same as the Records menu's New and Delete.
+7. Right-click the toolbar, Customize Toolbar..., drag Refresh before New, Done; quit and reopen. -> The new order is kept.
 
 ### G-02 Records: choose, add, change, delete
 Purpose: The Form and the List work together.

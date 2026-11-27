@@ -11,7 +11,7 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│ © Company  │ |< <  Customer 3 of 91  > >|  Saved.  [New][Save][Delete][Refresh]│  footer
+│ © Company  │ |< <  Customer 3 of 91  > >|  Saved.                     [Save]  │  footer
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -22,6 +22,13 @@ Every app generated from a SQLite project opens in the same frame:
 - **Footer:** the **record navigator** (First, Previous, *"Customer 3 of 91"*, Next, Last), a status line
   ("Saved.", a refused save's reason), and the page actions New, Save, Delete, Refresh (also the *Records* menu).
   The copyright sits at the foot of the navigation bar, in small type.
+- **Toolbar** (author, 2026-11-27; `App Toolbar.incl`): FB's `toolbar` and `toolbaritem`, so each item has a tag and
+  sends `_toolbarItemClick`. **Search** is first (`magnifyingglass`), its label following the page ("Search
+  Customers": `AppToolbarShowPage`); then a flexible space and **New**, **Delete**, **Refresh**, moved out of the
+  footer. FB has no search item, so clicking Search opens our own search field, a small Cocoa popover under the item
+  (`AppToolbarSearchPopover`); each keystroke calls `AppPageSearchChanged` (App Pages.incl), which narrows the List to
+  the records holding every word (`Record Search.incl`: any case, any accent) and keeps the navigator on those. A new
+  page clears the search. The toolbar can be customised and its arrangement is saved.
 - **Record navigator** (author, 2026-11-27): a page opens on its first record - selected in the List, the List
   given the focus (the arrow keys move through it), the record in the Form. First and Previous are dimmed on the
   first record, Next and Last on the last. After a Save the same record stays selected; after adding one, the new

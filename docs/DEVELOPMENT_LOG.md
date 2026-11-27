@@ -6,6 +6,24 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The generated app's toolbar and search
+
+- **Author:** a toolbar at the top of the window, customisable as Mac toolbars are; its first item Search, linked to
+  the object in focus ("Search Customers", "Search Products"); then, on the author's direction, FB's own toolbar items
+  (tags, click events) with icons, a magnifying glass for Search, and New and Delete moved from the footer into it.
+- **`App Toolbar.incl`** (runtime): `toolbar` / `toolbaritem` with SF Symbols (Search, flexible space, New, Delete,
+  Refresh), customisation and autosave on. FB has no search toolbar item, so Search opens a Cocoa popover with an
+  NSSearchField under the item (`showRelativeToToolbarItem:`, macOS 14+; the apps need 15). Its label follows the
+  page (`AppToolbarShowPage`, with a plural: Category -> Categories).
+- **`Record Search.incl`** (runtime): `RecordSearchFilter`: every word of the search in some value of the record,
+  Finder-style (`StringLocalizedStandardContainsString`).
+- **App Pages** (generated): `gAppPageSearch`, `gAppPageShown` (the List's records: those that match);
+  `AppPageSearchChanged` as you type (the List, the navigator, "5 of 91 match"); the toolbar's clicks; a new page
+  clears the search. Rows, tiles and the navigator all work on the records shown.
+- **Footer:** Save only, under the Form (New, Delete, Refresh are in the toolbar; all four in the Records menu).
+- Test scenario G-02b. Waits for a Mac build. A first version built the whole toolbar in Cocoa (an
+  NSSearchToolbarItem); replaced, before commit, by FB's toolbar items at the author's direction.
+
 ## 2026-11-27 — The record navigator
 
 - **Author:** the generated app should behave like a record navigator: the first item of a List selected (as the

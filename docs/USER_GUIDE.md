@@ -254,14 +254,19 @@ generated file starts with a comment saying what it does and whether it is regen
 
 Every generated app has the same frame (`App Shell.incl`):
 
+- a **toolbar** at the top: **Search** first (a magnifying glass, labelled for the page: *Search
+  Customers*, *Search Products*), then **New**, **Delete** and **Refresh**. Click Search and type: the
+  List narrows as you type to the records holding every word (any case, any accent), and the navigator
+  counts only those; clear the field to see them all again. Like any Mac toolbar you can rearrange it
+  (right-click it, *Customize Toolbar…*), and the app remembers how you left it;
 - a **dark blue navigation bar** on the left (darker in dark mode), with a button and an icon per
   entity;
 - a **header** with the app icon, the app's name centred on it and the tag-line under it, and on
   the right the **theme menu** (System / Light / Dark) and **Log In** (connect it to your sign-in in
   `EventHandlers.incl`, `DoLogin`);
 - a **footer** with the **record navigator** (First, Previous, *Customer 3 of 91*, Next, Last), a status
-  line, and the page actions **New**, **Save**, **Delete** and **Refresh** (also in the *Records* menu: ⌘N,
-  ⌘S, ⌘R). A page opens on its first record, selected in the List with the focus there, so the arrow keys
+  line, and **Save**, under the Form it saves (New, Delete and Refresh are in the toolbar, and all four in the
+  *Records* menu: ⌘N, ⌘S, ⌘R). A page opens on its first record, selected in the List with the focus there, so the arrow keys
   move through the records too. Previous is dimmed on the first record and Next on the last. The copyright
   is at the foot of the navigation bar;
 - the **page**: the entity's List in a card at the top and its Form in a card below, both the
