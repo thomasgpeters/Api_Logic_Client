@@ -284,7 +284,9 @@ then adds the record. **Delete** asks first; the rules decide what happens to re
 **Grid or tiles.** A switch at the right of the List card's title shows the records as a grid or
 as **tiles**: rounded panels, three or four across depending on the window's width, each with the
 record's name as a subheading and up to four other fields in smaller text. Click a tile to see its
-record in the Form, as you would a row. The page remembers your choice while the app runs.
+record in the Form, as you would a row. The record you are on has a ring round its tile, and the
+footer's navigator moves the ring from tile to tile, scrolling to keep it in view. The page remembers
+your choice while the app runs.
 
 Change the colours in `Theme.incl` (yours). Add pages of your own in `Windows.incl`, after
 `AppPagesBuild`; the file shows how.

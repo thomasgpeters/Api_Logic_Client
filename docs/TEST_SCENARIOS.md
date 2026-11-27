@@ -220,9 +220,14 @@ Purpose: A foreign key's Dropdown and its details.
 Purpose: The tiles view beside the grid.
 1. Click the tiles symbol in the switch at the right of the List card's title. -> The grid gives way to tiles: rounded panels with a soft shadow, the record's name as a subheading, up to four other fields under it in smaller text.
 2. Make the window wide, then narrow, and click Refresh. -> Four tiles across when the List is wide, three when it is narrower.
-3. Click a tile. -> Its record fills the Form; the tile is outlined in the accent colour.
-4. Switch to another page and back. -> The page still shows tiles; switch back to the grid with the list symbol.
-5. Switch the theme to dark. -> The tiles still stand out from their card.
+3. Look at the first tile. -> It has a ring in the accent colour: the navigator's record ("Customer 1 of 91"), shown in the Form.
+4. Click Next in the footer, three times. -> The ring moves tile by tile; the Form follows; "Customer 4 of 91".
+5. Click Last. -> The ring is on the last tile, the tiles scrolled to show it; Next and Last are dimmed.
+6. Click a tile. -> Its record fills the Form; the ring moves to it; the navigator shows its number.
+7. Search for a name (toolbar). -> Only the matching tiles; the ring on the first of them.
+8. Switch to the grid. -> The same record is selected in the grid; switch back: the ring is on it.
+9. Switch to another page and back. -> The page still shows tiles; switch back to the grid with the list symbol.
+10. Switch the theme to dark. -> The tiles still stand out from their card; the ring still shows.
 
 ### G-06 Auto-complete for a related record
 Purpose: Finding a parent record by typing.

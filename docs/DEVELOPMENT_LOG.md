@@ -6,6 +6,21 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The navigator in the tiles; the list and toolbar checked against FB's reference
+
+- **Author:** check the list view's selection (-1 when nothing is selected, else from 0), the callbacks available
+  for the list view and the toolbar; make the navigator work in the tiles view, with a ring round the selected tile.
+- **Checked** (FutureBasic_Documentation): `TableViewSelectedRow` wraps Cocoa's `selectedRow` (-1 with none,
+  rows from 0); `TableViewClickedRow` the same for a right-click or double-click. The table events FB's reference
+  documents for apps are `_tableViewSelectionDidChange` (we use it: a row clicked or the arrow keys) and
+  `_tableViewDoubleAction`; the header lists more delegate events (`_tableViewShouldSelectRow`,
+  `_tableViewSelectionShouldChange`, ...) with no documented way to answer them. The toolbar has
+  `_toolbarItemClick` (we use it) and `_toolbarItemValidate` (no documented answer either, so the items'
+  autovalidation is off and `AppToolbarSetEnabled` sets them).
+- **Tiles:** `RecordTilesSelect( page, index )` (Record Tiles.incl): the ring (3 pt, the accent colour) moves to the
+  tile and the tiles scroll to show it. `AppPageGoTo` calls it, so the navigator, a tile click, a row click, the
+  search and a list arriving all move it; New clears it. `TilesMark` now through Cocoa. Test scenario G-05.
+
 ## 2026-11-27 — Save in the toolbar; the toolbar knows the context
 
 - **Author:** Save in the toolbar too; the toolbar's buttons context-aware: Save only when there is a change (the
