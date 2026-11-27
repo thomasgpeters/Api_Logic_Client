@@ -31,7 +31,7 @@ mode work without extra code).
   - `XIB Generator.incl` — Form and List parts per entity; `Model Tags.incl`; model entries.
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
   - `Studio Library.incl` — the runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`): installed from the repository folder, updated from the Model menu; also `AppSupportFolderURL`.
-  - `Licence.incl` — the licence: ES256, verified offline (Security framework; its calls declared in our own `Licence Security.incl`, since FB's `Tlbx Security.incl` is newer than the author's FB), kept in the Keychain, `LicenceAllows( feature )`; `Licence Window.incl` — the Licence menu and window, `LicenceGate` on licensed commands (`docs/features/LICENSING_FEATURE.md`). Test keys only here (`tools/licence_test_keys`).
+  - `Licence.incl` — the licence: ES256, verified offline (Security framework; its calls declared at the top of `Licence.incl` itself, since FB's `Tlbx Security.incl` is newer than the author's FB), kept in the Keychain, `LicenceAllows( feature )`; `Licence Window.incl` — the Licence menu and window, `LicenceGate` on licensed commands (`docs/features/LICENSING_FEATURE.md`). Test keys only here (`tools/licence_test_keys`).
   - `Edition.incl` — which edition the Studio generates: Professional when the licence includes it.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
@@ -155,7 +155,7 @@ These apply to hand-written code **and to everything the generator emits**.
 - No `#build` in projects (single-file `.fb` programs only); compiler options
   such as `-lsqlite3` go in Build Settings.
 - Verify every toolbox name/signature in FutureBasic_Documentation's headers, and check the header's date: a `Tlbx` header
-  dated 2026 may be newer than the author's FB (declare the calls ourselves, as `Licence Security.incl` does).
+  dated 2026 may be newer than the author's FB (declare the calls ourselves, as the top of `Licence.incl` does).
 - `View…` functions take a view tag, never a window tag — use `_windowContentViewTag`.
 - Cast CF types passed to `ObjectRef` parameters: `fn ObjectClassName( (ObjectRef)dta )`.
 - `alert` button titles are an array; don't quit a Cocoa app with `end`.

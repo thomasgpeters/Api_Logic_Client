@@ -149,8 +149,7 @@ def mac_test_source(private, public):
     """the Mac test: Licence.incl's verify part, unchanged, and every case - one FB program"""
     incl = open(LICENCE_INCL, newline='').read().replace('\r', '\n')
     def security_declarations():
-        text = open(os.path.join(os.path.dirname(LICENCE_INCL), 'Licence Security.incl'), newline='').read().replace('\r', '\n')
-        return text[text.index('include library'):].rstrip().replace('\n', '\r')
+        return incl[incl.index('include library'):incl.index('// --- end Security declarations ---')].rstrip().replace('\n', '\r')
     start = incl.index('// --- verify (shared')
     end = incl.index('// --- end verify ---') + len('// --- end verify ---')
     lines = ['/*',
@@ -162,7 +161,7 @@ def mac_test_source(private, public):
              ' */',
              '',
              'include "NSLog.incl"',
-             '// the Security declarations, as src/AppBuilder/Licence Security.incl has them (any FutureBasic, with or without its own',
+             '// the Security declarations, as src/AppBuilder/Licence.incl has them (any FutureBasic, with or without its own',
              '// Tlbx Security.incl)',
              security_declarations(),
              '',

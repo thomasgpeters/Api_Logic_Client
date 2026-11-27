@@ -69,11 +69,11 @@ private key never leaves the server.
 
 The author's first build of the Studio with the licence stopped at `include "Tlbx Security.incl"` (error 1234). That FB
 header is dated 2026-05-05 and is not in the author's FutureBasic. `src/AppBuilder/Licence Security.incl` now declares the
-calls `Licence.incl` uses:
+calls `Licence.incl` uses, at its own top (first in a file of its own, `Licence Security.incl`; moved into `Licence.incl` the same day, because the editor, with the project already open, did not see the new file):
 - the framework: `include library "Security"`;
 - SecKey: `SecKeyCreateWithData`, `SecKeyVerifySignature` and the ES256 constants;
 - SecItem: `SecItemCopyMatching`, `SecItemAdd`, `SecItemDelete` and the Keychain keys.
 
-It comes just before `Licence.incl` in `data.fbproj`. The Mac licence test carries the same declarations
+The Mac licence test carries the same declarations
 (`tools/licence_reference.py --mac-test`).
 
