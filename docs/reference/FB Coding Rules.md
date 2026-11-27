@@ -161,6 +161,11 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
 - **Cocoa collections refuse NULL.** `MutableDictionarySetObjectForKey( d, NULL, k )` raises
   an exception — guard optional values, or store `NSNull` for SQL NULL.
 
+- **Replacing an object in a dictionary (or an array) frees the old one when nothing else holds it** (2026-11-27,
+  a crash in `AppPageChooseRow`): `old = fn DictionaryObjectForKey( d, key )`, then `MutableDictionarySetObjectForKey(
+  d, new, key )` leaves `old` pointing at freed memory. Copy it first (`old = fn ArrayWithArray( old )`, autoreleased:
+  alive for the rest of the event), or keep it with the module's Kept fn if it must outlive the event.
+
 ## Deprecated — don't write these
 
 | Don't | Use | Since |

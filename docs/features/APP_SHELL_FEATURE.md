@@ -11,7 +11,7 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│ © Company  │ |< <  Customer 3 of 91  > >|  Saved.                             │  footer
+│            │ © Company (|< First)(< Previous) Customer 3 of 91 (Next >)(Last >|)│  footer
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -19,9 +19,15 @@ Every app generated from a SQLite project opens in the same frame:
   current page is highlighted.
 - **Header:** the business logo, the app name and the tag-line on the left; the theme menu
   (System / Light / Dark) and **Log In** on the right.
-- **Footer:** the **record navigator** (First, Previous, *"Customer 3 of 91"*, Next, Last), a status line
-  ("Saved.", a refused save's reason), and the page actions New, Save, Delete, Refresh (also the *Records* menu).
-  The copyright sits at the foot of the navigation bar, in small type.
+- **Footer** (author, 2026-11-27): the copyright on the left, then the **record navigator** across the rest of the
+  width: First, Previous, *"Customer 3 of 91"*, Next, Last, as pills in five equal cells that stretch with the window
+  (`ShellNavigatorButton`, proportional autoresizing). A dimmed pill is also faded (alpha 0.4: on macOS 15 the layer
+  draws the pill and does not grey itself). What just happened ("Saved.", a refused save's reason, "5 of 91 match")
+  shows under the window's title, the window's subtitle (`ShellSetStatus`).
+- **Window title:** *Company | App* (author, 2026-11-27), the company taken from the copyright (`ShellCompanyName`:
+  "© 2026 Imagery Business Systems, LLC" -> "Imagery Business Systems, LLC"); just the app's name when it names none.
+- **Spacing:** 16 points around the cards, 12 inside them, a 26-point title row (less room above a List: author,
+  2026-11-27).
 - **Toolbar** (author, 2026-11-27; `App Toolbar.incl`): FB's `toolbar` and `toolbaritem`, so each item has a tag and
   sends `_toolbarItemClick`. **Search** is first (`magnifyingglass`), its label following the page ("Search
   Customers": `AppToolbarShowPage`); then a flexible space and **New**, **Save**, **Delete**, **Refresh**, moved out of the
@@ -37,7 +43,7 @@ Every app generated from a SQLite project opens in the same frame:
   `AppPageSearchChanged`, which narrows the List (`Record Search.incl`: `RecordSearchQuery`) and keeps the navigator on
   those. A new page starts a new search. The toolbar can be customised and its arrangement is saved.
 - **Navigation bar:** the entity buttons go into a scrolling list (`ShellNavScroll`, the first time a page is shown:
-  a flipped document view, an overlay scroller) between the heading and the copyright, and the button of the page
+  a flipped document view, an overlay scroller) from the heading to the bar's foot, and the button of the page
   shown is scrolled into view, for models with many entities.
 - **Record navigator** (author, 2026-11-27): a page opens on its first record - selected in the List, the List
   given the focus (the arrow keys move through it), the record in the Form. First and Previous are dimmed on the
@@ -65,7 +71,7 @@ Branding comes from **Project Settings** in the Studio (`ProjectSettingsView.xib
 `Project Settings.incl`, `Project Workspace.incl`): a logo well (paste or drag; kept as
 `<project>/Branding/logo.png`, deployed as `FBapp/AppLogo.png`), the tag-line (≤ 80 characters)
 and the copyright, all in `Project.json`. Without a logo the header shows the `building.2` symbol;
-without a copyright the footer says `© <app name>`.
+without a copyright the footer says `© <app name>` (at its left).
 
 ## Decisions
 

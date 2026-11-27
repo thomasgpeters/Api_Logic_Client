@@ -169,33 +169,41 @@ Purpose: Regenerating never overwrites the files that are yours.
 
 ### G-01 The app's frame
 Purpose: Navigation bar, header, footer.
-1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a toolbar with Search, New, Save, Delete, Refresh; a footer with the record navigator and the status line; the copyright at the foot of the navigation bar.
+1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a toolbar with Search, New, Save, Delete, Refresh; a footer with the copyright at its left and the record navigator across the rest (First, Previous, the record's number, Next, Last as pill buttons sharing the width).
 2. Use the theme menu: Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both.
 3. Click each navigation button. -> Each page shows its List card above its Form card, both filling the width.
+
+### G-01b The window's title
+Purpose: Company | App.
+Before: In Project Settings, the copyright "© 2026 Imagery Business Systems, LLC"; Generate App.
+1. Look at the window's title. -> "Imagery Business Systems, LLC | <app name>".
+2. Clear the copyright in Project Settings, Generate App, build and run. -> The title is the app's name alone.
 
 ### G-01a Many entities
 Purpose: The navigation bar scrolls.
 Before: The full Northwind database (about twenty tables), Generate App.
-1. Look at the navigation bar. -> A button per table under "Business Objects"; the copyright at the foot of the bar, not covered.
+1. Look at the navigation bar. -> A button per table under "Business Objects", down to the foot of the bar.
 2. Scroll the bar (two fingers or the wheel). -> The buttons scroll; a thin scroller shows while scrolling.
 3. Make the window short, then click the last button. -> Its page shows, and the bar scrolls to keep its button in view.
 
 ### G-02a The record navigator
 Purpose: A page opens on its first record, and the footer moves through them.
-1. Open the app, click Customers. -> The first customer is selected in the List (the List has the focus) and shown in the Form; the footer reads "Customer 1 of 91" (your count); First and Previous are dimmed.
-2. Click Next three times. -> "Customer 4 of 91"; the List's selection and the Form follow; First and Previous are on.
-3. Click Last. -> The last customer; Next and Last are dimmed.
-4. Press the up arrow key. -> The one before it; the footer follows.
-5. Change a field and Save. -> The same customer stays selected and shown.
-6. New, fill in the Form, Save. -> The new customer is selected and shown.
-7. Delete it. -> The customer that took its place in the list is selected and shown.
-8. Click Products. -> "Product 1 of ..." and the first product shown.
+1. Open the app, click Customers. -> The first customer is selected in the List (the List has the focus) and shown in the Form; the footer reads "Customer 1 of 91" (your count) between the pill buttons; First and Previous are dimmed (faded).
+2. Make the window wider and narrower. -> The five cells of the navigator share the footer's width and stretch with it; the copyright stays at the left.
+3. Click Next three times. -> "Customer 4 of 91"; the List's selection and the Form follow; First and Previous are on.
+4. Click Last. -> The last customer; Next and Last are dimmed.
+5. Press the up arrow key. -> The one before it; the footer follows.
+6. Change a field and Save. -> The same customer stays selected and shown.
+7. New, fill in the Form, Save. -> The new customer is selected and shown.
+8. Delete it. -> The customer that took its place in the list is selected and shown.
+9. Click Products. -> "Product 1 of ..." and the first product shown.
+10. Click Customers again, then Products again, a few times. -> Each page comes back on its record; the app does not quit (a crash here was fixed on 2026-11-27).
 
 ### G-02b The toolbar and the search dialog
 Purpose: Search follows the page and the field; New, Save, Delete and Refresh work from the toolbar.
 1. On Customers, look at the toolbar. -> Search (a magnifying glass) labelled "Search Customers", a thin separator, then New, Save, Delete, Refresh; Save is dimmed (nothing changed yet), Delete is on (a customer is shown).
 2. Click Search. -> A dialog under the item: "Search by" with Any Field, and a text box.
-3. Type part of a company name. -> The List narrows as you type; the footer says "n of 91 match"; the first match is shown.
+3. Type part of a company name. -> The List narrows as you type; under the window's title, "n of 91 match"; the first match is shown.
 4. Search by: Company Name, type a word from a city. -> No match (it searches that field only); type part of a name instead: matches.
 5. Search by: a field with few values (a country, a region, a type). -> The text box gives way to a dropdown of that field's values; choose one: only those records.
 6. On Orders, Search by: Order Date. -> A small calendar (day, month, year); click a day with orders: only that day's orders; another day: those.
@@ -209,7 +217,7 @@ Purpose: Search follows the page and the field; New, Save, Delete and Refresh wo
 ### G-02 Records: choose, add, change, delete
 Purpose: The Form and the List work together.
 1. Click a row in the List. -> Its record fills the Form.
-2. Change a field and Save (or Command-S). -> The List shows the change; the status line confirms it.
+2. Change a field and Save (or Command-S). -> The List shows the change; "Saved." under the window's title.
 3. New (Command-N), fill in the Form, Save. -> The new record is in the List.
 4. Select it and Delete; confirm. -> It is gone from the List.
 

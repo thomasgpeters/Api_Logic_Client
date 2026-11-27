@@ -6,6 +6,34 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Crash fix: going back to a page (AppPageChooseRow)
+
+- **Author:** the generated Northwind app crashed when a page was clicked "after a while" (EXC_BAD_ACCESS in
+  objc_msgSend `count`, AppPageChooseRow <- AppDataDone <- ShellShowPage).
+- **Cause:** `AppDataDone` took the page's old list (`previous`, to find a record just added), then replaced it in
+  `gAppPageRecords`; the dictionary held the old list's only reference, so it was freed, and `AppPageChooseRow` asked
+  it for its count. Only the second time a page's records arrive, hence "after a while".
+- **Fix** (App Generator.incl, the generated AppDataDone): `previous = fn ArrayWithArray( previous )` before the
+  replace. Rule added to FB Coding Rules ("Replacing an object in a dictionary ... frees the old one"); test scenario
+  G-02a step 10 (back and forth between pages). Regenerate the app.
+
+## 2026-11-27 — The generated app's footer: a pill navigator across the window; less space above the Lists
+
+- **Author** (after a Mac run: "generated app look really nice"): too much white space above the Address list; the
+  navigation arrows as pill buttons stretching across the whole bottom of the window; the copyright in the window's
+  footer, not at the foot of the navigation bar.
+- **Footer** (App Shell.incl): the copyright on the left; First, Previous, "Customer 3 of 91", Next, Last in five equal
+  cells across the rest, the buttons pills with a title and an SF Symbol (`ShellNavigatorButton`, `PillButton`),
+  proportional autoresizing so they stretch with the window. `ShellSetEnabled` also fades a dimmed control (alpha
+  0.4): on macOS 15 the pill is the layer's drawing and does not grey itself.
+- **Status** ("Saved.", a refusal, "5 of 91 match") moved to the window's subtitle, under its title beside the
+  toolbar (`ShellSetStatus`, the same call): the footer is the navigator's.
+- **Window title** (author: "Imagery Business Systems, LLC | <app name>"): *Company | App*, the company taken from
+  the project's copyright (`ShellCompanyName`, a regular expression strips ©, (c), "Copyright" and the years), so
+  other developers' apps carry their own company; the app's name alone when the copyright names none.
+- **Spacing:** around the cards 24 -> 16 points, inside them 16 -> 12, the title row 30 -> 26, between cards 16 -> 12:
+  about 26 points less above each List. The navigation bar's list runs to the bar's foot now. Waits for a Mac build.
+
 ## 2026-11-27 — Generate App's progress sheet: tried on a Mac
 
 - **Author:** "the generate popup window looks fantastic." First build failed with "Unknown function
