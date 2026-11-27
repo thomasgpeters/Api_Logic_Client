@@ -56,6 +56,13 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 - [ ] **Online activation per Mac:** the License Server refuses more Macs than seats, then App Builder works offline;
       "Release this Mac" frees a seat. Needs the License Server's endpoints (its L38).
 
+## The generated app's look (author's first run, 2026-11-27)
+
+- [x] Nav bar darker in dark mode; the working area apart from the Forms and Lists (cards on a backdrop); Forms and
+      Lists across the full width with margins, the List's columns sharing it (`APP_SHELL_FEATURE.md`).
+- [ ] **On the Mac:** generate again and build. `Theme.incl` is yours and is not overwritten, so to get the new
+      colours, delete it before generating, or copy the new lines from `src/Templates/App/Theme.incl`.
+
 ## Waiting on the author
 
 - [ ] **Bug:** Form layout popup - choosing "3 columns" pops back to "automatic". Diagnostics are in

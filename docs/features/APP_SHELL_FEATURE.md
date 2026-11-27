@@ -50,9 +50,36 @@ without a copyright the footer says `© <app name>`.
   `ButtonSetContentTintColor`, `TextFieldSetTextColor`, `ImageViewSetImage`, …), every one
   checked against the toolbox headers by `fblint`. The pages stay XIBs, loaded into the content
   view with `nibview …, _shellContent`.
-- **Colours in one file you own** (`Theme.incl`): the nav bar's dark blue is a fixed sRGB colour
-  (it is the brand, in light and dark mode); everything else uses system colours, so the theme
-  menu's Light / Dark / System (`AppSetAppearanceNamed`, `AppSetAppearance( NULL )`) just works.
+- **Colours in one file you own** (`Theme.incl`). Everything follows the theme menu's Light / Dark / System
+  (`AppSetAppearanceNamed`, `AppSetAppearance( NULL )`) by itself.
+  - **Light and dark pairs:** `fn ShellDynamicColor( light, dark )` makes one colour for each mode (`ColorWithName` with a
+    provider function; macOS picks as the appearance changes).
+  - **The nav bar** is the brand's dark blue, darker in dark mode (author, 2026-11-27: "the blue nav bar should be
+    different (darker) in dark mode").
+- **Pages as cards on a backdrop** (author, 2026-11-27: the working area "is also not differentiating enough between
+  the background and the form layouts").
+  - **The backdrop:** the working area is a backdrop (`gThemeContentBackground`): a light grey, or near-black in dark
+    mode.
+  - **The cards:** each Form and List sits on a rounded card (`gThemeCardBackground`, `gThemeCardBorder`): white, or a
+    lifted grey in dark mode.
+  - **Spacing:** 24 pt margins around the cards, 16 pt inside them and between them.
+  - **The functions:** `ShellCard` draws a card behind a part (called before its `nibview`). `ShellPlacePart` fits the
+    part into it. Each card's tag is its part's + `_shellCardTagOffset`, and it is listed with the page's views, so it
+    shows and hides with the page.
+- **Full width** (author, 2026-11-27: "layouts should stretch across the entire available space, with ample margins.
+  Same for grids").
+  - **Form and List:** both span the working area's width.
+  - **Inside the Form,** labels, fields and drop-downs stretch in proportion (autoresizing `flexibleMinX` +
+    `widthSizable` + `flexibleMaxX`), so one, two or three columns spread over the width.
+  - **Fixed-width controls** (check boxes, date pickers, radio groups, the lookup info button) keep their width and
+    move with their column.
+  - **The List's columns** share the table's width (`columnAutoresizingStyle="uniform"`).
+- **Each card has a title** (author, 2026-11-27: "a title in slightly larger font size ... a professional look with
+  sans-serif fonts").
+  - "Customer Details" over the Form (the layout), "Customer List" over the List.
+  - The title is set in the system font, San Francisco, semibold at 15 pt (`gThemeCardTitleText`,
+    `gThemeCardTitleFontSize`). The fields stay in the system font at 13.
+  - The layout's card stands apart from the window's backdrop in both modes.
 - **Readable output for the FB community.** Every generated file opens with what it is, whether
   it is regenerated, and developer notes; `README.md` explains the project group by group.
 - **ALS projects:** an app over an API Logic Server is the Professional edition (roadmap); in Lite,
@@ -66,8 +93,11 @@ without a copyright the footer says `© <app name>`.
       picture; Done; reopen the project — all three come back; ⌘X cuts text, ⇧⌘X generates XIBs.
 - [ ] Generate App, build `FBapp/<name>.fbeproj`: the window has the nav bar, header (logo, name,
       tag-line, theme menu, Log In), footer; each nav button shows its page; a List's row fills the Form.
-- [ ] Theme menu: Light / Dark / System switch the window's appearance; the nav bar stays dark blue.
-- [ ] Resize: the nav bar keeps its width; header and footer stretch; the List grows.
+- [ ] Theme menu: Light / Dark / System switch the window's appearance; the nav bar is dark blue, darker in Dark.
+- [ ] The working area is a grey backdrop (near-black in Dark); the Form and the List sit on rounded cards, white (a
+      lifted grey in Dark), with margins around and between them.
+- [ ] Resize: the nav bar keeps its width; header and footer stretch; the Form's fields and the List's columns spread
+      across the width; the List grows in height.
 - [ ] New → fill in → Save adds a row; choose a row → change → Save updates it; a constraint's
       message appears when a save is refused; Delete asks, then removes; Refresh re-reads.
 

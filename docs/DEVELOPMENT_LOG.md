@@ -6,6 +6,26 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The generated app's look: dark nav, cards on a backdrop, full width
+
+- **The author's first look at a generated app:** "looks great at first glance". Three changes asked for: a darker nav
+  bar in dark mode; a working area that stands apart from the forms; layouts and grids across the full width, with
+  ample margins.
+- **`App Shell.incl`:**
+  - `ShellDynamicColor` gives light and dark pairs (FB's `ColorWithName` with a provider function).
+  - New theme colours: the content backdrop, the card, and the card border.
+  - `ShellCard` and `ShellPlacePart` put each part on a rounded card, with margins of 24 and 16 pt.
+- **`App Generator.incl`:** pages place their Form and List on cards across the full width, and list the cards with
+  the page's views.
+- **`XIB Generator.incl`:** Form controls stretch in proportion; fixed-width ones move with their column. The List's
+  columns are `uniform`.
+- **`Theme.incl` (the template):** the new colours.
+- Learned:
+  - **A part's card must exist before the part:** the part's `nibview` lands on top, and `ViewAddSubview` moves the
+    card into the content view.
+  - **Proportional autoresizing** (`flexibleMinX` + `widthSizable` + `flexibleMaxX` on every control) spreads a
+    multi-column form across any width without Auto Layout.
+
 ## 2026-11-26 — Enterprise is now Professional; seats on the network
 
 - **The rename:** the author renamed App Builder's paid edition from Enterprise to Professional. It applies across
