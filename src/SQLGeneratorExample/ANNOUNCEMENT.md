@@ -1,22 +1,17 @@
 # Draft post for the FutureBasic list
 
 Plain text, no attachments: everything is on the web page the post links to (the list's storage fills up).
-The link is the SQL Generator's page on Imagery's FutureBasic site (`tools/make_site.py` builds it), or the
-GitHub page if that goes up first.
+Written in the author's own style: short, direct, the point first.
 
 ---
 
-**Subject:** Back again, with an old friend: the SQL Generator
+**Subject:** SQL Generator is back
 
 Hi all,
 
-I owe the list an apology. I have been quiet for a long while, reading now and then but not
-joining in. Life and work took over. I am sorry for that, and glad to be back.
+Sorry I've been quiet for a while. I've brought back my SQL Generator, updated for FB 7.
 
-I come bearing a small gift. Some of you may remember the SQL Generator, my little module for
-building SQL from dictionaries. I have dusted it off and brought it up to date for FB 7.
-
-The idea is simple. You describe what you want, and it writes the SQL for you:
+You describe the query, it writes the SQL:
 
 ```
 query = fn InitQueryDictionary
@@ -26,27 +21,17 @@ fn AddFilterToQuery( query, @"p", @"balance", fn NumberWithDouble( 100.0 ), _rea
 sql = fn GenerateSelectSQL( query )
 ```
 
-That gives you:
+which gives:
 
 ```
 SELECT "p"."surName" AS "Surname" FROM "person" AS "p" WHERE "p"."balance" > ?
 ```
 
-The values go in separately, so no quotes to fuss over.
+To try it, start with the one-file demo (about 40 lines). There's also a sample app with ten
+examples if you want more.
 
-If you want to try it, start small. There is a single-file program, about forty lines of code, that makes
-a little table, adds three people and reads two of them back. Put it in a folder with the module's
-four files, open it, run it, and watch the NSLog window.
+Everything is here, no attachments: [link]
 
-When you want more, there is also an example app with ten examples, each showing the FB code,
-the SQL it wrote, and the result. You do not need it to use the module.
-
-Everything is on one page, so nothing clogs the list:
-
-[link to the SQL Generator page]
-
-It is free (MIT licence). Questions and suggestions are welcome, here or by email.
-
-Good to be back,
+Free, MIT licence. Questions welcome.
 
 [your name]
