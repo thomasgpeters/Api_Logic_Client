@@ -24,7 +24,8 @@ to see the appropriate settings."
 Any attribute with a **Values** list can be an auto-complete: the list is written into the generated code
 (`AutoCompleteSetValues`), and the matches come from it. `R = Retail, W = Wholesale` shows the label and stores the
 code, as a Dropdown does. **Allow other values** keeps what the user types when it is not in the list (a label typed in
-full stores its code); it is on for a plain list and off for a list of codes, unless the designer chooses. A Values list
+full stores its code), and remembers it: new values go into the app's preferences plist (`Auto-complete Entity.attribute`)
+and are offered after the next launch too (author: "would revert back to the original list when the app is recycled"); it is on for a plain list and off for a list of codes, unless the designer chooses. A Values list
 takes precedence over a related table, as for a Dropdown.
 
 ## In App Builder

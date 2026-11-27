@@ -173,7 +173,7 @@ What each control does:
   When you choose it, a settings row appears under the Control popup: **Show** (the related record's field the user
   sees and types), **After 1, 2 or 3 letters**, **Up to 5, 8, 12 or 20 results**. With a Values list the matches come
   from it (labels shown, codes stored), and **Allow other values** keeps what the user types when it is not in the
-  list. Generate to apply.
+  list, and offers it from then on, after a restart too. Generate to apply.
 - **Radio buttons**: one per value of the **Values** list, up to 8 (with more, or with no list,
   the attribute gets a Dropdown). Code = label pairs work the same way: the label is the button's
   title, the code is stored. Side by side when they fit, else one under the other.

@@ -205,6 +205,7 @@ Before: In App Builder, a text attribute with Values "R = Retail, W = Wholesale,
 2. In the generated app, type "wh" in the first field. -> The list offers Wholesale; choosing it shows Wholesale.
 3. Save, then look at the record in the List. -> The stored value is W.
 4. In the second field, type "Extra large" and Save. -> The value is kept as typed (other values allowed).
+5. Quit the app, start it again, and type "ext" in that field. -> Extra large is offered with the list's values.
 
 ## H. The free modules
 

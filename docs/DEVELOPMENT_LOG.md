@@ -13,6 +13,9 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 - **Built:** an attribute's Values list feeds the auto-complete (`AutoCompleteSetValues`; labels shown, codes stored);
   **Allow other values** keeps typed text (default on for a plain list, off for codes; `acOthers` in Design.json); the
   settings row shows "From the Values list" and the check box. Test scenario G-07. Waiting on the Mac.
+- **New values remembered** (author: they "would revert back to the original list when the app is recycled, unless
+  stored in a plist"): a value typed under Allow other values joins the suggestions and is kept in the app's preferences
+  (`NSUserDefaults`, `Auto-complete <Entity.attribute>`), merged in at the next launch.
 
 ## 2026-11-27 — Auto-complete for related records; "View does not exist" found for good
 
