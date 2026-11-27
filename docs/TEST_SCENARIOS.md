@@ -189,6 +189,8 @@ Before: Rules in the app's Rules.incl (for example a credit limit).
 Purpose: A foreign key's Dropdown and its details.
 1. On a page whose Form has a Dropdown for a parent (an Order's Customer), open the Dropdown. -> It lists the parent's records by a readable name.
 2. Choose one and click the info button beside it. -> A popover shows that record's fields and values.
+3. Click New. -> The Dropdown is empty and the info button is dimmed; clicking it does nothing.
+4. Choose a parent again. -> The info button is on again. For an auto-complete: clear the text, and it dims; choose a match, and it comes back on.
 
 ### G-05 Records as tiles
 Purpose: The tiles view beside the grid.

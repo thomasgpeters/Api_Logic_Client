@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The info button is off until a parent is chosen
+
+- **Author:** "If no related record is chosen disable the info button so that you never see the dialogue. Intuitive."
+  `RecordPopoverRefresh` (Record Popover.incl) turns each lookup's info button on only while its field has a parent
+  chosen; App Pages calls it after a record is shown (`AppPageShowRecord`: also New and after a delete), after a
+  lookup's rows arrive (`AppPageFillLookup`) and after any click (a Dropdown's choice). An auto-complete updates its own
+  button as a match is chosen, the text is cleared, or a record is shown (`updateInfoButton`). The "No Customer chosen"
+  popover is gone.
+- The click path no longer uses any FB tag function: the chosen record, its title, the button's look all through
+  Cocoa (`ShellFindView`), so "View does not exist" cannot come from it.
+
 ## 2026-11-27 — Right-click menus; a Project menu that follows the page
 
 - **Author:** "the Project menu needs to better understand context. Also, right-click on a project should display a menu

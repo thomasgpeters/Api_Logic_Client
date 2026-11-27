@@ -167,7 +167,8 @@ What each control does:
   is written into the generated code. `Retail, Wholesale, Online` stores what it shows;
   `R = Retail, W = Wholesale, O = Online` stores the code (`R`) and shows the label (`Retail`).
   The first item is empty: no value. Beside a foreign key's Dropdown, an **info button** (ⓘ)
-  shows the chosen record's details in a popover, for example an Order's Customer.
+  shows the chosen record's details in a popover, for example an Order's Customer. It is dimmed
+  until a record is chosen.
 - **Auto-complete** (for a foreign key, or any attribute with a **Values** list): a text field that finds the related record, or the local value, as you type. The matches open in
   a list under the field (or above it, near the bottom of the window); choosing one shows its name and stores its key.
   When you choose it, a settings row appears under the Control popup: **Show** (the related record's field the user
