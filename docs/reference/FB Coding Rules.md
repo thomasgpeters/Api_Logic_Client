@@ -176,3 +176,19 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
 
 17. **FB source uses CR line endings**; XIB and JSON use LF. The generator
     converts its FB output to CR (`AppWriteSource`).
+
+## Headers newer than the author's FutureBasic (2026-11-27)
+
+FutureBasic_Documentation's `Toolboxes/Headers` can be newer than the FutureBasic on the author's Mac. `Tlbx Security.incl`
+(dated 2026-05-05 in the documentation) is missing from the author's install, and including it stopped the Studio's
+build with "Missing or invalid source file ... (error 1234 for Tlbx Security.incl)".
+- **Check the date** at the top of a `Tlbx ... .incl` header before including it. Headers dated 2026 may not be in the
+  author's FutureBasic.
+- **For a framework the author's FutureBasic may lack,** declare the few calls needed in a file of our own:
+  - `include library "<Framework>"`;
+  - a `BeginCDeclaration` with the framework's `#import`;
+  - `system` constants and `toolbox fn` declarations, written from Apple's headers.
+
+  Example: `src/AppBuilder/Licence Security.incl`. Never also include FB's own header for the same framework: the
+  declarations would clash.
+

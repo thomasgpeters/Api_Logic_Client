@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Build fix: our own Security declarations
+
+- **The author's build after the rename** stopped at `include "Tlbx Security.incl"` ("Missing or invalid source
+  file", error 1234), and every licence call failed with it.
+- **Learned:** FutureBasic_Documentation's headers can be newer than the author's FutureBasic. `Tlbx Security.incl` is
+  dated 2026-05-05.
+- **The fix:** `src/AppBuilder/Licence Security.incl` declares the calls the licence uses: `include library
+  "Security"`, the C `#import`, the `system` constants and the `toolbox fn` declarations, written from Apple's
+  headers.
+  - `My Globals.glbl` no longer includes FB's header.
+  - The Mac licence test carries the same declarations.
+  - FB Coding Rules: check a header's date before including it.
+
 ## 2026-11-27 — The generated app's look: dark nav, cards on a backdrop, full width
 
 - **The author's first look at a generated app:** "looks great at first glance". Three changes asked for: a darker nav

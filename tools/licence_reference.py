@@ -125,7 +125,7 @@ def cases(private, public):
     tampered_body = b64url(json.dumps(tampered, separators=(',', ':')).encode('utf-8'))
     return [
         ('a Lite licence: core and the AI assistant, nothing Professional', lite, '2026-11-26', True, '', LITE),
-        ('an Professional licence until 2027-11-30', ent, '2026-11-26', True, '', PROFESSIONAL),
+        ('a Professional licence until 2027-11-30', ent, '2026-11-26', True, '', PROFESSIONAL),
         ('the Professional licence the day it ends: still good', ent, '2027-11-30', True, '', PROFESSIONAL),
         ('the Professional licence the day after: expired', ent, '2027-12-01', False, 'expired', None),
         ('a Lite licence edited to Professional: the signature no longer matches', tampered_body + '.' + sig, '2026-11-26', False, 'signature', None),
@@ -148,6 +148,9 @@ def fb_string(text):
 def mac_test_source(private, public):
     """the Mac test: Licence.incl's verify part, unchanged, and every case - one FB program"""
     incl = open(LICENCE_INCL, newline='').read().replace('\r', '\n')
+    def security_declarations():
+        text = open(os.path.join(os.path.dirname(LICENCE_INCL), 'Licence Security.incl'), newline='').read().replace('\r', '\n')
+        return text[text.index('include library'):].rstrip().replace('\n', '\r')
     start = incl.index('// --- verify (shared')
     end = incl.index('// --- end verify ---') + len('// --- end verify ---')
     lines = ['/*',
@@ -159,7 +162,9 @@ def mac_test_source(private, public):
              ' */',
              '',
              'include "NSLog.incl"',
-             'include "Tlbx Security.incl"',
+             '// the Security declarations, as src/AppBuilder/Licence Security.incl has them (any FutureBasic, with or without its own',
+             '// Tlbx Security.incl)',
+             security_declarations(),
              '',
              incl[start:end].replace('\n', '\r'),
              '',
