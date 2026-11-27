@@ -514,6 +514,9 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
 
 ## 13. Opening projects again
 
+- **Welcome page:** the Imagery logo and the product's name at the top; below them, Create Project, Open Project
+  and your recent projects. With a project open, the heading shows the project's icon (its picture or symbol from
+  Project Settings) and its name.
 - **Welcome page:** double-click a recent project. *Project → Recent Projects* returns to it;
   *Clear Recent Projects* empties the list.
 - **Open Project…** (⇧⌘O): choose a project's `Project.json` in the workspace.

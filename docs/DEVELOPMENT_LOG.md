@@ -30,6 +30,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   language, so the user gets a sense of what they're about to see"): short paragraphs, then **The rules, in plain
   words** - each rule in `Rules.incl` as one sentence, grouped item / order / customer - then **What you will see**
   (the thirteen steps, and the buttons). `StoryIntro`, `StoryRule` in `Story.incl`.
+- **The Studio's Welcome page** (author, a screenshot: "the heading is redundant on the welcome page, and the Imagery
+  logo should not be inside the box ... heading, then working part of the app"): the logo, the product's name and the
+  tag-line ("Business rules and native Mac apps from your data model", no longer repeating "for FutureBasic") are the
+  page's own heading, above the box; the box holds Create Project, Open Project and Recent Projects. The window's
+  heading hides while the Welcome page shows (`StudioUpdateCrumbs`), and the page takes its place (`FitWelcomeView`).
+  Project pages: the project's icon and name, no Imagery logo (author: "each project should have an ICON"): its
+  picture from Project Settings, else its SF Symbol (`ProjectIconImage`, `ProjectShowHeading`), updated when
+  Project Settings is closed.
 - **The generated app's header** (author: the suggested icon does not show; the title should be centred on the icon):
   the app name is centred up and down on the icon, tag-line or not; the tag-line sits under it, smaller (11 pt); the
   symbol is drawn at 34 points (`ImageWithSymbolConfiguration`), not stretched from its text size. Waiting on the Mac.
