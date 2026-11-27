@@ -11,7 +11,7 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│ © Company  │ |< <  Customer 3 of 91  > >|  Saved.                     [Save]  │  footer
+│ © Company  │ |< <  Customer 3 of 91  > >|  Saved.                             │  footer
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -24,8 +24,11 @@ Every app generated from a SQLite project opens in the same frame:
   The copyright sits at the foot of the navigation bar, in small type.
 - **Toolbar** (author, 2026-11-27; `App Toolbar.incl`): FB's `toolbar` and `toolbaritem`, so each item has a tag and
   sends `_toolbarItemClick`. **Search** is first (`magnifyingglass`), its label following the page ("Search
-  Customers": `AppToolbarShowPage`); then a flexible space and **New**, **Delete**, **Refresh**, moved out of the
-  footer. FB has no search item, so clicking Search opens our own search field, a small Cocoa popover under the item
+  Customers": `AppToolbarShowPage`); then a flexible space and **New**, **Save**, **Delete**, **Refresh**, moved out of the
+  footer. The items know the context (`AppToolbarSetEnabled`, autovalidation off): Save only with a change in the Form
+  (`AppPageHasChange`: the Form read now differs from the Form as it was shown, `gAppPageClean`, taken after a record
+  is shown and after the lookups fill in), Delete only with a record shown. They are updated after every event
+  (`AppPagesDoDialog` wraps the handler) and at every keystroke in the Form (`AppToolbarWatchEdits`). FB has no search item, so clicking Search opens our own search field, a small Cocoa popover under the item
   (`AppToolbarSearchPopover`); each keystroke calls `AppPageSearchChanged` (App Pages.incl), which narrows the List to
   the records holding every word (`Record Search.incl`: any case, any accent) and keeps the navigator on those. A new
   page clears the search. The toolbar can be customised and its arrangement is saved.

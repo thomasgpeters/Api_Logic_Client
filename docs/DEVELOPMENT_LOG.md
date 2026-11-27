@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Save in the toolbar; the toolbar knows the context
+
+- **Author:** Save in the toolbar too; the toolbar's buttons context-aware: Save only when there is a change (the
+  dirty bit), Delete only when a record is in focus. The navigator stays in the footer, below the list.
+- Save moved to the toolbar (the footer now holds the navigator and the status line). `AppToolbarSetEnabled` (App
+  Toolbar.incl) with the items' autovalidation off. The dirty bit is a comparison, not a flag: `gAppPageClean` is the
+  Form read just after a record is shown (and again after its lookups fill in); `AppPageHasChange` reads the Form
+  now and compares, so undoing an edit dims Save again. `AppPagesDoDialog` now wraps the handler
+  (`AppPagesHandleDialog`) and updates the toolbar after every event; `AppToolbarWatchEdits` (Cocoa,
+  NSControlTextDidChangeNotification) at every keystroke. Waits for a Mac build.
+
 ## 2026-11-27 — Studio: Generate App's progress sheet
 
 - **Author:** Generate App needs a confirmation, a progress dialog with the steps enumerated, the bar moving forward
