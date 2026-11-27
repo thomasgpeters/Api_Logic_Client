@@ -119,7 +119,7 @@ mode work without extra code).
   `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),
   `models_py_reference.py` (an ALS project's `database/models.py` read as text; test: against SQLAlchemy),
   `als_project_reference.py` (the Open ALS Project screen: folders, files, GitHub, the Studio model),
-  `pages_reference.py` (the page designer, Professional: `Pages.json`, the links proposed on a drop, a page resolved; `tools/fixtures/northwind.sql`),
+  `pages_reference.py` (the page designer, Professional: `Pages.json`, associations and links proposed, a page resolved, the page flow diagram; `tools/fixtures/northwind.sql`),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 - `samples/<Name>/` — the sample applications (author, 2026-11-26), one use case each: `Telecom` (a mobile carrier's travel

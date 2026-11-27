@@ -6,6 +6,23 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Associations and the page flow diagram
+
+- **Author:** a page flow diagram (Show Page Flow Diagram: the application's logical flow between the pages); and
+  associations as proper objects: named, with their direction and cardinality (one to many, many to many, one to one).
+- `tools/pages_reference.py`: an association is `{ name, how, cardinality, relationship, fks, parentKeys, through }`
+  (a part's follows; a page's links add fromPart and page). Cardinality from the keys: children one to many (one to
+  one when the foreign key is the child's whole key), parent many to one, the same record one to one, a join table
+  many to many. `join_tables`: two foreign keys to two tables that are, together, the primary key -
+  EmployeeTerritories, CustomerCustomerDemo, and Order Details (Orders and Products: "the orders that include this
+  product"); many-to-many links come after every direct one. Names: *Customers to Orders*, *Orders to Shippers
+  (ShipVia)*, *... (through EmployeeTerritories)*, *Orders, the same record*.
+- `page_flow_svg`: the diagram (pages as cards with their parts, arrows labelled with name and cardinality, back
+  links in lanes under the cards, light and dark); `--flow Pages.json`, `--flow-example` ->
+  `docs/design/Page Flow Example.svg`. Looked at in Chromium, light and dark, and laid out again after the first
+  look (back links had crossed the cards). 58 checks.
+- Design: "Associations" and "The page flow diagram" in `design/Page Designer Design.md`.
+
 ## 2026-11-27 — The page designer: links between pages
 
 - **Author:** drag and drop a relationship between pages; the first thing shown is the relationship between the two

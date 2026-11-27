@@ -23,7 +23,8 @@ toolbar on the part with the focus; the same entity twice on a page later; the W
   - **Detail** (the author's "scalar"): one record in a Form;
   - **List**: many records in a grid (with the tiles switch, as now);
   - **List with detail**: a List and, below it, the Form of the row chosen (today's page, as one part).
-- **Link**: how a part's records follow another part on the page, from the model's relationships.
+- **Association**: a named, directed link between two parts of a page, or from a part to another page, riding on a
+  relationship of the model, with its cardinality (below). A part's *follows* and a page's *links* are associations.
 - **Driver**: the part whose current record the others follow. The record navigator moves the driver.
 
 ## The designer (Studio for FB)
@@ -63,6 +64,7 @@ foreign key: `fks`) and `tomany` on the parent (`parentKeys`). When entity B is 
 | A has a foreign key to B (B is A's parent: Order -> Customer) | B **follows** A: B is A's parent | B (Detail) shows the parent of the current A |
 | Several relationships (Order -> Employee twice: taken by, approved by) | the first, with a choice | the sheet lists them by name (`toone` / `tomany` names) |
 | None directly, but through a part already linked | linked to that part instead | |
+| A join table between them (EmployeeTerritories: Employees and Territories; Order Details: Orders and Products) | after every direct one: B **through** the join table | B shows the rows joined to the current A |
 | None | *Not linked* | B has its own navigator-free list or detail |
 
 The first part dropped is the page's **driver**: its record comes from the navigator (and the search). A part that
@@ -74,6 +76,24 @@ The author's "parameter to set the current record in focus": a Detail part's rec
 - the part it follows (a parent, or the row chosen in a List of the same entity),
 - *(later)* a fixed filter (a status, the signed-in user), or a value passed from another page (drill-in).
 
+## Associations: named, directed, with a cardinality
+
+Author, 2026-11-27: "a proper association object within the system that understands the relationship and the direction
+of the relationship, so one to many, many to many, one-to-one", with a name.
+
+| Cardinality | From the current record of the source, the target shows | Comes from |
+|---|---|---|
+| one to many (1 : n) | its children (a customer's orders) | the target holds the foreign key |
+| many to one (n : 1) | its parent (an order's customer) | the source holds the foreign key |
+| one to one (1 : 1) | the same record; or the child whose foreign key is its whole primary key | the same entity, or such a key |
+| many to many (n : n) | the rows joined to it (an employee's territories; the orders that include a product) | a join table: two foreign keys that are, together, its primary key |
+
+Every association has a **name**, proposed and the developer's to change: *Customers to Orders*, *Orders to Shippers
+(ShipVia)* when the foreign key plays a role, *Employees to Territories (through EmployeeTerritories)*, *Orders, the
+same record*. Its **direction** is from the part or page it starts at to the one that receives the record. In
+`Pages.json` an association is `{ name, how, cardinality, relationship, fks, parentKeys, through }`, plus `part` (on a
+part: the part it follows) or `fromPart` and `page` (on a page: the link to another page).
+
 ## Links between pages (drill-in)
 
 Author, 2026-11-27: "we need to be able to drag and drop a relationship or an association between pages; first thing
@@ -84,23 +104,39 @@ those pages."
   pages (`page_associations`): from each part of the first page to the second page's driver (the part that receives
   the record), the proposed one first, each in words - *"Customers -> Orders: the customer's orders"*, *"Order
   Entry (its order) -> Customers: the order's customer"*, *"Order Entry (its Customers part) -> Customers: the same
-  customer"*. Choose one, give it a label (proposed: the other page's title, or the relationship's name for a
-  parent), and it is saved as one of the first page's `links`. Nothing in common: the sheet says so and nothing is
+  customer"*. Choose one, name it (the proposed name, the developer's to change), and it is saved as one of the
+  first page's `links`, an association with its cardinality. Nothing in common: the sheet says so and nothing is
   saved. A page can have several links; they are listed, and removed, on the page in the designer.
 - **In the generated app:** the part a link starts from has a *Go to* button in its card's title row (several links:
-  a menu), labelled with the link's label. It opens the other page for the part's current record: its driver shows
+  a menu), labelled with the association's name. It opens the other page for the part's current record: its driver shows
   that record's children (Customers -> Orders: VINET's orders, the navigator over them, "Order 1 of 1"), its parent
   (Orders -> Customers: the order's customer), or the same record. The crumb trail at the top shows where you came
   from (*Customers / VINET / Orders*) and goes back; the header's Back button too. The other page opened from its
   navigation-bar button shows all its records, as before.
-- In `Pages.json`: `links: [ { page, fromPart, how, relationship, fks, parentKeys, label } ]` on the page they start
-  from (the format in `tools/pages_reference.py`).
+- In `Pages.json`: `links: [ { name, page, fromPart, how, cardinality, relationship, fks, parentKeys, through } ]` on the
+  page they start from (the format in `tools/pages_reference.py`).
 
 Tested (`tools/pages_reference.py`): Customers -> Orders (VINET: 10248), Orders -> Customers (10249: Toms
 Spezialitäten), Order Entry -> Customers (from the order, and the same record from its Customers part), Order Entry
 -> Products (the line chosen, and its Products part), Products -> Order Entry and Categories -> Orders (nothing in
 common), Categories -> Products; the check reports a link to a missing page, to its own page, or along a
 relationship that does not exist.
+
+## The page flow diagram
+
+Author, 2026-11-27: "the developer should be able to select Show Page Flow Diagram and they should see the
+application's logical flow between the pages": page names, relationships, associations.
+
+- **Model > Show Page Flow Diagram** (beside Show Model Diagram; Professional): writes `<project>/Page Flow.svg` from
+  `Pages.json` and opens it, as the model diagram opens.
+- **What it shows:** each page a card (its title, then its parts: entity, display, and what each follows with its
+  cardinality: *Customers Detail · n : 1 from Orders*); an arrow for each link between pages, from the part it starts
+  at to the page it opens, labelled with the association's name and cardinality. Pages in columns by how far they
+  are from the first page along the links; a link back to an earlier page runs in its own lane under the cards. Light
+  and dark mode follow the viewer.
+- The example (Northwind: Customers, Orders, the invoice page, Products): `Page Flow Example.svg`, drawn by
+  `python3 tools/pages_reference.py --flow-example`; any project's by `--flow <project>/Pages.json`. The reference
+  is `page_flow_svg`; the Studio's is its FB port (an SVG is text: FB writes it as the ERD generator writes its page).
 
 ## The invoice, as an example
 
@@ -129,10 +165,11 @@ OrderDetail adds a line to the current order (its OrderId filled in); the rules 
 1. **Done:** `Pages.json` and the link rules, with a Python reference (`tools/pages_reference.py`, the format in its
    header) tested on a Northwind fixture (`tools/fixtures/northwind.sql`: the classic schema and foreign keys, a few
    rows) and the three samples: the invoice page built from drops and resolved for an order; every relationship
-   offered both ways.
+   offered both ways; associations with their names and cardinalities, many to many through join tables; links
+   between pages; the page flow diagram.
 2. The designer in Studio for FB (Cocoa drag and drop: the palette as a drag source, the page as a drop target;
-   the sheet on drop; a page dragged onto another, the sheet of their relationships). The links between pages are in
-   phase 1's reference already.
+   the sheet on drop; a page dragged onto another, the sheet of their associations; Show Page Flow Diagram). The
+   associations, the links between pages and the diagram are in phase 1's reference already.
 3. Parts with a tag base (XIB and binding generators); today's pages regenerated the same way, so nothing changes
    for a project without `Pages.json`.
 4. The generated app: pages of parts, linking, the focus; the links between pages (Go to, the crumb trail, Back).
@@ -146,3 +183,5 @@ OrderDetail adds a line to the current order (its OrderId filled in); the rules 
 3. The same entity twice on a page (an employee and their manager): later.
 4. The Web Toolkit shares `Pages.json`: later.
 5. Professional edition only.
+6. Associations are first-class: named, directed, one to many / many to one / one to one / many to many.
+7. Show Page Flow Diagram: an SVG of the pages and the associations between them.
