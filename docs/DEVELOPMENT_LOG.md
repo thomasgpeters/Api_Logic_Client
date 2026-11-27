@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — No stripes: plain rows, a super-light line between them
+
+- **Author:** "you took the liberty to set alternating row backgrounds. I don't like it, because it creates strips."
+  Undone everywhere, and the generated Lists' own stripes too: the XIB generator no longer writes
+  `alternatingRowBackgroundColors`; `StudioTableStyle` (Studio) and `ShellListHeadings` (generated Lists) set plain rows
+  with a horizontal line at 6% of the label colour (the look the author asked for on the Welcome list), the larger
+  headings kept. Lesson: the one style for every table was the author's to choose - asked for consistency, I picked the
+  generated Lists' stripes without asking.
+
 ## 2026-11-27 — One table style everywhere
 
 - **Author:** "match the grid on the welcome screen with the other grids in the app ... a little funny to have all those
