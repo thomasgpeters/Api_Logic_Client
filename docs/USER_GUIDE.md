@@ -68,8 +68,8 @@ title and explains when you choose it.
    and below them a card with your **Recent Projects** (double-click one to open it),
    **Open Project…** and **Create Project**.
 
-The window resizes freely, down to 1000 × 620. The entity list runs down the left, and the page
-beside it changes as you work. With a project open, the heading shows the project's icon and name.
+The window resizes freely, down to 1000 × 620. Once a project is open, its entity list runs down the left and the
+page beside it changes as you work; until then, the Welcome page uses the whole window.
 
 ## 4. Creating a project
 

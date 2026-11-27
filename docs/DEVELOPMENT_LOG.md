@@ -11,6 +11,9 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 - **The alert** (author, at launch): the cards were set up by the tags 110 and 111 given to their boxes in the XIBs;
   an NSBox is not a control, so the tags never reach it. Now `StudioCardAround` finds each box from a control inside
   it (the Recent Projects table, the form's Project Name field) and styles it. Rule added to FB Coding Rules.
+- **The entity list only with a project open** (author: "not needed until the user actually opens a project ... the
+  welcome screen should fill the whole working area"): `StudioLayoutForProject` (Menus.incl, run with the crumb trail)
+  hides the list and its + / - without a project, and moves the pages, the crumb trail and the heading to the left.
 
 ## 2026-11-27 — Documentation cleanup (author: "remove redundancies and fix wording to be professional but warm and readable")
 
