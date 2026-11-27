@@ -34,6 +34,7 @@ include "SQLite Model.incl"
 include "ALS Model.incl"
 include "Type Mapping.incl"
 // "Generators" 1
+include "Generate Progress.incl"
 include "XIB Generator.incl"
 include "Binding Generator.incl"
 include "Studio Library.incl"

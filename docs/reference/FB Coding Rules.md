@@ -177,6 +177,28 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
 17. **FB source uses CR line endings**; XIB and JSON use LF. The generator
     converts its FB output to CR (`AppWriteSource`).
 
+## Style (2026-11-27)
+
+The FutureBasic editor indents the code and colours it as it shows it, so these rules are for what stays in the file:
+how it reads to someone who opens it in another editor (VS Code, GitHub, a diff). They hold for hand-written and
+generated code alike, and `fblint` reports each one ("style: ...").
+
+- **A header in every file:** a comment at the top naming the file and saying what it holds -
+  `/* *   Name.incl - what it is ... */`. Files shared publicly (the runtime, the free modules, the examples) add the
+  Imagery banner and the licence line. Generated files may start with a `//` line instead.
+- **Spaces inside the parentheses of a call and of a condition:** `fn ControlSetStringValue( tag, text )`,
+  `if ( isLoggingOn ) then`, `while ( i < n )`; none before the parenthesis: `fn Name( a )`, not `fn Name (a)`.
+  An empty call stays `fn Name()`; a cast stays `(long)fn ArrayCount( x )`.
+- **No tabs:** spaces only. Lines that line up (constants, `case _x : ...`, declarations) are lined up with spaces.
+- **A space after `//`**, and no trailing spaces.
+- **No commented-out code:** delete it; git keeps it. Comments that show an example (`// Name = Column(...)`) stay.
+- **Names:** functions in PascalCase with their file's prefix (`Shell...`, `Record...`, `AppPage...`); globals start
+  with `g`; constants with `_` (`_shellNavWidth`); locals in camelCase. Not checked by `fblint`; followed throughout.
+- **Two blank lines between functions; a comment above each that is not obvious from its name**, saying what it is
+  for, in plain words.
+- Not checked: `cln` lines and `BeginCFunction` blocks (Objective-C / C, written as Apple's code is), the FB editor's
+  own CleanApp project, and FutureBasic's `Tlbx` files (the FB team's code).
+
 ## Headers newer than the author's FutureBasic (2026-11-27)
 
 FutureBasic_Documentation's `Toolboxes/Headers` can be newer than the FutureBasic on the author's Mac. `Tlbx Security.incl`

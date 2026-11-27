@@ -6,6 +6,225 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — One coding style, checked
+
+- **Author:** make sure every lint test works, and one consistent coding style throughout the application and the
+  generated apps, for other developers reading it (the FB editor indents and colours; the style is for other editors).
+- **Measured first** (146 FB files): the style was already the majority - 7,350 calls with spaces inside the
+  parentheses against 5 without, 2,782 `if ( ... )` against 77 `if (...)`, 103 files with the banner, 89 with a
+  header block. The outliers were the oldest Studio files (EventHandlers, API Interface) and the shared modules' logging
+  lines.
+- **Fixed** (a fixer that leaves strings, comments, `cln` lines and C blocks alone): `if ( x )` in 77 places, calls
+  spaced, `fn Name (` -> `fn Name(`, `//text` -> `// text`; tabs replaced by spaces with each run of tab-aligned lines
+  kept as a table (constants, `case` lines, declarations, the `nibview` lines); 10 files given a header (the Studio's
+  main program, EventHandlers, Validations, My Globals, Windows; the examples' main programs); dead code removed (the
+  CRM's Person / Address / Contact calls left in EventHandlers, a test query in Project Actions); two functions
+  nothing called removed (`ShowdProjectCreateView`, and `ShellFooterButton` now the footer's buttons are in the
+  toolbar). The generators' code templates checked: already in style.
+- **fblint** reports the style (`style_problems`): a header comment, a tab, a call's or a condition's parentheses
+  without spaces, a space before a call's parenthesis, `//` without a space, trailing spaces; strings, `cln`, C
+  blocks, CleanApp and FB's `Tlbx` files exempt. Tried on a file written badly on purpose: every rule reported, text
+  in strings left alone. The rules: FB Coding Rules, "Style"; CLAUDE.md.
+- **Test_Xib_View** (a412db2): the same fixes and headers; the SQL Generator module synced (identical again).
+- **Generated files:** Model Tags.incl now starts with a header (the XIB generator); the bindings, App Pages and
+  Studio Rules already did. `check_app_pages` lints them with the style rules. `run_tests.sh`: every lint clean
+  (the generator and runtime, Test_Xib_View, the logic test project, the samples, the generated pages).
+
+## 2026-11-27 — The site: Lite and Professional compared
+
+- **Author:** a page on the site's App Builder pages comparing the Lite and Professional editions, feature by feature.
+- `tools/make_site.py`: `EDITION_FEATURES` (one list: groups, features, Lite, Professional, status) ->
+  `app-builder/editions.html`, linked from the App Builder page ("Compare the editions"). Each feature carries an
+  honest status - Available (built and tried on a Mac), In testing (built, waiting for the Mac), In development,
+  Planned - kept true with `design/Editions Design.md` and the roadmap; no prices. The page designer and the links
+  between pages are Professional. Looked at in Chromium, light and dark; no sideways scroll at phone width.
+
+## 2026-11-27 — Associations and the page flow diagram
+
+- **Author:** a page flow diagram (Show Page Flow Diagram: the application's logical flow between the pages); and
+  associations as proper objects: named, with their direction and cardinality (one to many, many to many, one to one).
+- `tools/pages_reference.py`: an association is `{ name, how, cardinality, relationship, fks, parentKeys, through }`
+  (a part's follows; a page's links add fromPart and page). Cardinality from the keys: children one to many (one to
+  one when the foreign key is the child's whole key), parent many to one, the same record one to one, a join table
+  many to many. `join_tables`: two foreign keys to two tables that are, together, the primary key -
+  EmployeeTerritories, CustomerCustomerDemo, and Order Details (Orders and Products: "the orders that include this
+  product"); many-to-many links come after every direct one. Names: *Customers to Orders*, *Orders to Shippers
+  (ShipVia)*, *... (through EmployeeTerritories)*, *Orders, the same record*.
+- `page_flow_svg`: the diagram (pages as cards with their parts, arrows labelled with name and cardinality, back
+  links in lanes under the cards, light and dark); `--flow Pages.json`, `--flow-example` ->
+  `docs/design/Page Flow Example.svg`. Looked at in Chromium, light and dark, and laid out again after the first
+  look (back links had crossed the cards). 58 checks.
+- Design: "Associations" and "The page flow diagram" in `design/Page Designer Design.md`.
+
+## 2026-11-27 — The page designer: links between pages
+
+- **Author:** drag and drop a relationship between pages; the first thing shown is the relationship between the two
+  pages, from the relationships of their entities.
+- `tools/pages_reference.py`: `page_associations( model, a, b )` (from each part of a to b's driver: children,
+  parent, the same record; the proposed one first), `resolve_link` (b's driver records for a's current record), a
+  page's `links` in `Pages.json` and in the check. 13 more checks (49 in all): Customers -> Orders, Orders ->
+  Customers, the invoice page to Customers and to Products, pages with nothing in common, the check's three new
+  reports. The design (`design/Page Designer Design.md`, "Links between pages"): the sheet in the designer; Go to in
+  the part's card, the crumb trail and Back in the generated app.
+
+## 2026-11-27 — The page designer, phase 1: Pages.json and the links
+
+- **Author:** the proposals accepted (Detail / List / List with detail; the toolbar on the part with the focus; the same
+  entity twice later; the Web Toolkit later); the page designer is **Professional only** (Lite keeps one page per
+  entity and ignores `Pages.json`).
+- `tools/pages_reference.py`: the `Pages.json` format (pages, parts with a display and what they follow), the links
+  proposed on a drop (`children` / `parent` from the model's `toone` / `tomany`, `same` for a Detail of a List's
+  row; parts in page order, the driver first), the default pages, the check, a page resolved from a driver record.
+  `tools/fixtures/northwind.sql`: the classic Northwind schema with its foreign keys (13 tables, `Order Details` with
+  its space, `Orders.ShipVia` -> `Shippers`) and a few rows. 36 checks: the invoice page built from drops and
+  resolved for 10248 (its customer, three lines, the first line's product, Buchanan, Federal Shipping) and 10249 (a
+  line whose product is missing shows none); every relationship of Northwind and the samples (12, 34, 21, 18) offered
+  both ways. In `run_tests.sh`.
+- Next: phase 2, the Pages view in the Studio.
+
+## 2026-11-27 — The page designer, designed
+
+- **Author:** pages composed by dropping entities from a palette, each asked for its display (a list or a "scalar",
+  one record), linked to what is already on the page through the relationship, as an invoice page holds several
+  object types. This is the "new layout manager" asked for earlier (the backlog item now says so).
+- `design/Page Designer Design.md`: pages and parts (Detail, List, List with detail), links proposed from the
+  model's `toone` / `tomany` relationships, the driver and the parts that follow it, the invoice example, what the
+  generated app needs (above all: a part generated per page with its own tag base, the binding taking the base), five
+  phases, four open decisions. Nothing built yet.
+
+## 2026-11-27 — The search dialog; a separator in the toolbar; a scrolling navigation bar (6b9fa7d)
+
+- **Author:** a scrolling navigation bar (the full Northwind, about twenty tables); a separator keeping Search apart
+  from the record actions; Search opening a dialog: *Search by* a field from a dropdown, and the value in a text box,
+  a date picker (a little calendar) for a date field, and, for a field with distinct values such as a type, a
+  second dropdown of those values - dynamic, for every field type, built into the generated app.
+- **Search dialog** (App Toolbar.incl, Cocoa popover): the field popup (Any Field + the page's fields), then a
+  search field, a value popup or a graphical date picker (`NSDatePickerStyleClockAndCalendar`, year-month-day).
+  Distinct values come from the page's records: at most 15, each used more than once on average; keys and parents
+  get a text box (their values are numbers). Queries `{ field, mode, text }`; `RecordSearchQuery` (Record
+  Search.incl): text (every word, in that field or any), value (exact), date (that day: the value starts with
+  yyyy-mm-dd). Generated: `AppPageSearchFields` per page (`AppSearchFieldsLiteral`: kind date / key / text from the
+  control kind, the SQL type, the key and the lookup), `gAppPageQuery`.
+- **Separator:** a toolbar item whose view is a vertical `NSBoxSeparator` box (`ToolbarItemSetView`).
+- **Navigation bar:** `ShellNavScroll` moves the entity buttons and the highlight into an NSScrollView with a
+  flipped document view (Cocoa, `ShellNavScrollViews`) the first time a page is shown; `ShellNavItemY` measures
+  from the list's top then; the page's button is scrolled into view. Test scenarios G-01a, G-02b. Waits for a Mac
+  build.
+
+## 2026-11-27 — The navigator in the tiles; the list and toolbar checked against FB's reference
+
+- **Author:** check the list view's selection (-1 when nothing is selected, else from 0), the callbacks available
+  for the list view and the toolbar; make the navigator work in the tiles view, with a ring round the selected tile.
+- **Checked** (FutureBasic_Documentation): `TableViewSelectedRow` wraps Cocoa's `selectedRow` (-1 with none,
+  rows from 0); `TableViewClickedRow` the same for a right-click or double-click. The table events FB's reference
+  documents for apps are `_tableViewSelectionDidChange` (we use it: a row clicked or the arrow keys) and
+  `_tableViewDoubleAction`; the header lists more delegate events (`_tableViewShouldSelectRow`,
+  `_tableViewSelectionShouldChange`, ...) with no documented way to answer them. The toolbar has
+  `_toolbarItemClick` (we use it) and `_toolbarItemValidate` (no documented answer either, so the items'
+  autovalidation is off and `AppToolbarSetEnabled` sets them).
+- **Tiles:** `RecordTilesSelect( page, index )` (Record Tiles.incl): the ring (3 pt, the accent colour) moves to the
+  tile and the tiles scroll to show it. `AppPageGoTo` calls it, so the navigator, a tile click, a row click, the
+  search and a list arriving all move it; New clears it. `TilesMark` now through Cocoa. Test scenario G-05.
+
+## 2026-11-27 — Save in the toolbar; the toolbar knows the context
+
+- **Author:** Save in the toolbar too; the toolbar's buttons context-aware: Save only when there is a change (the
+  dirty bit), Delete only when a record is in focus. The navigator stays in the footer, below the list.
+- Save moved to the toolbar (the footer now holds the navigator and the status line). `AppToolbarSetEnabled` (App
+  Toolbar.incl) with the items' autovalidation off. The dirty bit is a comparison, not a flag: `gAppPageClean` is the
+  Form read just after a record is shown (and again after its lookups fill in); `AppPageHasChange` reads the Form
+  now and compares, so undoing an edit dims Save again. `AppPagesDoDialog` now wraps the handler
+  (`AppPagesHandleDialog`) and updates the toolbar after every event; `AppToolbarWatchEdits` (Cocoa,
+  NSControlTextDidChangeNotification) at every keystroke. Waits for a Mac build.
+
+## 2026-11-27 — Studio: Generate App's progress sheet
+
+- **Author:** Generate App needs a confirmation, a progress dialog with the steps enumerated, the bar moving forward
+  as each part is generated; "Generated" at the end and a Done button; no closing it while it generates.
+- **`Generate Progress.incl`** (new, before the generators in the build order): a Cocoa sheet on the Studio's window
+  with nine steps (screens, binding code, runtime and templates, model and About, main program and project file,
+  starting files, App Pages, runtime files, business rules), each marked waiting / under way / done / failed, a
+  determinate bar, the message and Done (dimmed until the end; Return closes it). Generation runs on the main
+  thread, so the sheet is redrawn after each step and held 0.18 s (the run loop in the modal-panel mode: no events
+  are handled meanwhile). `AppGenerate` calls `GenerateProgressStep( n )`; it does nothing for the other Generate
+  commands, which show no sheet. Waits for a Mac build.
+
+## 2026-11-27 — Studio: the Welcome list without its box
+
+- **Author:** "I don't like the square box at all": the Recent Projects list should be transparent, with super-light
+  grid lines, on a card shaded a little lighter than the window in dark mode and a super-light grey in light mode.
+- `StudioQuietTable` (Branding.incl): the table's and scroll view's backgrounds cleared, no border, horizontal grid
+  lines at 6% of the label colour. `StudioCardColor` is now worked out from the window's own background (3.5% darker
+  in light mode, 7% lighter in dark), so it always stands apart from it. Waits for a Mac build.
+
+## 2026-11-27 — The generated app's toolbar and search
+
+- **Author:** a toolbar at the top of the window, customisable as Mac toolbars are; its first item Search, linked to
+  the object in focus ("Search Customers", "Search Products"); then, on the author's direction, FB's own toolbar items
+  (tags, click events) with icons, a magnifying glass for Search, and New and Delete moved from the footer into it.
+- **`App Toolbar.incl`** (runtime): `toolbar` / `toolbaritem` with SF Symbols (Search, flexible space, New, Delete,
+  Refresh), customisation and autosave on. FB has no search toolbar item, so Search opens a Cocoa popover with an
+  NSSearchField under the item (`showRelativeToToolbarItem:`, macOS 14+; the apps need 15). Its label follows the
+  page (`AppToolbarShowPage`, with a plural: Category -> Categories).
+- **`Record Search.incl`** (runtime): `RecordSearchFilter`: every word of the search in some value of the record,
+  Finder-style (`StringLocalizedStandardContainsString`).
+- **App Pages** (generated): `gAppPageSearch`, `gAppPageShown` (the List's records: those that match);
+  `AppPageSearchChanged` as you type (the List, the navigator, "5 of 91 match"); the toolbar's clicks; a new page
+  clears the search. Rows, tiles and the navigator all work on the records shown.
+- **Footer:** Save only, under the Form (New, Delete, Refresh are in the toolbar; all four in the Records menu).
+- Test scenario G-02b. Waits for a Mac build. A first version built the whole toolbar in Cocoa (an
+  NSSearchToolbarItem); replaced, before commit, by FB's toolbar items at the author's direction.
+
+## 2026-11-27 — The record navigator
+
+- **Author:** the generated app should behave like a record navigator: the first item of a List selected (as the
+  Studio's entity list is), the List focused and that row loaded; buttons at the bottom to move one record at a time,
+  Previous dimmed at the start, Next at the end; the footer naming the entity and the record count.
+- **The footer** (App Shell.incl): First, Previous, *"Customer 3 of 91"*, Next, Last at its left (SF Symbols,
+  borderless), then the status line, then New / Save / Delete / Refresh. The copyright moved to the foot of the
+  navigation bar. `ShellSetNavigator` (the label and which buttons apply), `ShellSelectRow` (select, scroll, focus),
+  `ShellSetEnabled`, all through Cocoa.
+- **The pages** (App Pages.incl, generated): `AppPageGoTo( row )` selects, shows and updates the navigator;
+  `AppPageChooseRow` runs when a list arrives: the record that was showing (after Save or Refresh), the new one
+  (after adding: the one not in the list before), the one in the deleted record's place, else the first. A row
+  clicked, the arrow keys or a tile clicked move the navigator too. The "91 records" status message is gone (the
+  navigator shows the count).
+- Test scenario G-02a. Waits for a Mac build.
+
+## 2026-11-27 — The info button is off until a parent is chosen
+
+- **Author:** "If no related record is chosen disable the info button so that you never see the dialogue. Intuitive."
+  `RecordPopoverRefresh` (Record Popover.incl) turns each lookup's info button on only while its field has a parent
+  chosen; App Pages calls it after a record is shown (`AppPageShowRecord`: also New and after a delete), after a
+  lookup's rows arrive (`AppPageFillLookup`) and after any click (a Dropdown's choice). An auto-complete updates its own
+  button as a match is chosen, the text is cleared, or a record is shown (`updateInfoButton`). The "No Customer chosen"
+  popover is gone.
+- The click path no longer uses any FB tag function: the chosen record, its title, the button's look all through
+  Cocoa (`ShellFindView`), so "View does not exist" cannot come from it.
+
+## 2026-11-27 — Right-click menus; a Project menu that follows the page
+
+- **Author:** "the Project menu needs to better understand context. Also, right-click on a project should display a menu
+  to delete the project, or open the project ... people expect these type of thing when using a mac app."
+- **Right-click menus** (FB's `ResponderSetMenu` on the list, as FB's *View Contextual Menu* example; menus 101 and 102,
+  not in the menu bar): a project in Recent Projects (Open, Show in Finder, Remove from Recent Projects, Delete
+  Project...) and an entity in the Objects list (Generate XIB, Show Model Diagram). The row right-clicked is selected
+  first (`ContextRow`, `TableViewClickedRow`), so the page and the menu bar agree with it.
+- **The Project menu names its target:** on the Welcome page the project selected in Recent Projects, elsewhere the
+  open one (`StudioRecentTargetRow`); Delete, Show in Finder and Close carry its name; a tick on the page showing;
+  Clear Recent Projects is dimmed when the list is empty. Before, Delete on the Welcome page deleted the open project
+  even with another selected. `ProjectDelete` split into `ProjectDeleteFolder` (the one place a folder goes to the Trash).
+- Test scenario B-08. Waits for a Mac build.
+
+## 2026-11-27 — The info button's popover: a tag-range clash
+
+- **Still no popover** (author). Not a scope problem: every page's Form and List are already loaded when the app opens
+  (`AppPagesBuild`, two `nibview`s per entity) and hidden until their page is shown. The click was taken earlier in
+  `AppPagesDoDialog`: `BindingRadioClicked` claimed every tag from 30000 to 59999 as a radio button, and the lookups'
+  info buttons are 40000 + the field's tag, so it answered "mine" and `RecordPopoverClicked` never ran. Radio buttons
+  now start at 100000 (`_xibRadioTagBase`, `_bindingRadioTagBase`) and their range ends at 199999, clear of everything
+  else. Regenerate the app (Generate App rewrites the XIBs with the new tags).
+
 ## 2026-11-27 — "Call to undeclared function 'StudioFindView'"
 
 - **The build error** (author): FB compiles a project in several chunks; a C function written only in `BeginCFunction`

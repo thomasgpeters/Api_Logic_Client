@@ -34,6 +34,7 @@ mode work without extra code).
   - `Licence.incl` — the licence: ES256, verified offline (Security framework; its calls declared at the top of `Licence.incl` itself, since FB's `Tlbx Security.incl` is newer than the author's FB), kept in the Keychain, `LicenceAllows( feature )`; `Licence Window.incl` — the Licence menu and window, `LicenceGate` on licensed commands (`docs/features/LICENSING_FEATURE.md`). Test keys only here (`tools/licence_test_keys`).
   - `Edition.incl` — which edition the Studio generates: Professional when the licence includes it.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
+  - `Generate Progress.incl` — Generate App's progress sheet (the steps ticked, a bar, Done when finished).
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
   - `Project Settings.incl` — the Project Settings view (`ProjectSettingsView.xib`): the About text (≤ 250 chars, the app's `Credits.rtf`) and branding (logo, tag-line, copyright for the app shell).
@@ -94,7 +95,7 @@ mode work without extra code).
   (from `workspace/Templates`, see above): `ERD/Model ERD.html` (the model diagram page), `Project/Settings2.plist`, `App/EventHandlers.incl`,
   `App/Menus.incl`, `App/Theme.incl` (the colours), `App/Rules.incl` (the app's business rules). `Windows.incl` is generated from the model the same way (only when missing).
 - `docs/research/` — domain research behind the samples (flight planning, customs clearance), with sources.
-- `docs/design/` — `Web Toolkit Design.md` (feasibility: a standalone web server and UI in FB, replacing Wt; proof: `src/MacTests/Web Server Test.fb`), `Free Modules Design.md` (the SQL Generator and LogicBank for FutureBasic: free, each with a sample app and the About Imagery window; App Builder licensed), `Derived Attributes Design.md` (a rule's attribute stored in the database or computed in memory), `Editions Design.md` (Lite and Professional: one app, two data layers, which rules belong to which edition), `Licensing Design.md` (one app, signed licences from the Imagery License Server, the Licence menu and upgrade), `AI Assistant Design.md` (rules as sentences in the model's names, translated by AI into LogicBank for FutureBasic and ALS's declare_logic.py; controls suggested), `Flight Service Filing Design.md` (Professional: the simulated FAA filing interface in ALS), `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
+- `docs/design/` — `Web Toolkit Design.md` (feasibility: a standalone web server and UI in FB, replacing Wt; proof: `src/MacTests/Web Server Test.fb`), `Free Modules Design.md` (the SQL Generator and LogicBank for FutureBasic: free, each with a sample app and the About Imagery window; App Builder licensed), `Derived Attributes Design.md` (a rule's attribute stored in the database or computed in memory), `Page Designer Design.md` (Professional: pages composed from entities, a List or a Detail each, linked by the model's relationships), `Editions Design.md` (Lite and Professional: one app, two data layers, which rules belong to which edition), `Licensing Design.md` (one app, signed licences from the Imagery License Server, the Licence menu and upgrade), `AI Assistant Design.md` (rules as sentences in the model's names, translated by AI into LogicBank for FutureBasic and ALS's declare_logic.py; controls suggested), `Flight Service Filing Design.md` (Professional: the simulated FAA filing interface in ALS), `App Shell Design.md` (the generated app), `Generator App Design.md` (the generator: workspace, settings, git), `Logic Engine Design.md` (LogicBank rewritten for FB: rules as FB code, the runtime engine, Imagery Logic Studio in the generator).
 - `docs/reference/` — `FB Coding Rules.md`, `FB Documentation Map.md`, `FB Reference Index.md`, `XIB Reference.md` (what a XIB is, FB's nib statements, how we write and check them).
 - `docs/design/architecture.svg` — the end-to-end diagram, drawn by `tools/make_architecture_svg.py` (edit the script, not the SVG).
 - `docs/controls/` — `Controls Catalog.md` (native controls, FB toolboxes, readiness).
@@ -118,6 +119,7 @@ mode work without extra code).
   `jsonapi_reference.py` (the SQL Generator's JSON:API side; test: same rows as SQL, against a server),
   `models_py_reference.py` (an ALS project's `database/models.py` read as text; test: against SQLAlchemy),
   `als_project_reference.py` (the Open ALS Project screen: folders, files, GitHub, the Studio model),
+  `pages_reference.py` (the page designer, Professional: `Pages.json`, associations and links proposed, a page resolved, the page flow diagram; `tools/fixtures/northwind.sql`),
   `run_tests.sh` (every check that runs without a Mac). How to run each test: `docs/TESTING.md`.
 - `samples/Northwind/metadata.json` — sample ALS `/metadata` response.
 - `samples/<Name>/` — the sample applications (author, 2026-11-26), one use case each: `Telecom` (a mobile carrier's travel
@@ -170,6 +172,9 @@ These apply to hand-written code **and to everything the generator emits**.
   back to CR before committing). XIB, JSON, SQL and Python use LF.
 - **A global does not keep its value alive** (FB's CF types are plain pointers): use a local when one function is enough;
   otherwise keep the value with the module's Kept fn (`LicenceKept`, `DataKept`, `WebKept`). `fblint` reports an object global set from a fn and not kept.
+- **Style** (for readers in other editors; the FB editor indents): a header comment in every file; spaces inside a
+  call's and a condition's parentheses (`fn Name( a )`, `if ( x )`); no tabs; a space after `//`; no commented-out code.
+  `fblint` reports each (`docs/reference/FB Coding Rules.md`, Style).
 - Logging is gated: every `NSLog` - errors too - is `if ( isLoggingOn ) then NSLog( ... )`. `isLoggingOn` is NO by default,
   declared in the app's own globals (generated apps: `App Globals.glbl`, a template; the Studio: `My Globals.glbl`;
   the examples: their `.glbl`). `fblint` reports an ungated `NSLog` (single-file `.fb` tests, whose output is their log, are exempt).

@@ -10,7 +10,10 @@ Every Dropdown that picks a parent record (a lookup: Order → Customer, Order �
 Department, Address → Person) has an **info button** (ⓘ) at its right. Clicking it opens a popover
 beside the button: the heading *"Customer: Alfreds Futterkiste"*, then the parent's fields - each
 Title and its value (values can be selected and copied). A click anywhere else closes it. With no
-parent chosen, the popover says *"No Customer chosen"*. Value-list Dropdowns have no info button.
+parent chosen the button is dimmed (author, 2026-11-27: "If no related record is chosen disable the info button
+so that you never see the dialogue"): `RecordPopoverRefresh` turns each one on or off after a record is shown, after a
+lookup's rows arrive and after a click; an auto-complete turns its own on and off as a match is chosen or the text
+cleared. Every view is reached through Cocoa (`ShellFindView`), never FB's tag functions. Value-list Dropdowns have no info button.
 
 ## How it works
 

@@ -167,7 +167,8 @@ What each control does:
   is written into the generated code. `Retail, Wholesale, Online` stores what it shows;
   `R = Retail, W = Wholesale, O = Online` stores the code (`R`) and shows the label (`Retail`).
   The first item is empty: no value. Beside a foreign key's Dropdown, an **info button** (ⓘ)
-  shows the chosen record's details in a popover, for example an Order's Customer.
+  shows the chosen record's details in a popover, for example an Order's Customer. It is dimmed
+  until a record is chosen.
 - **Auto-complete** (for a foreign key, or any attribute with a **Values** list): a text field that finds the related record, or the local value, as you type. The matches open in
   a list under the field (or above it, near the bottom of the window); choosing one shows its name and stores its key.
   When you choose it, a settings row appears under the Control popup: **Show** (the related record's field the user
@@ -198,7 +199,7 @@ Dates are stored as `1996-07-04`, times as `14:30:00`, and dates with times as
   header, its Dock icon and its About box. Select it and press Delete to remove it. **Without a
   picture, the symbol:** an SF Symbol for the header instead, with a preview beside it.
 - **Tag-line**: a short description under the app's name, up to 80 characters.
-- **Copyright**: the footer's text (`© <app name>` when empty).
+- **Copyright**: at the foot of the navigation bar (`© <app name>` when empty).
 
 **Done** saves everything in `Project.json`. The project's heading in App Builder shows the same
 icon, the picture or else the symbol.
@@ -235,6 +236,10 @@ every time, so an app always gets the runtime App Builder was built with.
 | Generate Binding Code | ⌘B | `<Entity> Binding.incl` for every entity |
 | Generate App | ⌘G | all of the above, plus the project, the main program, `Model.json`, `Credits.rtf`, the runtime and the starting files |
 
+*Generate App* shows its progress in a sheet: each step listed and ticked as it is done, a bar that moves with
+them, and at the end **Generated** and a **Done** button that closes the sheet. Done stays dimmed until it has
+finished. If a step fails it is marked in red and the sheet says the app was not generated.
+
 Then open **`FBapp/<name>.fbeproj`** in FutureBasic and build it. The project is laid out in groups:
 
 | Group | Holds | Regenerated? |
@@ -253,13 +258,26 @@ generated file starts with a comment saying what it does and whether it is regen
 
 Every generated app has the same frame (`App Shell.incl`):
 
+- a **toolbar** at the top: **Search** first (a magnifying glass, labelled for the page: *Search
+  Customers*, *Search Products*), a separator, then **New**, **Save**, **Delete** and **Refresh**. They
+  follow what you are doing: **Save** comes on only when you have changed something in the Form,
+  **Delete** only when a record is shown (not while you fill in a new one). Like any Mac toolbar you can
+  rearrange it (right-click it, *Customize Toolbar…*), and the app remembers how you left it;
+- the **search dialog** (click Search): **Search by** a field, or *Any Field*, then the value, in the
+  control that suits the field: a **calendar** for a date (the records of that day); a **dropdown of
+  the field's values** when it has only a few, such as a type or a status (worked out from the records);
+  a **text box** for anything else (the records holding every word you type, any case, any accent).
+  The List narrows at once, the navigator counts only those records, and the footer says how many
+  match. *Show All* brings every record back; a new page starts a new search;
 - a **dark blue navigation bar** on the left (darker in dark mode), with a button and an icon per
-  entity;
+  entity; with many entities (twenty tables, say) the buttons scroll;
 - a **header** with the app icon, the app's name centred on it and the tag-line under it, and on
   the right the **theme menu** (System / Light / Dark) and **Log In** (connect it to your sign-in in
   `EventHandlers.incl`, `DoLogin`);
-- a **footer** with the copyright, a status line, and the page actions **New**, **Save**,
-  **Delete** and **Refresh** (also in the *Records* menu: ⌘N, ⌘S, ⌘R);
+- a **footer** with the **record navigator** (First, Previous, *Customer 3 of 91*, Next, Last), and a status
+  line (New, Save, Delete and Refresh are in the toolbar, and in the *Records* menu: ⌘N, ⌘S, ⌘R). A page opens on its first record, selected in the List with the focus there, so the arrow keys
+  move through the records too. Previous is dimmed on the first record and Next on the last. The copyright
+  is at the foot of the navigation bar;
 - the **page**: the entity's List in a card at the top and its Form in a card below, both the
   full width of the window.
 
@@ -270,7 +288,9 @@ then adds the record. **Delete** asks first; the rules decide what happens to re
 **Grid or tiles.** A switch at the right of the List card's title shows the records as a grid or
 as **tiles**: rounded panels, three or four across depending on the window's width, each with the
 record's name as a subheading and up to four other fields in smaller text. Click a tile to see its
-record in the Form, as you would a row. The page remembers your choice while the app runs.
+record in the Form, as you would a row. The record you are on has a ring round its tile, and the
+footer's navigator moves the ring from tile to tile, scrolling to keep it in view. The page remembers
+your choice while the app runs.
 
 Change the colours in `Theme.incl` (yours). Add pages of your own in `Windows.incl`, after
 `AppPagesBuild`; the file shows how.
@@ -538,6 +558,12 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
   brings you back to the list, and *Clear Recent Projects* empties it.
 - **Open Project…** (⌘O): choose a project's `Project.json` in the workspace.
 - If the project's database has moved, you are asked to find it, and the new place is remembered.
+- **Right-click a project** in Recent Projects for *Open*, *Show in Finder*, *Remove from Recent
+  Projects* (the project stays in the workspace) and *Delete Project…*. Right-click an entity in the
+  Objects list for *Generate XIB* and *Show Model Diagram*.
+- **The Project menu follows what is on screen:** on the Welcome page it acts on the project selected
+  in Recent Projects, elsewhere on the open one, and names it (*Delete “Northwind”…*, *Show “Northwind”
+  in Finder*, *Close “Northwind”*). A tick marks the page showing, Recent Projects or Entity Definitions.
 - **Delete Project…** (*Project* menu): the open project, or on the Welcome page the one selected in
   Recent Projects, goes to the **Trash** after you confirm, with its database copy, settings, rules
   and generated app. The database you started from is not touched. To restore the project, drag its

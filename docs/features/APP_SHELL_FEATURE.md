@@ -11,7 +11,7 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│            │ © 2026 Your Company   Saved.     [New][Save][Delete][Refresh]│  footer
+│ © Company  │ |< <  Customer 3 of 91  > >|  Saved.                             │  footer
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -19,8 +19,32 @@ Every app generated from a SQLite project opens in the same frame:
   current page is highlighted.
 - **Header:** the business logo, the app name and the tag-line on the left; the theme menu
   (System / Light / Dark) and **Log In** on the right.
-- **Footer:** the copyright, a status line ("Saved.", a refused save's reason), and the page
-  actions New, Save, Delete, Refresh (also the *Records* menu).
+- **Footer:** the **record navigator** (First, Previous, *"Customer 3 of 91"*, Next, Last), a status line
+  ("Saved.", a refused save's reason), and the page actions New, Save, Delete, Refresh (also the *Records* menu).
+  The copyright sits at the foot of the navigation bar, in small type.
+- **Toolbar** (author, 2026-11-27; `App Toolbar.incl`): FB's `toolbar` and `toolbaritem`, so each item has a tag and
+  sends `_toolbarItemClick`. **Search** is first (`magnifyingglass`), its label following the page ("Search
+  Customers": `AppToolbarShowPage`); then a flexible space and **New**, **Save**, **Delete**, **Refresh**, moved out of the
+  footer. The items know the context (`AppToolbarSetEnabled`, autovalidation off): Save only with a change in the Form
+  (`AppPageHasChange`: the Form read now differs from the Form as it was shown, `gAppPageClean`, taken after a record
+  is shown and after the lookups fill in), Delete only with a record shown. They are updated after every event
+  (`AppPagesDoDialog` wraps the handler) and at every keystroke in the Form (`AppToolbarWatchEdits`). A separator follows Search: a vertical `NSBoxSeparator` box as an
+  item's view (macOS has had no separator item since 11). FB has no search item, so clicking Search opens our own
+  **search dialog**, a Cocoa popover under the item (`AppToolbarSearchPopover`): *Search by* a field (from
+  `AppPageSearchFields`, generated: every field shown, its title and kind) or Any Field, then a calendar for a date
+  field, a dropdown of the field's distinct values when it has at most 15, each used more than once on average
+  (worked out from the page's records), or a text box. Every change sends a query `{ field, mode, text }` to
+  `AppPageSearchChanged`, which narrows the List (`Record Search.incl`: `RecordSearchQuery`) and keeps the navigator on
+  those. A new page starts a new search. The toolbar can be customised and its arrangement is saved.
+- **Navigation bar:** the entity buttons go into a scrolling list (`ShellNavScroll`, the first time a page is shown:
+  a flipped document view, an overlay scroller) between the heading and the copyright, and the button of the page
+  shown is scrolled into view, for models with many entities.
+- **Record navigator** (author, 2026-11-27): a page opens on its first record - selected in the List, the List
+  given the focus (the arrow keys move through it), the record in the Form. First and Previous are dimmed on the
+  first record, Next and Last on the last. After a Save the same record stays selected; after adding one, the new
+  one; after a Delete, the one that took its place. Clicking a row or a tile moves the navigator too.
+  `AppPageGoTo` / `AppPageChooseRow` (App Pages.incl), `ShellSetNavigator` / `ShellSelectRow` (App Shell.incl,
+  through Cocoa).
 - **Content:** a page per entity, its List above its Form. Choosing a row shows it in the Form.
 - **Data:** the pages call the app's data interface (`App Data Lite.incl`: `AppDataList`,
   `AppDataSave`, `AppDataRemove`, answers in `AppDataDone`); saves go through the rules. The

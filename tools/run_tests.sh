@@ -141,6 +141,7 @@ else
 fi
 # the Open ALS Project screen's logic: GitHub addresses always; folders, files and the Studio model
 # on the ALS projects in ALS_PROJECTS; public repositories over raw.githubusercontent.com with ALS_GITHUB=1
+run "Professional: the page designer - Pages.json, the links proposed on a drop, a page resolved (Northwind fixture, the samples)" python3 "$here/tools/pages_reference.py" --test
 run "ALS project: addresses, folders and files, the Studio model with its lookups" python3 "$here/tools/als_project_reference.py" --test ${ALS_PROJECTS:-} ${ALS_GITHUB:+--github}
 # the ALS model reader (Professional): database/models.py read as text, compared with SQLAlchemy's view
 # ALS_PROJECTS: ALS project folders (space-separated); ALS_PYTHON: the Python of the ALS install

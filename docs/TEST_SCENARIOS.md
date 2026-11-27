@@ -25,7 +25,7 @@ Purpose: The Studio builds and opens on its Welcome page.
 Before: The repository cloned on the Mac; FutureBasic 7 installed.
 1. Open src/AppBuilder/Studio for FB.fbeproj in FutureBasic and build it. -> The Build Log ends without errors and the app starts.
 2. Look at the Welcome page. -> At the top: the Imagery logo, "App Builder for FutureBasic", and the tag-line under it. There is no second heading above it.
-3. Look below the heading. -> A rounded card, a shade apart from the window: "Recent Projects", the list, then Open Project... and Create Project at the right, under the list.
+3. Look below the heading. -> A rounded card, a shade apart from the window (super-light grey in light mode, a little lighter than the window in dark mode): "Recent Projects", the list with no box of its own (the card shows through it, faint lines between the rows), then Open Project... and Create Project at the right, under the list.
 4. Switch the Mac between light and dark. -> The logo, the card and the text follow; the card still stands out from the window.
 5. Resize the window, down to its smallest. -> The card and the list stretch; the buttons stay at the right.
 
@@ -89,7 +89,17 @@ Purpose: The form's layout.
 ### B-07 Delete a project
 Purpose: A project goes to the Trash, and can come back.
 Before: A project you can spare.
-1. Select it in Recent Projects, Model menu, Delete Project..., confirm. -> It leaves the list; its folder is in the Trash. The database you started from is untouched.
+1. Select it in Recent Projects, Project menu, Delete Project..., confirm. -> The item reads Delete "<its name>"...; it leaves the list; its folder is in the Trash. The database you started from is untouched.
+
+### B-08 Right-click menus and a Project menu that follows the page
+Purpose: The commands act on what you are looking at, as in any Mac app.
+Before: Two projects in Recent Projects; one of them open.
+1. On the Welcome page, right-click the project that is not open. -> A menu: Open, Show in Finder, Remove from Recent Projects, Delete Project...; the row is selected.
+2. Choose Show in Finder. -> Finder shows that project's folder.
+3. Open the Project menu. -> Show "<that name>" in Finder and Delete "<that name>"... name the selected project; Close "<open project>" names the open one; Recent Projects has a tick.
+4. Right-click it again, Remove from Recent Projects. -> It leaves the list; its folder is still in the workspace.
+5. Open the other project, right-click an entity in the Objects list, Generate XIB. -> That entity is selected and its XIB is generated.
+6. Open the Project menu. -> Entity Definitions has the tick; Delete and Show in Finder name the open project.
 
 ## C. Studio for FB: entity definitions
 
@@ -143,8 +153,9 @@ Purpose: The entity-relationship diagram and its tools.
 ### F-01 Generate App
 Purpose: The generated project.
 Before: A project open.
-1. Generate menu, Generate App. -> A message says the app was generated.
-2. Generate menu, Show Generated App in Finder. -> FBapp/ holds <name>.fbeproj, the XIBs, the bindings, App Pages.incl, Model.json, README.md and the runtime files, Record Tiles.incl among them.
+1. Generate menu, Generate App. -> A sheet, "Generating <name>", lists nine steps; each is ticked in turn as the bar moves forward; Done is dimmed meanwhile.
+2. Wait for the end. -> Every step ticked, the bar full, the message "Generated"; Done is on; Return or a click on Done closes the sheet.
+3. Generate menu, Show Generated App in Finder. -> FBapp/ holds <name>.fbeproj, the XIBs, the bindings, App Pages.incl, Model.json, README.md and the runtime files, Record Tiles.incl among them.
 
 ### F-02 Build the generated app
 Purpose: The generated app builds and runs.
@@ -158,9 +169,42 @@ Purpose: Regenerating never overwrites the files that are yours.
 
 ### G-01 The app's frame
 Purpose: Navigation bar, header, footer.
-1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a footer with the copyright and New, Save, Delete, Refresh.
+1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a toolbar with Search, New, Save, Delete, Refresh; a footer with the record navigator and the status line; the copyright at the foot of the navigation bar.
 2. Use the theme menu: Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both.
 3. Click each navigation button. -> Each page shows its List card above its Form card, both filling the width.
+
+### G-01a Many entities
+Purpose: The navigation bar scrolls.
+Before: The full Northwind database (about twenty tables), Generate App.
+1. Look at the navigation bar. -> A button per table under "Business Objects"; the copyright at the foot of the bar, not covered.
+2. Scroll the bar (two fingers or the wheel). -> The buttons scroll; a thin scroller shows while scrolling.
+3. Make the window short, then click the last button. -> Its page shows, and the bar scrolls to keep its button in view.
+
+### G-02a The record navigator
+Purpose: A page opens on its first record, and the footer moves through them.
+1. Open the app, click Customers. -> The first customer is selected in the List (the List has the focus) and shown in the Form; the footer reads "Customer 1 of 91" (your count); First and Previous are dimmed.
+2. Click Next three times. -> "Customer 4 of 91"; the List's selection and the Form follow; First and Previous are on.
+3. Click Last. -> The last customer; Next and Last are dimmed.
+4. Press the up arrow key. -> The one before it; the footer follows.
+5. Change a field and Save. -> The same customer stays selected and shown.
+6. New, fill in the Form, Save. -> The new customer is selected and shown.
+7. Delete it. -> The customer that took its place in the list is selected and shown.
+8. Click Products. -> "Product 1 of ..." and the first product shown.
+
+### G-02b The toolbar and the search dialog
+Purpose: Search follows the page and the field; New, Save, Delete and Refresh work from the toolbar.
+1. On Customers, look at the toolbar. -> Search (a magnifying glass) labelled "Search Customers", a thin separator, then New, Save, Delete, Refresh; Save is dimmed (nothing changed yet), Delete is on (a customer is shown).
+2. Click Search. -> A dialog under the item: "Search by" with Any Field, and a text box.
+3. Type part of a company name. -> The List narrows as you type; the footer says "n of 91 match"; the first match is shown.
+4. Search by: Company Name, type a word from a city. -> No match (it searches that field only); type part of a name instead: matches.
+5. Search by: a field with few values (a country, a region, a type). -> The text box gives way to a dropdown of that field's values; choose one: only those records.
+6. On Orders, Search by: Order Date. -> A small calendar (day, month, year); click a day with orders: only that day's orders; another day: those.
+7. Show All. -> Every record; Search by is back on Any Field.
+8. Click Products. -> The toolbar reads "Search Products"; the dialog offers Products' fields.
+6. Type one letter in a field of the Form. -> Save comes on at once. Save. -> The record is saved; Save is dimmed again.
+7. Toolbar New. -> An empty Form; Delete and Save are dimmed. Fill in a field. -> Save comes on; Delete stays dimmed until the new record is saved.
+8. Choose a record you can spare, Delete. -> The same as the Records menu's Delete.
+9. Right-click the toolbar, Customize Toolbar..., drag Refresh before New, Done; quit and reopen. -> The new order is kept.
 
 ### G-02 Records: choose, add, change, delete
 Purpose: The Form and the List work together.
@@ -179,14 +223,21 @@ Before: Rules in the app's Rules.incl (for example a credit limit).
 Purpose: A foreign key's Dropdown and its details.
 1. On a page whose Form has a Dropdown for a parent (an Order's Customer), open the Dropdown. -> It lists the parent's records by a readable name.
 2. Choose one and click the info button beside it. -> A popover shows that record's fields and values.
+3. Click New. -> The Dropdown is empty and the info button is dimmed; clicking it does nothing.
+4. Choose a parent again. -> The info button is on again. For an auto-complete: clear the text, and it dims; choose a match, and it comes back on.
 
 ### G-05 Records as tiles
 Purpose: The tiles view beside the grid.
 1. Click the tiles symbol in the switch at the right of the List card's title. -> The grid gives way to tiles: rounded panels with a soft shadow, the record's name as a subheading, up to four other fields under it in smaller text.
 2. Make the window wide, then narrow, and click Refresh. -> Four tiles across when the List is wide, three when it is narrower.
-3. Click a tile. -> Its record fills the Form; the tile is outlined in the accent colour.
-4. Switch to another page and back. -> The page still shows tiles; switch back to the grid with the list symbol.
-5. Switch the theme to dark. -> The tiles still stand out from their card.
+3. Look at the first tile. -> It has a ring in the accent colour: the navigator's record ("Customer 1 of 91"), shown in the Form.
+4. Click Next in the footer, three times. -> The ring moves tile by tile; the Form follows; "Customer 4 of 91".
+5. Click Last. -> The ring is on the last tile, the tiles scrolled to show it; Next and Last are dimmed.
+6. Click a tile. -> Its record fills the Form; the ring moves to it; the navigator shows its number.
+7. Search for a name (toolbar). -> Only the matching tiles; the ring on the first of them.
+8. Switch to the grid. -> The same record is selected in the grid; switch back: the ring is on it.
+9. Switch to another page and back. -> The page still shows tiles; switch back to the grid with the list symbol.
+10. Switch the theme to dark. -> The tiles still stand out from their card; the ring still shows.
 
 ### G-06 Auto-complete for a related record
 Purpose: Finding a parent record by typing.

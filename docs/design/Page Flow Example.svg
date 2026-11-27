@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1650" height="416" viewBox="0 0 1650 416" font-family="-apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif">
+<style>.bg{fill:#f5f6f8}.card{fill:#fff;stroke:rgba(0,0,0,.12)}.head{fill:#113;}.title{fill:#fff;font-weight:600;font-size:14px}.part{fill:#333;font-size:12px}.note{fill:#777;font-size:11px}.link{fill:none;stroke:#2f6fde;stroke-width:1.6}.label,.card-n{paint-order:stroke;stroke:#f5f6f8;stroke-width:5px;stroke-linejoin:round}.label{fill:#2f6fde;font-size:11px;font-weight:600}.card-n{fill:#555;font-size:11px}.heading{fill:#222;font-size:16px;font-weight:600}@media (prefers-color-scheme: dark){.bg{fill:#1e1f22}.card{fill:#2b2c30;stroke:rgba(255,255,255,.12)}.head{fill:#0b1a3a}.part{fill:#ddd}.note{fill:#999}.link{stroke:#6aa0ff}.label{fill:#6aa0ff}.card-n{fill:#aaa}.heading{fill:#eee}.label,.card-n{stroke:#1e1f22}#arrow path{fill:#6aa0ff}}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f6fde"/></marker></defs>
+<rect class="bg" x="0" y="0" width="1650" height="416"/>
+<text class="heading" x="40" y="40">Page flow</text>
+<g class="page" data-page="Customers">
+<rect class="card" x="40" y="70" width="250" height="62" rx="10"/>
+<path class="head" d="M40,102 v-22 a10,10 0 0 1 10,-10 h230 a10,10 0 0 1 10,10 v22 z"/>
+<text class="title" x="52" y="91">Customers</text>
+<text class="part" x="52" y="117">Customers <tspan class="note">List with detail · driver</tspan></text>
+</g>
+<g class="page" data-page="Orders">
+<rect class="card" x="480" y="70" width="250" height="62" rx="10"/>
+<path class="head" d="M480,102 v-22 a10,10 0 0 1 10,-10 h230 a10,10 0 0 1 10,10 v22 z"/>
+<text class="title" x="492" y="91">Orders</text>
+<text class="part" x="492" y="117">Orders <tspan class="note">List with detail · driver</tspan></text>
+</g>
+<g class="page" data-page="Order Entry">
+<rect class="card" x="920" y="70" width="250" height="162" rx="10"/>
+<path class="head" d="M920,102 v-22 a10,10 0 0 1 10,-10 h230 a10,10 0 0 1 10,10 v22 z"/>
+<text class="title" x="932" y="91">Order Entry</text>
+<text class="part" x="932" y="117">Orders <tspan class="note">Detail · driver</tspan></text>
+<text class="part" x="932" y="137">Customers <tspan class="note">Detail · n : 1 from Orders</tspan></text>
+<text class="part" x="932" y="157">Order Details <tspan class="note">List · 1 : n from Orders</tspan></text>
+<text class="part" x="932" y="177">Products <tspan class="note">Detail · n : 1 from Order Details</tspan></text>
+<text class="part" x="932" y="197">Employees <tspan class="note">Detail · n : 1 from Orders</tspan></text>
+<text class="part" x="932" y="217">Shippers <tspan class="note">Detail · n : 1 from Orders</tspan></text>
+</g>
+<g class="page" data-page="Products">
+<rect class="card" x="1360" y="70" width="250" height="62" rx="10"/>
+<path class="head" d="M1360,102 v-22 a10,10 0 0 1 10,-10 h230 a10,10 0 0 1 10,10 v22 z"/>
+<text class="title" x="1372" y="91">Products</text>
+<text class="part" x="1372" y="117">Products <tspan class="note">List with detail · driver</tspan></text>
+</g>
+<g class="flow" data-from="Customers" data-to="Orders"><path class="link" d="M290,112 C385.0,112 385.0,82 480,82" marker-end="url(#arrow)"/><text class="label" x="385.0" y="89.0" text-anchor="middle">Customers to Orders<tspan class="card-n" dx="6">1 : n</tspan></text></g>
+<g class="flow" data-from="Orders" data-to="Order Entry"><path class="link" d="M730,112 C825.0,112 825.0,82 920,82" marker-end="url(#arrow)"/><text class="label" x="825.0" y="89.0" text-anchor="middle">Orders, the same record<tspan class="card-n" dx="6">1 : 1</tspan></text></g>
+<g class="flow" data-from="Order Entry" data-to="Customers"><path class="link" d="M1107.5,232 V270 Q1107.5,278 1099.5,278 H110.5 Q102.5,278 102.5,270 V132" marker-end="url(#arrow)"/><text class="label" x="605.0" y="272" text-anchor="middle">Orders to Customers<tspan class="card-n" dx="6">n : 1</tspan></text></g>
+<g class="flow" data-from="Order Entry" data-to="Products"><path class="link" d="M1170,152 C1265.0,152 1265.0,82 1360,82" marker-end="url(#arrow)"/><text class="label" x="1265.0" y="109.0" text-anchor="middle">Order Details to Products<tspan class="card-n" dx="6">n : 1</tspan></text></g>
+<g class="flow" data-from="Products" data-to="Order Entry"><path class="link" d="M1547.5,132 V304 Q1547.5,312 1539.5,312 H990.5 Q982.5,312 982.5,304 V232" marker-end="url(#arrow)"/><text class="label" x="1265.0" y="306" text-anchor="middle">Products to Orders (through Order Details)<tspan class="card-n" dx="6">n : n</tspan></text></g>
+<text class="note" x="40" y="400">1 : n one to many · n : 1 many to one · 1 : 1 one to one · n : n many to many (through a join table)</text>
+</svg>

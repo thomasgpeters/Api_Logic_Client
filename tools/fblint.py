@@ -80,6 +80,50 @@ def strip_strings_and_comments(line):
     return line.split('//')[0]
 
 
+# the house style (docs/reference/FB Coding Rules.md, "Style"): the same in hand-written and generated code
+STYLE_CALL = re.compile(r'\b[A-Za-z_]\w*\((?=[^ )])')
+STYLE_COND = re.compile(r'\b(?:if|elseif|while|until|select)\s+\((?=[^ ])')
+STYLE_FN_SPACE = re.compile(r'\bfn\s+\w+\s+\(')
+
+
+def mask_strings(line):
+    """the line with every string literal's contents blanked (same length), so a rule never looks inside one"""
+    return re.sub(r'"(?:[^"\\]|\\.)*"', lambda m: '"' + ' ' * (len(m.group(0)) - 2) + '"', line)
+
+
+def style_problems(path, text):
+    """the house style: a header comment; no tabs; spaces inside a call's and a condition's parentheses
+    ( fn X( a ), if ( x ) ); no space before a call's parenthesis; a space after //; no trailing spaces"""
+    problems = []
+    if 'CleanApp' in path.split(os.sep):                  # the FB editor's own starting project, kept as it made it
+        return problems
+    if os.path.basename(path).startswith('Tlbx '):         # FutureBasic's own toolbox files: the FB team's code, not ours
+        return problems
+    lines = text.split('\n')
+    first = next((l.strip() for l in lines if l.strip()), '')
+    if not first.startswith(('/*', '//')):
+        problems.append(f'{path}:1: style: start the file with a header comment: its name, and what it holds')
+    for no, line in code_lines(text):
+        s = line.strip()
+        if s.startswith('cln ') or s.startswith('#'):
+            continue
+        masked = mask_strings(line)
+        code, _, comment = masked.partition('//')
+        if line != line.rstrip():
+            problems.append(f'{path}:{no}: style: trailing spaces')
+        if '\t' in code:
+            problems.append(f'{path}:{no}: style: a tab - use spaces')
+        if STYLE_FN_SPACE.search(code):
+            problems.append(f'{path}:{no}: style: no space between a function\'s name and its "(": fn Name( a )')
+        if STYLE_COND.search(code):
+            problems.append(f'{path}:{no}: style: a space inside a condition\'s parentheses: if ( x )')
+        elif STYLE_CALL.search(code):
+            problems.append(f'{path}:{no}: style: a space inside a call\'s parentheses: fn Name( a )')
+        if '//' in masked and comment and comment[0] not in ' /-=*!~' and not code.endswith(':'):
+            problems.append(f'{path}:{no}: style: a space after //')
+    return problems
+
+
 FN_DEF = re.compile(r'^\s*(?:(void)\s+|(\w+)\s+)?local\s+fn\s+(\w+)(\s*\(.*?\))?(.*)$')
 
 
@@ -544,6 +588,8 @@ def main(argv):
             problems += opt_in_problems(members, opt)
         for p in files:
             if p.endswith(('.fb', '.bas')): problems += opt_in_problems([p], opt)
+    for p in files:
+        problems += style_problems(p, open(p, 'rb').read().decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n'))
     for line in problems: print(line)
     print(f'fblint: {len(files)} files, {len(problems)} problems')
     return 1 if problems else 0
