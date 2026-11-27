@@ -31,6 +31,11 @@ Every app generated from a SQLite project opens in the same frame:
   shows under the window's title, the window's subtitle (`ShellSetStatus`).
 - **Window title:** *Company | App* (author, 2026-11-27), the company taken from the copyright (`ShellCompanyName`:
   "© 2026 Imagery Business Systems, LLC" -> "Imagery Business Systems, LLC"); just the app's name when it names none.
+- **Splitter** (author, 2026-11-27): a handle in the gap between a page's List card and its Form card
+  (`ShellSplitter`, an `ABSplitHandle` view per page, tag `_shellSplitterBase` + the page, shown with its page).
+  Dragging it moves the line: the List card, the List and its tiles area give up or take height, the Form card and the
+  Form take or give it, the Form's title moves with its card's top; the List keeps at least 140 points, the Form card 90.
+  Up-and-down cursor, a short grip line.
 - **Spacing:** 16 points around the cards, 12 inside them, a 26-point title row (less room above a List: author,
   2026-11-27).
 - **Toolbar** (author, 2026-11-27; `App Toolbar.incl`): FB's `toolbar` and `toolbaritem`, so each item has a tag and

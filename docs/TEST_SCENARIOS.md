@@ -188,6 +188,15 @@ Before: The full Northwind database (about twenty tables), Generate App.
 2. Scroll the bar (two fingers or the wheel). -> The buttons scroll; a thin scroller shows while scrolling.
 3. Make the window short, then click the last button. -> Its page shows, and the bar scrolls to keep its button in view.
 
+### G-01c The splitter between the List and the Form
+Purpose: The height shared by dragging.
+1. Point at the gap between the List card and the Details card. -> The cursor shows the up-and-down arrows; a short grip line marks the middle.
+2. Drag it up. -> The Details card grows, the List card shrinks; the List still shows at least a few rows when dragged all the way.
+3. Drag it down. -> The List grows; the Details card keeps at least its title and first fields.
+4. Switch to tiles, drag again. -> The tiles area follows the List card.
+5. Resize the window, go full screen. -> The divider stays between the cards.
+6. Go to another page. -> Its own divider, at its own place; back again: as you left it.
+
 ### G-02a The record navigator
 Purpose: A page opens on its first record, and the footer moves through them.
 1. Open the app, click Customers. -> The first customer is selected in the List (the List has the focus) and shown in the Form; the footer reads "Customer 1 of 91" (your count) between the pill buttons; First and Previous are dimmed (faded).

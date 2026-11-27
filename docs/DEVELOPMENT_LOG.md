@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — A splitter between the List and the Form
+
+- **Author:** "a splitter in between the list and the scalar view in the generated app."
+- `ShellSplitter` (App Shell.incl; App Pages calls it per page after `RecordTilesBuild`): an `ABSplitHandle` (Cocoa
+  view) in the gap between the cards. Dragging moves the line between them - above, the List card, the List and its
+  tiles area; below, the Form card and the Form, the Form's title with its card's top - within minimums (List 140,
+  Form card 90). Chosen over an NSSplitView: that would have re-parented each card, its title, its XIB part and the
+  tiles area; the handle leaves the layout as it is. The views it moves are gathered without nils (an array literal
+  with a nil stops the app). Not compiled here (GNUstep has no AppKit on this machine): the Mac build is its first.
+  Test scenario G-01c.
+
 ## 2026-11-27 — The theme menu in the toolbar; a slimmer header; full screen
 
 - **Author:** the theme selector into the toolbar, to gain back the header's unused space; the app able to go full
