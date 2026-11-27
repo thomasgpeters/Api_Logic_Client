@@ -1,0 +1,1 @@
+on appevent	fn DoAppEventon menu		fn DoMenuon dialog	fn DoDialogHandleEvents

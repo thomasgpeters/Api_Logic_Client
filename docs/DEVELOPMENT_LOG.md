@@ -6,12 +6,43 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Record Files for FutureBasic: record files and B-tree indexes, timed against SQLite
+
+- **The idea** (author): FB's `begin record` types in random-access files as legacy FB did, with index files beside
+  them, as Btrieve; "I would love to see how it performs"; if stable, a developer choice in App Builder to generate
+  record databases with B-tree indexes instead of SQLite. Answered first: nothing has to be loaded into memory -
+  record n is at n x the slot length, and a B-tree finds a key in three or four pages.
+- **Built** (`src/RecordFilesExample/`): `Record File.incl` in FutureBasic (`open "R"`, `record`, `read file`,
+  `write file`; a header slot, a free list, recovery after a stop); `Record Index.incl`, the B-tree in C inside the
+  .incl (key segments, equal keys kept apart by the record number, seven seeks, next / previous along chained leaves,
+  `RICheck`); `Orders Records.incl` (Customer, Order, Item with six indexes: what the generator would write);
+  `Benchmark.incl` against `SQLite Comparison.incl` on the same data (`Sample Data.incl`).
+- **Tested here:** `tools/check_record_index.py` compiles the B-tree exactly as written and runs six random runs
+  (keys of 8 to 220 bytes, many equal keys, deletes, every seek, next / previous) against a sorted list; every file is
+  read back by `tools/record_files_reference.py`, which checks the tree with its own walk. 300,000 keys: inserted in
+  0.43 s, 300,000 lookups 0.29 s, scanned in 0.02 s (Linux, this machine). `tools/check_record_files_example.py`:
+  the SQLite side and the sample data. The FB parts lint clean; they are built on the Mac first.
+- **Learned:** fblint caught `width` (an FB keyword) and a `for ... in fn ...` in the new code before the Mac did.
+
 ## 2026-11-27 — The LogicBank example's opening page; the Studio's heading with no project open
 
 - **LogicBank example, opening page** (author: "needs paragraph breaks... we need to see the rules as natural
   language, so the user gets a sense of what they're about to see"): short paragraphs, then **The rules, in plain
   words** - each rule in `Rules.incl` as one sentence, grouped item / order / customer - then **What you will see**
   (the thirteen steps, and the buttons). `StoryIntro`, `StoryRule` in `Story.incl`.
+- **The Studio's Welcome page** (author, a screenshot: "the heading is redundant on the welcome page, and the Imagery
+  logo should not be inside the box ... heading, then working part of the app"): the logo, the product's name and the
+  tag-line ("Business rules and native Mac apps from your data model", no longer repeating "for FutureBasic") are the
+  page's own heading, above the box; the box holds Create Project, Open Project and Recent Projects. The window's
+  heading hides while the Welcome page shows (`StudioUpdateCrumbs`), and the page takes its place (`FitWelcomeView`).
+  The running API Logic Server form has the same treatment (author: "yes, same treatment for the server form"): the
+  logo, the name and "A project from a running API Logic Server" above its box (`FitOwnHeadingView`).
+  Project pages: the project's icon and name, no Imagery logo (author: "each project should have an ICON"): its
+  picture from Project Settings, else its SF Symbol (`ProjectIconImage`, `ProjectShowHeading`), updated when
+  Project Settings is closed.
+- **The generated app's header** (author: the suggested icon does not show; the title should be centred on the icon):
+  the app name is centred up and down on the icon, tag-line or not; the tag-line sits under it, smaller (11 pt); the
+  symbol is drawn at 34 points (`ImageWithSymbolConfiguration`), not stretched from its text size. Waiting on the Mac.
 - **Back to Projects with a project open** (author: the heading stayed): the heading follows the page now -
   `ProjectShowHeading` (`Project Workspace.incl`): the product's name on the Projects page, the project's on its entities.
 - **Studio for FB, no project open:** the heading said "Untitled Project"; it now shows the product's name
