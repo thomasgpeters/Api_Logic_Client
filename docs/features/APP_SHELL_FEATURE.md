@@ -24,7 +24,7 @@ Every app generated from a SQLite project opens in the same frame:
 - **Content:** a page per entity, its List above its Form. Choosing a row shows it in the Form.
 - **Data:** the pages call the app's data interface (`App Data Lite.incl`: `AppDataList`,
   `AppDataSave`, `AppDataRemove`, answers in `AppDataDone`); saves go through the rules. The
-  Professional edition will replace only that file (`design/Editions and Licensing.md`).
+  Professional edition will replace only that file (`design/Editions Design.md`).
 
 ## Where
 

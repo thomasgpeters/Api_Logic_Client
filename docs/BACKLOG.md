@@ -223,7 +223,7 @@ LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in AL
   translation through the ALS project's `genai-logic` when it has it, else the Studio's connector
 - [ ] Professional: the client previews the rules locally (LogicBank for FutureBasic) while the server decides
 - [x] Decisions (author, 2026-11-26): every edition with the user's own key; Claude first; Professional both routes;
-  the neutral expression language; the module published. The rules split: `design/Editions and Licensing.md`
+  the neutral expression language; the module published. The rules split: `design/Editions Design.md`
 
 ## Rules - Logic for FutureBasic (`design/Logic Engine Design.md`, ROADMAP Phase 5)
 

@@ -209,7 +209,7 @@ recorded answer (no network in the test).
 ## Decisions (author, 2026-11-26)
 
 - **Edition:** every edition gets the Assistant (Translate, Suggest Rules, Suggest Controls), using the user's own
-  API key. The rules split between editions is in `Editions and Licensing.md` → *Rules: where the line is*.
+  API key. The rules split between editions is in `Editions Design.md` → *Rules: where the line is*.
 - **Provider:** Claude first, behind a narrow connector interface, so others can be added later without changing the
   Studio.
 - **Professional route:** both. The ALS project's `genai-logic` when the server has it (as Imagery LogicBank Studio

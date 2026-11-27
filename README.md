@@ -1,115 +1,108 @@
 # App Builder for FutureBasic
 
-*(repository: Api_Logic_Client)*
+App Builder turns your data model into a complete FutureBasic app for the Mac. Point it at a SQLite database (or, in
+the Professional edition, an [API Logic Server](https://apilogicserver.github.io/Docs/) project), review what it
+proposes, and it writes the windows, forms, lists, data binding and business rules. You open the result in the
+FutureBasic editor, build it, and keep it as your own.
 
-A macOS FutureBasic app that turns a data model — a SQLite database today, an
-[API Logic Server](https://apilogicserver.github.io/Docs/) project next — into a
-native macOS FutureBasic app the developer keeps editing. One shell, many
-entities: an entity navigator, a List part and a Form part per entity, related
-lists in tabs, drill-in with a crumb trail.
+The app is called **Studio for FB**. This repository (still named Api_Logic_Client) also holds the free FutureBasic
+modules App Builder is made of, which you can use on their own.
 
-![Architecture: SQLite or API Logic Server → the generator → the project workspace → the generated FutureBasic app, with business rules end to end](docs/design/architecture.svg)
+![From your data model to a FutureBasic app: the model, App Builder, the project workspace, the generated app, with business rules all the way through](docs/design/architecture.svg)
 
-## How it works
+## Getting started
 
-1. **Create a project from a SQLite database** — *Create Project* on the Welcome view: choose
-   the database, check the tables it found, name the project. Or **open a project or a model** — *Model → Open Project…* (⇧⌘O) or double-click one of
-   the Recent Projects on the Welcome view; or *Model → Open SQLite Database…* (⌘D) reads tables, columns,
-   keys and relationships straight from the database. A saved ALS
-   `/metadata?include=attributes` response (e.g. `samples/Northwind/metadata.json`)
-   also works.
-2. **Review the entity definitions.** Each attribute shows its recommended
-   **Title** (field label and column heading), FB type, size, key role, form
-   control and widths. Adjust what you like; adjustments are kept in
-   `Design.json` and survive regeneration.
-3. **Generate** — each step on its own, or all at once:
-   *Generate XIBs* · *Generate XIB for Selected Entity* · *Generate Binding Code* ·
-   *Generate App*. Output goes to `~/Library/Application Support/App Builder for FutureBasic/workspace/<project>/FBapp/`;
-   the project's own settings (`Project.json`, `Design.json`) stay in `<project>/`.
-4. **Open `FBapp/<project>.fbeproj` in FutureBasic**, build, and keep editing: generated code is
-   plain, readable FB; `EventHandlers.incl`, `Menus.incl` and `Windows.incl` start from
-   templates and are yours — regeneration never touches them.
+1. Open `src/AppBuilder/Studio for FB.fbeproj` in FutureBasic and build it.
+2. On the Welcome page, **Create Project** and choose a SQLite database.
+3. Click an entity to see what App Builder proposes for each field: its title, control, type and widths. Change
+   what you like; your changes are kept.
+4. **Generate App** (Command-G), then open the generated project in FutureBasic and build it.
 
-## Repository layout
+The [user guide](docs/USER_GUIDE.md) covers each step in full, along with project settings, the model diagram,
+business rules and the shortcuts.
+
+## What you get
+
+A generated app has a navigation bar with a page per entity, a list (as a grid or as tiles) above a form, lookups for
+related records, and New, Save, Delete and Refresh. Every save goes through your business rules: totals, balances,
+limits and the rest are kept right for you. Light and dark mode work out of the box.
+
+The generated code is plain FutureBasic. The files you are meant to change (event handlers, menus, windows, theme,
+rules) are created once and never overwritten; the rest is regenerated from the model whenever it changes.
+
+## Editions
+
+| | Lite | Professional |
+|---|---|---|
+| Licence | free, with registration | paid |
+| Start from | a SQLite database | a SQLite database, or an API Logic Server project |
+| The app | runs on the Mac, with its rules | talks to API Logic Server: many users, rules on the server |
+
+Licences are signed and checked offline. See [Licensing](docs/features/LICENSING_FEATURE.md).
+
+## The free modules
+
+Each comes with an example app, a user guide and the MIT licence. They are also on
+[fb.imagery-business-systems.com](https://fb.imagery-business-systems.com/), built from this repository by
+`tools/make_site.py`.
+
+| Module | What it does | Folder |
+|---|---|---|
+| SQL Generator | Describe a query with dictionaries; it writes safe, parameterized SQL for SQLite. | [`src/SQLGeneratorExample`](src/SQLGeneratorExample/README.md) |
+| LogicBank for FutureBasic | Business rules declared once and enforced on every save. | [`src/LogicBankExample`](src/LogicBankExample/README.md) |
+| Web Toolkit for FutureBasic | Web apps written in FutureBasic, served behind nginx. | [`src/WebToolkit`](src/WebToolkit/README.md) |
+| Record Files for FutureBasic | Fixed-size records with B-tree indexes, timed against SQLite (an experiment). | [`src/RecordFilesExample`](src/RecordFilesExample/README.md) |
+
+## The repository
 
 ```
-Api_Logic_Client/
-├── README.md · CLAUDE.md · .gitignore
-├── src/
-│   ├── AppBuilder/   ← open "Studio for FB.fbeproj" here in the FB editor
-│   ├── Runtime/      ← FB code copied into generated apps (regenerated)
-│   └── Templates/    ← starting files for generated apps (copied only when missing)
-├── docs/
-│   ├── design/       ← App Shell Design, Generator App Design
-│   ├── reference/    ← FB Coding Rules, FB Documentation Map, FB Reference Index
-│   ├── controls/     ← Controls Catalog
-│   ├── features/     ← one <NAME>_FEATURE.md per feature
-│   ├── ROADMAP.md · BACKLOG.md · DEVELOPMENT_LOG.md
-├── tools/            ← fblint.py, sqlite_model.py
-└── samples/          ← Northwind metadata
+src/
+  AppBuilder/            Studio for FB, the app itself
+  Runtime/               the FutureBasic code every generated app gets
+  Templates/             starting files for generated apps (yours once copied)
+  SQLGeneratorExample/   LogicBankExample/   WebToolkit/   WebToolkitExample/   RecordFilesExample/
+  Shared/                the About Imagery window the examples share
+  Professional/          the Professional edition's data side
+  MacTests/              small programs that answer a question on a Mac
+samples/                 sample applications: Telecom, Customs, FlightPlanner (each a database, rules and tests)
+tools/                   checks, references and builders (Python, run here; nothing FB builds uses them)
+docs/                    the documentation (below)
 ```
 
-## Where the app keeps its files
-
-The app bundle is never written to. Everything the generator creates lives in
-its Application Support folder (*Model → Show Workspace in Finder* opens it;
-`~/Library` is hidden in Finder):
-
-```
-~/Library/Application Support/App Builder for FutureBasic/
-├── Settings.plist                 (planned) settings: git, GitHub, ALS/APIs, AI/LLMs, SMTP
-├── Recent Projects.json           the Welcome view's Recent Projects (newest first)
-└── workspace/
-    └── <project>/                 one folder per project: the generator's settings for it
-        ├── Project.json           name, model source, base URL, user name, About text (no passwords)
-        ├── Design.json            the designer's adjustments (kept)
-        ├── Database/              the project's own copy of its SQLite database (+ -wal/-shm)
-        └── FBapp/                 the generated FutureBasic app - open <project>.fbeproj
-            ├── <project>.fbeproj      the FB project: data.fbproj (regenerated), Settings2.plist (kept)
-            ├── <project>.main         main program: connection, handler registration, start (regenerated)
-            ├── EventHandlers.incl     DoAppEvent / DoMenu / DoDialog (starting template, kept)
-            ├── Menus.incl             BuildMenus (starting template, kept)
-            ├── Windows.incl           BuildWindows + nibview per Form part (starting template, kept)
-            ├── <Entity>Form.xib       generated Form part per entity (regenerated)
-            ├── <Entity>List.xib       generated List part per entity (regenerated)
-            ├── <Entity> Binding.incl  generated binding code per entity (regenerated)
-            ├── Model.json             the model the app reads at run time (regenerated)
-            ├── Credits.rtf            the About text, shown in the app's About box (regenerated)
-            ├── Model Tags.incl        tag constants for your own code (regenerated)
-            ├── *.incl                 runtime files copied from src/Runtime (regenerated)
-            └── <Entity> Hooks.incl    (planned) your hand-written code, never overwritten
-```
-
-Secrets (tokens, API keys, passwords) go in the macOS Keychain, never in a file.
+App Builder never writes into its own app bundle. Projects live in
+`~/Library/Application Support/App Builder for FutureBasic/workspace/`, one folder each, and passwords and keys stay
+in the Keychain. The [user guide](docs/USER_GUIDE.md#5-the-workspace-and-your-projects-files) shows what is in a
+project folder.
 
 ## Documentation
 
-| Document | What it answers |
+| Read this | For |
 |---|---|
-| [`docs/ROADMAP.md`](docs/ROADMAP.md) | Where the project is going, phase by phase |
-| [`docs/BACKLOG.md`](docs/BACKLOG.md) | Open items and ideas |
-| [`docs/DEVELOPMENT_LOG.md`](docs/DEVELOPMENT_LOG.md) | What was done, what was learned, with commits |
-| [`docs/USER_GUIDE.md`](docs/USER_GUIDE.md) | **How to use the app** — projects, generation, business rules, ALS import / export |
-| [`docs/TESTING.md`](docs/TESTING.md) | Every test and how to run it: `tools/run_tests.sh`, and the checks on a Mac |
-| [`docs/features/`](docs/features/) | How each feature works |
-| [`docs/design/`](docs/design/) | The generated app's shell; the generator app (workspace, settings, git) |
-| [`docs/reference/FB Coding Rules.md`](docs/reference/FB%20Coding%20Rules.md) | Rules every FB file follows — hand-written and generated |
-| [`docs/controls/Controls Catalog.md`](docs/controls/Controls%20Catalog.md) | Native controls available to generated apps |
+| [User guide](docs/USER_GUIDE.md) | Using App Builder, from the first project to business rules |
+| [Test scenario guide](docs/TEST_SCENARIOS.pdf) | Checking every feature on a Mac, step by step (source: [TEST_SCENARIOS.md](docs/TEST_SCENARIOS.md)) |
+| [Testing](docs/TESTING.md) | The automated checks, and how to run them |
+| [Features](docs/features/) | How each feature works, one file each |
+| [Design](docs/design/) | The larger designs: the generated app, the rules engine, licensing, the Web Toolkit, record files |
+| [FB coding rules](docs/reference/FB%20Coding%20Rules.md) | The rules all our FutureBasic follows, hand-written or generated |
+| [Roadmap](docs/ROADMAP.md), [backlog](docs/BACKLOG.md), [development log](docs/DEVELOPMENT_LOG.md) | Where it is going, what is open, what was done |
 
-## Building
+## Building and checking
 
-FutureBasic 7.1.x on macOS. Open `src/AppBuilder/Studio for FB.fbeproj` in the
-FB editor and build (the project links `-lsqlite3`). Before handing over FB
-changes, check them:
+You need a Mac with FutureBasic 7. Build Studio for FB as above. The examples build the same way, each from its own
+`.fbeproj`.
+
+FutureBasic does not run outside the Mac, so the repository carries checks that do: a linter for our coding rules,
+the rules engine's scenarios, the B-tree and web tests, and more. Run them all with:
 
 ```bash
-python3 tools/fblint.py --headers <FutureBasic_Documentation>/Toolboxes/Headers src
+tools/run_tests.sh
 ```
+
+[Testing](docs/TESTING.md) describes each check and the tests that need a Mac.
 
 ## Related repositories
 
-- **FutureBasic_Documentation** (private) — the current FB reference manual,
-  toolbox headers and examples; the Northwind ALS project used for testing.
-- **Test_Xib_View** — the SQLite + XIB "Modern CRM" app: the record/view pattern
-  generated apps follow, and the SQL query builder.
-- **Domain-Driven-Design-Book** (private) — the principles the generator follows.
+- **FutureBasic_Documentation** (private): the FutureBasic reference, toolbox headers and examples we check against.
+- **Test_Xib_View**: the SQLite and XIB app whose record and view pattern generated apps follow.
+
+MIT licence for the free modules (see each folder's LICENSE). The Imagery name and logos are not licensed for reuse.

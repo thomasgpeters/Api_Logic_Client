@@ -260,7 +260,7 @@ adds the record. **Delete** asks first; the rules decide what happens to related
 
 The app is generated as the **Lite** edition: free and open source. It opens the project's SQLite
 database itself and runs the business rules inside the app. A paid **Professional** edition, a
-three-tier app that talks to an API Logic Server, is planned (`design/Editions and Licensing.md`).
+three-tier app that talks to an API Logic Server, is planned (`design/Editions Design.md`).
 
 A project whose model was read from an API Logic Server (*Open API Logic Server Metadata JSON*, or the ALS form)
 can generate XIBs, bindings and the model diagram, but not a Lite app: create the project from the
