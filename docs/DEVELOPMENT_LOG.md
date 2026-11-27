@@ -6,6 +6,21 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Build fixes: NSLog.incl where it was missing; fblint checks opt-in headers
+
+- **The author's build of the Web Toolkit example** stopped at 47 errors:
+  - 44 were "Unknown statement 'NSLog'". The SQL Generator's files include `NSLog.incl` themselves, but the Web Toolkit
+    example, its template and the LogicBank example have no SQL Generator. Each now includes `NSLog.incl` in its globals,
+    as does the generated app's `App Globals.glbl` template.
+  - 3 came from `CFDateFormatterRef`, which is in `Tlbx CFDateFormatter.incl`; FB's own `DateFormatterRef` is now used.
+- **`MapKit Points Test.fb`** had the same `NSLog` problem.
+- **`fblint`: names from opt-in headers.** It now finds a name from an opt-in header that the project never includes.
+  - The opt-in headers are `NSLog.incl` and the `Tlbx` headers FB's own examples include by hand, plus `Tlbx
+    Security.incl` and `Tlbx CFDateFormatter.incl`.
+  - It reads the includes of a file included from beside it, and skips comments and C blocks.
+  - On the old files it reports exactly the author's errors.
+- **The author: our files are never named `Tlbx ...`.** That prefix is for toolboxes that wrap C code (FB Coding Rules).
+
 ## 2026-11-27 — Build fix: our own Security declarations
 
 - **The author's build after the rename** stopped at `include "Tlbx Security.incl"` ("Missing or invalid source
