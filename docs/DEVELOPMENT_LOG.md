@@ -6,6 +6,25 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The search dialog; a separator in the toolbar; a scrolling navigation bar (6b9fa7d)
+
+- **Author:** a scrolling navigation bar (the full Northwind, about twenty tables); a separator keeping Search apart
+  from the record actions; Search opening a dialog: *Search by* a field from a dropdown, and the value in a text box,
+  a date picker (a little calendar) for a date field, and, for a field with distinct values such as a type, a
+  second dropdown of those values - dynamic, for every field type, built into the generated app.
+- **Search dialog** (App Toolbar.incl, Cocoa popover): the field popup (Any Field + the page's fields), then a
+  search field, a value popup or a graphical date picker (`NSDatePickerStyleClockAndCalendar`, year-month-day).
+  Distinct values come from the page's records: at most 15, each used more than once on average; keys and parents
+  get a text box (their values are numbers). Queries `{ field, mode, text }`; `RecordSearchQuery` (Record
+  Search.incl): text (every word, in that field or any), value (exact), date (that day: the value starts with
+  yyyy-mm-dd). Generated: `AppPageSearchFields` per page (`AppSearchFieldsLiteral`: kind date / key / text from the
+  control kind, the SQL type, the key and the lookup), `gAppPageQuery`.
+- **Separator:** a toolbar item whose view is a vertical `NSBoxSeparator` box (`ToolbarItemSetView`).
+- **Navigation bar:** `ShellNavScroll` moves the entity buttons and the highlight into an NSScrollView with a
+  flipped document view (Cocoa, `ShellNavScrollViews`) the first time a page is shown; `ShellNavItemY` measures
+  from the list's top then; the page's button is scrolled into view. Test scenarios G-01a, G-02b. Waits for a Mac
+  build.
+
 ## 2026-11-27 — The navigator in the tiles; the list and toolbar checked against FB's reference
 
 - **Author:** check the list view's selection (-1 when nothing is selected, else from 0), the callbacks available

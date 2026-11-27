@@ -28,10 +28,17 @@ Every app generated from a SQLite project opens in the same frame:
   footer. The items know the context (`AppToolbarSetEnabled`, autovalidation off): Save only with a change in the Form
   (`AppPageHasChange`: the Form read now differs from the Form as it was shown, `gAppPageClean`, taken after a record
   is shown and after the lookups fill in), Delete only with a record shown. They are updated after every event
-  (`AppPagesDoDialog` wraps the handler) and at every keystroke in the Form (`AppToolbarWatchEdits`). FB has no search item, so clicking Search opens our own search field, a small Cocoa popover under the item
-  (`AppToolbarSearchPopover`); each keystroke calls `AppPageSearchChanged` (App Pages.incl), which narrows the List to
-  the records holding every word (`Record Search.incl`: any case, any accent) and keeps the navigator on those. A new
-  page clears the search. The toolbar can be customised and its arrangement is saved.
+  (`AppPagesDoDialog` wraps the handler) and at every keystroke in the Form (`AppToolbarWatchEdits`). A separator follows Search: a vertical `NSBoxSeparator` box as an
+  item's view (macOS has had no separator item since 11). FB has no search item, so clicking Search opens our own
+  **search dialog**, a Cocoa popover under the item (`AppToolbarSearchPopover`): *Search by* a field (from
+  `AppPageSearchFields`, generated: every field shown, its title and kind) or Any Field, then a calendar for a date
+  field, a dropdown of the field's distinct values when it has at most 15, each used more than once on average
+  (worked out from the page's records), or a text box. Every change sends a query `{ field, mode, text }` to
+  `AppPageSearchChanged`, which narrows the List (`Record Search.incl`: `RecordSearchQuery`) and keeps the navigator on
+  those. A new page starts a new search. The toolbar can be customised and its arrangement is saved.
+- **Navigation bar:** the entity buttons go into a scrolling list (`ShellNavScroll`, the first time a page is shown:
+  a flipped document view, an overlay scroller) between the heading and the copyright, and the button of the page
+  shown is scrolled into view, for models with many entities.
 - **Record navigator** (author, 2026-11-27): a page opens on its first record - selected in the List, the List
   given the focus (the arrow keys move through it), the record in the Form. First and Previous are dimmed on the
   first record, Next and Last on the last. After a Save the same record stays selected; after adding one, the new
