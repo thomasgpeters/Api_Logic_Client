@@ -58,6 +58,8 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 
 ## The generated app's look (author's first run, 2026-11-27)
 
+- [ ] Records as tiles (`Record Tiles.incl`): the switch in each List card, three or four across, the name and details, a click shows the record in the Form; light and dark
+
 - [x] Nav bar darker in dark mode; the working area apart from the Forms and Lists (cards on a backdrop); Forms and
       Lists across the full width with margins, the List's columns sharing it (`APP_SHELL_FEATURE.md`).
 - [ ] **On the Mac:** generate again and build. `Theme.incl` is yours and is not overwritten, so to get the new
@@ -221,7 +223,7 @@ LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in AL
   translation through the ALS project's `genai-logic` when it has it, else the Studio's connector
 - [ ] Professional: the client previews the rules locally (LogicBank for FutureBasic) while the server decides
 - [x] Decisions (author, 2026-11-26): every edition with the user's own key; Claude first; Professional both routes;
-  the neutral expression language; the module published. The rules split: `design/Editions and Licensing.md`
+  the neutral expression language; the module published. The rules split: `design/Editions Design.md`
 
 ## Rules - Logic for FutureBasic (`design/Logic Engine Design.md`, ROADMAP Phase 5)
 
@@ -372,6 +374,10 @@ the site, download] -> [post to the list].
 - [ ] A stop in the middle: quit with Force Quit during a Run, open again - the counts recovered, the indexes rebuilt, Check sound
 - [ ] Record checksums (a half-written slot is found), before it is offered in App Builder
 - [ ] App Builder: "Record files with B-tree indexes" as a data choice beside SQLite - records and indexes generated from the model, `App Data Records.incl` behind the same app data interface
+
+## Documentation
+
+- [ ] `DOC_ONE_PAGER.html` / `.pdf`: bring them in step with `DOC_ONE_PAGER.md` (editions, grid or tiles, App Builder naming), or build them from the Markdown with a tool
 
 ## Ideas
 

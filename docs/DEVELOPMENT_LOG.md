@@ -6,6 +6,53 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Documentation cleanup (author: "remove redundancies and fix wording to be professional but warm and readable")
+
+- **README** rewritten (bd477b6): what App Builder is, a four-step start, editions, the free modules, the repository,
+  a documentation map. The details live in the user guide; the README links to them.
+- **USER_GUIDE.md**: shorter sentences, "you", "App Builder" throughout; licences and editions in section 2; the
+  Welcome page's new layout, the project icon, grid or tiles; repeats merged. Stale facts fixed: the example
+  `Windows.incl` (it showed functions the generator no longer writes), Open Project is Command-O, Delete Project is in
+  the Project menu, FutureBasic 7 (not 7.1.x), every Generate command needs a licence.
+- **DOC_ONE_PAGER.md**: App Builder throughout, the editions, grid or tiles. Its .html and .pdf are hand-made and now
+  lag the Markdown (backlog).
+- **ROADMAP**: current statuses; phase 6, the free modules and the site.
+- **Editions Design.md** (was Editions and Licensing.md): the editions, the two data layers, the rules split;
+  licensing is in Licensing Design only.
+- **The modules' READMEs**: the gentle start first; the Templates README corrected (it described bundled templates,
+  listed three of seven, and showed an old start-up).
+- **docs/archive/**: the LinkedIn post and the dated summary report.
+
+## 2026-11-27 — The test scenario guide (PDF)
+
+- **Asked** (author): "a test scenario guide to enable people to test and validate all the various features.
+  Professional style pdf document".
+- **Built:** `docs/TEST_SCENARIOS.md` (the source: 32 scenarios, 94 steps, in nine areas - the Studio's launch and
+  licence, projects, entity definitions, settings, the model diagram, generating, the generated app with its tiles,
+  the free modules, the checks without a Mac) and `tools/make_test_guide.py`, which builds `docs/TEST_SCENARIOS.pdf`:
+  a cover with the tester's record, a results summary, and each scenario's steps in a table with Pass / Fail boxes.
+- **On the site** (`tools/make_site.py`): `/downloads/Test-Scenario-Guide.pdf`, a card on the home page and a "Test it
+  yourself" section on the App Builder page.
+
+## 2026-11-27 — Generated apps: records as tiles beside the grid
+
+- **Asked** (author): a "grid-bag" of tiles beside the grid for multi-record results: popping style, the name as a
+  subheading, other details smaller, three or four across.
+- **Built:** `src/Runtime/Record Tiles.incl` (copied into every app), a Grid / Tiles switch in each List card's
+  title row; the generator picks each entity's name field and four details from the model (`AppTilesCall`).
+  `docs/features/APP_SHELL_FEATURE.md`, "Records as tiles". `tools/check_app_pages.py` lints the generated calls
+  with the new runtime file. Waiting on the Mac.
+
+## 2026-11-27 — The SQL Generator for the FB list: a short post, a small download
+
+- **The post** (`src/SQLGeneratorExample/ANNOUNCEMENT.md`), in the author's style (author: "the apology is too much ...
+  they will stop there"): one line of apology, then the code; the one-file demo first, the example app second; a link,
+  no attachments (the list's storage fills up).
+- **The small download** (author: most on the list share a single-file app; the example app may overwhelm):
+  `SQL-Generator-Module.zip` on the site (`tools/make_site.py`), about 50 KB - the module's four files, the one-file
+  demo, the licence and a README.txt of three steps. It is the first button on the SQL Generator page and the home
+  page's Download link; the example app is the second button.
+
 ## 2026-11-27 — Record Files for FutureBasic: record files and B-tree indexes, timed against SQLite
 
 - **The idea** (author): FB's `begin record` types in random-access files as legacy FB did, with index files beside
@@ -40,6 +87,12 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   Build error on the Mac: `CGRect r = gStudioHeadingFrame` became `= &gStudioHeadingFrame` (FB passes a global record
   by address); the heading keeps only its left edge (`gStudioHeadingLeft`) and reads its frame from the view. fblint
   now reports a record declared with a global record as its value.
+  More room around that heading (author: "still too squished"): 24 points above the logo and 24 below it, before the
+  box, on both pages.
+  The working area as a card (author): rounded corners (12), no outline, a background a shade apart from the window -
+  white on the light one, a lighter grey on the dark one (`StudioCardColor`, `StudioCard`, Branding.incl). Its buttons
+  float right, the main action rightmost (Open Project..., then Create Project; Cancel, then Create on the server form),
+  and on the Welcome page they sit below the project list (author: "the action buttons should be below the project list").
   Project pages: the project's icon and name, no Imagery logo (author: "each project should have an ICON"): its
   picture from Project Settings, else its SF Symbol (`ProjectIconImage`, `ProjectShowHeading`), updated when
   Project Settings is closed.

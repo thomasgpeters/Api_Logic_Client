@@ -1,6 +1,6 @@
 # Licensing Design: one app, licensed through the Imagery License Server
 
-Status: design (author, 2026-11-26). It replaces the earlier plan in `Editions and Licensing.md` (Lite open source,
+Status: design (author, 2026-11-26). It replaced an earlier plan (Lite open source,
 Professional a separate private build that swaps `Edition.incl`). Nothing is built yet; see BACKLOG.
 
 ## Decisions (author, 2026-11-26)
@@ -163,7 +163,7 @@ Fleet's `docs/LICENSING.md`).
 - **Lite is `0x0003`.** **Professional is `0x01FF`** (bits 0-8); with the web target, `0x03FF`. `Licence.incl` already
   treats unknown bits as features it does not offer yet, so a licence carrying bit 9 works today.
 - **Trials:** a trial is an Professional licence that expires, as the License Server's 30-day trials already work.
-- **The split between editions:** `Editions and Licensing.md` → *Rules: where the line is*; this table is that
+- **The split between editions:** `Editions Design.md` → *Rules: where the line is*; this table is that
   split, in bits.
 
 ## In the app

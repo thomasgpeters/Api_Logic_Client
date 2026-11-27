@@ -12,7 +12,8 @@ repository already holds, so the site and the apps never disagree:
     /help/logicbank/
     /samples/, /samples/<name>/   the sample applications: their READMEs, their downloads
     /app-builder/             App Builder: Lite and Professional, registration on the Imagery License Server
-    /downloads/*.zip          each module's example app (MIT), each sample
+    /downloads/*.zip          each module's example app (MIT), each sample; the SQL Generator's module alone with a one-file demo
+    /downloads/Test-Scenario-Guide.pdf   the test scenario guide (docs/TEST_SCENARIOS.pdf)
 Standard library only (no packages to install). Imagery's name and logos are not licensed for reuse.
 """
 import html
@@ -30,6 +31,20 @@ YEAR = '2026'
 
 MODULES = [
     {'slug': 'sql-generator', 'name': 'SQL Generator', 'folder': 'src/SQLGeneratorExample', 'zip': 'SQL-Generator-Example.zip',
+     # the gentle start (author, 2026-11-27): the module's four files and the one-file demo, nothing more
+     'small_zip': 'SQL-Generator-Module.zip',
+     'small_files': ['DataObject.glbl', 'DataObject_Super.incl', 'DataObject.incl', 'SQL Generator SQLite.incl',
+                     'SQL Generator - Smallest Program.fb', 'LICENSE'],
+     'small_readme': 'SQL Generator for FutureBasic\n\n'
+                     'The module (four files) and a one-file demo.\n\n'
+                     '1. Keep the files together in one folder.\n'
+                     '2. Open "SQL Generator - Smallest Program.fb" in FutureBasic and run it.\n'
+                     '3. Watch the NSLog window: the SQL it wrote, and the rows it read back.\n\n'
+                     'In your own program, include the four files in the same order as the demo does,\n'
+                     'and add -lsqlite3 to Build Settings > Compiler options.\n\n'
+                     'More examples, the user guide and the full example app:\n'
+                     'https://fb.imagery-business-systems.com/sql-generator/\n\n'
+                     'MIT License. See LICENSE.\n',
      'blurb': 'Describe a SELECT, INSERT, UPDATE or DELETE as a dictionary (its tables, columns, filters and joins) and get safe, '
               'parameterized SQL for SQLite. Names are quoted for you, and every value is bound rather than pasted into the SQL.'},
     {'slug': 'logicbank', 'name': 'LogicBank for FutureBasic', 'folder': 'src/LogicBankExample', 'zip': 'LogicBank-for-FutureBasic-Example.zip',
@@ -252,6 +267,15 @@ def zip_folder(folder, zip_path, top):
                 z.write(full, os.path.join(top, os.path.relpath(full, folder)))
 
 
+def zip_files(folder, names, zip_path, top, readme=None):
+    """a few files of a folder, in a zip (and a short README.txt when given)"""
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as z:
+        for name in names:
+            z.write(os.path.join(folder, name), os.path.join(top, name))
+        if readme:
+            z.writestr(os.path.join(top, 'README.txt'), readme)
+
+
 def licence_server():
     text = open(os.path.join(ROOT, 'src', 'AppBuilder', 'Licence.incl'), encoding='utf-8').read().replace('\r', '\n')
     server = re.search(r'#define LICENCE_SERVER\s+@"([^"]+)"', text).group(1)
@@ -279,6 +303,14 @@ def build(out):
             buttons = (f'<p><a class="button" href="../downloads/{m["zip"]}">Download the module (zip)</a>'
                        f'<a class="button secondary" href="../downloads/{m["example_zip"]}">Download the example (zip)</a>'
                        f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>')
+        elif m.get('small_zip'):
+            # the small download first: the module and a one-file demo; the example app for later
+            zip_files(folder, m['small_files'], os.path.join(out, 'downloads', m['small_zip']), m['small_zip'][:-4], m.get('small_readme'))
+            buttons = (f'<p><a class="button" href="../downloads/{m["small_zip"]}">Download the module and a one-file demo (zip)</a>'
+                       f'<a class="button secondary" href="../downloads/{m["zip"]}">Download the example app (zip)</a>'
+                       f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>'
+                       f'<p>New to it? Start with the small download: the module\'s four files and a demo of about 40 lines. '
+                       f'The example app shows ten examples, each with the FB, the SQL it wrote and the result.</p>')
         else:
             buttons = (f'<p><a class="button" href="../downloads/{m["zip"]}">Download the example (zip)</a>'
                        f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>')
@@ -307,6 +339,11 @@ def build(out):
           'Each one is a SQLite database with its business rules and its tests, and the same rules in FutureBasic.</p>\n'
           f'<div class="cards">{"".join(cards)}</div>', 1))
 
+    # the test scenario guide (docs/TEST_SCENARIOS.pdf, tools/make_test_guide.py): a download, linked below
+    guide_pdf = os.path.join(ROOT, 'docs', 'TEST_SCENARIOS.pdf')
+    if os.path.exists(guide_pdf):
+        shutil.copy(guide_pdf, os.path.join(out, 'downloads', 'Test-Scenario-Guide.pdf'))
+
     # App Builder
     register = licence_server()
     write(out, 'app-builder/index.html', page('App Builder for FutureBasic', f"""<h1>App Builder for FutureBasic</h1>
@@ -324,11 +361,15 @@ the data binding and the business rules, ready for you to open in the FutureBasi
 With the modules on their own, you write your rules by hand. App Builder writes them for you from plain sentences, checks them
 against your model, tests every rule, and builds the app around them.</p>
 <p>We're working on the same for the web, though it isn't ready yet. With the Web Toolkit on its own you write each page yourself;
-App Builder will build the pages from your model (forms, lists, bindings and rules) for a web app beside the Mac app, or in its place.</p>""", 1, 'Build a complete FutureBasic app from your database.'))
+App Builder will build the pages from your model (forms, lists, bindings and rules) for a web app beside the Mac app, or in its place.</p>
+<h2>Test it yourself</h2>
+<p>The test scenario guide walks you through every feature of App Builder, the apps it builds and the free modules, one
+step at a time: what to do, what you should see, and a box to tick. It's how we check a release, and you're welcome to use it.</p>
+<p><a class="button" href="../downloads/Test-Scenario-Guide.pdf">Download the test scenario guide (PDF)</a></p>""", 1, 'Build a complete FutureBasic app from your database.'))
 
     # the home page
     module_cards = ''.join(f'<div class="card"><span class="tag">free &middot; MIT</span><h3><a href="{m["slug"]}/index.html">{esc(m["name"])}</a></h3>'
-                           f'<p>{esc(m["blurb"])}</p><p><a href="downloads/{m["zip"]}">Download</a> &middot; <a href="help/{m["slug"]}/index.html">User guide</a></p></div>'
+                           f'<p>{esc(m["blurb"])}</p><p><a href="downloads/{m.get("small_zip", m["zip"])}">Download</a> &middot; <a href="help/{m["slug"]}/index.html">User guide</a></p></div>'
                            for m in MODULES)
     write(out, 'index.html', page('FutureBasic tools', f"""<h1>Tools for FutureBasic programmers</h1>
 <p class="lead">We're Imagery Business Systems, and we make these for FutureBasic programmers on the Mac. There are three free
@@ -340,7 +381,10 @@ modules for your own apps, sample applications that show them at work, and App B
 <p>Windows, forms, lists, data binding and business rules, generated from your database. You write rules as plain sentences, and App Builder checks and tests them.</p>
 <p><a href="{register}">Register</a> &middot; <a href="app-builder/index.html">Lite and Professional</a></p></div>
 <div class="card"><span class="tag">samples</span><h3><a href="samples/index.html">Sample applications</a></h3>
-<p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, each with its database, rules and tests.</p></div></div>""", 0,
+<p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, each with its database, rules and tests.</p></div>
+<div class="card"><span class="tag">PDF</span><h3><a href="downloads/Test-Scenario-Guide.pdf">Test scenario guide</a></h3>
+<p>Every feature, step by step: what to do, what you should see, and a box to tick. Use it to try things out, or to check a release.</p>
+<p><a href="downloads/Test-Scenario-Guide.pdf">Download the PDF</a></p></div></div>""", 0,
         'Free FutureBasic modules (the SQL Generator, LogicBank for FutureBasic and the Web Toolkit) and App Builder for FutureBasic.'))
     return out
 

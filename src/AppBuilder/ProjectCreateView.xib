@@ -13,11 +13,11 @@
             <rect key="frame" x="0.0" y="0.0" width="684" height="416"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <box boxType="custom" cornerRadius="4" title="Box" id="UkJ-R5-zc1">
-                    <rect key="frame" x="20" y="20" width="644" height="300"/>
+                <box boxType="custom" cornerRadius="12" title="Box" tag="111" id="UkJ-R5-zc1">
+                    <rect key="frame" x="20" y="20" width="644" height="274"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <view key="contentView" id="N5i-31-sSM">
-                        <rect key="frame" x="1" y="1" width="642" height="298"/>
+                        <rect key="frame" x="1" y="1" width="642" height="272"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button fixedFrame="YES" tag="205" translatesAutoresizingMaskIntoConstraints="NO" id="cm6-bb-za6">
@@ -32,8 +32,8 @@ DQ
                                 </buttonCell>
                             </button>
                             <button fixedFrame="YES" tag="204" translatesAutoresizingMaskIntoConstraints="NO" id="zED-t0-9bk">
-                                <rect key="frame" x="13" y="13" width="90" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="437" y="13" width="90" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <buttonCell key="cell" type="bevel" title="Cancel" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ely-m5-GmZ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -43,7 +43,7 @@ Gw
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wqG-RU-zCV">
-                                <rect key="frame" x="100" y="246" width="90" height="16"/>
+                                <rect key="frame" x="100" y="220" width="90" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Project Name:" id="f9h-DV-lcm">
                                     <font key="font" metaFont="system"/>
@@ -52,7 +52,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" tag="200" translatesAutoresizingMaskIntoConstraints="NO" id="58z-NG-kSp">
-                                <rect key="frame" x="203" y="244" width="337" height="21"/>
+                                <rect key="frame" x="203" y="218" width="337" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="7Sj-o3-bSe">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -61,7 +61,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <box fixedFrame="YES" title="Api Logic Project " translatesAutoresizingMaskIntoConstraints="NO" id="o2C-dg-jgz">
-                                <rect key="frame" x="103" y="73" width="437" height="142"/>
+                                <rect key="frame" x="103" y="55" width="437" height="142"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="pBh-TA-r0d">
                                     <rect key="frame" x="3" y="3" width="431" height="124"/>
@@ -128,7 +128,7 @@ Gw
                     </view>
                 </box>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vvD-dp-JRr">
-                    <rect key="frame" x="116" y="366" width="548" height="31"/>
+                    <rect key="frame" x="116" y="354" width="548" height="31"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="App Builder for FutureBasic" id="g9l-YR-smA">
                         <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
@@ -137,14 +137,14 @@ Gw
                     </textFieldCell>
                 </textField>
                 <imageView tag="104" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w3H-Bz-E9k">
-                    <rect key="frame" x="20" y="330" width="84" height="74"/>
+                    <rect key="frame" x="20" y="318" width="84" height="74"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="vyn-xb-8bA">
                     </imageCell>
                     <symbolConfiguration key="symbolConfiguration" scale="large" weight="ultraLight"/>
                 </imageView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pcv-sub-txt">
-                    <rect key="frame" x="118" y="340" width="546" height="20"/>
+                    <rect key="frame" x="118" y="328" width="546" height="20"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingTail" alignment="left" title="A project from a running API Logic Server" id="pcv-sub-cel">
                         <font key="font" usesAppearanceFont="YES"/>
