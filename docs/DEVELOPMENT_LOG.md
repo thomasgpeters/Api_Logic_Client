@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The info button's popover: a tag-range clash
+
+- **Still no popover** (author). Not a scope problem: every page's Form and List are already loaded when the app opens
+  (`AppPagesBuild`, two `nibview`s per entity) and hidden until their page is shown. The click was taken earlier in
+  `AppPagesDoDialog`: `BindingRadioClicked` claimed every tag from 30000 to 59999 as a radio button, and the lookups'
+  info buttons are 40000 + the field's tag, so it answered "mine" and `RecordPopoverClicked` never ran. Radio buttons
+  now start at 100000 (`_xibRadioTagBase`, `_bindingRadioTagBase`) and their range ends at 199999, clear of everything
+  else. Regenerate the app (Generate App rewrites the XIBs with the new tags).
+
 ## 2026-11-27 — "Call to undeclared function 'StudioFindView'"
 
 - **The build error** (author): FB compiles a project in several chunks; a C function written only in `BeginCFunction`

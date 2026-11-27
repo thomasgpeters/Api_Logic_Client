@@ -42,7 +42,7 @@ regenerations. Constants for every tag go to `Model Tags.incl`
   (`TypeMapValueParts`); a Dropdown's list then goes in with `BindingSetChoices( tag, titles, codes )`,
   Radio buttons take the labels as titles and the codes in `BindingShowRadio` / `BindingTakeRadio`.
   Radio buttons sit in a `customView` with the field's tag; button n has tag
-  30000 + field tag × 10 + n (`BindingRadioTag`); `BindingRadioClicked` turns the others off.
+  100000 + field tag × 10 + n (`BindingRadioTag`); `BindingRadioClicked` turns the others off.
   Model.json carries a choice's `values` or `lookup` ({ entity, key, display }), which
   `SQLite Model.incl` sets on a single-column foreign key.
 - **Type → control:** VARCHAR/CHAR → text field (width from length, capped);
