@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The LogicBank example's opening page; the Studio's heading with no project open
+
+- **LogicBank example, opening page** (author: "needs paragraph breaks... we need to see the rules as natural
+  language, so the user gets a sense of what they're about to see"): short paragraphs, then **The rules, in plain
+  words** - each rule in `Rules.incl` as one sentence, grouped item / order / customer - then **What you will see**
+  (the thirteen steps, and the buttons). `StoryIntro`, `StoryRule` in `Story.incl`.
+- **Studio for FB, no project open:** the heading said "Untitled Project"; it now shows the product's name
+  (`APP_DISPLAY_NAME`), in `MainWindow.xib` and when a project is closed (`ProjectResetToEmpty`).
+
 ## 2026-11-27 — Three Mac reports: StringRef, the Web Toolkit's Objective-C, LogicBankExample's crash; globals swept
 
 - **Generated app (Northwind): "Unknown variable type StringRef"** in `App Shell.incl`'s colour provider, written from
