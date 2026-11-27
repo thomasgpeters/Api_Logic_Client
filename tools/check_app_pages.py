@@ -35,6 +35,7 @@ def ev(e,env):
     e=e.strip()
     if e=='index': return str(env['index'])
     if e in('name','prefix'): return env[e]
+    if 'AppSearchFieldsLiteral' in e: return '@{ @"name":@"Name", @"title":@"Name", @"kind":@"text" }, @{ @"name":@"Since", @"title":@"Since", @"kind":@"date" }, @{ @"name":@"Id", @"title":@"Id", @"kind":@"key" }'
     if 'AppTilesCall' in e: return f'fn RecordTilesShow( {env["index"]}, records, @"Name", @[ @"City", @"Phone" ], @[ @"City", @"Phone" ] )'
     if 'XibResourcePrefix' in e: return pre(env['resource']['name'])
     if 'formNib' in e: return env['resource']['formNib']
