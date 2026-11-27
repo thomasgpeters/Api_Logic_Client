@@ -188,6 +188,16 @@ Purpose: The tiles view beside the grid.
 4. Switch to another page and back. -> The page still shows tiles; switch back to the grid with the list symbol.
 5. Switch the theme to dark. -> The tiles still stand out from their card.
 
+### G-06 Auto-complete for a related record
+Purpose: Finding a parent record by typing.
+Before: In App Builder, a foreign key (an Address's Person, an Order's Customer) set to Control: Auto-complete, then Generate App.
+1. In App Builder, select that attribute. -> A settings row appears under the Control popup: Show (the parent's field), After 1 letter, Up to 8 results.
+2. In the generated app, type the first letters of a parent's name into the field. -> A list of matches opens under the field (above it, if the field is low in the window); names that start with the letters come first.
+3. Choose one with a click, or with the arrow keys and Return. -> The field shows the name; the list closes.
+4. Save, then choose another record and come back. -> The field shows the chosen parent's name.
+5. Click the info button beside the field. -> A popover shows the chosen parent's fields.
+6. Type, then press Escape. -> The list closes.
+
 ## H. The free modules
 
 ### H-01 SQL Generator: the one-file demo

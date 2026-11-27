@@ -202,6 +202,10 @@ build with "Missing or invalid source file ... (error 1234 for Tlbx Security.inc
 - **Our file names never start with `Tlbx`** (author, 2026-11-27). `Tlbx ...` is FutureBasic's name for a toolbox: a header
   that wraps a C or Objective-C library or framework for FB. Our own files are named for what they do (`Licence.incl`,
   `SQLite Access.incl`). A real toolbox of ours, an FB wrapper over a C library such as nlohmann/json, could carry the prefix.
+- **FB's `ViewWithTag` looks only in its current output window** (2026-11-27: "View does not exist ... tag: 40100", a
+  generated app's info button, clicked). When an event arrives, that is not always the app's window. Find a view by tag
+  with `ShellFindView` (runtime, `App Shell.incl`) or `StudioFindView` (App Builder, `Branding.incl`): Cocoa's
+  `viewWithTag:` across the app's windows, controls inside XIB parts included.
 - **A box in a XIB has no tag FB can find** (2026-11-27, the Studio's cards: "View does not exist ... tag: 110"). NSBox
   is not a control; a tag set on it in Interface Builder never reaches it. Find the box from a control inside it that
   has a tag, walking up its superviews (`StudioCardAround`, Branding.incl).
