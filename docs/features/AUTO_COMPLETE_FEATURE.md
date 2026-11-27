@@ -1,4 +1,4 @@
-# Auto-complete (a control for foreign keys)
+# Auto-complete (related records, or local values)
 
 Author, 2026-11-27: "a text box that looks up matching related records as the user types. The results are in a
 results list right below or above (if the control is too low in the layout) the text field. When the user selects
@@ -19,12 +19,20 @@ to see the appropriate settings."
   (`App Shell.incl`), across the app's windows: FB's `ViewWithTag` only looks in its current output window
   ("View does not exist", tag 40100, 2026-11-27).
 
+## Local values (author, 2026-11-27: "custom auto-complete on other fields that are based on in-memory values (called local values), not just lookups of related tables")
+
+Any attribute with a **Values** list can be an auto-complete: the list is written into the generated code
+(`AutoCompleteSetValues`), and the matches come from it. `R = Retail, W = Wholesale` shows the label and stores the
+code, as a Dropdown does. **Allow other values** keeps what the user types when it is not in the list (a label typed in
+full stores its code); it is on for a plain list and off for a list of codes, unless the designer chooses. A Values list
+takes precedence over a related table, as for a Dropdown.
+
 ## In App Builder
 
-- **Control: Auto-complete**, for a foreign key (any other attribute falls back to its normal control).
+- **Control: Auto-complete**, for a foreign key or an attribute with a Values list (any other attribute falls back to its normal control). The designer can still choose a Dropdown for either.
 - Choosing it shows a settings row under the Control popup: **Show** (the parent's field the user sees and types; the
   lookup's display column by default), **After 1 / 2 / 3 letters**, **Up to 5 / 8 / 12 / 20 results**. Kept in
-  `Design.json` (`acDisplay`, `acMinChars`, `acMaxResults`); the attribute table moves down to make room only while
+  `Design.json` (`acDisplay`, `acMinChars`, `acMaxResults`, `acOthers`). With local values, Show reads "From the Values list" and **Allow other values** appears; the attribute table moves down to make room only while
   the row shows.
 
 ## The generator

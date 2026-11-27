@@ -168,10 +168,12 @@ What each control does:
   `R = Retail, W = Wholesale, O = Online` stores the code (`R`) and shows the label (`Retail`).
   The first item is empty: no value. Beside a foreign key's Dropdown, an **info button** (ⓘ)
   shows the chosen record's details in a popover, for example an Order's Customer.
-- **Auto-complete** (for a foreign key): a text field that finds the related record as you type. The matches open in
+- **Auto-complete** (for a foreign key, or any attribute with a **Values** list): a text field that finds the related record, or the local value, as you type. The matches open in
   a list under the field (or above it, near the bottom of the window); choosing one shows its name and stores its key.
   When you choose it, a settings row appears under the Control popup: **Show** (the related record's field the user
-  sees and types), **After 1, 2 or 3 letters**, **Up to 5, 8, 12 or 20 results**. Generate to apply.
+  sees and types), **After 1, 2 or 3 letters**, **Up to 5, 8, 12 or 20 results**. With a Values list the matches come
+  from it (labels shown, codes stored), and **Allow other values** keeps what the user types when it is not in the
+  list. Generate to apply.
 - **Radio buttons**: one per value of the **Values** list, up to 8 (with more, or with no list,
   the attribute gets a Dropdown). Code = label pairs work the same way: the label is the button's
   title, the code is stored. Side by side when they fit, else one under the other.

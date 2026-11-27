@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Auto-complete on local values
+
+- **Asked** (author): auto-completes on other fields too, "based on in-memory values (called local values), not just
+  lookups of related tables"; the designer chooses a Dropdown or an Auto-complete.
+- **Built:** an attribute's Values list feeds the auto-complete (`AutoCompleteSetValues`; labels shown, codes stored);
+  **Allow other values** keeps typed text (default on for a plain list, off for codes; `acOthers` in Design.json); the
+  settings row shows "From the Values list" and the check box. Test scenario G-07. Waiting on the Mac.
+
 ## 2026-11-27 — Auto-complete for related records; "View does not exist" found for good
 
 - **"Cannot find a view with tag: 40100"** (author, the info button again): the tag is the info button itself. FB's

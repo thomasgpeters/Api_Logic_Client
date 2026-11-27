@@ -198,6 +198,14 @@ Before: In App Builder, a foreign key (an Address's Person, an Order's Customer)
 5. Click the info button beside the field. -> A popover shows the chosen parent's fields.
 6. Type, then press Escape. -> The list closes.
 
+### G-07 Auto-complete on local values
+Purpose: An auto-complete fed by the attribute's own Values list.
+Before: In App Builder, a text attribute with Values "R = Retail, W = Wholesale, O = Online" and Control: Auto-complete; another with a plain list ("Small, Medium, Large"), Auto-complete, Allow other values on. Generate App.
+1. In App Builder, select the first attribute. -> The settings row shows "From the Values list"; Allow other values is off (a list of codes).
+2. In the generated app, type "wh" in the first field. -> The list offers Wholesale; choosing it shows Wholesale.
+3. Save, then look at the record in the List. -> The stored value is W.
+4. In the second field, type "Extra large" and Save. -> The value is kept as typed (other values allowed).
+
 ## H. The free modules
 
 ### H-01 SQL Generator: the one-file demo
