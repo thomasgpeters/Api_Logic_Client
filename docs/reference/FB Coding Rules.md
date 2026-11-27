@@ -202,6 +202,10 @@ build with "Missing or invalid source file ... (error 1234 for Tlbx Security.inc
 - **Our file names never start with `Tlbx`** (author, 2026-11-27). `Tlbx ...` is FutureBasic's name for a toolbox: a header
   that wraps a C or Objective-C library or framework for FB. Our own files are named for what they do (`Licence.incl`,
   `SQLite Access.incl`). A real toolbox of ours, an FB wrapper over a C library such as nlohmann/json, could carry the prefix.
+- **A C function FB calls is declared in `BeginCDeclaration` and defined in `BeginCFunction`** (2026-11-27: "call to
+  undeclared function 'StudioFindView'"). FB compiles a project in several chunks; only the declarations (the shared
+  header) reach them all. Put the prototype in a `BeginCDeclaration` block, the body in `BeginCFunction`, then the
+  `toolbox` line, as FB's reference shows. `fblint` reports a `toolbox` C function with no declaration.
 - **FB's `ViewWithTag` looks only in its current output window** (2026-11-27: "View does not exist ... tag: 40100", a
   generated app's info button, clicked). When an event arrives, that is not always the app's window. Find a view by tag
   with `ShellFindView` (runtime, `App Shell.incl`) or `StudioFindView` (App Builder, `Branding.incl`): Cocoa's

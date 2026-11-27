@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — "Call to undeclared function 'StudioFindView'"
+
+- **The build error** (author): FB compiles a project in several chunks; a C function written only in `BeginCFunction`
+  is seen in its own chunk, not in `Project Actions.incl`'s. Every C function FB calls now has its prototype in a
+  `BeginCDeclaration` block (FB's reference pattern, as `Web Server.incl` already did): `StudioFindView`,
+  `ShellFindView`, the auto-complete's, the Record Files example's (53 in all; the generated apps and the example would
+  have failed the same way). fblint reports a `toolbox` C function with no declaration; rule in FB Coding Rules.
+
 ## 2026-11-27 — Auto-complete on local values
 
 - **Asked** (author): auto-completes on other fields too, "based on in-memory values (called local values), not just

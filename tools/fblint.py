@@ -510,6 +510,28 @@ def main(argv):
                                     f'(include "{im.group(2)}"), never in the project list (FutureBasic crashes)')
                 if re.match(r'\s*resources\s+"[^"]*\.(incl|glbl|bas)"', line):
                     problems.append(f'{proj}:{no}: an FB source file listed as a resource is compiled into the app - bundle its folder instead')
+    # a C function FB calls (toolbox) is defined in BeginCFunction and must also be declared in BeginCDeclaration: FB
+    # compiles a project in several chunks, and only the declarations (the shared header) reach them all ("call to
+    # undeclared function 'StudioFindView'", 2026-11-27)
+    by_folder = {}
+    for p in files:
+        by_folder.setdefault(os.path.dirname(p), []).append(p)
+    for folder, members in by_folder.items():
+        defined, declared, called = {}, set(), {}
+        for p in members:
+            text = open(p, 'rb').read().decode('utf-8', 'replace').replace('\r\n', '\n').replace('\r', '\n')
+            for m in re.finditer(r'(?ms)^\s*BeginCFunction\b(.*?)^\s*EndC\b', text):
+                for d in re.finditer(r'(?m)^(?!\s*static\b)[A-Za-z_][\w \*]*?\b(\w+)\s*\([^;{]*\)\s*\{', m.group(1)):
+                    defined.setdefault(d.group(1), p)
+            for m in re.finditer(r'(?ms)^\s*BeginCDeclaration\b(.*?)^\s*EndC\b', text):
+                declared |= set(re.findall(r'\b(\w+)\s*\(', m.group(1)))
+            for no, line in enumerate(text.split('\n'), 1):
+                t = re.match(r'\s*toolbox\s+(?:fn\s+)?(\w+)', line)
+                if t: called.setdefault(t.group(1), (p, no))
+        for name, (p, no) in sorted(called.items()):
+            if name in defined and name not in declared:
+                problems.append(f'{p}:{no}: {name} is a C function (BeginCFunction) with no declaration in a BeginCDeclaration block - '
+                                f'add its prototype there, or other files of the project cannot call it')
     # names from opt-in headers (NSLog.incl, Tlbx *.incl): the project must include the header
     opt = opt_in_names(headers)
     if opt:
