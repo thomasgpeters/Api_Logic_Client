@@ -260,7 +260,7 @@ generated file starts with a comment saying what it does and whether it is regen
 Every generated app has the same frame (`App Shell.incl`):
 
 - a **toolbar** at the top: **Search** first (a magnifying glass, labelled for the page: *Search
-  Customers*, *Search Products*), a separator, then **New**, **Save**, **Delete** and **Refresh**. They
+  Customers*, *Search Products*), a separator, then **New**, **Save**, **Delete** and **Refresh**, and at the far right the **theme menu**. They
   follow what you are doing: **Save** comes on only when you have changed something in the Form,
   **Delete** only when a record is shown (not while you fill in a new one). Like any Mac toolbar you can
   rearrange it (right-click it, *Customize Toolbar…*), and the app remembers how you left it;
@@ -272,9 +272,11 @@ Every generated app has the same frame (`App Shell.incl`):
   title says how many match. *Show All* brings every record back; a new page starts a new search;
 - a **dark blue navigation bar** on the left (darker in dark mode), with a button and an icon per
   entity; with many entities (twenty tables, say) the buttons scroll;
-- a **header** with the app icon, the app's name centred on it and the tag-line under it, and on
-  the right the **theme menu** (System / Light / Dark) and **Log In** (connect it to your sign-in in
-  `EventHandlers.incl`, `DoLogin`);
+- a slim **header** with the app icon, the app's name and the tag-line, and on the right **Log In** where
+  the app signs in to a server (connect it to your sign-in in `EventHandlers.incl`, `DoLogin`); the **theme
+  menu** (System / Light / Dark) is at the right of the toolbar;
+- **full screen:** the green button (or *View → Enter Full Screen*) gives the app its own space; the
+  cards, the List and the Form's fields, the navigator and the toolbar all stretch with the window;
 - a **footer** with the copyright on the left and the **record navigator** across the rest: First, Previous,
   *Customer 3 of 91*, Next and Last, as pill buttons that share the width and stretch with the window. A page
   opens on its first record, selected in the List with the focus there, so the arrow keys move through the
