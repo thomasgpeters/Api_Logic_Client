@@ -172,6 +172,9 @@ These apply to hand-written code **and to everything the generator emits**.
   back to CR before committing). XIB, JSON, SQL and Python use LF.
 - **A global does not keep its value alive** (FB's CF types are plain pointers): use a local when one function is enough;
   otherwise keep the value with the module's Kept fn (`LicenceKept`, `DataKept`, `WebKept`). `fblint` reports an object global set from a fn and not kept.
+- **Style** (for readers in other editors; the FB editor indents): a header comment in every file; spaces inside a
+  call's and a condition's parentheses (`fn Name( a )`, `if ( x )`); no tabs; a space after `//`; no commented-out code.
+  `fblint` reports each (`docs/reference/FB Coding Rules.md`, Style).
 - Logging is gated: every `NSLog` - errors too - is `if ( isLoggingOn ) then NSLog( ... )`. `isLoggingOn` is NO by default,
   declared in the app's own globals (generated apps: `App Globals.glbl`, a template; the Studio: `My Globals.glbl`;
   the examples: their `.glbl`). `fblint` reports an ungated `NSLog` (single-file `.fb` tests, whose output is their log, are exempt).

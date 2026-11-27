@@ -6,6 +6,30 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — One coding style, checked
+
+- **Author:** make sure every lint test works, and one consistent coding style throughout the application and the
+  generated apps, for other developers reading it (the FB editor indents and colours; the style is for other editors).
+- **Measured first** (146 FB files): the style was already the majority - 7,350 calls with spaces inside the
+  parentheses against 5 without, 2,782 `if ( ... )` against 77 `if (...)`, 103 files with the banner, 89 with a
+  header block. The outliers were the oldest Studio files (EventHandlers, API Interface) and the shared modules' logging
+  lines.
+- **Fixed** (a fixer that leaves strings, comments, `cln` lines and C blocks alone): `if ( x )` in 77 places, calls
+  spaced, `fn Name (` -> `fn Name(`, `//text` -> `// text`; tabs replaced by spaces with each run of tab-aligned lines
+  kept as a table (constants, `case` lines, declarations, the `nibview` lines); 10 files given a header (the Studio's
+  main program, EventHandlers, Validations, My Globals, Windows; the examples' main programs); dead code removed (the
+  CRM's Person / Address / Contact calls left in EventHandlers, a test query in Project Actions); two functions
+  nothing called removed (`ShowdProjectCreateView`, and `ShellFooterButton` now the footer's buttons are in the
+  toolbar). The generators' code templates checked: already in style.
+- **fblint** reports the style (`style_problems`): a header comment, a tab, a call's or a condition's parentheses
+  without spaces, a space before a call's parenthesis, `//` without a space, trailing spaces; strings, `cln`, C
+  blocks, CleanApp and FB's `Tlbx` files exempt. Tried on a file written badly on purpose: every rule reported, text
+  in strings left alone. The rules: FB Coding Rules, "Style"; CLAUDE.md.
+- **Test_Xib_View** (a412db2): the same fixes and headers; the SQL Generator module synced (identical again).
+- **Generated files:** Model Tags.incl now starts with a header (the XIB generator); the bindings, App Pages and
+  Studio Rules already did. `check_app_pages` lints them with the style rules. `run_tests.sh`: every lint clean
+  (the generator and runtime, Test_Xib_View, the logic test project, the samples, the generated pages).
+
 ## 2026-11-27 — The site: Lite and Professional compared
 
 - **Author:** a page on the site's App Builder pages comparing the Lite and Professional editions, feature by feature.

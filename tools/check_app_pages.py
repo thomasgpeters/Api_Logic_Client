@@ -97,16 +97,16 @@ tags=''
 for k,r in enumerate(res):
     p=pre(r['name'])
     tags+=f'_{p}View = {100+k*100}\r_{p}List = {101+k*100}\r_{p}ListTable = {102+k*100}\r_{p}ViewHeight = 300\r'
-open(G+'/Model Tags.incl','w',newline='').write(tags)
+open(G+'/Model Tags.incl','w',newline='').write('/*\r *   Model Tags.incl - every view and control tag (as XIB Generator.incl writes it)\r */\r'+tags)
 for r in res:
     n=r['name']
-    open(G+f'/{n} Binding.incl','w',newline='').write(f'void local fn {n}RecordToForm( aRecord as CFDictionaryRef )\rend fn\r\rlocal fn {n}FormToRecord as CFMutableDictionaryRef\rend fn = fn MutableDictionaryNew\r\rvoid local fn {n}RecordsToList( records as CFArrayRef )\rend fn\r'+f'\rvoid local fn {n}FormSetUp\rend fn\r\rlocal fn {n}Lookups as CFArrayRef\rend fn = @[]\r\rvoid local fn {n}FillLookup( lookupEntity as CFStringRef, records as CFArrayRef )\rend fn\r')
+    open(G+f'/{n} Binding.incl','w',newline='').write(f'/*\r *   {n} Binding.incl (as Binding Generator.incl writes it)\r */\r\rvoid local fn {n}RecordToForm( aRecord as CFDictionaryRef )\rend fn\r\rlocal fn {n}FormToRecord as CFMutableDictionaryRef\rend fn = fn MutableDictionaryNew\r\rvoid local fn {n}RecordsToList( records as CFArrayRef )\rend fn\r'+f'\rvoid local fn {n}FormSetUp\rend fn\r\rlocal fn {n}Lookups as CFArrayRef\rend fn = @[]\r\rvoid local fn {n}FillLookup( lookupEntity as CFStringRef, records as CFArrayRef )\rend fn\r')
 R=os.path.join(ROOT,'src')+'/'
 for f in ['Data SQLite.incl','DataObject.glbl','DataObject_Super.incl','DataObject.incl','Data Model.incl','Data Records.incl','Logic Rules.incl','Logic Row.incl','Logic Engine.incl','App Data Lite.incl','Pill Buttons.incl','App Shell.incl','Binding Support.incl','Auto Complete.incl','Record Popover.incl','Record Tiles.incl','Record Search.incl','App Toolbar.incl']:
     shutil.copy(R+'Runtime/'+f,G)
 for f in ['App Globals.glbl','EventHandlers.incl','Menus.incl','Theme.incl','Rules.incl']:
     shutil.copy(R+'Templates/App/'+f,G)
-open(G+'/Studio Rules.incl','w',newline='').write('void local fn DeclareStudioRules\rend fn\r')
+open(G+'/Studio Rules.incl','w',newline='').write('// Studio Rules.incl - the rules kept in the Studio (as Rules Bridge.incl writes it)\r\rvoid local fn DeclareStudioRules\rend fn\r')
 
 run_ = subprocess.run([sys.executable, os.path.join(HERE,'fblint.py'), '--headers', os.path.join(DOCS,'Toolboxes','Headers'), G], capture_output=True, text=True)
 print(run_.stdout.strip())

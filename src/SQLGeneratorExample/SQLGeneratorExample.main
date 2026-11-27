@@ -1,1 +1,1 @@
-on appevent	fn DoAppEventon menu		fn DoMenuon dialog	fn DoDialogHandleEvents
+/* *   SQLGeneratorExample.main - the main program: the event handlers connected, then the event loop * *   MIT License. Copyright (c) 2026 Imagery Business Systems, LLC. See LICENSE. */on appevent fn DoAppEventon menu     fn DoMenuon dialog   fn DoDialogHandleEvents
