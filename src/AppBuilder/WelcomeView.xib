@@ -20,8 +20,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button tag="100" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U7Q-Or-sjM">
-                                <rect key="frame" x="481" y="220" width="121" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="481" y="34" width="121" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <buttonCell key="cell" type="bevel" title="Create Project" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oUL-u8-WOQ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -31,15 +31,15 @@ DQ
                                 </buttonCell>
                             </button>
                             <button tag="101" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rp-opn-btn">
-                                <rect key="frame" x="348" y="220" width="121" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <rect key="frame" x="348" y="34" width="121" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <buttonCell key="cell" type="bevel" title="Open Project…" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rp-opn-cel">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rp-lbl-txt">
-                                <rect key="frame" x="38" y="196" width="300" height="16"/>
+                                <rect key="frame" x="38" y="240" width="300" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Recent Projects (double-click to open)" id="rp-lbl-cel">
                                     <font key="font" metaFont="smallSystem"/>
@@ -48,10 +48,10 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rp-scr-vw">
-                                <rect key="frame" x="40" y="48" width="562" height="144"/>
+                                <rect key="frame" x="40" y="78" width="562" height="156"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <clipView key="contentView" id="rp-clp-vw">
-                                    <rect key="frame" x="1" y="1" width="560" height="98"/>
+                                    <rect key="frame" x="1" y="1" width="560" height="154"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" tag="102" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="rp-hdr-vw" viewBased="YES" id="rp-tbl-vw">
@@ -143,7 +143,7 @@ DQ
                                 </tableHeaderView>
                             </scrollView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EoE-7x-HhO">
-                                <rect key="frame" x="99" y="26" width="444" height="14"/>
+                                <rect key="frame" x="99" y="12" width="444" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="© 2026 Imagery Business Systems, LLC" id="epu-pb-PBi">
                                     <font key="font" metaFont="smallSystem"/>

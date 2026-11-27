@@ -52,6 +52,10 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   now reports a record declared with a global record as its value.
   More room around that heading (author: "still too squished"): 24 points above the logo and 24 below it, before the
   box, on both pages.
+  The working area as a card (author): rounded corners (12), no outline, a background a shade apart from the window -
+  white on the light one, a lighter grey on the dark one (`StudioCardColor`, `StudioCard`, Branding.incl). Its buttons
+  float right, the main action rightmost (Open Project..., then Create Project; Cancel, then Create on the server form),
+  and on the Welcome page they sit below the project list (author: "the action buttons should be below the project list").
   Project pages: the project's icon and name, no Imagery logo (author: "each project should have an ICON"): its
   picture from Project Settings, else its SF Symbol (`ProjectIconImage`, `ProjectShowHeading`), updated when
   Project Settings is closed.
