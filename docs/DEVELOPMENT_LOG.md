@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The SQL Generator for the FB list: a short post, a small download
+
+- **The post** (`src/SQLGeneratorExample/ANNOUNCEMENT.md`), in the author's style (author: "the apology is too much ...
+  they will stop there"): one line of apology, then the code; the one-file demo first, the example app second; a link,
+  no attachments (the list's storage fills up).
+- **The small download** (author: most on the list share a single-file app; the example app may overwhelm):
+  `SQL-Generator-Module.zip` on the site (`tools/make_site.py`), about 50 KB - the module's four files, the one-file
+  demo, the licence and a README.txt of three steps. It is the first button on the SQL Generator page and the home
+  page's Download link; the example app is the second button.
+
 ## 2026-11-27 — Record Files for FutureBasic: record files and B-tree indexes, timed against SQLite
 
 - **The idea** (author): FB's `begin record` types in random-access files as legacy FB did, with index files beside
