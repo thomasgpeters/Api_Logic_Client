@@ -6,6 +6,22 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The record navigator
+
+- **Author:** the generated app should behave like a record navigator: the first item of a List selected (as the
+  Studio's entity list is), the List focused and that row loaded; buttons at the bottom to move one record at a time,
+  Previous dimmed at the start, Next at the end; the footer naming the entity and the record count.
+- **The footer** (App Shell.incl): First, Previous, *"Customer 3 of 91"*, Next, Last at its left (SF Symbols,
+  borderless), then the status line, then New / Save / Delete / Refresh. The copyright moved to the foot of the
+  navigation bar. `ShellSetNavigator` (the label and which buttons apply), `ShellSelectRow` (select, scroll, focus),
+  `ShellSetEnabled`, all through Cocoa.
+- **The pages** (App Pages.incl, generated): `AppPageGoTo( row )` selects, shows and updates the navigator;
+  `AppPageChooseRow` runs when a list arrives: the record that was showing (after Save or Refresh), the new one
+  (after adding: the one not in the list before), the one in the deleted record's place, else the first. A row
+  clicked, the arrow keys or a tile clicked move the navigator too. The "91 records" status message is gone (the
+  navigator shows the count).
+- Test scenario G-02a. Waits for a Mac build.
+
 ## 2026-11-27 — The info button is off until a parent is chosen
 
 - **Author:** "If no related record is chosen disable the info button so that you never see the dialogue. Intuitive."

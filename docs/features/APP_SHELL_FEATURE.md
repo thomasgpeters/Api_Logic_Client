@@ -11,7 +11,7 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│            │ © 2026 Your Company   Saved.     [New][Save][Delete][Refresh]│  footer
+│ © Company  │ |< <  Customer 3 of 91  > >|  Saved.  [New][Save][Delete][Refresh]│  footer
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -19,8 +19,15 @@ Every app generated from a SQLite project opens in the same frame:
   current page is highlighted.
 - **Header:** the business logo, the app name and the tag-line on the left; the theme menu
   (System / Light / Dark) and **Log In** on the right.
-- **Footer:** the copyright, a status line ("Saved.", a refused save's reason), and the page
-  actions New, Save, Delete, Refresh (also the *Records* menu).
+- **Footer:** the **record navigator** (First, Previous, *"Customer 3 of 91"*, Next, Last), a status line
+  ("Saved.", a refused save's reason), and the page actions New, Save, Delete, Refresh (also the *Records* menu).
+  The copyright sits at the foot of the navigation bar, in small type.
+- **Record navigator** (author, 2026-11-27): a page opens on its first record - selected in the List, the List
+  given the focus (the arrow keys move through it), the record in the Form. First and Previous are dimmed on the
+  first record, Next and Last on the last. After a Save the same record stays selected; after adding one, the new
+  one; after a Delete, the one that took its place. Clicking a row or a tile moves the navigator too.
+  `AppPageGoTo` / `AppPageChooseRow` (App Pages.incl), `ShellSetNavigator` / `ShellSelectRow` (App Shell.incl,
+  through Cocoa).
 - **Content:** a page per entity, its List above its Form. Choosing a row shows it in the Form.
 - **Data:** the pages call the app's data interface (`App Data Lite.incl`: `AppDataList`,
   `AppDataSave`, `AppDataRemove`, answers in `AppDataDone`); saves go through the rules. The

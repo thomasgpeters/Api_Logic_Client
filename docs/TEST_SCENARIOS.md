@@ -168,9 +168,20 @@ Purpose: Regenerating never overwrites the files that are yours.
 
 ### G-01 The app's frame
 Purpose: Navigation bar, header, footer.
-1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a footer with the copyright and New, Save, Delete, Refresh.
+1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a footer with the record navigator and New, Save, Delete, Refresh; the copyright at the foot of the navigation bar.
 2. Use the theme menu: Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both.
 3. Click each navigation button. -> Each page shows its List card above its Form card, both filling the width.
+
+### G-02a The record navigator
+Purpose: A page opens on its first record, and the footer moves through them.
+1. Open the app, click Customers. -> The first customer is selected in the List (the List has the focus) and shown in the Form; the footer reads "Customer 1 of 91" (your count); First and Previous are dimmed.
+2. Click Next three times. -> "Customer 4 of 91"; the List's selection and the Form follow; First and Previous are on.
+3. Click Last. -> The last customer; Next and Last are dimmed.
+4. Press the up arrow key. -> The one before it; the footer follows.
+5. Change a field and Save. -> The same customer stays selected and shown.
+6. New, fill in the Form, Save. -> The new customer is selected and shown.
+7. Delete it. -> The customer that took its place in the list is selected and shown.
+8. Click Products. -> "Product 1 of ..." and the first product shown.
 
 ### G-02 Records: choose, add, change, delete
 Purpose: The Form and the List work together.

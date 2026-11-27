@@ -199,7 +199,7 @@ Dates are stored as `1996-07-04`, times as `14:30:00`, and dates with times as
   header, its Dock icon and its About box. Select it and press Delete to remove it. **Without a
   picture, the symbol:** an SF Symbol for the header instead, with a preview beside it.
 - **Tag-line**: a short description under the app's name, up to 80 characters.
-- **Copyright**: the footer's text (`© <app name>` when empty).
+- **Copyright**: at the foot of the navigation bar (`© <app name>` when empty).
 
 **Done** saves everything in `Project.json`. The project's heading in App Builder shows the same
 icon, the picture or else the symbol.
@@ -259,8 +259,11 @@ Every generated app has the same frame (`App Shell.incl`):
 - a **header** with the app icon, the app's name centred on it and the tag-line under it, and on
   the right the **theme menu** (System / Light / Dark) and **Log In** (connect it to your sign-in in
   `EventHandlers.incl`, `DoLogin`);
-- a **footer** with the copyright, a status line, and the page actions **New**, **Save**,
-  **Delete** and **Refresh** (also in the *Records* menu: ⌘N, ⌘S, ⌘R);
+- a **footer** with the **record navigator** (First, Previous, *Customer 3 of 91*, Next, Last), a status
+  line, and the page actions **New**, **Save**, **Delete** and **Refresh** (also in the *Records* menu: ⌘N,
+  ⌘S, ⌘R). A page opens on its first record, selected in the List with the focus there, so the arrow keys
+  move through the records too. Previous is dimmed on the first record and Next on the last. The copyright
+  is at the foot of the navigation bar;
 - the **page**: the entity's List in a card at the top and its Form in a card below, both the
   full width of the window.
 
