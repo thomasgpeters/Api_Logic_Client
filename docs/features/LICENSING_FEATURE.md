@@ -64,3 +64,16 @@ private key never leaves the server.
 - The `appbuilderfb://` URL scheme and the `.fblicence` document type (the licence arrives by link or file).
 - The edition in the About box.
 - The License Server: the product, signing, the pages (its own repository).
+
+## Build fix (2026-11-27)
+
+The author's first build of the Studio with the licence stopped at `include "Tlbx Security.incl"` (error 1234). That FB
+header is dated 2026-05-05 and is not in the author's FutureBasic. `src/AppBuilder/Licence Security.incl` now declares the
+calls `Licence.incl` uses:
+- the framework: `include library "Security"`;
+- SecKey: `SecKeyCreateWithData`, `SecKeyVerifySignature` and the ES256 constants;
+- SecItem: `SecItemCopyMatching`, `SecItemAdd`, `SecItemDelete` and the Keychain keys.
+
+It comes just before `Licence.incl` in `data.fbproj`. The Mac licence test carries the same declarations
+(`tools/licence_reference.py --mac-test`).
+
