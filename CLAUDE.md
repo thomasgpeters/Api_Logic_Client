@@ -65,6 +65,10 @@ mode work without extra code).
   `Web Layout.incl`: pages laid out in XIB files (`.webxib`), rules in `tools/web_layout_reference.py`, its Objective-C
   compiled here with GNUstep (`tools/check_web_layout.py`); `Layout Tool/Layout Tool.html` lays them out (`tools/check_layout_tool.py`).
   Copies are identical (`run_tests.sh`); `tools/web_toolkit_reference.py` tests web.js (`docs/features/WEB_TOOLKIT_FEATURE.md`).
+- `src/RecordFilesExample/` — Record Files for FutureBasic (working name, MIT): `Record File.incl` (fixed-size records in
+  random-access files, FB's `open "R"`), `Record Index.incl` (B-tree index files; C between the markers "record index
+  core", tested by `tools/check_record_index.py`), Customer / Order / Item timed against SQLite. Formats and the App
+  Builder option: `docs/design/Record Files Design.md`; `tools/record_files_reference.py` reads both formats.
 - `src/MacTests/` — single-file FB programs that answer a question on a Mac before a feature is built on it (`MapKit Points Test.fb`: how FB serves MapKit's point views); see `docs/TESTING.md`.
 - `src/Professional/` — the Professional edition, in this repository for now (author, 2026-11-25; a private
   repository when it is sold): `DataObject_JSONAPI.incl` (the SQL Generator's JSON:API side: the same

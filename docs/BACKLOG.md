@@ -365,6 +365,14 @@ the site, download] -> [post to the list].
 - [ ] Run `src/MacTests/Web Server Test.fb` on a Mac: can FB serve a page and take its clicks? (a standalone
   replacement for Wt, no Wt licence - a feasibility question for now)
 
+## Record Files for FutureBasic (author, 2026-11-27; `design/Record Files Design.md`)
+
+- [x] The module: record files (FB, `open "R"`) and B-tree indexes (C, tested here); the example on Customer / Order / Item, timed against SQLite
+- [ ] Build and run `src/RecordFilesExample` on the Mac: the table of times at 10,000 and 100,000 customers; `tools/record_files_reference.py --records / --index` on the files it made
+- [ ] A stop in the middle: quit with Force Quit during a Run, open again - the counts recovered, the indexes rebuilt, Check sound
+- [ ] Record checksums (a half-written slot is found), before it is offered in App Builder
+- [ ] App Builder: "Record files with B-tree indexes" as a data choice beside SQLite - records and indexes generated from the model, `App Data Records.incl` behind the same app data interface
+
 ## Ideas
 
 - **An Imagery menu bar launcher** (author, 2026-11-27, from a screenshot of a "Qwik" launcher: one status-bar icon

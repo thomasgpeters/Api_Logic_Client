@@ -93,6 +93,14 @@ Open `src/MacTests/Web Server Test.fb` in FB and run it; click Open in Browser (
 - two tabs, many fast clicks: does it keep up (the window counts the requests);
 - anything the window or the NSLog window says.
 
+### Record Files example (`docs/design/Record Files Design.md`)
+- Here: `tools/check_record_index.py` (the B-tree in C, random runs against a sorted list, files read back by
+  `tools/record_files_reference.py`), `tools/check_record_files_example.py` (the sample data and the SQLite side).
+- On the Mac: open `src/RecordFilesExample/RecordFilesExample.fbeproj`, build, Run at 10,000 customers. Step 7 must
+  say "every index sound"; step 2 "0 indexes rebuilt". Then Force Quit during a Run and run again: the files are
+  recovered. To look inside a file: `python3 tools/record_files_reference.py --records ".../Customers.records"`
+  or `--index ".../Customers by Name.index"`.
+
 ## 2b. On a Mac — MapKit points (before the Map view is built)
 
 Open `src/MacTests/MapKit Points Test.fb` in FB and run it. Five points (three customers in blue,
