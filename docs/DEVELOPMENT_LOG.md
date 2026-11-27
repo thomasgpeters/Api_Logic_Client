@@ -6,6 +6,29 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Auto-complete on local values
+
+- **Asked** (author): auto-completes on other fields too, "based on in-memory values (called local values), not just
+  lookups of related tables"; the designer chooses a Dropdown or an Auto-complete.
+- **Built:** an attribute's Values list feeds the auto-complete (`AutoCompleteSetValues`; labels shown, codes stored);
+  **Allow other values** keeps typed text (default on for a plain list, off for codes; `acOthers` in Design.json); the
+  settings row shows "From the Values list" and the check box. Test scenario G-07. Waiting on the Mac.
+- **New values remembered** (author: they "would revert back to the original list when the app is recycled, unless
+  stored in a plist"): a value typed under Allow other values joins the suggestions and is kept in the app's preferences
+  (`NSUserDefaults`, `Auto-complete <Entity.attribute>`), merged in at the next launch.
+
+## 2026-11-27 — Auto-complete for related records; "View does not exist" found for good
+
+- **"Cannot find a view with tag: 40100"** (author, the info button again): the tag is the info button itself. FB's
+  `ViewWithTag` looks only in its current output window, which is not the app's window when the click arrives. Views are
+  now found with Cocoa's `viewWithTag:` across the app's windows: `ShellFindView` (runtime) and `StudioFindView` (App
+  Builder), used by the popover, the tiles, the auto-complete, the cards and the entity list. Rule in FB Coding Rules.
+- **Auto-complete** (author): a foreign key as a text field that finds the parent record as you type; the matches in a
+  list under the field (above it near the bottom of the window), the name shown, the key stored. `Auto Complete.incl`
+  (runtime, Cocoa), the generator (`_xibKindAutoComplete`), and in App Builder a settings row under the Control popup:
+  the field shown, the letters before results, the most results (`features/AUTO_COMPLETE_FEATURE.md`). Test scenario
+  G-06. Waiting on the Mac: its AppKit code could not be compiled here (no AppKit headers).
+
 ## 2026-11-27 — The lookup's info button: "View does not exist", the popover never opened
 
 - **The report** (author, a generated app): clicking the info button beside a lookup (Person) showed "View does not

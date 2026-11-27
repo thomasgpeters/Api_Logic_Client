@@ -139,7 +139,7 @@ Click an entity in the list. Its **attribute table** shows, for every column:
 | Size | text length or numeric size | |
 | Key | primary key and how it is made (identity, autoincrement, assigned) | |
 | Required / Default | from the database | |
-| **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, **Radio buttons**, **Dropdown**, **Read-only text**, **Hidden** | ✓ |
+| **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, **Radio buttons**, **Dropdown**, **Auto-complete**, **Read-only text**, **Hidden** | ✓ |
 | **Values** | a value list for Radio buttons or a Dropdown (`Retail, Wholesale, Online`, or code = label pairs `R = Retail, W = Wholesale`); for a foreign key, what its Dropdown shows (`→ person.givenName`) | ✓ |
 | **Form Width** / **List Width** | in points | ✓ |
 | Adjusted | ✓ when you changed something | |
@@ -168,6 +168,12 @@ What each control does:
   `R = Retail, W = Wholesale, O = Online` stores the code (`R`) and shows the label (`Retail`).
   The first item is empty: no value. Beside a foreign key's Dropdown, an **info button** (ⓘ)
   shows the chosen record's details in a popover, for example an Order's Customer.
+- **Auto-complete** (for a foreign key, or any attribute with a **Values** list): a text field that finds the related record, or the local value, as you type. The matches open in
+  a list under the field (or above it, near the bottom of the window); choosing one shows its name and stores its key.
+  When you choose it, a settings row appears under the Control popup: **Show** (the related record's field the user
+  sees and types), **After 1, 2 or 3 letters**, **Up to 5, 8, 12 or 20 results**. With a Values list the matches come
+  from it (labels shown, codes stored), and **Allow other values** keeps what the user types when it is not in the
+  list, and offers it from then on, after a restart too. Generate to apply.
 - **Radio buttons**: one per value of the **Values** list, up to 8 (with more, or with no list,
   the attribute gets a Dropdown). Code = label pairs work the same way: the label is the button's
   title, the code is stored. Side by side when they fit, else one under the other.
