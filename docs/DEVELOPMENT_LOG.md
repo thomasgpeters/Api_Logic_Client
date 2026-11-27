@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — White panels in the Studio; larger column headings throughout
+
+- **Author** (screenshots of the Studio and a generated app): the Studio's panel with the table should be white, as the
+  generated app's panels are; a clean, slightly larger column heading throughout.
+- `StudioCardColor` (Branding.incl): white in light mode (the window behind it is grey), a step lighter than the
+  window in dark mode. `StudioTableHeadings` (the Studio's Recent Projects, Objects and attribute tables) and
+  `ShellListHeadings` (App Shell.incl, each generated List, called from App Pages): the headings 13 pt semibold, the
+  header row 28 pt. The blue sidebar for the Studio: later (author).
+
 ## 2026-11-27 — Crash fix: going back to a page (AppPageChooseRow)
 
 - **Author:** the generated Northwind app crashed when a page was clicked "after a while" (EXC_BAD_ACCESS in
