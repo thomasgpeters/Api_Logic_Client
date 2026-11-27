@@ -58,6 +58,8 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
 
 ## The generated app's look (author's first run, 2026-11-27)
 
+- [ ] Records as tiles (`Record Tiles.incl`): the switch in each List card, three or four across, the name and details, a click shows the record in the Form; light and dark
+
 - [x] Nav bar darker in dark mode; the working area apart from the Forms and Lists (cards on a backdrop); Forms and
       Lists across the full width with margins, the List's columns sharing it (`APP_SHELL_FEATURE.md`).
 - [ ] **On the Mac:** generate again and build. `Theme.incl` is yours and is not overwritten, so to get the new

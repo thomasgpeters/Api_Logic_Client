@@ -112,3 +112,23 @@ without a copyright the footer says `© <app name>`.
 - Each entity's navigation icon is its Model.json `icon`: the designer's choice in the Studio
   (Icon popup, saved under `"@entity"` in Design.json) or `TypeMapRecommendedIcon` from its name.
 - The navigation bar has a "Business Objects" heading (`SHELL_NAV_HEADING`, `gThemeNavHeadingText`).
+
+
+## Records as tiles (2026-11-27)
+
+Author: "rather than just a grid for multi record results, we also need a grid-bag with records displayed as tiles,
+popping style, professional format with subheading name, and other details in the tile in smaller font ... three or
+four tiles wide".
+
+- `src/Runtime/Record Tiles.incl`: each List card has a Grid / Tiles switch at the right of its title row. Tiles:
+  rounded panels a shade apart from the card, with a soft shadow; the record's name as a subheading (14 pt semibold),
+  up to four other fields under it as "Title: value" (11 pt, secondary colour). Four across when the List is at least
+  880 points wide, else three; they stretch with the window and are laid out again with the next records. At most
+  400 tiles (the grid shows every record). A click picks the record, as a row does, and marks the tile in the
+  accent colour.
+- The generator (`App Generator.incl`, `AppTilesCall`) chooses the fields from the model: the name field (name,
+  title, description or label; else a field with "name" in it; else the first text field), then the first four other
+  shown fields that are not keys. `App Pages.incl` calls `RecordTilesBuild` after each List is placed,
+  `RecordTilesShow` with each page's records, `RecordTilesPageShown` when a page is shown, `RecordTilesClicked` in
+  its dialog handler.
+- Tags: 700000 + page x 2000 (the switch, the area, four per tile).

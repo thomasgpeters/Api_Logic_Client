@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Generated apps: records as tiles beside the grid
+
+- **Asked** (author): a "grid-bag" of tiles beside the grid for multi-record results: popping style, the name as a
+  subheading, other details smaller, three or four across.
+- **Built:** `src/Runtime/Record Tiles.incl` (copied into every app), a Grid / Tiles switch in each List card's
+  title row; the generator picks each entity's name field and four details from the model (`AppTilesCall`).
+  `docs/features/APP_SHELL_FEATURE.md`, "Records as tiles". `tools/check_app_pages.py` lints the generated calls
+  with the new runtime file. Waiting on the Mac.
+
 ## 2026-11-27 — The SQL Generator for the FB list: a short post, a small download
 
 - **The post** (`src/SQLGeneratorExample/ANNOUNCEMENT.md`), in the author's style (author: "the apology is too much ...
