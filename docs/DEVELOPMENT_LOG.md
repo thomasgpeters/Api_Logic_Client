@@ -50,6 +50,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
   Build error on the Mac: `CGRect r = gStudioHeadingFrame` became `= &gStudioHeadingFrame` (FB passes a global record
   by address); the heading keeps only its left edge (`gStudioHeadingLeft`) and reads its frame from the view. fblint
   now reports a record declared with a global record as its value.
+  More room around that heading (author: "still too squished"): 24 points above the logo and 24 below it, before the
+  box, on both pages.
   Project pages: the project's icon and name, no Imagery logo (author: "each project should have an ICON"): its
   picture from Project Settings, else its SF Symbol (`ProjectIconImage`, `ProjectShowHeading`), updated when
   Project Settings is closed.
