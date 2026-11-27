@@ -65,6 +65,7 @@ Purpose: The crumb trail and the heading follow the page.
 Before: A project open.
 1. Click Projects in the crumb trail. -> The Welcome page, with its own heading; the project's name is not shown.
 2. Click the toolbar's Entities. -> The project's entity definitions, with its icon and name in the heading.
+3. With the project open, click Projects (crumb trail or toolbar). -> The Projects page fills the whole width: the Objects list is hidden. Entities again: the list is back, the entity still selected.
 
 ### B-04 Open a project again
 Purpose: Recent Projects and Open Project.

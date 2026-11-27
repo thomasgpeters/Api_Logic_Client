@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Studio: the entity list hides on Projects with a project open
+
+- **Author** (several SQLite databases opened and imported - Northwind, Chinook, contacts): going back to Projects, the
+  last project's table list stayed beside the page. The list was hidden only with no project open. Now
+  `StudioUpdateCrumbs` shows it only when a project is open **and** one of its own pages is showing: Projects, New
+  Project and the API Logic Server pages fill the whole width. `ShowWelcome`, `ShowEntityDefinitions`,
+  `ShowNewProject` and `ShowOpenALSProject` update the layout themselves (`StudioUpdateCommands`), whichever way they are
+  reached (crumb, toolbar, menu, button).
+
 ## 2026-11-27 — No stripes: plain rows, a super-light line between them
 
 - **Author:** "you took the liberty to set alternating row backgrounds. I don't like it, because it creates strips."
