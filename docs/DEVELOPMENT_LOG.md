@@ -14,6 +14,10 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 - **The entity list only with a project open** (author: "not needed until the user actually opens a project ... the
   welcome screen should fill the whole working area"): `StudioLayoutForProject` (Menus.incl, run with the crumb trail)
   hides the list and its + / - without a project, and moves the pages, the crumb trail and the heading to the left.
+- **Derived attributes, stored or in memory** (author): designed (`design/Derived Attributes Design.md`), two
+  questions open; not built.
+- **A project opens on its first entity** (author): `ProjectModelLoaded` selects it, highlights it (the list has
+  the focus) and shows its definitions.
 
 ## 2026-11-27 — Documentation cleanup (author: "remove redundancies and fix wording to be professional but warm and readable")
 

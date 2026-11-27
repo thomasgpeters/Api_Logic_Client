@@ -227,6 +227,10 @@ LogicBank rules - LogicBank for FutureBasic in the app, `declare_logic.py` in AL
 
 ## Rules - Logic for FutureBasic (`design/Logic Engine Design.md`, ROADMAP Phase 5)
 
+- [ ] Derived attributes stored or in memory (author, 2026-11-27; `design/Derived Attributes Design.md`): the two open
+  questions first; then the Python reference's scenarios, the FB engine and Data Records, App Builder's Add Derived
+  Attribute, the generated Form and List
+
 Done: the engine (formulas, constraints, sums / counts with delta and re-parenting, parent
 references, copy, parent check, cascade, delete actions, events, upsert; LB-41) - 70 scenarios and
 20 rules proven in the Python reference; the rules bridge in Python (`features/RULES_BRIDGE_FEATURE.md`).
