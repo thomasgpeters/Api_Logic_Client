@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The site: Lite and Professional compared
+
+- **Author:** a page on the site's App Builder pages comparing the Lite and Professional editions, feature by feature.
+- `tools/make_site.py`: `EDITION_FEATURES` (one list: groups, features, Lite, Professional, status) ->
+  `app-builder/editions.html`, linked from the App Builder page ("Compare the editions"). Each feature carries an
+  honest status - Available (built and tried on a Mac), In testing (built, waiting for the Mac), In development,
+  Planned - kept true with `design/Editions Design.md` and the roadmap; no prices. The page designer and the links
+  between pages are Professional. Looked at in Chromium, light and dark; no sideways scroll at phone width.
+
 ## 2026-11-27 — Associations and the page flow diagram
 
 - **Author:** a page flow diagram (Show Page Flow Diagram: the application's logical flow between the pages); and

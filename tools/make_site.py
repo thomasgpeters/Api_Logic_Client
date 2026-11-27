@@ -12,6 +12,7 @@ repository already holds, so the site and the apps never disagree:
     /help/logicbank/
     /samples/, /samples/<name>/   the sample applications: their READMEs, their downloads
     /app-builder/             App Builder: Lite and Professional, registration on the Imagery License Server
+    /app-builder/editions.html  the editions compared, feature by feature (EDITION_FEATURES), each with its status
     /downloads/*.zip          each module's example app (MIT), each sample; the SQL Generator's module alone with a one-file demo
     /downloads/Test-Scenario-Guide.pdf   the test scenario guide (docs/TEST_SCENARIOS.pdf)
 Standard library only (no packages to install). Imagery's name and logos are not licensed for reuse.
@@ -60,6 +61,50 @@ SAMPLES = [('Telecom', 'A mobile carrier\'s travel plans, priced from its roamin
            ('FlightPlanner', 'VFR flight planning: wind, weight and balance, runways, weather and a go / no-go decision.')]
 SKIP = {'__pycache__', '.DS_Store'}
 
+# App Builder's editions, feature by feature (the page app-builder/editions.html). Keep it true with
+# docs/design/Editions Design.md and docs/ROADMAP.md: each row's status is honest - Available (built and tried on a
+# Mac), In testing (built, being tried on a Mac), In development, Planned. No prices here.
+EDITION_FEATURES = [
+    ('Projects', [
+        ('A project from a SQLite database', True, True, 'Available'),
+        ('A project from an API Logic Server project: its folder, its model file, or a public GitHub repository', False, True, 'In testing'),
+        ('Entity definitions: titles, controls, widths, form columns, icons; your changes kept', True, True, 'Available'),
+        ('The model diagram: entities, relationships and rules', True, True, 'Available'),
+        ('Generate App, with its steps shown as it works', True, True, 'In testing'),
+        ('Right-click menus and a Project menu that names what it acts on', True, True, 'In testing'),
+    ]),
+    ('The apps it builds', [
+        ('A complete FutureBasic project: windows, forms, lists, data binding, your starting files kept', True, True, 'Available'),
+        ('The app frame: navigation bar, header, footer, light and dark mode, Mac-style buttons', True, True, 'Available'),
+        ('Lists as a grid or as tiles', True, True, 'In testing'),
+        ('The record navigator: first, previous, next, last, "Customer 3 of 91"', True, True, 'In testing'),
+        ('A toolbar: New, Save and Delete when they apply; Search by any field, by value or by date', True, True, 'In testing'),
+        ('Related records: dropdowns, auto-complete, the details in a popover', True, True, 'In testing'),
+        ('The page designer: pages built from several entities (an order with its customer and its lines), linked by their relationships', False, True, 'In development'),
+        ('Links between pages, and the page flow diagram', False, True, 'In development'),
+    ]),
+    ('Data', [
+        ('The app and its SQLite database, on the Mac (two tiers)', True, True, 'Available'),
+        ('Three tiers: the app, API Logic Server, the database; many users, sign-in', False, True, 'In development'),
+    ]),
+    ('Business rules', [
+        ('LogicBank for FutureBasic in every app: formulas, constraints, sums, counts, copies, parent checks, delete actions, events', True, True, 'Available'),
+        ('The Rules page: write, check and explain rules', True, True, 'Planned'),
+        ('Rules as plain sentences, translated by AI with your own key', True, True, 'Planned'),
+        ('Rules exchanged with API Logic Server (declare_logic.py, both ways)', False, True, 'In development'),
+        ('Rules enforced on the server for every user', False, True, 'Planned'),
+        ('Integration and scheduled rules: web services, mail, messaging', False, True, 'Planned'),
+        ('Authorization: row-level security, grants by role', False, True, 'Planned'),
+        ('Rule governance: versions, sign-off, an audit trail', False, True, 'Planned'),
+        ('AI through API Logic Server\'s genai-logic, shared by a team', False, True, 'Planned'),
+    ]),
+    ('Included', [
+        ('The free modules in every app: the SQL Generator and LogicBank for FutureBasic (MIT)', True, True, 'Available'),
+        ('The test scenario guide: every feature, step by step', True, True, 'Available'),
+        ('Licence', 'free, with registration', 'paid', ''),
+    ]),
+]
+
 CSS = """:root { --bg:#ffffff; --fg:#1d1d1f; --soft:#5f6368; --line:#d2d2d7; --card:#f5f5f7; --accent:#0a63c9; --code:#f0f0f3; }
 @media (prefers-color-scheme: dark) { :root { --bg:#161618; --fg:#f2f2f4; --soft:#a1a1a6; --line:#3a3a3c; --card:#1f1f22; --accent:#4c9bff; --code:#26262a; } }
 * { box-sizing: border-box; }
@@ -79,6 +124,10 @@ pre { background:var(--code); border:1px solid var(--line); border-radius:10px; 
 code { font-family: ui-monospace, Menlo, monospace; font-size:0.92em; } p code, li code, td code { background:var(--code); padding:1px 4px; border-radius:4px; }
 table { border-collapse:collapse; margin:16px 0; width:100%; font-size:15px; display:block; overflow-x:auto; } th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; } th { background:var(--card); }
 img.figure { max-width:100%; border:1px solid var(--line); border-radius:10px; background:#fff; }
+.editions td:nth-child(2), .editions td:nth-child(3), .editions th:nth-child(2), .editions th:nth-child(3) { text-align:center; width:110px; }
+.editions td.group { background:var(--card); font-weight:700; } .yes { color:var(--accent); font-weight:700; } .no { color:var(--soft); }
+.status { display:inline-block; font-size:12px; font-weight:600; padding:1px 8px; border-radius:999px; border:1px solid var(--line); color:var(--soft); white-space:nowrap; }
+.status.available { color:#1a7f37; border-color:#1a7f37; } .status.testing { color:var(--accent); border-color:var(--accent); }
 footer { border-top:1px solid var(--line); padding-top:16px; padding-bottom:32px; color:var(--soft); font-size:14px; }
 """
 
@@ -349,7 +398,7 @@ def build(out):
     write(out, 'app-builder/index.html', page('App Builder for FutureBasic', f"""<h1>App Builder for FutureBasic</h1>
 <p class="lead">A Mac app that builds a complete FutureBasic application from your database: the windows and forms, the lists,
 the data binding and the business rules, ready for you to open in the FutureBasic editor and build.</p>
-<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Professional</a></p>
+<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Professional</a><a class="button secondary" href="editions.html">Compare the editions</a></p>
 <table><thead><tr><th></th><th>Lite</th><th>Professional</th></tr></thead><tbody>
 <tr><td>Licence</td><td>free, with registration</td><td>paid</td></tr>
 <tr><td>Start from</td><td>a SQLite database</td><td>a SQLite database, or an API Logic Server project</td></tr>
@@ -357,6 +406,7 @@ the data binding and the business rules, ready for you to open in the FutureBasi
 <tr><td>Rules</td><td>written, checked and tested in App Builder</td><td>the same, and shared with your Python project (declare_logic.py)</td></tr>
 <tr><td>AI assistant (coming)</td><td>rules from sentences in your model's names, with your own key</td><td>also through API Logic Server's genai-logic</td></tr>
 </tbody></table>
+<p>Every feature, edition by edition, with where each one stands: <a href="editions.html">Lite and Professional compared</a>.</p>
 <p>App Builder stands on the free modules, and every app it builds carries the SQL Generator and LogicBank for FutureBasic.
 With the modules on their own, you write your rules by hand. App Builder writes them for you from plain sentences, checks them
 against your model, tests every rule, and builds the app around them.</p>
@@ -366,6 +416,33 @@ App Builder will build the pages from your model (forms, lists, bindings and rul
 <p>The test scenario guide walks you through every feature of App Builder, the apps it builds and the free modules, one
 step at a time: what to do, what you should see, and a box to tick. It's how we check a release, and you're welcome to use it.</p>
 <p><a class="button" href="../downloads/Test-Scenario-Guide.pdf">Download the test scenario guide (PDF)</a></p>""", 1, 'Build a complete FutureBasic app from your database.'))
+
+    # App Builder: Lite and Professional, feature by feature
+    def mark(value):
+        if value is True:
+            return '<span class="yes" aria-label="yes">&#10003;</span>'
+        if value is False:
+            return '<span class="no" aria-label="no">&mdash;</span>'
+        return esc(value)
+    rows = []
+    for group, features in EDITION_FEATURES:
+        rows.append(f'<tr><td class="group" colspan="4">{esc(group)}</td></tr>')
+        for name, lite, pro, status in features:
+            badge = (f'<span class="status {"available" if status == "Available" else "testing" if status == "In testing" else ""}">'
+                     f'{esc(status)}</span>') if status else ''
+            rows.append(f'<tr><td>{esc(name)}</td><td>{mark(lite)}</td><td>{mark(pro)}</td><td>{badge}</td></tr>')
+    write(out, 'app-builder/editions.html', page('Lite and Professional', f"""<h1>Lite and Professional</h1>
+<p class="lead">Both editions are the same App Builder: your licence decides which one a project uses. Lite builds an app that runs on
+your Mac with its SQLite database and its rules. Professional adds three tiers, many users and the rules on a server, with API
+Logic Server, and the page designer.</p>
+<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Professional</a></p>
+<table class="editions"><thead><tr><th>Feature</th><th>Lite</th><th>Professional</th><th>Status</th></tr></thead><tbody>
+{''.join(rows)}
+</tbody></table>
+<p><span class="status available">Available</span> built and in use &middot; <span class="status testing">In testing</span> built, being
+tried on a Mac before release &middot; <span class="status">In development</span> being built &middot; <span class="status">Planned</span>
+designed, not yet built. A Lite project moves to Professional with its rules unchanged.</p>
+<p><a href="index.html">Back to App Builder</a></p>""", 1, 'App Builder for FutureBasic: the Lite and Professional editions compared, feature by feature.'))
 
     # the home page
     module_cards = ''.join(f'<div class="card"><span class="tag">free &middot; MIT</span><h3><a href="{m["slug"]}/index.html">{esc(m["name"])}</a></h3>'
