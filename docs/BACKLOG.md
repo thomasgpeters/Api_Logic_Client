@@ -375,6 +375,10 @@ the site, download] -> [post to the list].
 - [ ] Record checksums (a half-written slot is found), before it is offered in App Builder
 - [ ] App Builder: "Record files with B-tree indexes" as a data choice beside SQLite - records and indexes generated from the model, `App Data Records.incl` behind the same app data interface
 
+## Documentation
+
+- [ ] `DOC_ONE_PAGER.html` / `.pdf`: bring them in step with `DOC_ONE_PAGER.md` (editions, grid or tiles, App Builder naming), or build them from the Markdown with a tool
+
 ## Ideas
 
 - **An Imagery menu bar launcher** (author, 2026-11-27, from a screenshot of a "Qwik" launcher: one status-bar icon

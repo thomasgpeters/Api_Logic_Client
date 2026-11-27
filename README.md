@@ -71,7 +71,7 @@ docs/                    the documentation (below)
 
 App Builder never writes into its own app bundle. Projects live in
 `~/Library/Application Support/App Builder for FutureBasic/workspace/`, one folder each, and passwords and keys stay
-in the Keychain. The [user guide](docs/USER_GUIDE.md#5-the-workspace-and-your-projects-files) shows what is in a
+in the Keychain. The [user guide](docs/USER_GUIDE.md#5-where-your-files-live) shows what is in a
 project folder.
 
 ## Documentation

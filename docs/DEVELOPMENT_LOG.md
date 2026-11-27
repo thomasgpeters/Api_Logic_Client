@@ -6,6 +6,23 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Documentation cleanup (author: "remove redundancies and fix wording to be professional but warm and readable")
+
+- **README** rewritten (bd477b6): what App Builder is, a four-step start, editions, the free modules, the repository,
+  a documentation map. The details live in the user guide; the README links to them.
+- **USER_GUIDE.md**: shorter sentences, "you", "App Builder" throughout; licences and editions in section 2; the
+  Welcome page's new layout, the project icon, grid or tiles; repeats merged. Stale facts fixed: the example
+  `Windows.incl` (it showed functions the generator no longer writes), Open Project is Command-O, Delete Project is in
+  the Project menu, FutureBasic 7 (not 7.1.x), every Generate command needs a licence.
+- **DOC_ONE_PAGER.md**: App Builder throughout, the editions, grid or tiles. Its .html and .pdf are hand-made and now
+  lag the Markdown (backlog).
+- **ROADMAP**: current statuses; phase 6, the free modules and the site.
+- **Editions Design.md** (was Editions and Licensing.md): the editions, the two data layers, the rules split;
+  licensing is in Licensing Design only.
+- **The modules' READMEs**: the gentle start first; the Templates README corrected (it described bundled templates,
+  listed three of seven, and showed an old start-up).
+- **docs/archive/**: the LinkedIn post and the dated summary report.
+
 ## 2026-11-27 — The test scenario guide (PDF)
 
 - **Asked** (author): "a test scenario guide to enable people to test and validate all the various features.
