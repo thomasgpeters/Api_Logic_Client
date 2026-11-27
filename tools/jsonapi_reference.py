@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The SQL Generator's two back ends, side by side: the same statement dictionaries become SQL
 (src/Runtime/DataObject.incl) or a JSON:API request for API Logic Server
-(src/Enterprise/DataObject_JSONAPI.incl). This is the reference for the FB code, and its test:
+(src/Professional/DataObject_JSONAPI.incl). This is the reference for the FB code, and its test:
 
     python3 tools/jsonapi_reference.py --test <ALS project's db.sqlite> [http://localhost:5656 admin p]
 
@@ -476,7 +476,7 @@ def main():
     refused('an UPDATE without a filter', lambda: generate_jsonapi_update((lambda d: (d.update(updatetable='Category'), add_column_value(d, 'Description', 'x', TEXT_T), d)[-1])(init_write('updatetable', True))))
 
     # writes through JSON:API, read back through SQL. The statements name RESOURCES (what an
-    # Enterprise app's model holds); the server maps them to tables - Northwind's Category lives
+    # Professional app's model holds); the server maps them to tables - Northwind's Category lives
     # in CategoryTableNameTest, on purpose. Only these direct read-backs need the table's name.
     table = 'CategoryTableNameTest'
     d = init_write('insertintotable', False); d['insertintotable'] = 'Category'

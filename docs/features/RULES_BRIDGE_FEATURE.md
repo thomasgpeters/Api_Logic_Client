@@ -1,7 +1,7 @@
 # Rules Bridge — declare_logic.py import / export, Rules.json, Studio Rules.incl
 
 **Where:** `tools/rules_bridge.py` (bundled with the generator: `resources "../../tools"`),
-`src/Generator/Rules Bridge.incl` (runs it), *Model → Import Rules… / Export Rules…*, Generate App.
+`src/AppBuilder/Rules Bridge.incl` (runs it), *Model → Import Rules… / Export Rules…*, Generate App.
 
 ## How it works
 

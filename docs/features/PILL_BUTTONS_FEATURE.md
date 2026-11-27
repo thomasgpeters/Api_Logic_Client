@@ -19,11 +19,11 @@ Kinds: `_pillPlain`, `_pillDefault` (the page's main action), `_pillDestructive`
 
 | | |
 |---|---|
-| `src/Generator/Pill Buttons.incl`, `src/Runtime/Pill Buttons.incl` | the module; identical copies (`run_tests.sh` checks) |
-| `src/Generator/Windows.incl` | `StudioPillButtons`: every push button on the Studio's pages (Create Project / Create / Done as the main action) |
+| `src/AppBuilder/Pill Buttons.incl`, `src/Runtime/Pill Buttons.incl` | the module; identical copies (`run_tests.sh` checks) |
+| `src/AppBuilder/Windows.incl` | `StudioPillButtons`: every push button on the Studio's pages (Create Project / Create / Done as the main action) |
 | `src/Runtime/App Shell.incl` | the generated app's footer (New, Save as the main action, Delete in red, Refresh) and Log In, when `gThemePillButtons` (default YES) |
 | `src/Templates/App/Theme.incl` | `gThemePillButtons = YES` - NO gives classic push buttons |
-| `src/Generator/App Generator.incl` | `Pill Buttons.incl` is copied into every app, before `App Shell.incl` |
+| `src/AppBuilder/App Generator.incl` | `Pill Buttons.incl` is copied into every app, before `App Shell.incl` |
 
 ## Decisions
 

@@ -1,6 +1,6 @@
 # About Box and Project Settings
 
-**Where:** `src/Generator/ProjectSettingsView.xib`, `Project Settings.incl` (the view),
+**Where:** `src/AppBuilder/ProjectSettingsView.xib`, `Project Settings.incl` (the view),
 `Project Workspace.incl` (`ProjectAboutText`, `Project.json` key `about`),
 `App Generator.incl` (`AppWriteCredits`, `Model.json` key `about`).
 

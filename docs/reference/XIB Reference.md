@@ -1,6 +1,6 @@
 # XIB Reference
 
-What a XIB is, how FutureBasic loads one, how Imagery LogicBank Studio for FutureBasic writes
+What a XIB is, how FutureBasic loads one, how App Builder for FutureBasic writes
 them, and how to check one. Apple has **never published a XIB schema**: the format is
 Interface Builder's XML archive of an object graph, and the rules below come from Apple's
 guides, FB's reference, and what our own XIBs have taught us (each marked).

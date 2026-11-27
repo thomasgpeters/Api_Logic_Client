@@ -116,6 +116,10 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
                        f'use _windowContentViewTag for the window\'s content view')
 
         code_only = strip_strings_and_comments(line)
+        # logging is gated: every NSLog on the line that tests isLoggingOn (NO by default, in the app's globals);
+        # single-file .fb programs whose output is their log (tests, the smallest example) are exempt
+        if re.search(r'\bNSLog\s*\(', code_only) and not re.search(r'\bisLoggingOn\b', code_only) and not path.endswith('.fb'):
+            report(no, 'NSLog is not gated - write: if ( isLoggingOn ) then NSLog( ... )  (isLoggingOn is NO by default, in the app\'s globals)')
         # block balance: if/end if, select/end select, for/next, while/wend, do/until
         st = code_only.strip()
         for stmt in [p.strip() for p in st.split(' : ')] if st else []:

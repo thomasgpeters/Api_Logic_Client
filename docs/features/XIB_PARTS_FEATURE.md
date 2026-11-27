@@ -2,7 +2,7 @@
 
 Two embeddable parts per entity, each a self-contained custom view.
 
-**Where:** `src/Generator/XIB Generator.incl` (`XibViewDocument`, `XibListDocument`);
+**Where:** `src/AppBuilder/XIB Generator.incl` (`XibViewDocument`, `XibListDocument`);
 layout rules in `Type Mapping.incl`.
 
 | Part | File | Contents | Tags |
@@ -38,6 +38,9 @@ regenerations. Constants for every tag go to `Model Tags.incl`
   (`BindingFillLookup`, after `AppDataLookup` answers `_appDataLookup`). Item 0 is empty (NULL);
   each item's value is kept per tag (`gBindingChoiceKeys`) and the value a record wants is kept
   too (`gBindingChoiceWanted`), so rows that arrive after the record (a server) still select it.
+- **Value lists with codes** (2026-11-25): an entry `R = Retail` stores `R` and shows `Retail`
+  (`TypeMapValueParts`); a Dropdown's list then goes in with `BindingSetChoices( tag, titles, codes )`,
+  Radio buttons take the labels as titles and the codes in `BindingShowRadio` / `BindingTakeRadio`.
   Radio buttons sit in a `customView` with the field's tag; button n has tag
   30000 + field tag × 10 + n (`BindingRadioTag`); `BindingRadioClicked` turns the others off.
   Model.json carries a choice's `values` or `lookup` ({ entity, key, display }), which

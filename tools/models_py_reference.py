@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Read an API Logic Server project's model, database/models.py, AS TEXT - the reference for the
-FB reader (ALSModelFromModelsPy in src/Generator/ALS Model.incl) and its test.
+FB reader (ALSModelFromModelsPy in src/AppBuilder/ALS Model.incl) and its test.
 
     python3 tools/models_py_reference.py <ALS project folder> [<ALS venv python>]
 

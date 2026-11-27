@@ -10,7 +10,7 @@ SQL of Test_Xib_View, and since 2026-11-25 a module shared on its own (MIT).
 | | |
 |---|---|
 | `src/Runtime/DataObject*.{glbl,incl}` | the copy generated apps get |
-| `src/SQLGeneratorExample/` | the example project (FB project from `src/CleanApp`) with the module, `SQL Generator SQLite.incl` (a runner), ten examples on a CRM database, the Help window, About box, `README.md`, `LICENSE` (MIT), `ANNOUNCEMENT.md` (draft for the FB list) |
+| `src/SQLGeneratorExample/` | the example project (FB project from `src/CleanApp`) with the module, `SQL Generator SQLite.incl` (a runner), ten examples on a CRM database, the Help window, About box, `SQL Generator - Smallest Program.fb` (the module in the fewest lines, a single-file program), `README.md`, `LICENSE` (MIT), `ANNOUNCEMENT.md` (draft for the FB list) |
 | Test_Xib_View `DataObject*` | the author's app |
 | `docs/design/SQL Generator Object Model.svg` | the object model, drawn by `tools/make_sql_generator_svg.py` |
 
@@ -38,10 +38,16 @@ dictionaries; `metadata`, `results` unused). INSERT: `insertintotable` + `column
 
 ## The example app
 
-A window (Example popup, Run, Run All, Clear, Reset Database, ?), a rich-text output pane: the FB
+A window (Run All, Clear, Reset Database, ?) and one scrolling rich-text output with every example run at launch (author, 2026-11-25: no example popup): the FB
 (purple), the SQL with a `sqlite>` prompt (blue), the values (teal), results as a SQL command line
 prints them (Menlo, `+---+` borders, numbers right-aligned, "n rows in set", "Query OK, 1 row
-affected"); also to NSLog (Examples > Also Log to NSLog). Help opens `User Guide.txt` in its own
+affected"); also to NSLog (Examples > Log to NSLog: `isLoggingOn`, NO by default). Help opens `User Guide.txt` in its own window (author, 2026-11-25): a heading and opening
+paragraph, the object model diagram (`SQL Generator Diagram.png`, made from the SVG by
+`tools/svg_to_png.js`, light colours, 2x; `![name]` in the markup), how it fits together, then
+every function one by one, the runner's too. **Open in Preview** writes it as a paginated PDF
+(a print job saved to a file, in the light appearance) and opens it in Preview; **Export…** saves
+PDF or Rich Text with the diagram (RTFD); **View Diagram** shows the diagram full size in its own
+window (zoom, full screen). Also in the Help menu.
 window, styled from simple markup by `Rich Text.incl` with system colours (light and dark). The
 About box is `Credits.rtf`. The database: `~/Library/Application Support/SQL Generator Example/crm.sqlite`,
 five made-up people, made through the INSERT builder.
@@ -51,5 +57,7 @@ five made-up people, made through the INSERT builder.
 - [ ] The example project builds (FB 7.0.38) and runs; Run All shows all ten examples
 - [ ] Joins (examples 2, 4) work - the first real use of `AddAssociationToQuery`
 - [ ] Example 10 inserts three rows in one statement; example 1 then lists them
-- [ ] Help window: headings, bold, coloured code blocks, in light and dark mode
+- [ ] Using it in your own app (Help and README): copy the four files, drag them into the project window above your own files, Build Settings > Compiler options; the single-file way with `#build`. Try it once in a fresh FB project
+- [ ] `SQL Generator - Smallest Program.fb` runs: three rows added, Ada Lovelace and Grace Hopper listed
+- [ ] Help window: headings, bold, coloured code blocks, the diagram, in light and dark mode; Open in Preview (black on white even in dark mode); Export as PDF and as Rich Text (opens in TextEdit with the diagram); View Diagram (zoom, full screen)
 - [ ] About box shows the tag-line and what the module does

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Keeps the web app running (a LaunchAgent: it starts when you log in and again if it stops).
+  Copy to ~/Library/LaunchAgents/, set the path to the built app, then:
+      launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.example.webapp.plist
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.example.webapp</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Applications/Web App.app/Contents/MacOS/WebApp</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+</dict>
+</plist>

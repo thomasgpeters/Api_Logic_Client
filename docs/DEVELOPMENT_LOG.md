@@ -6,6 +6,412 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-26 — Enterprise is now Professional; seats on the network
+
+- **The rename:** the author renamed App Builder's paid edition from Enterprise to Professional. It applies across
+  the code, the tools, the docs and the licence payload (`"edition": "professional"`). `src/Enterprise` is now
+  `src/Professional`, and `ENTERPRISE_DATA_FEATURE.md` is now `PROFESSIONAL_DATA_FEATURE.md`.
+  - Projects and licences that say "enterprise" are still read as Professional (`Edition.incl`, `Licence.incl`).
+  - The Mac licence test was regenerated.
+  - Earlier entries of this log keep the old name, as written.
+- **Seats:** designed in `Licensing Design.md` -> Seats, from the author's answers.
+  - Bonjour finds copies with the same licence on the local network; past the seat count, the newest copy is
+    read-only until resolved.
+  - Each Mac is activated online once, then works offline.
+  - Lite: one copy at a time.
+
+## 2026-11-26 — The Web Toolkit is the third free module; pricing
+
+- **The author:** the Web Toolkit is a free module, like the other two. Those who take it write their own pages;
+  App Builder automates them, "that's why it's incentive to buy the subscription".
+- **Pricing:** an annual subscription under $299, monthly 20% more. This is recorded in `Licensing Design.md` ->
+  Pricing, with two questions for the author: is it the Enterprise subscription, and is the web target (feature
+  bit 9, proposed) in it? It is kept out of the marketing repository until it is public.
+- **The module:**
+  - its user guide (`src/WebToolkit/User Guide.txt`);
+  - its page on the site (`make_site.py`: the module, the Orders example and the guide, each downloadable);
+  - the About Imagery window in the Orders example (checked identical by `run_tests.sh`).
+- **The template:** gained `AppMenusBuild`, `AppMenu` and `AppDialog`, so an app's own menus and windows need no
+  change to the shared `Server Window.incl`.
+- Commit 573c365 (XIB layouts and the Layout Tool) preceded this.
+
+## 2026-11-26 — Web Toolkit: XIB layouts and the layout tool
+
+- The author: "go ahead with the XIB templates and layout tool". A XIB is now a web page's layout:
+  - `WebLoadLayout` (`Web Layout.incl`) reads a `.webxib` and makes its widgets: controls, labels joined to their
+    fields, rows in twelfths, boxes as cards or forms, an empty named label as a message band, Identifiers as
+    widget ids.
+  - The layout tool (`src/WebToolkit/Layout Tool/Layout Tool.html`) lays them out, previews them as the web shows
+    them, writes the FB code, and saves `.xib` and `.webxib`.
+  - The Orders example is laid out in three `.webxib` panels (a table beside a form, each).
+- The rules have one reference (`tools/web_layout_reference.py`) and three implementations, each tested against it:
+  - Python (the reference itself);
+  - the Objective-C in `Web Layout.incl`, compiled here with GNUstep: `tools/check_web_layout.py`;
+  - the tool's JavaScript, in Chromium: `tools/check_layout_tool.py`.
+
+  The comparisons use the reference's test layout and the repository's 15 XIBs, which all lay out with unique ids.
+- Commit 752eb47 (the widget library) preceded this.
+- Learned:
+  - **FB compiles a `.xib` resource into a nib,** so there is no XML at run time. Hence `.webxib`: the same file
+    under another name, copied as it is (to confirm on a Mac).
+  - **GNUstep's runtime has no object literals or subscripts,** so the Objective-C is written without them. It then
+    compiles here and on a Mac alike.
+  - **Python's `round()` rounds halves to even,** while C and JavaScript round them up. The reference uses
+    `floor( x + 0.5 )` so that the three agree on spans.
+
+## 2026-11-26 — Web Toolkit for FutureBasic: the widget library, the lifecycle, the app template
+
+- The author: the widget library for all HTML controls, with event handlers back to FB and binding to the
+  database - FB as the middleware, serving pages that behave as any normal page. Added during the work:
+  - every widget AJAX;
+  - a page lifecycle so data is saved back;
+  - an FB app template for the events in and out of FastCGI;
+  - the core tied to no data model, because App Builder will target a desktop or a web app;
+  - XIB files as page templates, with a layout tool (designed, next).
+- What was built:
+  - `src/WebToolkit/`: Server (the tested FastCGI core, verbatim), Session, Widgets (16 kinds), Render (escaped HTML,
+    Bootstrap class names), Events (routing, CGI answers, the lifecycle, `WebStart`), Binding (optional: forms and
+    tables through LogicBank), `web.js`, `web.css` (four themes as tokens).
+  - The template: `src/WebToolkit/Template/`.
+  - The example: `src/WebToolkitExample/` (Orders on the LogicBank example's model and rules).
+- Tests:
+  - `tools/web_toolkit_reference.py`: the protocol in Python, and `web.js` in headless Chromium, 30 checks.
+  - `run_tests.sh` also checks that the copies are identical.
+- Learned:
+  - **Define before use** shapes the module: the core cannot call the binding, so the binding registers two hooks
+    (field edited, save dirty) when a form is first bound. That is also what keeps the core free of any data model.
+  - **`data` is an FB keyword** (so are `line`, `text`, `record`, `select`, `button`): fblint caught `line`.
+  - **Beacons:** `navigator.sendBeacon` with a JSON Blob carries the cookie, so "leaving" reaches the FB app without
+    an answer awaited.
+
+## 2026-11-26 — Feasibility: web applications in FutureBasic, replacing Wt
+
+- The author's pattern: FastCGI, with nginx in front and a long-running FB app behind it answering requests with
+  HTML from our own widgets; Foundation throughout (`design/Web Toolkit Design.md` -> The pattern).
+
+- The author asked whether a standalone web server and web UI, with the business logic in FB, could replace Wt and
+  its licence: a feasibility question for now.
+- `docs/design/Web Toolkit Design.md` covers:
+  - the purpose: replace Wt, clean-room, no Wt code or licence;
+  - what FB offers;
+  - an architecture in Wt's spirit: sessions, widget dictionaries, events through `@fn`, incremental updates, a
+    small `web.js`, CSS themes;
+  - security, HTTPS (a proxy at first, then Apple's Network framework), and the limits.
+- `src/MacTests/Web Server Test.fb` is the proof: a C HTTP server (`BeginCFunction`, BSD sockets, GCD on the main
+  queue) calls an FB handler through an `@fn` pointer. The page is a counter and a greeting, updated without reloading.
+- Learned:
+  - FB has no web-server example or HTTP library.
+  - `BeginCDeclaration` / `BeginCFunction` ... `EndC` with `toolbox fn` brings in C the size of a small server.
+
+## 2026-11-26 — Imagery's FutureBasic site, generated
+
+- The author hosts the site on his own server at `fb.imagery-business-systems.com` (a domain name, so the host can
+  change without redeploying the apps). `ABOUT_IMAGERY_SITE` points there.
+- `tools/make_site.py` builds the static site from the repository:
+  - the home page;
+  - each module's page (README, download, user guide);
+  - the examples' user guides as web pages (`User Guide.txt`'s markup), ready for web Help;
+  - the samples' pages and zips;
+  - App Builder's page, with registration on the License Server.
+
+  Standard library only. Checked in Chromium: light and dark, phone width, tables and nested lists.
+
+## 2026-11-26 — Licensing built in App Builder; logging gated everywhere
+
+- Licensing (`docs/features/LICENSING_FEATURE.md`):
+  - `Licence.incl`: ES256 licences verified offline with the Security framework, kept in the Keychain,
+    `LicenceAllows`.
+  - `Licence Window.incl`: the Licence menu and window, and `LicenceGate` on ALS projects, rules exchange and every
+    Generate command. `Edition.incl` follows the licence.
+  - `tools/licence_reference.py`: issue and verify; 10 cases; it writes the Mac test program, which carries
+    `Licence.incl`'s verify part unchanged.
+  - The keys here are TEST keys; the production pair is made on the License Server.
+- Logging (author): every `NSLog` - errors too - is gated on `isLoggingOn`, NO by default, declared in the app's own
+  globals.
+  - Generated apps get a new template, `App Globals.glbl` (first in the build order); the generated main no longer
+    sets `isLoggingOn = YES`.
+  - The runtime's `Data SQLite.incl` and the LogicBank example's `Data Memory.incl` no longer declare it. The Studio's
+    `My Globals.glbl` has it NO.
+  - The examples' "Log to NSLog" menu items toggle `isLoggingOn`; their separate flag is gone.
+  - Test_Xib_View likewise (279496a).
+  - 62 calls gated here, 21 in Test_Xib_View. `fblint` now reports an ungated `NSLog` (FB Coding Rules 27).
+- Learned:
+  - macOS verifies ECDSA P-256 natively (`kSecKeyAlgorithmECDSASignatureMessageX962SHA256`, DER signatures - what
+    OpenSSL and Python's `cryptography` produce). The Security framework is `include "Tlbx Security.incl"`.
+  - Rather than an output parameter, a verify function reports why it refused in a global (`gLicenceVerifyProblem`).
+
+## 2026-11-26 — LogicBank for FutureBasic as a free module, with its example app
+
+- The author: LogicBank's sample is its own app, on three objects that never touch a database - Customer, Order,
+  Item - with hand-written rules; App Builder is what adds the AI, the checks and the tests. Open-sourcing the module
+  also keeps faith with LogicBank for Python, which is open source. And like the SQL Generator's, the example gets a
+  Help window with the user guide and examples.
+- `src/LogicBankExample`:
+  - `Data Memory.incl`: the engine's data calls answered from memory - copies out, a snapshot rolled back on a
+    refused save, generated keys.
+  - The module's files are identical to the runtime's.
+  - The example: `Rules.incl` (all rule kinds), a 13-step story with Next / Run All / Start Again and the engine
+    log, Help with `User Guide.txt` and a rules diagram, About Imagery.
+  - `tools/logicbank_example_reference.py` checks the story on the reference engine and writes `Model.json`.
+- Learned:
+  - The engine depends on its data only through about fifteen `Data…` calls, so a data layer is a file:
+    memory today, ALS tomorrow (the Enterprise client's preview of the rules).
+  - `%-8@` widths do nothing for objects in NSString formats: pad with `StringByPaddingToLength`; numbers keep
+    `%8.2f`.
+
+## 2026-11-26 — The free modules and the About Imagery window
+
+- The author: the SQL Generator and LogicBank for FutureBasic are free modules, downloadable from the GitHub Pages
+  site, each with a sample app. Both apps have *About Imagery Business Systems…*, describing Imagery's FutureBasic
+  work. App Builder is the licensed app Imagery resells. Design: `docs/design/Free Modules Design.md`.
+- `src/Shared/About Imagery.incl`:
+  - one self-contained window: the logo following light and dark mode, the text from the resource
+    `About Imagery.txt` (simple markup), *Visit the Website*, Close;
+  - added to the SQL Generator example's application menu and build order;
+  - `run_tests.sh` checks the copies are identical.
+- Learned: FB's application menu takes items after its required separator (`menu _mApplication, item,, title`,
+  FBExamples MainMenu). A window closes with the `window close` statement.
+
+## 2026-11-26 — Licensing designed: one app, signed licences from the Imagery License Server
+
+- The author: App Builder is one app for Lite and Enterprise, the Enterprise features gated by the licence. Lite is
+  licensed too: users register on the Imagery License Server before they can download, and upgrade from a Licence
+  menu in the app. Design: `docs/design/Licensing Design.md`.
+- Decided:
+  - App Builder's source goes private; LogicBank for FutureBasic and the SQL Generator stay public modules.
+  - Licences are bound to the registered account, signed for both editions, and checked offline.
+  - Generated apps never check a licence.
+- Learned:
+  - The License Server's current tokens can be forged (a published salt, a non-cryptographic hash) and use
+    `std::hash`, which differs between Linux and macOS.
+  - macOS verifies ECDSA P-256 natively (`SecKeyVerifySignature`, in FB's Security headers); Ed25519 would need
+    a library. Licences are therefore ES256.
+  - Fleet Dispatcher's editions-as-bit-bundles is the pattern App Builder follows (Lite `0x0003`, Enterprise
+    `0x01FF`).
+
+## 2026-11-26 — Rules: the line between Lite and Enterprise; the AI Assistant's decisions
+
+- The author drew the line for rules by where they run and who shares them (`docs/design/Editions and Licensing.md`):
+  - **Lite** defines, tests and runs rules on one Mac: the whole engine, authoring, sentences, Explain, scenarios,
+    and the AI Assistant with the user's own key.
+  - **Enterprise** covers rules shared through a server: enforcement, `declare_logic.py` import and export,
+    equivalence tests, multi-user, integration and scheduled rules, authorization, governance, `genai-logic`.
+  - An Enterprise client previews the rules locally.
+- AI Assistant decisions:
+  - Claude first, behind a narrow interface.
+  - Enterprise uses both routes (ALS `genai-logic`, else the Studio's connector).
+  - The neutral expression language.
+  - LogicBank for FutureBasic is published as its own module.
+
+## 2026-11-26 — AI Assistant designed: rules as sentences in the model's language
+
+- The author: a schema brings no rules, so an AI connector in App Builder. Rules are natural language using the
+  model's entities and attributes, and the same rules go to ALS as `declare_logic.py`. LogicBank for FutureBasic
+  should be a module of its own, as LogicBank is to ALS. Design: `docs/design/AI Assistant Design.md`.
+  - The sentence is the source of truth, grounded in the model as it is typed.
+  - The AI translates it into the engine's rule kinds, or asks a question when the sentence is ambiguous.
+  - App Builder checks and the user approves each translation.
+  - A neutral expression language generates both FB and Python.
+  - Suggest Rules and Suggest Controls (into `Design.json`).
+  - The three samples are the evaluation set.
+  - Generation never calls the AI.
+
+## 2026-11-26 — Customs elaborated from the research: automated clearance
+
+- `samples/Customs` rebuilt: 22 tables, 93 rules, 88 scenarios, `--prove` 93 of 93.
+  - Value on the price paid (FOB, Bermuda's Public Notice 17) at the week's exchange rate, rounded first.
+  - Ad valorem, specific, compound and stepped rates.
+  - Wharfage 1.25 %; none on personal baggage.
+  - Relief for approved importers; resident and visitor allowances.
+  - Master and house bills with a manifest check; late security filing.
+  - Agency permits, holds, prohibited goods.
+  - Risk score and lanes: green, yellow, red, blue, plus a random draw.
+  - `ReleaseReason` / `Releasable`: automatic release is the app releasing what the rules call releasable.
+  - Monthly statements within the bond; required bond.
+  - The port gate, kept.
+- Learned:
+  - A child's formula that reads its parent's aggregate sees it before the child is counted. Ten house bills
+    reading their master bill's "manifest match" kept a stale value. Read the aggregate from the row that
+    needs it, not through the child: the declaration copies `MasterBillId` and reads the master bill.
+  - A cycle (an inspection lowers the importer's points, which raise the same entry's risk) leaves the
+    entry's own score stale. Break it the way the domain does: score with the points as they were when the
+    entry was lodged (a copy rule).
+  - CIF (in the earlier sample) was wrong for Bermuda: duty is on the transaction value.
+
+## 2026-11-26 — Flight Planner elaborated from the research; Flight Service filing designed
+
+- The author asked for research on both samples' domains, then for everything it suggested. Research notes:
+  `docs/research/Flight Planning Research.md`, `docs/research/Customs Clearance Research.md` (c52efcc).
+- `samples/FlightPlanner` rebuilt: 14 tables, 104 rules, 104 scenarios, `--prove` 104 of 104.
+  - Wind triangle per leg.
+  - Weight and balance from loading stations, with a sloped forward CG limit.
+  - Runways: takeoff and landing distance at the density altitude (x 1.5), crosswind with the gust.
+  - Weather: flight category and the VFR minimums by airspace, tighter for students.
+  - NOTAMs that close an airport.
+  - Medical expiry from exam date and age, or BasicMed; flight review.
+  - Landings and night landings in 90 days from the logbook. Night currency counts only with passengers
+    (the research's correction).
+  - Student solo, cross-country and Class B endorsements.
+  - Annual, transponder, ELT and battery; the 100-hour inspection for hire.
+  - Draft - Filed - Active - Closed (old-value constraint), ETA and the search-and-rescue time.
+  - Each leg's `Problem`; the plan's `NoGoReason`.
+- Learned:
+  - Recency windows ("90 days") need a reference date the rules can see. Without max / min aggregates the
+    "third-latest landing" cannot be found, so the logbook counts back from the pilot's `AsOf` date (today in
+    the app), and a child formula reads it from the parent.
+  - The data loader steps a status through its life cycle (`STEPS`) when a rule guards the transitions.
+- The author: file the plan with the FAA, simulated, Enterprise only, inside ALS. Researched: Leidos Flight
+  Service web services (REST / SOAP, vendor access only), the ICAO fields, the life cycle (expiry after 2 hours,
+  overdue at ETA + 30, QALQ, INREQ, ALNOT). Designed: `docs/design/Flight Service Filing Design.md`. Built later.
+
+## 2026-11-26 — Flight Planner sample (VFR in New England)
+
+- `samples/FlightPlanner`: 7 tables, 44 rules, 45 scenarios, `--prove` 44 of 44; the same pattern as Telecom and
+  Customs (schema, lookup, sample, purge; `build_db.py` through the rules; `Rules.incl` in FB, linted with the runtime).
+  A leg's distance and true course by the great circle (haversine, initial bearing) from the airports'
+  coordinates; magnetic course, ground speed, minutes and fuel; the VFR hemispheric altitude rule (14 CFR 91.159),
+  runway length; the plan's totals, the reserve (30 / 45 minutes, 91.151) and the margin; `NoGoReason` - no legs,
+  medical, night currency (61.57), annual, altitude, runway, fuel - and filing needs a GO; the logbook from closed
+  plans; position reports for a flown track and other traffic (for the Map view).
+- Learned: FB's `sin`, `cos` and `asin` are keywords (radians), `atan2( y, x )`, `sqrt`, `floor`, `fmod` and `M_PI`
+  come from math.incl. Rounding is `floor( x + 0.5 )` in both the reference and FB, so the numbers agree.
+- Next (author): research both domains (flight planning; customs clearance and automated release) and elaborate
+  the two samples from it.
+
+## 2026-11-26 — Customs sample (Bermuda); lookup data and sample data apart
+
+- The author chose customs clearance next, set in Bermuda. No land border: goods arrive by sea and air, and
+  pre-clearance is at the port gate - transponder read, seal matching the declared one, truck and driver
+  cleared on the day, a registered and approved route. `samples/Customs`: 15 tables, 35 rules - duty from
+  the tariff (copied rates), the declaration's totals and balance, the deferment bond, the green and red
+  lanes, release (goods, lane or inspection, no failed inspection), and `Movement.Reason`: the first gate
+  check that fails, recomputed when its source changes. 41 scenarios; `--prove` 35 of 35. Sample duty rates
+  in Bermuda's style, not the official tariff; companies and people made up.
+- Learned: constraints of a parent run in the same save (the importer's bond refused a release before the
+  entry's own inspection rule) - scenarios must isolate the rule they test; delete actions run in declared
+  order - refuse (payments) before cascading (lines), or the cascade changes the entry and another rule
+  refuses it for the wrong reason.
+- The author: as on the C++ side, the schema and the data are separate files, lookup data (stays) apart from
+  sample data (the demo scenario), which can be purged. Both samples now have `lookup.sql`, `sample.sql`
+  (plain INSERTs of the typed columns) and `purge_sample.sql`; `samples/sample_loader.py` replays them
+  through the rules (forward references deferred, guarded statuses last); `--lookup-only`. The rebuilt
+  databases are identical to the earlier ones, table by table; the purge leaves exactly the lookup-only build.
+
+## 2026-11-26 — The sample applications: one lifecycle, use case by use case
+
+- The author: a SQLite database for each use case (Telecom, the flight planner, oil and gas assets, customs
+  clearance), made right first; App Builder generates each business application; each is added as a
+  sample to the GitHub Pages site and posted on the FutureBasic list - the whole lifecycle, many use cases
+  and user stories. `BACKLOG.md` -> Sample applications: the parts every sample has (as `samples/Telecom`),
+  its steps, and a table of the four. The Telecom README gained its user stories.
+
+## 2026-11-26 — Telecom sample: travel plans priced from roaming agreements, 39 rules
+
+- The author: a second application from a database, to show the business rules on a real-world case
+  unlike orders and products - a mobile carrier: customers, accounts, plans, phones (a phone is part of
+  a plan); networks matter for roaming abroad; customers buy a travel plan for their countries and dates,
+  priced from the carrier's agreements with partner networks. `samples/Telecom`.
+- The pricing engine is rules over data: a country's cost per day at its preferred agreement's rates,
+  the zone's markup and a rounding step; a trip's countries copy the day price (a quote keeps it), are
+  free in the home zone; purchased trips add up phone -> plan -> account against the credit limit. LogicBank
+  has no max/min aggregate, so the design uses formulas, copies, sums and constraints only.
+- Every seed row goes in through the rules (`build_db.py`, the reference engine): the database's prices and
+  totals are the rules' own. 30 scenarios, `--prove` 39 of 39; FB `Rules.incl` lints with the runtime. Days
+  between ISO dates in FB with the Julian day formula and `fix` (FB's `int` rounds) - checked against
+  Python's calendar over 20,000 days.
+- Backlog: four more applications from the author - the flight planner, oil and gas asset management, national
+  customs clearance (with the Telecom sample's Map and Page Layouts items).
+
+## 2026-11-26 — SQL Generator example: how to put the module in your own app
+
+- The author: the example needs further instructions for including the module's files in one's
+  own application - in the plain FutureBasic editor, by drag and drop (open source users will not
+  have the Studio). The Help (`User Guide.txt`) has a new part, "Using the SQL Generator in your own
+  app": copy the four files; drag them into the project window above your own files, in build order
+  (FB builds the list from the top; definition before use); Build Settings > Compiler options
+  `-lsqlite3 -Wno-unused-command-line-argument` and why; the single-file way (`include` + `#build`,
+  which FB allows in single files only); opening the database and creating its tables; describe,
+  generate, run; the names the module uses, using your own SQLite code, updating, errors. The
+  README's section follows it in short.
+- `SQL Generator - Smallest Program.fb`: the module in the fewest lines - a single-file program
+  (an in-memory database, a table, one INSERT of three rows, a SELECT with a filter and an order).
+
+## 2026-11-26 — Names: App Builder for FutureBasic, built as Studio for FB
+
+- The author: the product is **App Builder for FutureBasic** - without "Imagery", which the FB
+  community does not know - and apart from Imagery LogicBank Studio (C++/Wt, a different product).
+  The built app is **Studio for FB** ("Studio" alone is the other product). Done:
+  - the name in the app (`APP_DISPLAY_NAME`: window, Welcome view, server form, About box, Help
+    menu), the generated apps' templates and file headers ("Generated by App Builder for
+    FutureBasic"), the docs, the architecture diagram (script redrawn), the one-pager and its PDF
+    (remade with headless Chromium, Letter, scale 0.5: two pages as before);
+  - the Application Support folder `App Builder for FutureBasic`; on first launch the folder of
+    either earlier name (`Imagery LogicBank Studio for FutureBasic`, `Api_Logic_Client`) is moved
+    over and the paths stored in its JSON files fixed (`StudioMoveOldSupportFolder( url, oldName )`);
+  - `src/Generator` -> `src/AppBuilder` (32 files, and `check_app_pages.py`, which built the path
+    in pieces); `Api Logic Client.fbeproj` / `.main` -> `Studio for FB.fbeproj` / `.main` (the
+    built app takes the project's name; `data.fbproj` and FB's `Window.plist` updated).
+  - Kept: "Imagery LogicBank Studio" where it means the C++ product (rules design notes); the
+    repository's name; past entries of this log.
+- Open the project from its new place: `src/AppBuilder/Studio for FB.fbeproj`. The old
+  `src/Generator` build folder FB made can be deleted.
+
+## 2026-11-25 — SQL Generator example: a Help window to read, preview and export
+
+- The author: the Help window stays - a heading and opening paragraph, the architecture diagram, then
+  each function explained one by one; it should print as PDF; then, instead of printing, Preview and
+  Export (PDF or Rich Text). Done: `User Guide.txt` rewritten in that order (every public function of
+  the module and the runner); the diagram as a PNG (`tools/svg_to_png.js`: the SVG in headless
+  Chromium, light colours, 2x) placed by a new `![name]` markup line (`RichAppendImage`, a text
+  attachment); **Open in Preview** (a print job saved to a temporary PDF, in the light appearance so
+  it is black on white in dark mode, opened in /System/Applications/Preview.app), **Export…** (PDF, or
+  RTFD with the diagram), **View Diagram** (full size, zoom, full screen); Help menu items too.
+- FB has no wrapper for a print job to a file with a copied NSPrintInfo, for RTFD, or for opening
+  with a given app: those are single `cln` lines. fblint caught `textView` (an FB keyword) and a
+  function placed before one it calls.
+
+## 2026-11-25 — SQL Generator example: one scrolling output with every result
+
+- The author merged and pulled; the Studio and the example compile and run. For the example: no
+  popup to choose an example - a scrolling text with all the results - and a blank line between the
+  building of the dictionaries and the results. The window now opens with every example run
+  (`ExampleRunAll` at launch, under a short introduction); Run All (Return, ⌘R) runs them again;
+  the example popup and Run button are gone (the Examples menu still runs one). `ShowIntroText`
+  moved to Example Output.incl: fblint caught it called before its file in the build order.
+- The branch merged `origin/main` (merges only, no other changes there).
+
+## 2026-11-25 — SQL Generator example: window title; Run All shows what it ran
+
+- The author: the window title is now "SQL Generator Example by Imagery Business Systems, LLC";
+  Run All "does not seem to work". Its wiring is right (button, menu ⌘R, `ExampleRunAll` runs
+  1-10), but every example scrolls the output to its own end, so after Run All only the end of
+  example 10 was in view - it looked like nothing, or one example, had run. Run All now starts
+  with a heading, logs each example (when the output is logged), ends with a note and scrolls
+  back to the top (`TextScrollRangeToVisible`). If it still does nothing on the Mac, the cause is
+  elsewhere: the author's report decides.
+
+## 2026-11-25 — Value lists with codes: "R = Retail" stores R, shows Retail
+
+- The author: a type field should be able to be a Dropdown whose values the developer types,
+  written into the FB code, not a lookup but behaving like one. Most of it existed (Control:
+  Dropdown, the Values column, `BindingFillChoices` with the list in the generated binding); what
+  a lookup did and a value list did not was storing a key while showing a name. Values now take
+  `code = label` pairs: `TypeMapValuePart` / `TypeMapValueParts` / `TypeMapValuesArePairs` (Type
+  Mapping); a Dropdown's binding calls `BindingSetChoices( tag, titles, codes )`, Radio buttons
+  get the labels as titles (XIB) and the codes in their show / take. A plain list is generated as
+  before.
+
+## 2026-11-25 — SQL Generator example builds and runs; its warnings fixed
+
+- The author's build of `SQLGeneratorExample` compiled, linked and ran, with two warnings:
+  - `-lsqlite3: 'linker' input unused`, once per file: FB passes Build Settings' "Compiler options"
+    to every compile, and that is where its reference says a library goes. The example lacked
+    `-Wno-unused-command-line-argument`, which the Studio, the app template and Test_Xib_View
+    already have; added.
+  - `selectfilterArrayRef is used uninitialized` (`GetSelectFilterArray`, DataObject_Super.incl):
+    a query without a filter returned an unset variable; it starts at NULL now - in the runtime,
+    the example and *TXV* `e045def` (the copies stay identical).
+
 ## 2026-11-25 — Build fix: SQL Generator example, a text-view function newer than the author's FB
 
 - The author's build of `SQLGeneratorExample`: "Unknown … Toolbox name … TextViewAppendAttributedString"

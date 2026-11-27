@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Where the Studio finds an API Logic Server project's model, and what it makes of it - the
-reference for src/Generator/ALS Project.incl (the Open ALS Project screen), function for function.
+reference for src/AppBuilder/ALS Project.incl (the Open ALS Project screen), function for function.
 
     python3 tools/als_project_reference.py --test <ALS project folder> [...] [--github]
 

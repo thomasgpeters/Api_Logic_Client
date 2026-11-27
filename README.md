@@ -1,4 +1,4 @@
-# Imagery LogicBank Studio for FutureBasic
+# App Builder for FutureBasic
 
 *(repository: Api_Logic_Client)*
 
@@ -24,7 +24,7 @@ lists in tabs, drill-in with a crumb trail.
    `Design.json` and survive regeneration.
 3. **Generate** — each step on its own, or all at once:
    *Generate XIBs* · *Generate XIB for Selected Entity* · *Generate Binding Code* ·
-   *Generate App*. Output goes to `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/<project>/FBapp/`;
+   *Generate App*. Output goes to `~/Library/Application Support/App Builder for FutureBasic/workspace/<project>/FBapp/`;
    the project's own settings (`Project.json`, `Design.json`) stay in `<project>/`.
 4. **Open `FBapp/<project>.fbeproj` in FutureBasic**, build, and keep editing: generated code is
    plain, readable FB; `EventHandlers.incl`, `Menus.incl` and `Windows.incl` start from
@@ -36,7 +36,7 @@ lists in tabs, drill-in with a crumb trail.
 Api_Logic_Client/
 ├── README.md · CLAUDE.md · .gitignore
 ├── src/
-│   ├── Generator/    ← open "Api Logic Client.fbeproj" here in the FB editor
+│   ├── AppBuilder/   ← open "Studio for FB.fbeproj" here in the FB editor
 │   ├── Runtime/      ← FB code copied into generated apps (regenerated)
 │   └── Templates/    ← starting files for generated apps (copied only when missing)
 ├── docs/
@@ -56,7 +56,7 @@ its Application Support folder (*Model → Show Workspace in Finder* opens it;
 `~/Library` is hidden in Finder):
 
 ```
-~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/
+~/Library/Application Support/App Builder for FutureBasic/
 ├── Settings.plist                 (planned) settings: git, GitHub, ALS/APIs, AI/LLMs, SMTP
 ├── Recent Projects.json           the Welcome view's Recent Projects (newest first)
 └── workspace/
@@ -98,7 +98,7 @@ Secrets (tokens, API keys, passwords) go in the macOS Keychain, never in a file.
 
 ## Building
 
-FutureBasic 7.1.x on macOS. Open `src/Generator/Api Logic Client.fbeproj` in the
+FutureBasic 7.1.x on macOS. Open `src/AppBuilder/Studio for FB.fbeproj` in the
 FB editor and build (the project links `-lsqlite3`). Before handing over FB
 changes, check them:
 

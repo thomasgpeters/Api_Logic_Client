@@ -1,0 +1,176 @@
+{
+  "project": "LogicBank for FutureBasic Example",
+  "database": "",
+  "resources": [
+    {
+      "name": "Customer",
+      "kind": "table",
+      "fields": [
+        {
+          "name": "Id",
+          "type": "INTEGER",
+          "pk": 1
+        },
+        {
+          "name": "Name",
+          "type": "TEXT",
+          "pk": 0
+        },
+        {
+          "name": "CreditLimit",
+          "type": "REAL",
+          "pk": 0
+        },
+        {
+          "name": "Discount",
+          "type": "REAL",
+          "pk": 0
+        },
+        {
+          "name": "Balance",
+          "type": "REAL",
+          "pk": 0
+        },
+        {
+          "name": "UnshippedOrders",
+          "type": "INTEGER",
+          "pk": 0
+        }
+      ],
+      "keys": [
+        "Id"
+      ],
+      "keyKind": "autoincrement",
+      "relationships": [
+        {
+          "name": "OrderList",
+          "direction": "tomany",
+          "resource": "Order",
+          "fks": [
+            "CustomerId"
+          ],
+          "parentKeys": [
+            "Id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "kind": "table",
+      "fields": [
+        {
+          "name": "Id",
+          "type": "INTEGER",
+          "pk": 1
+        },
+        {
+          "name": "OrderId",
+          "type": "INTEGER",
+          "pk": 0
+        },
+        {
+          "name": "Product",
+          "type": "TEXT",
+          "pk": 0
+        },
+        {
+          "name": "Quantity",
+          "type": "REAL",
+          "pk": 0
+        },
+        {
+          "name": "UnitPrice",
+          "type": "REAL",
+          "pk": 0
+        },
+        {
+          "name": "Amount",
+          "type": "REAL",
+          "pk": 0
+        }
+      ],
+      "keys": [
+        "Id"
+      ],
+      "keyKind": "autoincrement",
+      "relationships": [
+        {
+          "name": "Order",
+          "direction": "toone",
+          "resource": "Order",
+          "fks": [
+            "OrderId"
+          ],
+          "parentKeys": [
+            "Id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Order",
+      "kind": "table",
+      "fields": [
+        {
+          "name": "Id",
+          "type": "INTEGER",
+          "pk": 1
+        },
+        {
+          "name": "CustomerId",
+          "type": "INTEGER",
+          "pk": 0
+        },
+        {
+          "name": "ShippedDate",
+          "type": "TEXT",
+          "pk": 0
+        },
+        {
+          "name": "Discount",
+          "type": "REAL",
+          "pk": 0
+        },
+        {
+          "name": "AmountTotal",
+          "type": "REAL",
+          "pk": 0
+        },
+        {
+          "name": "ItemCount",
+          "type": "INTEGER",
+          "pk": 0
+        }
+      ],
+      "keys": [
+        "Id"
+      ],
+      "keyKind": "autoincrement",
+      "relationships": [
+        {
+          "name": "ItemList",
+          "direction": "tomany",
+          "resource": "Item",
+          "fks": [
+            "OrderId"
+          ],
+          "parentKeys": [
+            "Id"
+          ]
+        },
+        {
+          "name": "Customer",
+          "direction": "toone",
+          "resource": "Customer",
+          "fks": [
+            "CustomerId"
+          ],
+          "parentKeys": [
+            "Id"
+          ]
+        }
+      ]
+    }
+  ]
+}

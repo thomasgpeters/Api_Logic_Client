@@ -20,7 +20,7 @@ if len(sys.argv)>1 and sys.argv[1] in ('-h','--help'):
     print(__doc__); sys.exit(0)
 DOCS=sys.argv[1] if len(sys.argv)>1 else os.path.join(ROOT,'..','FutureBasic_Documentation')
 if not os.path.isdir(DOCS): DOCS=os.path.join(ROOT,'..','futurebasic_documentation')
-gen=open(os.path.join(ROOT,'src','Generator','App Generator.incl'),newline='').read().replace('\r','\n')
+gen=open(os.path.join(ROOT,'src','AppBuilder','App Generator.incl'),newline='').read().replace('\r','\n')
 src=gen[gen.index('local fn AppPagesSource('):]
 src=src[:src.index('\nend fn = s\n')+len('\nend fn = s')]
 body=src[src.index('long               index')+len('long               index'):src.rindex('end fn = s')]
@@ -102,7 +102,7 @@ for r in res:
 R=os.path.join(ROOT,'src')+'/'
 for f in ['Data SQLite.incl','DataObject.glbl','DataObject_Super.incl','DataObject.incl','Data Model.incl','Data Records.incl','Logic Rules.incl','Logic Row.incl','Logic Engine.incl','App Data Lite.incl','Pill Buttons.incl','App Shell.incl','Binding Support.incl','Record Popover.incl']:
     shutil.copy(R+'Runtime/'+f,G)
-for f in ['EventHandlers.incl','Menus.incl','Theme.incl','Rules.incl']:
+for f in ['App Globals.glbl','EventHandlers.incl','Menus.incl','Theme.incl','Rules.incl']:
     shutil.copy(R+'Templates/App/'+f,G)
 open(G+'/Studio Rules.incl','w',newline='').write('void local fn DeclareStudioRules\rend fn\r')
 

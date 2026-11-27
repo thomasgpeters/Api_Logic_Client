@@ -24,7 +24,7 @@ Every app generated from a SQLite project opens in the same frame:
 - **Content:** a page per entity, its List above its Form. Choosing a row shows it in the Form.
 - **Data:** the pages call the app's data interface (`App Data Lite.incl`: `AppDataList`,
   `AppDataSave`, `AppDataRemove`, answers in `AppDataDone`); saves go through the rules. The
-  Enterprise edition will replace only that file (`design/Editions and Licensing.md`).
+  Professional edition will replace only that file (`design/Editions and Licensing.md`).
 
 ## Where
 
@@ -55,7 +55,7 @@ without a copyright the footer says `© <app name>`.
   menu's Light / Dark / System (`AppSetAppearanceNamed`, `AppSetAppearance( NULL )`) just works.
 - **Readable output for the FB community.** Every generated file opens with what it is, whether
   it is regenerated, and developer notes; `README.md` explains the project group by group.
-- **ALS projects:** an app over an API Logic Server is the Enterprise edition (roadmap); in Lite,
+- **ALS projects:** an app over an API Logic Server is the Professional edition (roadmap); in Lite,
   Generate App explains how to make the project from the server's SQLite database.
 - **Generator Edit menu** (`editmenu`) added so the logo well takes Paste; *Generate XIBs* moved
   from ⌘X (Cut) to ⇧⌘X.

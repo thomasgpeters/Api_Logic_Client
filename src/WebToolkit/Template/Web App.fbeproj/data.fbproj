@@ -1,0 +1,19 @@
+// "Headers" 0
+// "Resources" 1
+resources "Info.plist"
+resources "web.js"
+resources "web.css"
+// "Globals" 1
+include "Web App.glbl"
+// "Web Toolkit" 1
+include "Web Server.incl"
+include "Web Session.incl"
+include "Web Widgets.incl"
+include "Web Render.incl"
+include "Web Events.incl"
+include "Web Layout.incl"
+// "App" 1
+include "Pages.incl"
+include "Server Window.incl"
+// "Main" 1
+include "Web App.main"

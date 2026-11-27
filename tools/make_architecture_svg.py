@@ -31,7 +31,7 @@ def arrow(points, cls='arr', label=None, lx=None, ly=None, both=False):
         t(lx, ly, label, 'lbl', 'middle')
 
 # --- title
-t(30, 44, 'Imagery LogicBank Studio for FutureBasic — architecture', 'h1')
+t(30, 44, 'App Builder for FutureBasic — architecture', 'h1')
 t(30, 70, 'From a data model to a native Mac app with business rules: SQLite (lite edition) or API Logic Server → XIB parts, binding code, rules → a FutureBasic project built from the template and runtime.', 'sub')
 
 # --- columns: headers
@@ -180,6 +180,6 @@ style = '''
   <marker id="tail" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="head"/></marker>
 </defs>'''
 svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" '
-       f'aria-label="Imagery LogicBank Studio for FutureBasic architecture">\n<title>Imagery LogicBank Studio for FutureBasic — architecture</title>'
+       f'aria-label="App Builder for FutureBasic architecture">\n<title>App Builder for FutureBasic — architecture</title>'
        + style + f'\n<rect class="bg" x="0" y="0" width="{W}" height="{H}" style="stroke:none"/>\n' + '\n'.join(out) + '\n</svg>\n')
 open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'docs', 'design', 'architecture.svg'), 'w').write(svg)

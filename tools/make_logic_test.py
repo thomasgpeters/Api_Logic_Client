@@ -149,10 +149,10 @@ end globals
 void local fn Check( testName as CFStringRef, passed as BOOL, detail as CFStringRef )
 gTestsRun++
 if ( passed )
-NSLog( @"PASS  %@", testName )
+if ( isLoggingOn ) then NSLog( @"PASS  %@", testName )
 else
 gTestsFailed++
-NSLog( @"FAIL  %@   [%@]", testName, detail )
+if ( isLoggingOn ) then NSLog( @"FAIL  %@   [%@]", testName, detail )
 end if
 end fn
 
@@ -538,12 +538,12 @@ fn Check( @"step 3: LB-11: a row event that changes the row fails the save", ok 
 end fn
 
 
-isLoggingOn = YES
+isLoggingOn = YES                     // the test shows the engine's log (App Globals.glbl has it NO by default)
 if ( fn DataOpen( NULL ) )
 fn RunScenarios
 fn RunAggregateScenarios
 fn RunStep3Scenarios
-NSLog( @"logic test: %ld scenarios, %ld failed", gTestsRun, gTestsFailed )
+if ( isLoggingOn ) then NSLog( @"logic test: %ld scenarios, %ld failed", gTestsRun, gTestsFailed )
 end if
 HandleEvents
 '''
@@ -588,7 +588,8 @@ def main(argv):
                 os.path.join(out, 'Logic Test.fbeproj', 'Settings2.plist'))
     with open(os.path.join(out, 'App Headers.incl'), 'w', newline='') as f:   # FB's headers, from source
         f.write('// App Headers.incl - FutureBasic\'s own headers, from your FB install\r\rinclude "NSLog.incl"\r')
-    project = ['// "Headers" 1', 'include "App Headers.incl"', '// "Runtime" 1'] + [f'include "{n}"' for n in RUNTIME] + \
+    shutil.copy(os.path.join(ROOT, 'src', 'Templates', 'App', 'App Globals.glbl'), os.path.join(out, 'App Globals.glbl'))   # isLoggingOn
+    project = ['// "Headers" 1', 'include "App Headers.incl"', '// "Globals" 1', 'include "App Globals.glbl"', '// "Runtime" 1'] + [f'include "{n}"' for n in RUNTIME] + \
               ['// "Tests" 1', 'include "Logic Test Rules.incl"', '// "Resources" 1', 'resources "Model.json"',
                '// "Main" 1', 'include "Logic Test.main"']
     with open(os.path.join(out, 'Logic Test.fbeproj', 'data.fbproj'), 'w', newline='') as f:

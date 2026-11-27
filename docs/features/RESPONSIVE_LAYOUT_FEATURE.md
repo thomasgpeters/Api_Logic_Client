@@ -1,6 +1,6 @@
 # Responsive Layout (generator window)
 
-**Where:** `src/Generator/MainWindow.xib`, the page XIBs (`WelcomeView`, `NewProjectView`,
+**Where:** `src/AppBuilder/MainWindow.xib`, the page XIBs (`WelcomeView`, `NewProjectView`,
 `ProjectCreateView`, `ProjectDetailView`, `ProjectSettingsView`), `Windows.incl`
 (`PageFrame`, `FitPageView`), `My Globals.glbl` (`_minWindowWidth`, `_minWindowHeight`,
 `_pageHeadingHeight`).

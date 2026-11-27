@@ -1,7 +1,7 @@
 # Open ALS Project: a project from the model API Logic Server generated
 
 The author (2026-11-25): the model is API Logic Server's, never FutureBasic's. The Lite edition
-points at the SQLite file; the Enterprise edition points at the **ALS project** and reads the model
+points at the SQLite file; the Professional edition points at the **ALS project** and reads the model
 ALS generated there. The model file sits in the same place for any database: `database/models.py`.
 
 ## What the developer sees
@@ -36,11 +36,11 @@ The files are read over plain HTTPS from `raw.githubusercontent.com`.
 
 | | |
 |---|---|
-| `src/Generator/ALSProjectView.xib` | the page: name, ALS project field, Read, Folder…, Model File…, the drop zone's box and label, summary, API Server, From a Running Server…, Cancel, Create |
-| `src/Generator/Open ALS Project.incl` | the page's actions; `ALSProjectSetUp` makes the drop zone |
-| `src/Generator/ALS Project.incl` | finding the model (folder, file, GitHub), keeping the copy, `ALSProjectStudioModel` |
-| `src/Generator/ALS Model.incl` | parsing it (`ALSModelFromModelsPy`, `ALSModelFromYAML`, `ALSModelFromText`); moved here from `src/Enterprise/` - the Studio reads it |
-| `src/Generator/Project Actions.incl` | `LoadALSModel` (the project's copy -> the Studio model); `LoadModelFile` opens `.py` / `.yaml` with it |
+| `src/AppBuilder/ALSProjectView.xib` | the page: name, ALS project field, Read, Folder…, Model File…, the drop zone's box and label, summary, API Server, From a Running Server…, Cancel, Create |
+| `src/AppBuilder/Open ALS Project.incl` | the page's actions; `ALSProjectSetUp` makes the drop zone |
+| `src/AppBuilder/ALS Project.incl` | finding the model (folder, file, GitHub), keeping the copy, `ALSProjectStudioModel` |
+| `src/AppBuilder/ALS Model.incl` | parsing it (`ALSModelFromModelsPy`, `ALSModelFromYAML`, `ALSModelFromText`); moved here from `src/Professional/` - the Studio reads it |
+| `src/AppBuilder/Project Actions.incl` | `LoadALSModel` (the project's copy -> the Studio model); `LoadModelFile` opens `.py` / `.yaml` with it |
 | `tools/als_project_reference.py` | the reference, function for function, and its test |
 
 ## Decisions
@@ -53,7 +53,7 @@ The files are read over plain HTTPS from `raw.githubusercontent.com`.
   file works whatever it is called. Older projects write `class X(SAFRSBaseX, Base):`; both read.
 - **A copy in the project**: `<project>/ALS Model/models.py` (or `app_model.yaml` / `admin.yaml`), and
   `admin.yaml` beside it. The project's `source` is the copy, so it opens again without the original
-  or the network. `Project.json` keeps `alsSource` (where it came from) and `edition: enterprise`.
+  or the network. `Project.json` keeps `alsSource` (where it came from) and `edition: professional`.
 - **The drop zone is a subclassed view made in code** (author: FB's translator writes the subclass;
   only its own classes exist): `subclass view` laid over the XIB's box, `ViewRegisterForDraggedFileTypes`,
   the drop as `_viewPerformDragOperation` with `DialogEventArray` (FBExamples, DragDrop View).
@@ -64,9 +64,9 @@ The files are read over plain HTTPS from `raw.githubusercontent.com`.
   (Category is stored in `CategoryTableNameTest`; the table is kept as `table`).
 - GitHub is read while the developer waits (one small file, a few requests at most); a private
   repository (a Keychain token) and *Refresh Model* are backlog.
-- **Generate App**: an ALS project is an Enterprise app (three-tier). In this open build
+- **Generate App**: an ALS project is an Professional app (three-tier). In this open build
   (`Edition.incl`: Lite only) the model can be browsed, designed and its XIBs and bindings generated;
-  Generate App explains that the app is the Enterprise edition.
+  Generate App explains that the app is the Professional edition.
 
 ## Verify
 

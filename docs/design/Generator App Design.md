@@ -1,6 +1,6 @@
 # Generator App — Design
 
-The generator itself (this repo's `src/Generator/` project; product name to be
+The generator itself (this repo's `src/AppBuilder/` project; product name to be
 decided) is a **macOS-only** FutureBasic app. The generated apps are described
 in `App Shell Design.md`.
 
@@ -8,24 +8,24 @@ in `App Shell Design.md`.
 
 The app bundle is immutable: nothing is ever written inside the `.app`.
 Everything the app creates lives in its Application Support folder,
-`~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/`.
+`~/Library/Application Support/App Builder for FutureBasic/`.
 
 | What | Where | Notes |
 |---|---|---|
 | Runtime templates, XIB templates | inside the app bundle (`Contents/Resources`) | read-only, versioned with the app |
-| **Workspace** | `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/workspace/` | one folder per project; *Model → Show Workspace in Finder* opens it (`~/Library` is hidden in Finder) |
-| Settings | `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/Settings.plist` | non-secret configuration (below) |
+| **Workspace** | `~/Library/Application Support/App Builder for FutureBasic/workspace/` | one folder per project; *Model → Show Workspace in Finder* opens it (`~/Library` is hidden in Finder) |
+| Settings | `~/Library/Application Support/App Builder for FutureBasic/Settings.plist` | non-secret configuration (below) |
 | Secrets | macOS **Keychain** (`Security/SecItem.incl`) | API keys, tokens, passwords — never in a file |
-| Logs, caches | `~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/Logs`, `Caches` | safe to delete |
+| Logs, caches | `~/Library/Application Support/App Builder for FutureBasic/Logs`, `Caches` | safe to delete |
 
 In code: `AppSupportFolderURL`, `ProjectFolderURL`, `ShowWorkspaceInFinder`
-(`src/Generator/Project Actions.incl`). The folder name is `Api_Logic_Client`
+(`src/AppBuilder/Project Actions.incl`). The folder name is `Api_Logic_Client`
 until a product name is chosen.
 
 ### Workspace layout
 
 ```
-~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/
+~/Library/Application Support/App Builder for FutureBasic/
 ├── Settings.plist             (planned)
 └── workspace/
     ├── <Project>/             one project = one git repository (Project Workspace.incl)

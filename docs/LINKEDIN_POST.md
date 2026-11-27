@@ -1,10 +1,10 @@
-# LinkedIn post — Imagery LogicBank Studio for FutureBasic
+# LinkedIn post — App Builder for FutureBasic
 
 Attach `DOC_ONE_PAGER.pdf`, or a screenshot of the one-pager's masthead and big picture.
 
 ---
 
-**Introducing Imagery LogicBank Studio for FutureBasic**
+**Introducing App Builder for FutureBasic**
 
 Point it at a database. Get a native Mac app in FutureBasic, with its screens, its data access and its business rules written for you, in code you can read and keep.
 

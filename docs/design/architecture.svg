@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 960" width="1560" height="960" role="img" aria-label="Imagery LogicBank Studio for FutureBasic architecture">
-<title>Imagery LogicBank Studio for FutureBasic — architecture</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 960" width="1560" height="960" role="img" aria-label="App Builder for FutureBasic architecture">
+<title>App Builder for FutureBasic — architecture</title>
 <style>
   :root { --bg:#ffffff; --fg:#1d2430; --muted:#5a6473; --panel:#f4f6f9; --line:#c9d1dc; --accent:#2f5d8a;
           --src:#e8f1fb; --mod:#ffffff; --tool:#eef7ef; --res:#f6f1e7; --file:#ffffff; --runtime:#e9eef7; --gen:#eaf6f0; --tmpl:#fbf1e6; --build:#eef0f3; --app:#e7f0fa; --person:#f7eef6; }
@@ -34,7 +34,7 @@
   <marker id="tail" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="head"/></marker>
 </defs>
 <rect class="bg" x="0" y="0" width="1560" height="960" style="stroke:none"/>
-<text x="30" y="44" class="h1" text-anchor="start">Imagery LogicBank Studio for FutureBasic — architecture</text>
+<text x="30" y="44" class="h1" text-anchor="start">App Builder for FutureBasic — architecture</text>
 <text x="30" y="70" class="sub" text-anchor="start">From a data model to a native Mac app with business rules: SQLite (lite edition) or API Logic Server → XIB parts, binding code, rules → a FutureBasic project built from the template and runtime.</text>
 <text x="30" y="112" class="col" text-anchor="start">SOURCES</text>
 <text x="300" y="112" class="col" text-anchor="start">THE GENERATOR (FB, MACOS)</text>

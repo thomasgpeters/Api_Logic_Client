@@ -3,7 +3,7 @@
 Reads a data model straight from a SQLite database's own structure: the lite
 edition needs no server and no metadata file.
 
-**Where:** `src/Generator/SQLite Model.incl` (model), `src/Generator/SQLite Access.incl`
+**Where:** `src/AppBuilder/SQLite Model.incl` (model), `src/AppBuilder/SQLite Access.incl`
 (our own SQLite declarations), *Model → Open SQLite Database…* (⌘D) in
 `Project Actions.incl`. Reference implementation: `tools/sqlite_model.py`.
 

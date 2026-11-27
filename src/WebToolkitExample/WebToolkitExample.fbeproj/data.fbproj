@@ -1,0 +1,35 @@
+// "Headers" 0
+// "Resources" 1
+resources "Info.plist"
+resources "web.js"
+resources "web.css"
+resources "Model.json"
+resources "CustomerPanel.webxib"
+resources "OrderPanel.webxib"
+resources "ItemPanel.webxib"
+resources "About Imagery.txt"
+resources "imagery_logo.png"
+resources "imagery_logo_white.png"
+// "Globals" 1
+include "Web App.glbl"
+// "LogicBank for FutureBasic" 1
+include "Data Model.incl"
+include "Data Memory.incl"
+include "Logic Rules.incl"
+include "Logic Row.incl"
+include "Logic Engine.incl"
+include "Rules.incl"
+// "Web Toolkit" 1
+include "Web Server.incl"
+include "Web Session.incl"
+include "Web Widgets.incl"
+include "Web Render.incl"
+include "Web Events.incl"
+include "Web Layout.incl"
+include "Web Binding.incl"
+// "App" 1
+include "About Imagery.incl"
+include "Pages.incl"
+include "Server Window.incl"
+// "Main" 1
+include "Web App.main"

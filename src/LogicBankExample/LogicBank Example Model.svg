@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="720" viewBox="0 0 1000 720" font-family="-apple-system, Helvetica, Arial, sans-serif">
+<defs><marker id="up" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0a63c9"/></marker><marker id="down" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1e8e3e"/></marker></defs>
+<rect width="1000" height="720" fill="#ffffff"/>
+<text x="40" y="52" font-size="26" font-weight="700" fill="#1d1d1f">LogicBank for FutureBasic: the example’s rules</text>
+<text x="40" y="80" font-size="15" fill="#5f6368">Declared once in Rules.incl; enforced on every LogicInsert, LogicUpdate and LogicDelete.</text>
+<rect x="40" y="112" width="600" height="160" rx="12" fill="#f5f7fa" stroke="#c7c7cc" stroke-width="1.5"/>
+<text x="60" y="144" font-size="20" font-weight="700" fill="#1d1d1f">Customer</text>
+<text x="180" y="144" font-size="14" fill="#5f6368">Name, CreditLimit, Discount</text>
+<circle cx="66" cy="167" r="4" fill="#0a63c9"/>
+<text x="80" y="172" font-size="15" fill="#1d1d1f">Balance = sum of unshipped Orders’ AmountTotal</text>
+<circle cx="66" cy="191" r="4" fill="#0a63c9"/>
+<text x="80" y="196" font-size="15" fill="#1d1d1f">UnshippedOrders = count of unshipped Orders</text>
+<circle cx="66" cy="215" r="4" fill="#c26401"/>
+<text x="80" y="220" font-size="15" fill="#1d1d1f">constraint: Balance ≤ CreditLimit</text>
+<circle cx="66" cy="239" r="4" fill="#7b3fb5"/>
+<text x="80" y="244" font-size="15" fill="#1d1d1f">delete: prevented while it has Orders</text>
+<rect x="40" y="318" width="600" height="184" rx="12" fill="#f5f7fa" stroke="#c7c7cc" stroke-width="1.5"/>
+<text x="60" y="350" font-size="20" font-weight="700" fill="#1d1d1f">Order</text>
+<text x="180" y="350" font-size="14" fill="#5f6368">CustomerId, ShippedDate</text>
+<circle cx="66" cy="373" r="4" fill="#1e8e3e"/>
+<text x="80" y="378" font-size="15" fill="#1d1d1f">parent check: its Customer exists</text>
+<circle cx="66" cy="397" r="4" fill="#1e8e3e"/>
+<text x="80" y="402" font-size="15" fill="#1d1d1f">Discount = copy of Customer.Discount (when placed)</text>
+<circle cx="66" cy="421" r="4" fill="#0a63c9"/>
+<text x="80" y="426" font-size="15" fill="#1d1d1f">AmountTotal = sum of its Items’ Amount</text>
+<circle cx="66" cy="445" r="4" fill="#0a63c9"/>
+<text x="80" y="450" font-size="15" fill="#1d1d1f">ItemCount = count of its Items</text>
+<circle cx="66" cy="469" r="4" fill="#7b3fb5"/>
+<text x="80" y="474" font-size="15" fill="#1d1d1f">delete: its Items go with it</text>
+<rect x="40" y="548" width="600" height="112" rx="12" fill="#f5f7fa" stroke="#c7c7cc" stroke-width="1.5"/>
+<text x="60" y="580" font-size="20" font-weight="700" fill="#1d1d1f">Item</text>
+<text x="180" y="580" font-size="14" fill="#5f6368">OrderId, Product, Quantity, UnitPrice</text>
+<circle cx="66" cy="603" r="4" fill="#0a63c9"/>
+<text x="80" y="608" font-size="15" fill="#1d1d1f">Amount = Quantity × UnitPrice × (100 − Order.Discount) / 100</text>
+<circle cx="66" cy="627" r="4" fill="#c26401"/>
+<text x="80" y="632" font-size="15" fill="#1d1d1f">constraint: Quantity &gt; 0</text>
+<line x1="240" y1="314" x2="240" y2="280" stroke="#0a63c9" stroke-width="2" marker-end="url(#up)"/>
+<text x="252" y="300" font-size="13" fill="#0a63c9">sums and counts adjust the parent</text>
+<line x1="480" y1="276" x2="480" y2="310" stroke="#1e8e3e" stroke-width="2" marker-end="url(#down)"/>
+<text x="492" y="300" font-size="13" fill="#1e8e3e">copies, parent values</text>
+<line x1="240" y1="544" x2="240" y2="510" stroke="#0a63c9" stroke-width="2" marker-end="url(#up)"/>
+<text x="252" y="530" font-size="13" fill="#0a63c9">sums and counts adjust the parent</text>
+<line x1="480" y1="506" x2="480" y2="540" stroke="#1e8e3e" stroke-width="2" marker-end="url(#down)"/>
+<text x="492" y="530" font-size="13" fill="#1e8e3e">copies, parent values</text>
+<rect x="670" y="112" width="300" height="310" rx="12" fill="#ffffff" stroke="#c7c7cc" stroke-width="1.5"/>
+<text x="690" y="146" font-size="18" font-weight="700" fill="#1d1d1f">One save, in order</text>
+<text x="690" y="182" font-size="14" fill="#1d1d1f">1. copies from parents</text>
+<text x="690" y="212" font-size="14" fill="#1d1d1f">2. parent checks</text>
+<text x="690" y="242" font-size="14" fill="#1d1d1f">3. formulas</text>
+<text x="690" y="272" font-size="14" fill="#1d1d1f">4. sums and counts: adjust the parents</text>
+<text x="690" y="302" font-size="14" fill="#1d1d1f">5. … each parent saved by its rules</text>
+<text x="690" y="332" font-size="14" fill="#1d1d1f">6. constraints</text>
+<text x="690" y="362" font-size="14" fill="#1d1d1f">7. write</text>
+<text x="690" y="392" font-size="14" fill="#c26401">8. a constraint fails: all rolls back</text>
+<text x="670" y="456" font-size="13" fill="#5f6368">Data Memory.incl keeps the objects in memory;</text>
+<text x="670" y="476" font-size="13" fill="#5f6368">Data Records.incl keeps them in SQLite.</text>
+</svg>

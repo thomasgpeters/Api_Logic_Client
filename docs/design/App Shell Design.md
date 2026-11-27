@@ -116,7 +116,7 @@ Decisions for *Multiple windows*:
    | Generate Binding Code | `<Entity> Binding.incl` for every entity |
    | Generate App | all of it, plus `Model.json`, `Model Tags.incl`, `<project>.fb`, runtime |
 
-All rules and adjustments live in `src/Generator/Type Mapping.incl`; the XIB and
+All rules and adjustments live in `src/AppBuilder/Type Mapping.incl`; the XIB and
 binding generators read attributes only through it, so what the designer sees is
 what gets generated.
 

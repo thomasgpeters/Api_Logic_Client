@@ -25,9 +25,10 @@ tools/run_tests.sh
 | `make_logic_test.py` + `fblint` | the FB test project assembles from the real runtime files and lints clean, build order included | `0 problems` |
 | `run_tests.sh` (SQL Generator) | the module's three copies (runtime, `src/SQLGeneratorExample`, Test_Xib_View) are identical | `the copies are identical` |
 | `check_app_pages.py` | the `App Pages.incl` the generator writes (its `AppPagesSource` played for two entities) lints with the real runtime, templates and stand-in bindings | `0 failed` |
+| `samples/<Name>/test_rules.py` (and `--prove`), for Telecom and Customs | each sample's rules on its database, built through the rules from `lookup.sql` and `sample.sql`: the scenarios, the purge (`purge_sample.sql` empties the sample tables and leaves the lookup data exactly as a lookup-only build makes it), every rule left out must fail a scenario; its FB `Rules.incl` lints with the runtime | Telecom `32 scenarios`, `39 rules, 0 not proven`; Customs `41 scenarios`, `35 rules, 0 not proven` |
 | `check_erd_page.py` | the model diagram page, filled as `ERD Generator.incl` fills it, draws every entity, relationship and rule symbol, opens / closes, drags and selects with no script errors (headless Chromium; skipped without node + Playwright) | `0 failed` |
 | `als_project_reference.py --test` (projects from `ALS_PROJECTS`; `--github` with `ALS_GITHUB=1`) | the Open ALS Project screen's logic, as `ALS Project.incl` does it: GitHub addresses; a project's folder, `database/` and `models.py` find the same model; the Studio model (keys, relationships, lookups and their display columns); public repositories over raw.githubusercontent.com | `25 checks, 0 failed` |
-| `models_py_reference.py` (Enterprise; when `ALS_PROJECTS` and `ALS_PYTHON` are set) | an ALS project's `database/models.py`, read as text the way `ALSModelFromModelsPy` reads it, equals SQLAlchemy's own model of the same file: classes, tables, attributes, primary keys, relationships with their key columns. Make projects with `ApiLogicServer create --project_name=nw --db_url=nw-` and `--db_url=sqlite:///<file>` | `0 failed` per project |
+| `models_py_reference.py` (Professional; when `ALS_PROJECTS` and `ALS_PYTHON` are set) | an ALS project's `database/models.py`, read as text the way `ALSModelFromModelsPy` reads it, equals SQLAlchemy's own model of the same file: classes, tables, attributes, primary keys, relationships with their key columns. Make projects with `ApiLogicServer create --project_name=nw --db_url=nw-` and `--db_url=sqlite:///<file>` | `0 failed` per project |
 
 Run any one of them alone:
 
@@ -55,6 +56,43 @@ and ends with `logic test: 70 scenarios, 0 failed`. It works on `~/Desktop/Logic
 a copy; run `make_logic_test.py` again for a fresh one. Paste the Build Log or the NSLog lines
 into a session when something fails.
 
+### Web Toolkit: the template and the Orders example (`docs/features/WEB_TOOLKIT_FEATURE.md`)
+
+Here: `tools/web_toolkit_reference.py --test` (in `run_tests.sh`) drives `web.js` in headless Chromium against a Python
+reference of the protocol (30 checks); `--serve 8099` shows its page. On a Mac:
+1. Build `src/WebToolkitExample/WebToolkitExample.fbeproj` and run it.
+2. In that folder, `nginx -c "$PWD/nginx.conf" -p "$PWD"`, then open http://127.0.0.1:8088/.
+3. Report:
+   - a customer's credit limit lowered below the balance: refused, with the message;
+   - an item added: the total and the balance follow;
+   - Ship Today;
+   - a second browser sees the changes after switching back;
+   - an item typed, then the tab switched: it is saved;
+   - the theme menu.
+4. Also build `src/WebToolkit/Template` once.
+
+The layouts:
+- Here: `tools/web_layout_reference.py --test`, `tools/check_web_layout.py` (GNUstep:
+  `apt install libgnustep-base-dev`) and `tools/check_layout_tool.py` (Chromium).
+- On a Mac: the example shows its three panels (FB copied the `.webxib` files). Open `src/WebToolkit/Layout Tool/Layout
+  Tool.html` in Safari, open `CustomerPanel.webxib`, move a field, Save .xib, and open that file in Xcode.
+
+### FastCGI Test (the pattern: nginx in front of a FutureBasic program)
+
+`tools/check_fastcgi_core.py` (in `run_tests.sh`) compiles the program's FastCGI core here and runs it behind nginx. On a
+Mac: `brew install nginx`, copy `src/MacTests/FastCGI Test nginx.conf` to `/opt/homebrew/etc/nginx/servers/`,
+`brew services restart nginx`, run `src/MacTests/FastCGI Test.fb`, open http://127.0.0.1:8088/ - the same reports as
+the Web Server Test below.
+
+### Web Server Test (feasibility: a web app in FutureBasic, `docs/design/Web Toolkit Design.md`)
+
+Open `src/MacTests/Web Server Test.fb` in FB and run it; click Open in Browser (http://127.0.0.1:8080/). Report:
+- does the page appear;
+- does Add One count up without reloading;
+- does Greet show `<b>Bob</b>` as typed (not bold);
+- two tabs, many fast clicks: does it keep up (the window counts the requests);
+- anything the window or the NSLog window says.
+
 ## 2b. On a Mac — MapKit points (before the Map view is built)
 
 Open `src/MacTests/MapKit Points Test.fb` in FB and run it. Five points (three customers in blue,
@@ -67,7 +105,7 @@ lines of details and an (i) button; paste the `MapTest:` lines from the log
 
 | Check | How | Passing |
 |---|---|---|
-| Generator builds and runs | open `src/Generator/Api Logic Client.fbeproj`, build | builds; window opens |
+| Generator builds and runs | open `src/AppBuilder/Studio for FB.fbeproj`, build | builds; window opens |
 | New Project | Create Project → Choose… a database → Create | tables summary; entity list and definitions |
 | Workspace | Help → Show Workspace in Finder | `<project>/Project.json`, `Database/<db>`, `Design.json` after an edit |
 | Designer adjustments | edit a Title or a width in the attribute table | `Design.json` written; kept after reopening |

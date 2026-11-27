@@ -1,6 +1,6 @@
 # New Project from a SQLite Database
 
-**Where:** `src/Generator/NewProjectView.xib`, `New Project.incl`; Welcome view
+**Where:** `src/AppBuilder/NewProjectView.xib`, `New Project.incl`; Welcome view
 *Create Project* button (`EventHandlers.incl`).
 
 ## How it works

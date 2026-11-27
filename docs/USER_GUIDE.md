@@ -1,4 +1,4 @@
-# Imagery LogicBank Studio for FutureBasic — User Guide
+# App Builder for FutureBasic — User Guide
 
 *Turn a data model into a native Mac app with business rules, written in FutureBasic.*
 
@@ -29,7 +29,7 @@
 
 ## 1. What it does
 
-Imagery LogicBank Studio for FutureBasic reads a **data model** — the tables, columns, keys
+App Builder for FutureBasic reads a **data model** — the tables, columns, keys
 and relationships of a SQLite database, or the model of an
 [API Logic Server](https://apilogicserver.github.io/Docs/) (ALS) project — and generates a
 complete **FutureBasic project** for it:
@@ -57,7 +57,7 @@ readable FB; your own code lives in files that regeneration never touches.
 
 ## 3. Getting started
 
-1. Open `src/Generator/Api Logic Client.fbeproj` in the FutureBasic editor and build it.
+1. Open `src/AppBuilder/Studio for FB.fbeproj` in the FutureBasic editor and build it.
    (The project file keeps its old name for now; the app shows its new one.)
 2. The window opens on the **Welcome** page: **Create Project**, **Open Project…**, and your
    **Recent Projects** (double-click one to open it).
@@ -97,7 +97,7 @@ the **API Server** the generated app will talk to (`http://localhost:5656` by de
 **Create**. The Studio keeps a copy of the model in the project (`ALS Model/`), so the project opens
 again without the original. The Studio reads the model; it never runs it.
 
-An app generated from an ALS project talks to the server: it is the **Enterprise** edition. The
+An app generated from an ALS project talks to the server: it is the **Professional** edition. The
 free Studio opens, designs and generates screens for ALS projects; for a Lite app, start from the
 server's SQLite database instead.
 
@@ -111,7 +111,7 @@ Everything lives in your Application Support folder — *Help → Show Workspace
 opens it (`~/Library` is hidden in Finder):
 
 ```
-~/Library/Application Support/Imagery LogicBank Studio for FutureBasic/
+~/Library/Application Support/App Builder for FutureBasic/
 ├── Recent Projects.json           the Welcome page's list
 └── workspace/
     └── <name> Project/            one folder per project — back it up, and you have it all
@@ -138,7 +138,7 @@ Click an entity in the list. Its **attribute table** shows, for every column:
 | Key | primary key and how it is made (identity, autoincrement, assigned) | |
 | Required / Default | from the database | |
 | **Form Control** | Text field, Text area, Integer field, Decimal field, Date picker, Time picker, Date and time picker, Checkbox, **Radio buttons**, **Dropdown**, **Read-only text**, **Hidden** | ✓ |
-| **Values** | a value list for Radio buttons or a Dropdown (`Retail, Wholesale, Online`); for a foreign key, what its Dropdown shows (`→ person.givenName`) | ✓ |
+| **Values** | a value list for Radio buttons or a Dropdown (`Retail, Wholesale, Online`, or code = label pairs `R = Retail, W = Wholesale`); for a foreign key, what its Dropdown shows (`→ person.givenName`) | ✓ |
 | **Form Width** / **List Width** | in points | ✓ |
 | Adjusted | ✓ when you changed something | |
 
@@ -157,11 +157,15 @@ you regenerate. Clear a cell to go back to the recommendation.
 - **Dropdown**: a foreign key gets one by default. It lists the rows of the table it refers to,
   showing a readable column (its *name*, *title* or *description*, a column whose name contains
   "name", else its first text column) and storing the key. Type a value list in **Values** to
-  offer those values instead. The first item is empty: no value.
+  offer those values instead - any attribute can have one, a type or status field for example.
+  The list is written into the generated code (no table behind it) and behaves like a lookup:
+  `Retail, Wholesale, Online` stores what it shows; `R = Retail, W = Wholesale, O = Online` stores
+  the code (`R`) and shows the label (`Retail`). The first item is empty: no value.
   Beside a foreign key's Dropdown, an **info button** (ⓘ) shows the chosen record's details in a
   popover - the Customer of an Order, the Department of an Employee: every field and its value.
 - **Radio buttons**: one per value of the **Values** list (up to 8; with more, or with no
-  list, the attribute gets a Dropdown). Side by side when they fit, else one under the other.
+  list, the attribute gets a Dropdown); code = label pairs work the same way (the label is the
+  button's title, the code is stored). Side by side when they fit, else one under the other.
 - **Checkbox**: for yes / no columns (BOOLEAN, BIT); stored as 1 or 0.
 - **Read-only text** shows a value without letting the user change it. A key the database
   makes for you (an `INTEGER PRIMARY KEY`, with or without `AUTOINCREMENT`) is read-only by
@@ -205,7 +209,7 @@ From the *Model* menu:
 
 **On first launch** (and whenever they are missing), the Studio copies the runtime and templates
 (`src/Runtime`, `src/Templates`) from the repository it was built in, which it finds from where its
-own app sits, into its own folder: `~/Library/Application Support/Imagery LogicBank Studio for
+own app sits, into its own folder: `~/Library/Application Support/App Builder for
 FutureBasic/workspace/Runtime` and `…/Templates`, creating the folders as needed. Only when it cannot
 find the repository does it ask you to choose the Api_Logic_Client folder you cloned (not a folder in
 Library). While the Studio runs from the repository it was built in, *Generate App* copies them from there
@@ -255,7 +259,7 @@ adds the record. **Delete** asks first; the rules decide what happens to related
 ### 8.2 Editions
 
 The app is generated as the **Lite** edition: free and open source. It opens the project's SQLite
-database itself and runs the business rules inside the app. A paid **Enterprise** edition, a
+database itself and runs the business rules inside the app. A paid **Professional** edition, a
 three-tier app that talks to an API Logic Server, is planned (`design/Editions and Licensing.md`).
 
 A project whose model was read from an API Logic Server (*Open API Logic Server Metadata JSON*, or the ALS form)
@@ -574,7 +578,7 @@ list (and names it); the Control popup needs an attribute selected in the table.
 | | Show Generated App in Finder | ⌥⌘G | a project |
 | | Update Runtime and Templates… | ⌥⌘U | |
 | Window | Minimize · Zoom · Close | ⌘M · · ⌘W | |
-| Help | Imagery LogicBank Studio Help (this guide) | ⌘? | |
+| Help | App Builder Help (this guide) | ⌘? | |
 | | Show Workspace in Finder | ⇧⌘K | |
 
 **Crumb trail:** along the top of the window, where you are — *Projects › Northwind › address*
@@ -610,7 +614,7 @@ window). Its `README.md` has the whole API.
 - **The Rules page** in the generator: the rules of `Rules.json` in a list, an editor with the
   model's entities and attributes to pick from, and checking. Until then, write rules in
   `Rules.incl`, or import them (§11) and edit `Rules.json`.
-- **Apps from API Logic Server projects** (Enterprise): the Studio opens, designs and generates
+- **Apps from API Logic Server projects** (Professional): the Studio opens, designs and generates
   screens for them; the data side that talks to the server, and sign-in, come next.
 - **More Form controls**: toggle switch, combo box, calendar and colour pickers, formatted date and
   time displays (`BACKLOG.md` → Modern look).

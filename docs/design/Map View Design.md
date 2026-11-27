@@ -82,7 +82,7 @@ addresses (Ship…). For those the Studio offers to **add the location columns a
 
 - **Lite:** `ALTER TABLE <table> ADD COLUMN Latitude REAL` and `… Longitude REAL` in the project's
   database copy (harmless when they exist), the model read again; then the app fills them (below).
-- **Enterprise:** the columns belong to the server's database and model: the Studio says which
+- **Professional:** the columns belong to the server's database and model: the Studio says which
   columns to add, and that the ALS project is then rebuilt (`ApiLogicServer rebuild-from-database`);
   the Studio reads the new `models.py`. The app fills them through the server (PATCH).
 
@@ -99,7 +99,7 @@ Coordinates from address*):
 - Apple limits how fast an app may geocode: **one address at a time** from a queue, spaced out; a
   throttling or network error puts the row back for later. Progress in the footer.
 - The answer is **written into the row's Latitude / Longitude** - Lite through the rules engine
-  (`LogicUpdate`), Enterprise through the server - so the location is stored with the record, the
+  (`LogicUpdate`), Professional through the server - so the location is stored with the record, the
   map reads columns only, and every other result set (a query, a report) has it too.
 - When: a *Locate* action on the page (the rows without a location), and after a Save that changed
   an address column (the location is cleared and looked up again).
@@ -112,8 +112,8 @@ Coordinates from address*):
 |---|---|
 | `src/Runtime/App Map.incl` | the generic map: `mkmapview`; `MapShowRows( mapTag, layer, rows, latitudeKey, longitudeKey, titleKey, subtitleKey )` -> pins (`MKPointAnnotationWithTitle`, `MKMapViewShowAnnotations`); layers with colours; `_mapViewDidSelectAnnotationView` -> the layer and row |
 | `src/Runtime/Geo Location.incl` | address -> location: the queue, CLGeocoder / MKGeocodingRequest, writing Latitude / Longitude through App Data |
-| `src/Generator/Type Mapping.incl` | the location columns (found or chosen), the address family, the entity's Map setting |
-| `src/Generator/` | *Add Location Columns* (Lite: ALTER TABLE in the project's copy; Enterprise: instructions); the List \| Map switch and the row -> pin keys per entity in the generated pages |
+| `src/AppBuilder/Type Mapping.incl` | the location columns (found or chosen), the address family, the entity's Map setting |
+| `src/AppBuilder/` | *Add Location Columns* (Lite: ALTER TABLE in the project's copy; Professional: instructions); the List \| Map switch and the row -> pin keys per entity in the generated pages |
 
 ## Steps
 
