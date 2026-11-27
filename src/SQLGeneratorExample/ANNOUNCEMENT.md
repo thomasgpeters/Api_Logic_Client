@@ -1,14 +1,22 @@
 # Draft post for the FutureBasic list
 
-**Subject:** SQL Generator: use SQLite from FB without writing SQL (MIT, with an example app)
+Plain text, no attachments: everything is on the web page the post links to (the list's storage fills up).
+The link is the SQL Generator's page on Imagery's FutureBasic site (`tools/make_site.py` builds it), or the
+GitHub page if that goes up first.
+
+---
+
+**Subject:** Back again, with an old friend: the SQL Generator
 
 Hi all,
 
-After years of reading this list and borrowing from what you all share, here is something back.
+I owe the list an apology. I have been quiet for a long while, reading now and then but not
+joining in. Life and work took over. I am sorry for that, and glad to be back.
 
-The **SQL Generator** is a small FutureBasic module that writes SQL for you. You describe a
-statement with dictionaries and arrays (its tables, columns, joins and filters) and it gives you
-the SQL and the values to bind:
+I come bearing a small gift. Some of you may remember the SQL Generator, my little module for
+building SQL from dictionaries. I have dusted it off and brought it up to date for FB 7.
+
+The idea is simple. You describe what you want, and it writes the SQL for you:
 
 ```
 query = fn InitQueryDictionary
@@ -16,23 +24,29 @@ fn AddTableToQuery( query, @"person", @"p" )
 fn AddColumnToQuery( query, @"p.surName", @"Surname" )
 fn AddFilterToQuery( query, @"p", @"balance", fn NumberWithDouble( 100.0 ), _realType, 0, _isGreaterThan, 0 )
 sql = fn GenerateSelectSQL( query )
-// SELECT "p"."surName" AS "Surname" FROM "person" AS "p" WHERE "p"."balance" > ?
 ```
 
-- SELECT with joins and filters (=, <, >, LIKE, IS NULL, AND / OR), INSERT, UPDATE, DELETE
-- an INSERT of a whole array of dictionaries (what a SELECT gives back) in one statement
-- every value bound to a `?` placeholder, never pasted into the SQL
-- names quoted, so tables called Order or Group just work
-- an UPDATE or DELETE without a filter is refused, so a whole table is never wiped by accident
+That gives you:
 
-It comes as a complete example project: ten examples on a small CRM database, each showing the
-FB, the SQL it produced, the values and the result as a SQL command line prints it, plus a user
-guide in the Help menu. Open the project, build, run.
+```
+SELECT "p"."surName" AS "Surname" FROM "person" AS "p" WHERE "p"."balance" > ?
+```
 
-MIT licence: use it in anything, change it, pass it on.
+The values go in separately, so no quotes to fuss over.
 
-[link]
+If you want to try it, start small. There is a single-file program, about forty lines of code, that makes
+a little table, adds three people and reads two of them back. Put it in a folder with the module's
+four files, open it, run it, and watch the NSLog window.
 
-Comments, fixes and ideas are very welcome.
+When you want more, there is also an example app with ten examples, each showing the FB code,
+the SQL it wrote, and the result. You do not need it to use the module.
+
+Everything is on one page, so nothing clogs the list:
+
+[link to the SQL Generator page]
+
+It is free (MIT licence). Questions and suggestions are welcome, here or by email.
+
+Good to be back,
 
 [your name]
