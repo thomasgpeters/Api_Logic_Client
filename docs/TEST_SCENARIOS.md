@@ -196,6 +196,7 @@ Purpose: The height shared by dragging.
 4. Switch to tiles, drag again. -> The tiles area follows the List card.
 5. Resize the window, go full screen. -> The divider stays between the cards.
 6. Go to another page. -> Its own divider, at its own place; back again: as you left it.
+7. Drag the divider on two pages to different places, quit the app and open it again. -> Each page's divider is where you left it.
 
 ### G-02a The record navigator
 Purpose: A page opens on its first record, and the footer moves through them.

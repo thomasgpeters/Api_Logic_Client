@@ -284,7 +284,8 @@ Every generated app has the same frame (`App Shell.incl`):
   happened (*Saved.*, why a save was refused, *5 of 91 match*) shows under the window's title. New, Save,
   Delete and Refresh are in the toolbar, and in the *Records* menu (⌘N, ⌘S, ⌘R);
 - a **divider** between the List card and the Form card: drag it (the cursor shows the up-and-down arrows)
-  to give the List or the Form more height;
+  to give the List or the Form more height. Each page keeps its own, and the app remembers it the next time
+  it opens;
 - the **page**: the entity's List in a card at the top and its Form in a card below, both the
   full width of the window.
 

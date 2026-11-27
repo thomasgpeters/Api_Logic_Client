@@ -6,6 +6,12 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — The splitter remembers its place, per page
+
+- **Author:** "yes, remember the splitter position per page." The Form card's height is saved in the app's preferences on
+  mouse-up (`Splitter <page title>`) and put back when the splitter is made at launch; the moving is one method
+  (`moveBy:`) for a drag and for the restore, so the minimums hold for both. Test scenario G-01c step 7.
+
 ## 2026-11-27 — A splitter between the List and the Form
 
 - **Author:** "a splitter in between the list and the scalar view in the generated app."
