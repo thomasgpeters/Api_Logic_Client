@@ -204,6 +204,11 @@ def lint_file(path, is_project_file, known_toolbox, local_fns, fb_keywords=froze
                         for i in (object_params or {}).get(name, []):
                             if i < len(args) and not re.match(r'\(\s*ObjectRef\s*\)|NULL\b', args[i]):
                                 report(no, f'{cm.group(1)}: argument {i + 1} is an ObjectRef - cast it: (ObjectRef){args[i][:30]}')
+        # a record declared with a global record as its value: FB passes the global by address ("CGRect r = &gFrame":
+        # clang error, 2026-11-27) - keep the global's parts as numbers
+        rm = re.match(r'\s*(CGRect|CGPoint|CGSize|CFRange|NSRange|\w+Record)\s+\w+\s*=\s*(\w+)\s*$', strip_strings_and_comments(line))
+        if rm and rm.group(2).lower() in (global_names or {}).get(os.path.dirname(path), set()):
+            report(no, f'a {rm.group(1)} declared with the global {rm.group(2)} as its value: FB writes &{rm.group(2)} (clang error) - keep the global\'s parts as numbers (CGFloat), or read the value where it lives (fn ViewFrame)')
         # FutureBasic 7.0.38 (the author's) does not know the newer type names: use the CF ones
         # (before the fn-definition check below, which ends the line's checks: the parameters count too)
         for tm in re.finditer(r'(?<![A-Za-z_])(StringRef|MutableStringRef|DictionaryRef|MutableDictionaryRef|ArrayRef|MutableArrayRef|DataRef|URLRef|NumberRef)\b', strip_strings_and_comments(line)):

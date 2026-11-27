@@ -202,6 +202,9 @@ build with "Missing or invalid source file ... (error 1234 for Tlbx Security.inc
 - **Our file names never start with `Tlbx`** (author, 2026-11-27). `Tlbx ...` is FutureBasic's name for a toolbox: a header
   that wraps a C or Objective-C library or framework for FB. Our own files are named for what they do (`Licence.incl`,
   `SQLite Access.incl`). A real toolbox of ours, an FB wrapper over a C library such as nlohmann/json, could carry the prefix.
+- **A record is not declared with a global record as its value** (2026-11-27, the Studio's heading): FB translated
+  `CGRect r = gStudioHeadingFrame` as `CGRect r = &gStudioHeadingFrame`, a clang error. Keep the global's parts as
+  numbers (`CGFloat gStudioHeadingLeft`), or read the value where it lives (`fn ViewFrame`). `fblint` reports it.
 - **A global does not keep its value alive** (2026-11-27: the Studio crashed in `LicenceFeaturesOf` on Generate App).
   - FB's `CFDictionaryRef`, `CFStringRef` and the other CF types are plain pointers, so a global does not retain what it
     is given.
