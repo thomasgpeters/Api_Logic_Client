@@ -538,6 +538,12 @@ python3 tools/rules_bridge.py export --rules "<project>/Rules.json" --model "<pr
   brings you back to the list, and *Clear Recent Projects* empties it.
 - **Open Project…** (⌘O): choose a project's `Project.json` in the workspace.
 - If the project's database has moved, you are asked to find it, and the new place is remembered.
+- **Right-click a project** in Recent Projects for *Open*, *Show in Finder*, *Remove from Recent
+  Projects* (the project stays in the workspace) and *Delete Project…*. Right-click an entity in the
+  Objects list for *Generate XIB* and *Show Model Diagram*.
+- **The Project menu follows what is on screen:** on the Welcome page it acts on the project selected
+  in Recent Projects, elsewhere on the open one, and names it (*Delete “Northwind”…*, *Show “Northwind”
+  in Finder*, *Close “Northwind”*). A tick marks the page showing, Recent Projects or Entity Definitions.
 - **Delete Project…** (*Project* menu): the open project, or on the Welcome page the one selected in
   Recent Projects, goes to the **Trash** after you confirm, with its database copy, settings, rules
   and generated app. The database you started from is not touched. To restore the project, drag its

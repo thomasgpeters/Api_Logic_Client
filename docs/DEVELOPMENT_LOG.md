@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-27 — Right-click menus; a Project menu that follows the page
+
+- **Author:** "the Project menu needs to better understand context. Also, right-click on a project should display a menu
+  to delete the project, or open the project ... people expect these type of thing when using a mac app."
+- **Right-click menus** (FB's `ResponderSetMenu` on the list, as FB's *View Contextual Menu* example; menus 101 and 102,
+  not in the menu bar): a project in Recent Projects (Open, Show in Finder, Remove from Recent Projects, Delete
+  Project...) and an entity in the Objects list (Generate XIB, Show Model Diagram). The row right-clicked is selected
+  first (`ContextRow`, `TableViewClickedRow`), so the page and the menu bar agree with it.
+- **The Project menu names its target:** on the Welcome page the project selected in Recent Projects, elsewhere the
+  open one (`StudioRecentTargetRow`); Delete, Show in Finder and Close carry its name; a tick on the page showing;
+  Clear Recent Projects is dimmed when the list is empty. Before, Delete on the Welcome page deleted the open project
+  even with another selected. `ProjectDelete` split into `ProjectDeleteFolder` (the one place a folder goes to the Trash).
+- Test scenario B-08. Waits for a Mac build.
+
 ## 2026-11-27 — The info button's popover: a tag-range clash
 
 - **Still no popover** (author). Not a scope problem: every page's Form and List are already loaded when the app opens

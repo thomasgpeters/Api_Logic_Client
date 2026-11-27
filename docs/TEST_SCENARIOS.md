@@ -89,7 +89,17 @@ Purpose: The form's layout.
 ### B-07 Delete a project
 Purpose: A project goes to the Trash, and can come back.
 Before: A project you can spare.
-1. Select it in Recent Projects, Model menu, Delete Project..., confirm. -> It leaves the list; its folder is in the Trash. The database you started from is untouched.
+1. Select it in Recent Projects, Project menu, Delete Project..., confirm. -> The item reads Delete "<its name>"...; it leaves the list; its folder is in the Trash. The database you started from is untouched.
+
+### B-08 Right-click menus and a Project menu that follows the page
+Purpose: The commands act on what you are looking at, as in any Mac app.
+Before: Two projects in Recent Projects; one of them open.
+1. On the Welcome page, right-click the project that is not open. -> A menu: Open, Show in Finder, Remove from Recent Projects, Delete Project...; the row is selected.
+2. Choose Show in Finder. -> Finder shows that project's folder.
+3. Open the Project menu. -> Show "<that name>" in Finder and Delete "<that name>"... name the selected project; Close "<open project>" names the open one; Recent Projects has a tick.
+4. Right-click it again, Remove from Recent Projects. -> It leaves the list; its folder is still in the workspace.
+5. Open the other project, right-click an entity in the Objects list, Generate XIB. -> That entity is selected and its XIB is generated.
+6. Open the Project menu. -> Entity Definitions has the tick; Delete and Show in Finder name the open project.
 
 ## C. Studio for FB: entity definitions
 
