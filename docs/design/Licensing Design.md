@@ -202,7 +202,9 @@ The About box shows the edition and the licensed account.
 3. **The Lite licence is issued and signed.** The page shows the download link, and the licence by email (the
    text, a `.fblicence` file, and the `appbuilderfb://` link).
 4. **First launch:** App Builder asks for the licence; the link or the file fills it in.
-5. **Upgrade:** the same order form with payment (Stripe / PayPal, as on the server). The new Professional licence
+5. **Upgrade:** the same order form with payment (Stripe / PayPal, as on the server; decided 2026-11-28: both, the
+   buyer chooses, on the providers' own pages; the licence is issued when the provider confirms - the License Server's
+   `docs/BACKLOG.md`, *Decided 2026-11-28*). The new Professional licence
    replaces the Lite one, for the same account.
 
 ## What changes where

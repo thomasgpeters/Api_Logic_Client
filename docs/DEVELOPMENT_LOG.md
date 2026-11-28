@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Payments: Stripe and PayPal, the buyer chooses; no release before
+
+- The author: Studio for FB is not released, Lite or otherwise, until payments work. Surveyed the other repositories:
+  Stripe and PayPal were chosen everywhere; the shared library `Imagery-Payments` (v0.1.0, 42 tests) is built, but no
+  provider is connected anywhere - the License Server's payment page is a simulation, switched off; the CRM, meant to
+  host the providers, is not started.
+- Decided (author): "Stripe or PayPal it is. We can provide both, and let the user choose." Recorded in the License
+  Server's `docs/BACKLOG.md` (ac52462 there): hosted pages only, the licence issued on the provider's confirmation, the
+  first sale App Builder for FutureBasic before the CRM, and the order of work with the owner's open items (accounts
+  and test keys, prices, tax - Stripe Tax covers Stripe Checkout; PayPal needs the amount from elsewhere).
+
 ## 2026-11-28 — The site's downloads: named for what they are, with their release dates
 
 - The author: "the source code downloads should be simple zip files naming according to their purpose with release

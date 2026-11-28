@@ -16,8 +16,10 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
    combo box, date / time display, calendar picker, colour picker. Each follows the Form
    designer's pattern (Control popup -> XIB part -> binding), so they are small and independent.
    Then the **Map view** (any result set with latitude / longitude on a map, an entity first; a bigger piece: a generic map part, then filling the columns by geocoding).
-4. **Lite release:** a generated app builds and runs on a Mac; tag it. Then post the SQL Generator
-   to the FB list.
+4. **Lite release:** a generated app builds and runs on a Mac; tag it. Then post the free modules to the FB list
+   (one post: `docs/FB List Post.md`). **Studio for FB is not released, Lite or Professional, until it can be paid for**
+   (author, 2026-11-28): payments through the License Server, Stripe and PayPal, the buyer's choice - the plan and the
+   owner's open items are in the License Server's `docs/BACKLOG.md`, *Decided 2026-11-28*.
 5. **Professional data:** `App Data Professional.incl` and the connection / sign-in, so an ALS project
    generates a working three-tier app.
 6. **Rules in FB:** the port of `rules_bridge.py` (Rules.json check, Studio Rules.incl), then the
