@@ -43,6 +43,9 @@ Every app generated from a SQLite project opens in the same frame:
   Form take or give it, the Form's title moves with its card's top; the List keeps at least 140 points, the Form card 90.
   Up-and-down cursor, a short grip line. Its place is kept per page in the app's preferences (`Splitter <page title>`:
   the Form card's height, saved on mouse-up) and put back when the page is built at the next launch.
+  The views come from FB (`WindowViewWithTag`), not Cocoa's `viewWithTag:` (2026-11-28, the author: "the white
+  background is responsive, but ... the form elements are not"): a part loaded with `nibview` is the nib's own `NSView`,
+  whose tag FB keeps for itself, so the splitter moved the cards and never found the List and the Form.
 - **Spacing:** 8 points above the first card (author, 2026-11-28), 16 around the others, 12 inside them, a 26-point title row (less room above a List: author,
   2026-11-27).
 - **Toolbar** (author, 2026-11-27; `App Toolbar.incl`): FB's `toolbar` and `toolbaritem`, so each item has a tag and

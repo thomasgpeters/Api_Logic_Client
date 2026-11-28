@@ -37,6 +37,7 @@ mode work without extra code).
   - `Generate Progress.incl` — Generate App's progress sheet (the steps ticked, a bar, Done when finished).
   - `Project Workspace.incl` — workspace folders (`<project>/`, `<project>/FBapp/`) and `Project.json` (project settings).
   - `Pages Model.incl` — the page designer's model (Professional): `Pages.json`, the parts, the associations proposed on a drop and between pages, the check; the FB port of `tools/pages_reference.py`.
+  - `Page Designer.incl` — the Pages view (Professional, Project > Pages): pages, the entity palette, the page's parts; drag and drop, the sheet on a drop; Cocoa, the model work called back in FB.
   - `New Project.incl` — the New Project view (`NewProjectView.xib`): name + SQLite database → a project (the lite edition's catalyst); the ALS form is one button away.
   - `Project Settings.incl` — the Project Settings view (`ProjectSettingsView.xib`): the About text (≤ 250 chars, the app's `Credits.rtf`) and branding (logo, tag-line, copyright for the app shell).
   - `Rules Bridge.incl` — Import / Export Rules (declare_logic.py) and `Studio Rules.incl` on Generate App; until its port to FB it says "coming" and writes an empty `Studio Rules.incl`.

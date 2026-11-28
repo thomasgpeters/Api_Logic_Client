@@ -6,6 +6,24 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The Pages view (page designer 2b); the splitter moves the List and the Form again
+
+- **The Pages view** (`src/AppBuilder/Page Designer.incl`, Project > Pages, command-3, Professional): a page of the
+  Studio's window on a raised card - the pages, the entity palette, the page's parts. Drag an entity onto the parts
+  (or double-click it): a sheet asks Detail / List / List with detail and, after the driver, the part it follows, the
+  proposed link chosen (`PagesProposedLinks`). The selected part's display and link change in place; Remove Part keeps
+  the later parts' links and the page's links to other pages right; pages are added, removed, renamed (their links
+  follow) and reordered by drag; Start from the Model's Pages. Each change is saved to `Pages.json` and checked
+  (`PagesCheck`), the problems under the parts. The view is Cocoa, the model work FB's, called back. Wired as the
+  Licence page is: `_pagesView`, the menu item (ticked when shown, "(Professional)" when not licensed), hidden by every
+  other page, moved with the pages when the entity list shows, a "Pages" crumb.
+- Tried to compile the view's Objective-C here against GNUstep's AppKit: its runtime has no object literals or
+  subscripts, so the check gave only noise - the view waits for the Mac build.
+- **The splitter** (author: "the white background is responsive, but the form elements are not ... same for the
+  grid"): `ShellSplitterMake` found the List and the Form with Cocoa's `viewWithTag:`; a part loaded with `nibview` is the
+  nib's own `NSView`, whose tag FB keeps itself, so only the cards moved. FB now hands over the views
+  (`WindowViewWithTag( _shellWindow, tag )`). The tiles were not affected: they reach the List through FB's tags.
+
 ## 2026-11-28 — Page designer, phase 2 begun: its model in FB
 
 - The author: "let's start implementing the forms builder" - the page designer (Professional), confirmed when asked.

@@ -43,6 +43,7 @@ include "App Generator.incl"
 // "Projects" 1
 include "Project Workspace.incl"
 include "Pages Model.incl"
+include "Page Designer.incl"
 include "ALS Project.incl"
 include "Rules Bridge.incl"
 include "ERD Generator.incl"

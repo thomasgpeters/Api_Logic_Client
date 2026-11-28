@@ -14,7 +14,8 @@ projects are.
 
 Status: phase 1 built (`tools/pages_reference.py`: the `Pages.json` format, the links, a page resolved). Phase 2
 started (author, 2026-11-28: "let's start implementing", the page designer chosen): its model is ported to FB
-(`src/AppBuilder/Pages Model.incl`); the Pages view is next. The author accepted the proposals below (2026-11-27): the names Detail, List, List with detail; the
+(`src/AppBuilder/Pages Model.incl`), and the Pages view is built (`Page Designer.incl`, Project > Pages, command-3),
+not yet on a Mac. The author accepted the proposals below (2026-11-27): the names Detail, List, List with detail; the
 toolbar on the part with the focus; the same entity twice on a page later; the Web Toolkit to share `Pages.json` later.
 
 ## Words
@@ -170,8 +171,14 @@ OrderDetail adds a line to the current order (its OrderId filled in); the rules 
    between pages; the page flow diagram.
 2. The designer in Studio for FB. **2a, built (2026-11-28):** `Pages Model.incl`, the FB port of the reference -
    `PagesDefault`, `PagesProposedLinks`, `PagesAssociations`, `PagesDrop`, `PagesCheck`, `PagesLoad` / `PagesSave`
-   (`<project>/Pages.json`), the same names, JSON and order of proposals; not yet built on a Mac. **2b, next:** the
-   Pages view (Cocoa drag and drop: the palette as a drag source, the page as a drop target;
+   (`<project>/Pages.json`), the same names, JSON and order of proposals; not yet built on a Mac. **2b, built
+   (2026-11-28, not yet on a Mac):** `Page Designer.incl`, the Pages view - a page of the Studio's window (Project >
+   Pages, command-3; Professional, `LicenceGate` on `_licenceFeatureProfessionalRuntime`): the pages (New, Remove,
+   rename, drag to reorder), the entities (drag one onto the parts, or double-click it), the page's parts; the sheet on
+   a drop (Detail / List / List with detail, and the part it follows, the proposed link chosen); the selected part's
+   display and link changed in place, Remove Part keeping the others' links (and the page's links) right; Start from
+   the Model's Pages; every change saved and checked, the problems shown. **2c, next:** a page dragged onto another
+   (its links), page icons, parts reordered by drag, Show Page Flow Diagram. Remaining of 2 (Cocoa drag and drop: the palette as a drag source, the page as a drop target;
    the sheet on drop; a page dragged onto another, the sheet of their associations; Show Page Flow Diagram). The
    associations, the links between pages and the diagram are in phase 1's reference already.
 3. Parts with a tag base (XIB and binding generators); today's pages regenerated the same way, so nothing changes
