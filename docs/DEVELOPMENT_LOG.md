@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Web Toolkit: a draft post for the FutureBasic list
+
+- The author wants to share the module on the FB list. It had everything but the post: `src/WebToolkit/ANNOUNCEMENT.md`,
+  in the SQL Generator's style (short, the point first, a page in a few lines of FB, no attachments - a link to the
+  module's page on the site). It says what is true today: early, a working name, tried on the author's Mac.
+- `tools/make_site.py` zipped each module's whole folder, so the SQL Generator's draft post was in its download. Both
+  drafts are now skipped (`SKIP`); the zips checked.
+
 ## 2026-11-28 — Web Toolkit: the Orders example on the Mac; hosting planned
 
 - The author's run of the Orders example after the `WebTableRefresh` fix: totals and the balance follow an added item,

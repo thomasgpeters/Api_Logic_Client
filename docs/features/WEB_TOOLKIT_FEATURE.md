@@ -18,6 +18,8 @@ In the same session the author also asked for:
 The Web Toolkit is a free module (MIT), like the SQL Generator and LogicBank for FutureBasic:
 - **The module:** the widgets, the template, the Layout Tool, the Orders example and its user guide
   (`src/WebToolkit/User Guide.txt`, also the module's page on fb.imagery-business-systems.com).
+- **The post for the FutureBasic list:** `src/WebToolkit/ANNOUNCEMENT.md` (a draft, as the SQL Generator's; the
+  downloads leave both drafts out).
 - **With the module alone,** you write your own pages: the widgets or layouts, the bindings, the event functions.
 - **App Builder (subscription)** builds them from the model: a page per entity, laid out as `.webxib`, with its
   bindings and rules. Pricing: `docs/design/Licensing Design.md` -> Pricing.

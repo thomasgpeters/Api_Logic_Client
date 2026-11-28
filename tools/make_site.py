@@ -59,7 +59,7 @@ MODULES = [
 SAMPLES = [('Telecom', 'A mobile carrier\'s travel plans, priced from its roaming agreements.'),
            ('Customs', 'Automated customs clearance, set in Bermuda: duty, risk lanes, release and the port gate.'),
            ('FlightPlanner', 'VFR flight planning: wind, weight and balance, runways, weather and a go / no-go decision.')]
-SKIP = {'__pycache__', '.DS_Store'}
+SKIP = {'__pycache__', '.DS_Store', 'ANNOUNCEMENT.md'}   # the draft list posts stay out of the downloads
 
 # App Builder's editions, feature by feature (the page app-builder/editions.html). Keep it true with
 # docs/design/Editions Design.md and docs/ROADMAP.md: each row's status is honest - Available (built and tried on a
