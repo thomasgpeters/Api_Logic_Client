@@ -6,8 +6,23 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Web Toolkit: a crash after a save (use after free in WebTableRefresh)
+
+- The author's run of the Orders example on the Mac: the page, choosing a customer and a refused credit limit all
+  worked; the next save (the limit raised back) crashed in `DataKeyValues`, called from `WebTableRefresh`.
+- Cause: `WebTableRefresh` took the selected record from the table's rows, then replaced the rows (`WebSetRows`), which
+  freed the old rows - the selected record with them - and then read the record's keys. The refused save never reached
+  the refresh, so the first successful save was the first to crash. The same rule as `AppPageChooseRow`'s crash
+  (`FB Coding Rules.md`: replacing an object in a dictionary frees the old one), behind a setter this time.
+- Fix: the key values are read before `WebSetRows`. `WebFormShowRecord` had the same shape (it replaces the form's
+  `record`, then read from the record passed in, which could be that one): it copies first now. `Web Binding.incl`,
+  identical in the toolkit, the template and the example.
+
 ## 2026-11-28 — Web Toolkit: FastCGI on 9010; the FastCGI Test runs from its folder
 
+- **Passed on the Mac** (author, 2026-11-28): FastCGI Test.fb behind nginx, started from `src/MacTests`, beside the
+  author's Apache (8080) and PHP-FPM (9000). With the Web Server Test, both halves of the Web Toolkit's pattern are
+  proven on a Mac: FB serving HTTP itself, and FB behind nginx over FastCGI. Next: the Orders example.
 - On the author's Mac, Apache (`httpd`) holds 8080 and PHP-FPM holds 127.0.0.1:9000 - both common with Homebrew PHP.
   Homebrew's nginx loads its default site on 8080 (so it would not start beside Apache), and our FB programs listened
   for FastCGI on 9000, PHP-FPM's port. The FastCGI port is now **9010** in the toolkit's template, the Orders example

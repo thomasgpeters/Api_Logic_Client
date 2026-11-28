@@ -375,7 +375,8 @@ the site, download] -> [post to the list].
 
 - [x] Run `src/MacTests/Web Server Test.fb` on a Mac: can FB serve a page and take its clicks? Yes (author, 2026-11-28:
   the page, Add One without reloading, `<b>Bob</b>` shown as typed, two tabs and fast clicks kept up)
-- [ ] Run `src/MacTests/FastCGI Test.fb` behind Homebrew's nginx on a Mac, then the Orders example (`src/WebToolkitExample`)
+- [x] Run `src/MacTests/FastCGI Test.fb` behind nginx on a Mac: passed (author, 2026-11-28; nginx run from `src/MacTests`, FastCGI on 9010)
+- [ ] Run the Orders example (`src/WebToolkitExample`) behind nginx on a Mac
 
 ## Record Files for FutureBasic (author, 2026-11-27; `design/Record Files Design.md`)
 
