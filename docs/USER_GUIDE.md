@@ -199,7 +199,7 @@ Dates are stored as `1996-07-04`, times as `14:30:00`, and dates with times as
   header, its Dock icon and its About box. Select it and press Delete to remove it. **Without a
   picture, the symbol:** an SF Symbol for the header instead, with a preview beside it.
 - **Tag-line**: a short description under the app's name, up to 80 characters.
-- **Copyright**: at the left of the footer (`© <app name>` when empty). Its company also heads the window's title:
+- **Copyright**: at the left of the footer (nothing there when it is empty: the app's name is already in its header). Its company also heads the window's title:
   *Imagery Business Systems, LLC | Northwind* (just the app's name when the copyright names no company).
 
 **Done** saves everything in `Project.json`. The project's heading in App Builder shows the same

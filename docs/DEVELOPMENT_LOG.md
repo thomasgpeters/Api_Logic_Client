@@ -6,6 +6,12 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — No default copyright; less room above the List
+
+- **Author:** "the Northwind at the bottom is redundant. Still too much space at the top above the list view; that only
+  needs 5 or 10 px." App Generator no longer makes a copyright of `© <app name>` when the project has none: the footer
+  then shows none. `_shellMarginTop` = 8 above the first card (the sides and the bottom keep 16).
+
 ## 2026-11-28 — The record navigator as icons
 
 - **Author** (a Northwind screenshot, dark mode, 13 tables): the pills' |< < > >| were not centred, the words redundant;

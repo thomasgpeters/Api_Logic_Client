@@ -38,7 +38,7 @@ Every app generated from a SQLite project opens in the same frame:
   Form take or give it, the Form's title moves with its card's top; the List keeps at least 140 points, the Form card 90.
   Up-and-down cursor, a short grip line. Its place is kept per page in the app's preferences (`Splitter <page title>`:
   the Form card's height, saved on mouse-up) and put back when the page is built at the next launch.
-- **Spacing:** 16 points around the cards, 12 inside them, a 26-point title row (less room above a List: author,
+- **Spacing:** 8 points above the first card (author, 2026-11-28), 16 around the others, 12 inside them, a 26-point title row (less room above a List: author,
   2026-11-27).
 - **Toolbar** (author, 2026-11-27; `App Toolbar.incl`): FB's `toolbar` and `toolbaritem`, so each item has a tag and
   sends `_toolbarItemClick`. **Search** is first (`magnifyingglass`), its label following the page ("Search
@@ -83,7 +83,7 @@ Branding comes from **Project Settings** in the Studio (`ProjectSettingsView.xib
 `Project Settings.incl`, `Project Workspace.incl`): a logo well (paste or drag; kept as
 `<project>/Branding/logo.png`, deployed as `FBapp/AppLogo.png`), the tag-line (≤ 80 characters)
 and the copyright, all in `Project.json`. Without a logo the header shows the `building.2` symbol;
-without a copyright the footer says `© <app name>` (at its left).
+without a copyright the footer shows none (the app's name is in its header and title).
 
 ## Decisions
 
