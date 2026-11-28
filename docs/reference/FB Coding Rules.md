@@ -169,6 +169,9 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
   a crash in `AppPageChooseRow`): `old = fn DictionaryObjectForKey( d, key )`, then `MutableDictionarySetObjectForKey(
   d, new, key )` leaves `old` pointing at freed memory. Copy it first (`old = fn ArrayWithArray( old )`, autoreleased:
   alive for the rest of the event), or keep it with the module's Kept fn if it must outlive the event.
+  It hides behind setter functions too (2026-11-28, a crash in the Web Toolkit's `WebTableRefresh`): a record taken from
+  a table's rows (`WebSelectedRecord`) is freed by `WebSetRows` on that table. Read what you need from it - its key
+  values - before the setter runs.
 
 ## Deprecated — don't write these
 

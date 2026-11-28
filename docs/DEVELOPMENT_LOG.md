@@ -6,6 +6,18 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Web Toolkit: a crash after a save (use after free in WebTableRefresh)
+
+- The author's run of the Orders example on the Mac: the page, choosing a customer and a refused credit limit all
+  worked; the next save (the limit raised back) crashed in `DataKeyValues`, called from `WebTableRefresh`.
+- Cause: `WebTableRefresh` took the selected record from the table's rows, then replaced the rows (`WebSetRows`), which
+  freed the old rows - the selected record with them - and then read the record's keys. The refused save never reached
+  the refresh, so the first successful save was the first to crash. The same rule as `AppPageChooseRow`'s crash
+  (`FB Coding Rules.md`: replacing an object in a dictionary frees the old one), behind a setter this time.
+- Fix: the key values are read before `WebSetRows`. `WebFormShowRecord` had the same shape (it replaces the form's
+  `record`, then read from the record passed in, which could be that one): it copies first now. `Web Binding.incl`,
+  identical in the toolkit, the template and the example.
+
 ## 2026-11-28 — Web Toolkit: FastCGI on 9010; the FastCGI Test runs from its folder
 
 - **Passed on the Mac** (author, 2026-11-28): FastCGI Test.fb behind nginx, started from `src/MacTests`, beside the
