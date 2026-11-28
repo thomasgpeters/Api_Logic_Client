@@ -13,8 +13,14 @@ repository already holds, so the site and the apps never disagree:
     /samples/, /samples/<name>/   the sample applications: their READMEs, their downloads
     /app-builder/             App Builder: Lite and Professional, registration on the Imagery License Server
     /app-builder/editions.html  the editions compared, feature by feature (EDITION_FEATURES), each with its status
-    /downloads/*.zip          each module's example app (MIT), each sample; the SQL Generator's module alone with a one-file demo
+    /downloads/*.zip          each module's example app (MIT), each sample; the SQL Generator's module alone with a one-file demo;
+                              named for what they are and dated: <what>-<purpose>-<YYYY-MM-DD>.zip, the date of the last
+                              commit that changed its folder (released())
     /downloads/Test-Scenario-Guide.pdf   the test scenario guide (docs/TEST_SCENARIOS.pdf)
+Published (2026-11-28) by GitHub Pages from the repository thomasgpeters/imagery-fb-site, at
+https://thomasgpeters.github.io/imagery-fb-site/ until the fb.imagery-business-systems.com name points there: build
+into a clone of that repository (python3 tools/make_site.py ../imagery-fb-site/ - its README.md and .nojekyll are kept),
+commit, push to the working branch; the author merges into its main, which Pages serves (live since 2026-11-28).
 Standard library only (no packages to install). Imagery's name and logos are not licensed for reuse.
 """
 import html
@@ -22,18 +28,22 @@ import urllib.parse
 import os
 import re
 import shutil
+import subprocess
 import sys
+import time
 import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, '..'))
-SITE_URL = 'https://fb.imagery-business-systems.com/'
+SITE_URL = 'https://thomasgpeters.github.io/imagery-fb-site/'   # fb.imagery-business-systems.com once its name points there
+# App Builder is not released until it can be paid for (author, 2026-11-28): its pages say so and offer no registration.
+APP_BUILDER_RELEASED = False
 YEAR = '2026'
 
 MODULES = [
-    {'slug': 'sql-generator', 'name': 'SQL Generator', 'folder': 'src/SQLGeneratorExample', 'zip': 'SQL-Generator-Example.zip',
+    {'slug': 'sql-generator', 'name': 'SQL Generator', 'folder': 'src/SQLGeneratorExample', 'zip': 'SQL-Generator-Example-App',
      # the gentle start (author, 2026-11-27): the module's four files and the one-file demo, nothing more
-     'small_zip': 'SQL-Generator-Module.zip',
+     'small_zip': 'SQL-Generator-Module',
      'small_files': ['DataObject.glbl', 'DataObject_Super.incl', 'DataObject.incl', 'SQL Generator SQLite.incl',
                      'SQL Generator - Smallest Program.fb', 'LICENSE'],
      'small_readme': 'SQL Generator for FutureBasic\n\n'
@@ -44,22 +54,22 @@ MODULES = [
                      'In your own program, include the four files in the same order as the demo does,\n'
                      'and add -lsqlite3 to Build Settings > Compiler options.\n\n'
                      'More examples, the user guide and the full example app:\n'
-                     'https://fb.imagery-business-systems.com/sql-generator/\n\n'
+                     + SITE_URL + 'sql-generator/\n\n'
                      'MIT License. See LICENSE.\n',
      'blurb': 'Describe a SELECT, INSERT, UPDATE or DELETE as a dictionary (its tables, columns, filters and joins) and get safe, '
               'parameterized SQL for SQLite. Names are quoted for you, and every value is bound rather than pasted into the SQL.'},
-    {'slug': 'logicbank', 'name': 'LogicBank for FutureBasic', 'folder': 'src/LogicBankExample', 'zip': 'LogicBank-for-FutureBasic-Example.zip',
+    {'slug': 'logicbank', 'name': 'LogicBank for FutureBasic', 'folder': 'src/LogicBankExample', 'zip': 'LogicBank-for-FutureBasic-Example-App',
      'blurb': 'Your business logic, looked after in one place. Sums, counts, formulas, copies, constraints and delete actions are '
               'declared once and enforced on every save. It works like your bank: what you put in, you can take out, and the arithmetic is done for you.'},
-    {'slug': 'web-toolkit', 'name': 'Web Toolkit for FutureBasic', 'folder': 'src/WebToolkit', 'zip': 'Web-Toolkit-for-FutureBasic.zip',
-     'example': 'src/WebToolkitExample', 'example_zip': 'Web-Toolkit-Orders-Example.zip',
+    {'slug': 'web-toolkit', 'name': 'Web Toolkit for FutureBasic', 'folder': 'src/WebToolkit', 'zip': 'Web-Toolkit-Module',
+     'example': 'src/WebToolkitExample', 'example_zip': 'Web-Toolkit-Orders-Example-App',
      'blurb': 'Web applications written in FutureBasic, with widgets, events answered in the background (AJAX), a page lifecycle, '
               'and pages you can lay out in XIB files with the Layout Tool. Your business logic runs in FB, on the server, behind nginx.'},
 ]
 SAMPLES = [('Telecom', 'A mobile carrier\'s travel plans, priced from its roaming agreements.'),
            ('Customs', 'Automated customs clearance, set in Bermuda: duty, risk lanes, release and the port gate.'),
            ('FlightPlanner', 'VFR flight planning: wind, weight and balance, runways, weather and a go / no-go decision.')]
-SKIP = {'__pycache__', '.DS_Store'}
+SKIP = {'__pycache__', '.DS_Store', 'ANNOUNCEMENT.md'}   # the draft list posts stay out of the downloads
 
 # App Builder's editions, feature by feature (the page app-builder/editions.html). Keep it true with
 # docs/design/Editions Design.md and docs/ROADMAP.md: each row's status is honest - Available (built and tried on a
@@ -120,6 +130,7 @@ a { color:var(--accent); } p, li { max-width: 760px; } .lead { font-size:19px; c
 .card h3 { margin-top:0; } .tag { display:inline-block; font-size:12px; font-weight:600; padding:2px 8px; border-radius:999px; border:1px solid var(--line); color:var(--soft); }
 .button { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:9px 18px; border-radius:999px; font-weight:600; margin:6px 8px 6px 0; }
 .button.secondary { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+.button.disabled { background:var(--card); color:var(--soft); border:1px solid var(--line); cursor:default; pointer-events:none; }
 pre { background:var(--code); border:1px solid var(--line); border-radius:10px; padding:14px; overflow-x:auto; font-size:13px; line-height:1.45; }
 code { font-family: ui-monospace, Menlo, monospace; font-size:0.92em; } p code, li code, td code { background:var(--code); padding:1px 4px; border-radius:4px; }
 table { border-collapse:collapse; margin:16px 0; width:100%; font-size:15px; display:block; overflow-x:auto; } th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; } th { background:var(--card); }
@@ -292,7 +303,7 @@ def page(title, body, depth, description=''):
 <main>
 {body}
 </main>
-<footer>&copy; {YEAR} Imagery Business Systems, LLC. The SQL Generator and LogicBank for FutureBasic are free and open source (MIT).
+<footer>&copy; {YEAR} Imagery Business Systems, LLC. The SQL Generator, LogicBank for FutureBasic and the Web Toolkit for FutureBasic are free and open source (MIT).
 The Imagery name and logos are not licensed for reuse. FutureBasic is the work of its own authors.</footer>
 </body></html>
 """
@@ -303,6 +314,32 @@ def write(out, rel, text):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
         f.write(text)
+
+
+def released(path):
+    """a download's release date (YYYY-MM-DD): the last commit that changed its folder, so the name changes only when
+    the contents do; today when git has no answer (a folder not committed yet)"""
+    try:
+        day = subprocess.run(['git', '-C', ROOT, 'log', '-1', '--format=%cs', '--', path],
+                             capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        day = ''
+    return day or time.strftime('%Y-%m-%d')
+
+
+def with_dates(m):
+    """a module's downloads named for what they are and dated: SQL-Generator-Module-2026-11-28.zip"""
+    m = dict(m)
+    day = released(m['folder'])
+    m['zip_top'] = m['zip']                      # the folder inside each zip: named as the zip, without the date
+    m['zip'] = f'{m["zip"]}-{day}.zip'
+    if m.get('example'):
+        m['example_top'] = m['example_zip']
+        m['example_zip'] = f'{m["example_zip"]}-{released(m["example"])}.zip'
+    if m.get('small_zip'):
+        m['small_top'] = m['small_zip']
+        m['small_zip'] = f'{m["small_zip"]}-{day}.zip'
+    return m
 
 
 def zip_folder(folder, zip_path, top):
@@ -322,7 +359,11 @@ def zip_files(folder, names, zip_path, top, readme=None):
         for name in names:
             z.write(os.path.join(folder, name), os.path.join(top, name))
         if readme:
-            z.writestr(os.path.join(top, 'README.txt'), readme)
+            # dated as the newest file it goes with, not the build: an unchanged site rebuilds to the same bytes
+            newest = max(os.path.getmtime(os.path.join(folder, name)) for name in names)
+            info = zipfile.ZipInfo(os.path.join(top, 'README.txt'), time.localtime(newest)[:6])
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, readme)
 
 
 def licence_server():
@@ -332,29 +373,41 @@ def licence_server():
     return server + page_path
 
 
+# kept when the site is built into a clone of the repository that serves it (GitHub Pages)
+KEEP = {'.git', '.nojekyll', 'README.md', 'CNAME'}
+
+
 def build(out):
     if os.path.exists(out):
-        shutil.rmtree(out)
+        for name in os.listdir(out):
+            if name in KEEP:
+                continue
+            path = os.path.join(out, name)
+            if os.path.isdir(path) and not os.path.islink(path):
+                shutil.rmtree(path)
+            else:
+                os.remove(path)
     os.makedirs(os.path.join(out, 'images'))
     os.makedirs(os.path.join(out, 'downloads'))
+    modules = [with_dates(m) for m in MODULES]
     write(out, 'styles.css', CSS)
     for logo in ('imagery_logo.png', 'imagery_logo_white.png'):
         shutil.copy(os.path.join(ROOT, 'src', 'Shared', logo), os.path.join(out, 'images', logo))
 
-    # the modules: README, download, Help
-    for m in MODULES:
+    # the modules: README, download, Help. Each download: what it is, then its release date (released()).
+    for m in modules:
         folder = os.path.join(ROOT, m['folder'])
-        zip_folder(folder, os.path.join(out, 'downloads', m['zip']), os.path.basename(m['folder']))
+        zip_folder(folder, os.path.join(out, 'downloads', m['zip']), m['zip_top'])
         readme = open(os.path.join(folder, 'README.md'), encoding='utf-8').read()
         if m.get('example'):
             # a module with its example apart: the module (its template and tools), and the example
-            zip_folder(os.path.join(ROOT, m['example']), os.path.join(out, 'downloads', m['example_zip']), os.path.basename(m['example']))
+            zip_folder(os.path.join(ROOT, m['example']), os.path.join(out, 'downloads', m['example_zip']), m['example_top'])
             buttons = (f'<p><a class="button" href="../downloads/{m["zip"]}">Download the module (zip)</a>'
                        f'<a class="button secondary" href="../downloads/{m["example_zip"]}">Download the example (zip)</a>'
                        f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>')
         elif m.get('small_zip'):
             # the small download first: the module and a one-file demo; the example app for later
-            zip_files(folder, m['small_files'], os.path.join(out, 'downloads', m['small_zip']), m['small_zip'][:-4], m.get('small_readme'))
+            zip_files(folder, m['small_files'], os.path.join(out, 'downloads', m['small_zip']), m['small_top'], m.get('small_readme'))
             buttons = (f'<p><a class="button" href="../downloads/{m["small_zip"]}">Download the module and a one-file demo (zip)</a>'
                        f'<a class="button secondary" href="../downloads/{m["zip"]}">Download the example app (zip)</a>'
                        f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>'
@@ -372,14 +425,14 @@ def build(out):
                 shutil.copy(os.path.join(folder, f), os.path.join(help_dir, f))
         guide = open(os.path.join(folder, 'User Guide.txt'), encoding='utf-8').read()
         write(out, f'help/{m["slug"]}/index.html',
-              page(m['name'] + ': User Guide', guide_to_html(guide, '') + f'\n<p><a class="button" href="../../downloads/{m["zip"]}">Download the example (zip)</a></p>', 2))
+              page(m['name'] + ': User Guide', guide_to_html(guide, '') + f'\n<p><a class="button" href="../../downloads/{m["zip"]}">Download (zip)</a></p>', 2))
 
     # the samples
     cards = []
     for name, blurb in SAMPLES:
         folder = os.path.join(ROOT, 'samples', name)
-        zip_name = f'{name}-Sample.zip'
-        zip_folder(folder, os.path.join(out, 'downloads', zip_name), name)
+        zip_name = f'{name}-Sample-{released(os.path.join("samples", name))}.zip'
+        zip_folder(folder, os.path.join(out, 'downloads', zip_name), f'{name}-Sample')
         readme = open(os.path.join(folder, 'README.md'), encoding='utf-8').read()
         body = after_title(markdown_to_html(readme), f'<p><a class="button" href="../../downloads/{zip_name}">Download the sample (zip)</a></p>')
         write(out, f'samples/{name.lower()}/index.html', page(name + ' sample', body, 2, blurb))
@@ -395,21 +448,28 @@ def build(out):
 
     # App Builder
     register = licence_server()
+    if APP_BUILDER_RELEASED:
+        get_it = (f'<p><a class="button" href="{register}">Register for a free Lite licence</a>'
+                  f'<a class="button secondary" href="{register}">Professional</a>')
+    else:
+        # not shipping: the same buttons, disabled, saying so (author, 2026-11-28)
+        get_it = ('<p><span class="button disabled" aria-disabled="true">Lite: Coming Soon</span>'
+                  '<span class="button disabled" aria-disabled="true">Professional: Coming Soon</span>')
     write(out, 'app-builder/index.html', page('App Builder for FutureBasic', f"""<h1>App Builder for FutureBasic</h1>
 <p class="lead">A Mac app that builds a complete FutureBasic application from your database: the windows and forms, the lists,
 the data binding and the business rules, ready for you to open in the FutureBasic editor and build.</p>
-<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Professional</a><a class="button secondary" href="editions.html">Compare the editions</a></p>
+{get_it}<a class="button secondary" href="editions.html">Compare the editions</a></p>
 <table><thead><tr><th></th><th>Lite</th><th>Professional</th></tr></thead><tbody>
 <tr><td>Licence</td><td>free, with registration</td><td>paid</td></tr>
 <tr><td>Start from</td><td>a SQLite database</td><td>a SQLite database, or an API Logic Server project</td></tr>
 <tr><td>The app</td><td>runs on your Mac, its rules with it (LogicBank for FutureBasic)</td><td>three tiers: many users, the rules enforced on the server, sign-in and security</td></tr>
-<tr><td>Rules</td><td>written, checked and tested in App Builder</td><td>the same, and shared with your Python project (declare_logic.py)</td></tr>
+<tr><td>Rules</td><td>LogicBank for FutureBasic in every app; a Rules page to write, check and test them (coming)</td><td>the same, and shared with your Python project (declare_logic.py, coming)</td></tr>
 <tr><td>AI assistant (coming)</td><td>rules from sentences in your model's names, with your own key</td><td>also through API Logic Server's genai-logic</td></tr>
 </tbody></table>
 <p>Every feature, edition by edition, with where each one stands: <a href="editions.html">Lite and Professional compared</a>.</p>
 <p>App Builder stands on the free modules, and every app it builds carries the SQL Generator and LogicBank for FutureBasic.
-With the modules on their own, you write your rules by hand. App Builder writes them for you from plain sentences, checks them
-against your model, tests every rule, and builds the app around them.</p>
+With the modules on their own, you write your rules by hand. App Builder builds the app around them, and the Rules page we're
+building will write them for you from plain sentences, check them against your model and test every rule.</p>
 <p>We're working on the same for the web, though it isn't ready yet. With the Web Toolkit on its own you write each page yourself;
 App Builder will build the pages from your model (forms, lists, bindings and rules) for a web app beside the Mac app, or in its place.</p>
 <h2>Test it yourself</h2>
@@ -435,7 +495,7 @@ step at a time: what to do, what you should see, and a box to tick. It's how we 
 <p class="lead">Both editions are the same App Builder: your licence decides which one a project uses. Lite builds an app that runs on
 your Mac with its SQLite database and its rules. Professional adds three tiers, many users and the rules on a server, with API
 Logic Server, and the page designer.</p>
-<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Professional</a></p>
+{get_it}</p>
 <table class="editions"><thead><tr><th>Feature</th><th>Lite</th><th>Professional</th><th>Status</th></tr></thead><tbody>
 {''.join(rows)}
 </tbody></table>
@@ -447,16 +507,19 @@ designed, not yet built. A Lite project moves to Professional with its rules unc
     # the home page
     module_cards = ''.join(f'<div class="card"><span class="tag">free &middot; MIT</span><h3><a href="{m["slug"]}/index.html">{esc(m["name"])}</a></h3>'
                            f'<p>{esc(m["blurb"])}</p><p><a href="downloads/{m.get("small_zip", m["zip"])}">Download</a> &middot; <a href="help/{m["slug"]}/index.html">User guide</a></p></div>'
-                           for m in MODULES)
+                           for m in modules)
     write(out, 'index.html', page('FutureBasic tools', f"""<h1>Tools for FutureBasic programmers</h1>
-<p class="lead">We're Imagery Business Systems, and we make these for FutureBasic programmers on the Mac. There are three free
-modules for your own apps, sample applications that show them at work, and App Builder, which builds a whole app from your database.</p>
+<p class="lead">I'm Thomas Peters. I've started a new business, Imagery Business Systems, LLC, and we build business applications
+in several fields: transportation fleet management, education, and service centers for big trucks. As the work has grown, I've
+found myself reaching for FutureBasic more often than not.</p>
+<p>These are the tools that came out of it: three free modules for your own FB apps, each with a sample app that shows it at work,
+and the sample applications we built to prove them on real problems.</p>
 <h2>Free modules</h2>
 <div class="cards">{module_cards}</div>
 <h2>App Builder for FutureBasic</h2>
-<div class="cards"><div class="card"><span class="tag">Lite free &middot; Professional licensed</span><h3><a href="app-builder/index.html">App Builder</a></h3>
-<p>Windows, forms, lists, data binding and business rules, generated from your database. You write rules as plain sentences, and App Builder checks and tests them.</p>
-<p><a href="{register}">Register</a> &middot; <a href="app-builder/index.html">Lite and Professional</a></p></div>
+<div class="cards"><div class="card"><span class="tag">{"Lite free &middot; Professional licensed" if APP_BUILDER_RELEASED else "Coming Soon"}</span><h3><a href="app-builder/index.html">App Builder</a></h3>
+<p>Windows, forms, lists, data binding and business rules (LogicBank for FutureBasic), generated from your database.</p>
+<p>{f'<a href="{register}">Register</a> &middot; ' if APP_BUILDER_RELEASED else ''}<a href="app-builder/index.html">Lite and Professional</a></p></div>
 <div class="card"><span class="tag">samples</span><h3><a href="samples/index.html">Sample applications</a></h3>
 <p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, each with its database, rules and tests.</p></div>
 <div class="card"><span class="tag">PDF</span><h3><a href="downloads/Test-Scenario-Guide.pdf">Test scenario guide</a></h3>

@@ -16,8 +16,10 @@ Open items and ideas, grouped by area, with a proposed order at the top. The pha
    combo box, date / time display, calendar picker, colour picker. Each follows the Form
    designer's pattern (Control popup -> XIB part -> binding), so they are small and independent.
    Then the **Map view** (any result set with latitude / longitude on a map, an entity first; a bigger piece: a generic map part, then filling the columns by geocoding).
-4. **Lite release:** a generated app builds and runs on a Mac; tag it. Then post the SQL Generator
-   to the FB list.
+4. **Lite release:** a generated app builds and runs on a Mac; tag it. Then post the free modules to the FB list
+   (one post: `docs/FB List Post.md`). **Studio for FB is not released, Lite or Professional, until it can be paid for**
+   (author, 2026-11-28): payments through the License Server, Stripe and PayPal, the buyer's choice - the plan and the
+   owner's open items are in the License Server's `docs/BACKLOG.md`, *Decided 2026-11-28*.
 5. **Professional data:** `App Data Professional.incl` and the connection / sign-in, so an ALS project
    generates a working three-tier app.
 6. **Rules in FB:** the port of `rules_bridge.py` (Rules.json check, Studio Rules.incl), then the
@@ -376,7 +378,27 @@ the site, download] -> [post to the list].
 - [x] Run `src/MacTests/Web Server Test.fb` on a Mac: can FB serve a page and take its clicks? Yes (author, 2026-11-28:
   the page, Add One without reloading, `<b>Bob</b>` shown as typed, two tabs and fast clicks kept up)
 - [x] Run `src/MacTests/FastCGI Test.fb` behind nginx on a Mac: passed (author, 2026-11-28; nginx run from `src/MacTests`, FastCGI on 9010)
-- [ ] Run the Orders example (`src/WebToolkitExample`) behind nginx on a Mac
+- [ ] Run the Orders example (`src/WebToolkitExample`) behind nginx on a Mac - mostly passed (author, 2026-11-28): the
+  page, a customer chosen, a credit limit refused, totals and balance following an item, Ship Today, the theme menu.
+  A save after a refused one crashed (`WebTableRefresh`, fixed in bd55a86). Still to try: two browsers side by side;
+  an item typed, then the tab switched (saved)
+
+## Web Toolkit - hosting: a first public app (author, 2026-11-28; `design/Web Toolkit Design.md` -> Hosting)
+
+- [ ] The host Mac: a Mac mini (port forwarding or Cloudflare Tunnel) or a rented Mac; a setup checklist (FileVault,
+  firewall, no automatic login, updates)
+- [ ] HTTPS: a commented HTTPS server block in the template's `nginx.conf`; `certbot` and its renewal; HTTP to HTTPS;
+  HSTS (the cookie's `Secure` is in place: set when nginx passes `HTTPS=on`)
+- [ ] Unattended: a LaunchDaemon plist beside the LaunchAgent; the app runs with no window; logs to files, rotated;
+  a `/health` URL
+- [ ] Sign-in: users with salted PBKDF2 hashes (CommonCrypto), a sign-in page, sign-out, a new session id at sign-in;
+  `limit_req` on sign-in; roles later, checked on the server
+- [ ] Hardening: CSP, `X-Content-Type-Options`, `Referrer-Policy`, `frame-ancestors` from nginx; `limit_req` /
+  `limit_conn` per address; fuzz the FastCGI parser here
+- [ ] A security review of the toolkit for public use, before the first public app
+- [ ] Data: SQLite behind the rules in a web app (`Data Records.incl`); scheduled backups and a tried restore
+- [ ] Deploying a new version: a short script (copy, `launchctl kickstart -k`) and its notes
+- [ ] The first public app: chosen by the author, built on all of the above
 
 ## Record Files for FutureBasic (author, 2026-11-27; `design/Record Files Design.md`)
 
@@ -385,6 +407,15 @@ the site, download] -> [post to the list].
 - [ ] A stop in the middle: quit with Force Quit during a Run, open again - the counts recovered, the indexes rebuilt, Check sound
 - [ ] Record checksums (a half-written slot is found), before it is offered in App Builder
 - [ ] App Builder: "Record files with B-tree indexes" as a data choice beside SQLite - records and indexes generated from the model, `App Data Records.incl` behind the same app data interface
+
+## The FutureBasic site (`features/SITE_FEATURE.md`)
+
+- [ ] Download counts (author, 2026-11-28: later). GitHub Pages keeps no statistics. Either a cookie-free analytics
+  script in `make_site.py`'s page template counting page views and clicks on each download (GoatCounter, the proposal;
+  the author opens the account), or the zips as GitHub Release assets (exact counts; the repository public, the files
+  uploaded by the author with each release)
+- [ ] The custom name: `fb.imagery-business-systems.com` as a CNAME to `thomasgpeters.github.io`, then `SITE_URL` and
+  `ABOUT_IMAGERY_SITE` back to it
 
 ## Documentation
 

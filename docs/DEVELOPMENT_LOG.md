@@ -6,6 +6,83 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The site and the downloads say only what is true today
+
+- The landing page opens with the author's introduction, in the first person, with a sentence on what the site holds.
+  The author asked for shortcomings to be caught; found and fixed:
+  - **App Builder offered registration** (five buttons and links) though it is not released until it can be paid for:
+    `APP_BUILDER_RELEASED = False` in `tools/make_site.py`; its buttons are disabled and say *Coming Soon* (the
+    author's words), the landing card's tag too.
+  - **Claims ahead of the code:** "you write rules as plain sentences, and App Builder checks and tests them" (the
+    landing card), the same on the App Builder page and in its table, and in LogicBank's README - the Rules page and
+    the AI assistant are *Planned*. Now in the future tense or marked *coming*.
+  - **A dead address inside the downloads:** the SQL Generator module's README and the About window in every example
+    app pointed at fb.imagery-business-systems.com, which does not answer yet. Now the live GitHub Pages address
+    (`SITE_URL`, `ABOUT_IMAGERY_SITE`).
+  - **The About window** said "Lite is free when you register" and offered App Builder's registration: now "will be".
+  - **The footer** named two of the three MIT modules: the Web Toolkit added.
+
+## 2026-11-28 — Payments: Stripe and PayPal, the buyer chooses; no release before
+
+- The author: Studio for FB is not released, Lite or otherwise, until payments work. Surveyed the other repositories:
+  Stripe and PayPal were chosen everywhere; the shared library `Imagery-Payments` (v0.1.0, 42 tests) is built, but no
+  provider is connected anywhere - the License Server's payment page is a simulation, switched off; the CRM, meant to
+  host the providers, is not started.
+- Decided (author): "Stripe or PayPal it is. We can provide both, and let the user choose." Recorded in the License
+  Server's `docs/BACKLOG.md` (ac52462 there): hosted pages only, the licence issued on the provider's confirmation, the
+  first sale App Builder for FutureBasic before the CRM, and the order of work with the owner's open items (accounts
+  and test keys, prices, tax - Stripe Tax covers Stripe Checkout; PayPal needs the amount from elsewhere).
+
+## 2026-11-28 — The site's downloads: named for what they are, with their release dates
+
+- The author: "the source code downloads should be simple zip files naming according to their purpose with release
+  dates." Each download is now `<what>-<purpose>-<YYYY-MM-DD>.zip` and unzips to one folder of the same name without
+  the date: `SQL-Generator-Module`, `SQL-Generator-Example-App`, `LogicBank-for-FutureBasic-Example-App`,
+  `Web-Toolkit-Module`, `Web-Toolkit-Orders-Example-App`, `<Name>-Sample`.
+- The date is the last commit that changed the download's folder (`released()` in `tools/make_site.py`, `git log -1
+  --format=%cs`): nobody keeps it by hand, it moves only when the contents do, and a rebuild of an unchanged site
+  gives the same names and bytes. The pages link the dated names; old files go at the next build.
+
+## 2026-11-28 — The FutureBasic site on GitHub Pages
+
+- The author can't open the firewall for fb.imagery-business-systems.com today, and has GitHub Team: the site goes on
+  GitHub Pages, from a new repository, `thomasgpeters/imagery-fb-site` (first commit 7d13652 there: the built site, a
+  README saying it is built from here and not edited there, `.nojekyll`). Address once Pages is on:
+  https://thomasgpeters.github.io/imagery-fb-site/; the custom name can point there later (a CNAME record).
+- Checked before publishing: every link relative (the site works under a sub-path), 154 links, none broken; no prices,
+  no toolbox files, no keys or private files in the zips.
+- `tools/make_site.py`: building into a clone of the site repository used to delete the folder first, `.git` too; it
+  now keeps `.git`, `.nojekyll`, `README.md` and `CNAME`. Its zips' generated `README.txt` was dated at build time, so
+  every rebuild changed a download; it is dated as its newest file now, and two rebuilds give identical bytes.
+- `docs/FB List Post.md` names the address. **Live** (author, 2026-11-28): Pages serves `main` of `imagery-fb-site`;
+  the post's link is filled in.
+
+## 2026-11-28 — One post for the FutureBasic list, for all the free modules
+
+- The author: "a single post for all the mods so as to not tire the men." `docs/FB List Post.md`: the SQL Generator,
+  LogicBank for FutureBasic and the Web Toolkit in one post, a few lines each, one link. The per-module drafts stay as
+  the longer text for each module's page. Record Files is left out until it has run on a Mac.
+- The site's address cannot be set up today (the author has no access to the firewall). The post's link is a
+  placeholder; the file lists what it can point at meanwhile (GitHub Pages, a public repository, shared zips).
+
+## 2026-11-28 — Web Toolkit: a draft post for the FutureBasic list
+
+- The author wants to share the module on the FB list. It had everything but the post: `src/WebToolkit/ANNOUNCEMENT.md`,
+  in the SQL Generator's style (short, the point first, a page in a few lines of FB, no attachments - a link to the
+  module's page on the site). It says what is true today: early, a working name, tried on the author's Mac.
+- `tools/make_site.py` zipped each module's whole folder, so the SQL Generator's draft post was in its download. Both
+  drafts are now skipped (`SKIP`); the zips checked.
+
+## 2026-11-28 — Web Toolkit: the Orders example on the Mac; hosting planned
+
+- The author's run of the Orders example after the `WebTableRefresh` fix: totals and the balance follow an added item,
+  Ship Today moves the unshipped count, the theme menu works (with the page, a customer chosen and a refused credit
+  limit from the first run). Two browsers side by side and saving on a tab switch are still to try.
+- The author: the Web Toolkit "will become the new path forward for my apps ... serve to anyone. Just need to be
+  hosted on macOS." `Web Toolkit Design.md` has a new section, *Hosting a Web Toolkit app*: what is in place (escaping,
+  the session cookie and token, limits, nginx in front) and what a first public app needs, in order - the Mac, HTTPS,
+  running unattended, sign-in, hardening, data and backups, deploying, scale. The backlog has the items.
+
 ## 2026-11-28 — Web Toolkit: a crash after a save (use after free in WebTableRefresh)
 
 - The author's run of the Orders example on the Mac: the page, choosing a customer and a refused credit limit all

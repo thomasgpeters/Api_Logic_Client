@@ -286,7 +286,7 @@ Before: In App Builder, a text attribute with Values "R = Retail, W = Wholesale,
 
 ### H-01 SQL Generator: the one-file demo
 Purpose: The module in its smallest form.
-Before: SQL-Generator-Module.zip from the site (or the files from src/SQLGeneratorExample).
+Before: SQL-Generator-Module-<date>.zip from the site (or the files from src/SQLGeneratorExample).
 1. Keep the five files together, open "SQL Generator - Smallest Program.fb" in FutureBasic, and run it. -> The NSLog window shows the INSERT it wrote, "3 rows added", the SELECT, its values, and two people: Ada Lovelace and Grace Hopper.
 
 ### H-02 SQL Generator: the example app
