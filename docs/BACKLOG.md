@@ -408,6 +408,15 @@ the site, download] -> [post to the list].
 - [ ] Record checksums (a half-written slot is found), before it is offered in App Builder
 - [ ] App Builder: "Record files with B-tree indexes" as a data choice beside SQLite - records and indexes generated from the model, `App Data Records.incl` behind the same app data interface
 
+## The FutureBasic site (`features/SITE_FEATURE.md`)
+
+- [ ] Download counts (author, 2026-11-28: later). GitHub Pages keeps no statistics. Either a cookie-free analytics
+  script in `make_site.py`'s page template counting page views and clicks on each download (GoatCounter, the proposal;
+  the author opens the account), or the zips as GitHub Release assets (exact counts; the repository public, the files
+  uploaded by the author with each release)
+- [ ] The custom name: `fb.imagery-business-systems.com` as a CNAME to `thomasgpeters.github.io`, then `SITE_URL` and
+  `ABOUT_IMAGERY_SITE` back to it
+
 ## Documentation
 
 - [ ] `DOC_ONE_PAGER.html` / `.pdf`: bring them in step with `DOC_ONE_PAGER.md` (editions, grid or tiles, App Builder naming), or build them from the Markdown with a tool
