@@ -6,6 +6,25 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Page designer: tags assigned and changeable; XIBs per part (designed); inline C, the Mac questions
+
+- **Tags** (author: "auto assign the tag numbers ... but allow the developer to change it"): each part has a
+  `tagBase`, 100 tags of its own (Form at the base, fields after it, List 20000 above), 10000 to 19900 in hundreds so
+  the radio buttons' tags stay under the cards'. `tools/pages_reference.py` (the reference, 6 new checks) and its FB
+  port (`PagesAssignTags`, the check in `PagesCheck`); the Pages view shows each part's tags and takes another base in
+  *Tags from* (empty: assigned again).
+- **XIBs per part** (author: "UI in xibs, auto generated and updated and the developer makes changes ... smaller
+  components such as the individual layouts in multi-entity pages"): designed in `Page Designer Design.md` - a Form and
+  a List XIB per part, regenerated from the model, the developer's changes kept by a merge on the stable tags
+  (proposed, to confirm).
+- **No inline C in generated apps** (author): the runtime's C is ~640 lines in C blocks and 35 one-liners. FB has
+  what most of it needs - `toolbar` / `nibtoolbar` (the author: "we can build the toolbar in FB, and in xib":
+  confirmed in FB's manual), `popover`, `subclass view` (mouse, drag, draw and cursor events, for the splitter), its
+  Cocoa wrappers by tag with `WindowSetOutput`, `kCFNull`, and `def fn ... using` for calls through an address. Two
+  Mac tests answer what the manual leaves open before any rewrite: `src/MacTests/Fn Pointer Test.fb`,
+  `src/MacTests/FB Wrappers Test.fb`.
+- fblint now knows `def fn` names (a prototype, or a call through an address).
+
 ## 2026-11-28 — The generated app: CUSTOMIZE: marks where developers change it
 
 - The author: "COMMENTS in the various places within code for developers to understand where they can customize the

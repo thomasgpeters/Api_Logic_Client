@@ -147,6 +147,46 @@ Page *Order Entry*: Order (Detail, driver) / Customer (Detail, follows Order as 
 navigator walks the orders; each order brings its customer and its lines; choosing a line shows its product. New on
 OrderDetail adds a line to the current order (its OrderId filled in); the rules recompute the order's total.
 
+## Tags: assigned, and the developer's to change (author, 2026-11-28)
+
+"In the Page Designer, we need to let the system auto assign the tag numbers to the widgets, but it should allow the
+developer to change it." Each part has a `tagBase` in `Pages.json`: a block of 100 tags of its own, so the same entity
+can be on several pages.
+
+| | Tags |
+|---|---|
+| the part's Form | `tagBase` |
+| its fields | `tagBase + 1 ...`, in the model's attribute order (as an entity's own Form) |
+| its List, the List's scroll view and table | `tagBase + 20000`, `+ 20001`, `+ 20002` |
+| a field's lookup info button, its radio buttons | `40000 + tag`, `100000 + tag * 10 + n` (as today) |
+
+Bases are 10000 to 19900, in hundreds: clear of the entities' own tags (Forms below 10000, Lists from 20000, lookup
+info from 40000), and the radio buttons' tags stay under the cards' (a part + 500000). Room for 100 parts. The
+designer gives every part without a base the lowest free one after each change (`assign_tags` / `PagesAssignTags`);
+the part's row shows it, and *Tags from* takes another (empty: assigned again). The check reports a base out of range,
+not in hundreds, or another part's. Reference and tests: `tools/pages_reference.py`.
+
+## The screens as XIBs: small, generated, updated - and the developer's to change (author, 2026-11-28)
+
+"We should have UI in xibs, auto generated and updated and the developer makes changes. XIBs should be smaller
+components such as the individual layouts in multi-entity pages designed by the developer."
+
+- **One XIB per part**, not per page: `<Page> - <Entity> Form.xib` and `<Page> - <Entity> List.xib` (a Detail has its
+  Form, a List its List, a List with detail both), each with the part's tags. A page is put together at run time from
+  its parts (App Pages.incl), so a part can be opened, changed and understood on its own in Interface Builder (Xcode).
+- **Generated and updated:** Generate App writes them from the model and the designer's choices, and writes them
+  again when the model changes (a new attribute, a removed one, another control).
+- **The developer's changes are kept** (proposed; to confirm): before writing a XIB again, the generator reads the
+  one in the project. If it is as the generator last wrote it (a fingerprint kept beside it), it is simply replaced.
+  If the developer changed it, the two are merged by tag - the tags are stable (above):
+  - a generated control the developer moved, resized or restyled keeps the developer's frame and attributes;
+  - an attribute new in the model gets its control, placed below the others;
+  - a control whose attribute left the model is removed (its tag is no longer the model's);
+  - what the developer added (a label, a box, a button with a tag outside the part's fields) is kept as it is.
+  The merge is the generator's (FB, as everything the Studio does), with a Python reference and tests first, as the
+  other generators have.
+- The entity's own XIBs (today's pages, no `Pages.json`) are treated the same way.
+
 ## What the generated app needs
 
 1. **The same entity on several pages.** A XIB part's controls have fixed tags, and tags must be unique in a window,

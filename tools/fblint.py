@@ -510,6 +510,7 @@ def main(argv):
         local_fns |= set(re.findall(r'^\s*(?:\w+\s+)?local\s+fn\s+(\w+)', s, re.M))
         local_fns |= set(re.findall(r'^\s*toolbox\s+(?:fn\s+)?(\w+)', s, re.M))
         local_fns |= set(re.findall(r'^\s*#define\s+(\w+)', s, re.M))
+        local_fns |= set(re.findall(r'^\s*(?:\w+\s+)?def\s+fn\s+(\w+)', s, re.M))   # def fn: a prototype, or a call through an address (def fn ... using)
         # a template may call fns the generator writes beside it: "// generated: Name, Name"
         for g in re.findall(r'^\s*//\s*generated:\s*([\w ,]+)$', s, re.M):
             local_fns |= {n.strip() for n in g.split(',') if n.strip()}

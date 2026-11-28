@@ -45,6 +45,16 @@ What this file is the reference for (the FB port lives in the Studio and the gen
     resolve_link( db, link, record )         the other page's driver records, for the current record of fromPart
     resolve_page( db, model, page, driver )  each part's records for a driver record, as the generated app shows them
     page_flow_svg( pages )                   the page flow diagram: pages, their parts, the associations between them
+    assign_tags( pages ) / part_tags( part ) each part's tags (below)
+
+Tags (author, 2026-11-28: "let the system auto assign the tag numbers ... but allow the developer to change it"):
+    each part has a "tagBase", a block of 100 tags of its own, so the same entity can be on several pages. The part's
+    Form is at tagBase and its fields after it (tagBase + 1 ...), in the model's attribute order, as an entity's are;
+    its List at tagBase + 20000 (+1 the scroll view, +2 the table). Bases run 10000 to 19900 in hundreds - clear of
+    the entities' own tags (Forms below 10000, Lists from 20000, lookup info buttons from 40000) and keeping the radio
+    buttons' tags (100000 + tag * 10 + n) below the cards' (part + 500000): room for 100 parts. assign_tags gives
+    every part without one the lowest free base (after each change in the designer, and in the default pages); the
+    developer may type another, and check_pages reports one out of range, not in hundreds, or used twice.
 
     python3 tools/pages_reference.py db.sqlite                 the default pages, and the links between every two entities
     python3 tools/pages_reference.py --flow Pages.json         the page flow diagram (SVG) of a project's pages
@@ -58,6 +68,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sqlite_model import read_model, q   # noqa: E402
 
 DISPLAYS = ('detail', 'list', 'listDetail')
+TAG_FIRST, TAG_LAST, TAG_STEP, LIST_OFFSET = 10000, 19900, 100, 20000
 
 
 def tables(model):
@@ -153,14 +164,50 @@ def page_associations(model, source, target):
     return sorted(found, key=lambda a: a['how'] == 'through')   # direct ones first (stable: page order kept)
 
 
+def _parts(pages):
+    return [part for page in pages.get('pages', []) for part in page.get('parts', [])]
+
+
+def _is_base(value):
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+def next_tag_base(pages):
+    """The lowest base no part uses, or None when all 100 are taken."""
+    used = {part.get('tagBase') for part in _parts(pages)}
+    return next((b for b in range(TAG_FIRST, TAG_LAST + 1, TAG_STEP) if b not in used), None)
+
+
+def assign_tags(pages):
+    """Every part without a base gets the lowest free one; a base the developer chose is kept. Returns how many."""
+    assigned = 0
+    for part in _parts(pages):
+        if not _is_base(part.get('tagBase')):
+            base = next_tag_base(pages)
+            if base is None:
+                break
+            part['tagBase'] = base
+            assigned += 1
+    return assigned
+
+
+def part_tags(part):
+    """A part's tags: its Form, its first field, its List (and the List's scroll view and table)."""
+    b = part['tagBase']
+    return {'form': b, 'firstField': b + 1, 'list': b + LIST_OFFSET, 'scroll': b + LIST_OFFSET + 1, 'table': b + LIST_OFFSET + 2}
+
+
 def default_pages(model):
-    return {'pages': [{'title': name, 'icon': None,
-                       'parts': [{'entity': name, 'display': 'listDetail', 'follows': None}]} for name in tables(model)]}
+    pages = {'pages': [{'title': name, 'icon': None,
+                        'parts': [{'entity': name, 'display': 'listDetail', 'follows': None}]} for name in tables(model)]}
+    assign_tags(pages)
+    return pages
 
 
 def check_pages(model, pages):
     problems = []
     titles = set()
+    bases = {}                                         # tag base -> where it is first used
     for p, page in enumerate(pages.get('pages', [])):
         where = f'page {p + 1} ({page.get("title")!r})'
         if not page.get('title'):
@@ -179,6 +226,14 @@ def check_pages(model, pages):
                 continue
             if part.get('display') not in DISPLAYS:
                 problems.append(f'{at}: display {part.get("display")!r}')
+            base = part.get('tagBase')
+            if base is not None:                       # none yet: assign_tags gives it one
+                if not _is_base(base) or base < TAG_FIRST or base > TAG_LAST or base % TAG_STEP:
+                    problems.append(f'{at}: tags from {base!r}: they must be {TAG_FIRST} to {TAG_LAST}, in hundreds')
+                elif base in bases:
+                    problems.append(f'{at}: tags from {base} are already {bases[base]}\'s')
+                else:
+                    bases[base] = at
             follows = part.get('follows')
             if follows is None:
                 continue
@@ -633,6 +688,29 @@ def run_tests():
         check(f'{name}: every relationship ({pairs}) is offered both ways', pairs > 0 and bad_pairs == 0,
               f'{bad_pairs} of {pairs}')
         check(f'{name}: the default pages pass the check', check_pages(m, default_pages(m)) == [])
+
+    # tags: assigned, kept when chosen, checked
+    pages = default_pages(model)
+    got = [p['parts'][0]['tagBase'] for p in pages['pages']]
+    check('default pages: each part its own tags, 10000 up in hundreds', got == list(range(10000, 10000 + 100 * len(got), 100)), got)
+    t = part_tags(pages['pages'][1]['parts'][0])
+    check('a part\'s tags: the Form at its base, the fields after it, the List 20000 above',
+          t == {'form': 10100, 'firstField': 10101, 'list': 30100, 'scroll': 30101, 'table': 30102}, t)
+    mixed = {'pages': [{'title': 'A', 'parts': [{'entity': 'Orders', 'display': 'detail', 'follows': None},
+                                                 {'entity': 'Customers', 'display': 'list', 'follows': None, 'tagBase': 10000}]},
+                       {'title': 'B', 'parts': [{'entity': 'Products', 'display': 'list', 'follows': None}]}]}
+    n = assign_tags(mixed)
+    check('assign_tags: the chosen base kept, the others the lowest free (10100, 10200)',
+          n == 2 and [p.get('tagBase') for p in _parts(mixed)] == [10100, 10000, 10200], [p.get('tagBase') for p in _parts(mixed)])
+    check('... and the check passes', check_pages(model, mixed) == [], check_pages(model, mixed))
+    mixed['pages'][1]['parts'][0]['tagBase'] = 10000
+    mixed['pages'][0]['parts'][0]['tagBase'] = 12345
+    problems = check_pages(model, mixed)
+    check('the check reports tags used twice', any('already' in p for p in problems), problems)
+    check('the check reports tags out of range or not in hundreds', any('in hundreds' in p for p in problems), problems)
+    full = {'pages': [{'title': f'P{i}', 'parts': [{'entity': 'Orders', 'display': 'list', 'follows': None}]} for i in range(101)]}
+    check('101 parts: 100 get tags, the last none (all taken)', assign_tags(full) == 100 and next_tag_base(full) is None
+          and 'tagBase' not in full['pages'][100]['parts'][0])
 
     print(f'pages_reference: {failed} failed')
     return failed

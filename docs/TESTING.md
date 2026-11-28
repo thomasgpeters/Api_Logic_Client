@@ -84,8 +84,17 @@ The layouts:
 `tools/check_fastcgi_core.py` (in `run_tests.sh`) compiles the program's FastCGI core here and runs it behind nginx. On a
 Mac: `brew install nginx`; in `src/MacTests`, `nginx -c "$PWD/FastCGI Test nginx.conf" -p "$PWD"` (a complete
 configuration with its own `fastcgi_params`, as the Orders example: Homebrew's default site, on 8080, is not loaded; the
-program listens on 9010, clear of PHP-FPM's 9000); run `src/MacTests/FastCGI Test.fb`, run `src/MacTests/FastCGI Test.fb`, open http://127.0.0.1:8088/ - the same reports as
+program listens on 9010, clear of PHP-FPM's 9000); run `src/MacTests/FastCGI Test.fb`, open http://127.0.0.1:8088/ - the same reports as
 the Web Server Test below.
+
+### FB in place of C: Fn Pointer Test, FB Wrappers Test (author, 2026-11-28: no inline C in the generated apps)
+
+Two questions to answer on a Mac before the runtime's lines of C are rewritten in FB. Open each in FB and run it; the
+NSLog window shows PASS / FAIL lines and a count (a Build Log is an answer too):
+- `src/MacTests/Fn Pointer Test.fb` - FB's `def fn ... using`: a function called through its address, with an object
+  back, a BOOL back, and one or four parameters (the rules engine, App Data's answers).
+- `src/MacTests/FB Wrappers Test.fb` - with another window current, `WindowSetOutput` and FB's own functions on the
+  app's window (alpha, enabled, subtitle, full screen, a symbol image), read back; and `kCFNull` as a JSON null.
 
 ### Web Server Test (feasibility: a web app in FutureBasic, `docs/design/Web Toolkit Design.md`)
 
