@@ -11,7 +11,7 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│            │ © Company (|< First)(< Previous) Customer 3 of 91 (Next >)(Last >|)│  footer
+│            │ © Company        |◀  ◀   Customer 3 of 91   ▶  ▶|               │  footer
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -24,9 +24,10 @@ Every app generated from a SQLite project opens in the same frame:
 - **Full screen** (`ShellAllowFullScreen`: `NSWindowCollectionBehaviorFullScreenPrimary`): the green button gives the
   app its own space; every part stretches (autoresizing: the cards, the List's columns, the Form's fields, the
   navigator's cells, the toolbar).
-- **Footer** (author, 2026-11-27): the copyright on the left, then the **record navigator** across the rest of the
-  width: First, Previous, *"Customer 3 of 91"*, Next, Last, as pills in five equal cells that stretch with the window
-  (`ShellNavigatorButton`, proportional autoresizing). A dimmed pill is also faded (alpha 0.4: on macOS 15 the layer
+- **Footer** (author, 2026-11-27/28): the copyright on the left, the **record navigator** centred: four icon buttons
+  (`ShellNavigatorButton`: borderless, SF Symbols `backward.end.circle.fill`, `chevron.backward.circle.fill`,
+  `chevron.forward.circle.fill`, `forward.end.circle.fill` at 22 pt semibold in the accent colour, no words) round
+  *"Customer 3 of 91"*; the group keeps to the middle as the window resizes (flexible margins). A dimmed pill is also faded (alpha 0.4: on macOS 15 the layer
   draws the pill and does not grey itself). What just happened ("Saved.", a refused save's reason, "5 of 91 match")
   shows under the window's title, the window's subtitle (`ShellSetStatus`).
 - **Window title:** *Company | App* (author, 2026-11-27), the company taken from the copyright (`ShellCompanyName`:

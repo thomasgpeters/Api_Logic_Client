@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The record navigator as icons
+
+- **Author** (a Northwind screenshot, dark mode, 13 tables): the pills' |< < > >| were not centred, the words redundant;
+  icons better than pills, if they can be disabled. Now four borderless icon buttons - SF Symbols
+  `backward.end.circle.fill`, `chevron.backward.circle.fill`, `chevron.forward.circle.fill`, `forward.end.circle.fill`,
+  22 pt semibold, the accent colour, no words - centred in the footer round "Supplier 1 of 29" (flexible margins). A
+  borderless symbol button dims itself when disabled, and `ShellSetEnabled` fades it too.
+
 ## 2026-11-27 — The splitter remembers its place, per page
 
 - **Author:** "yes, remember the splitter position per page." The Form card's height is saved in the app's preferences on

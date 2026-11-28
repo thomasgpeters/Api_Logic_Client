@@ -277,8 +277,8 @@ Every generated app has the same frame (`App Shell.incl`):
   menu** (System / Light / Dark) is at the right of the toolbar;
 - **full screen:** the green button (or *View → Enter Full Screen*) gives the app its own space; the
   cards, the List and the Form's fields, the navigator and the toolbar all stretch with the window;
-- a **footer** with the copyright on the left and the **record navigator** across the rest: First, Previous,
-  *Customer 3 of 91*, Next and Last, as pill buttons that share the width and stretch with the window. A page
+- a **footer** with the copyright on the left and the **record navigator** in the middle: four icons, First,
+  Previous, Next and Last (circled arrows in the accent colour), round *Customer 3 of 91*. A page
   opens on its first record, selected in the List with the focus there, so the arrow keys move through the
   records too. First and Previous are dimmed on the first record, Next and Last on the last. What just
   happened (*Saved.*, why a save was refused, *5 of 91 match*) shows under the window's title. New, Save,
