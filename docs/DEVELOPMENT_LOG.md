@@ -6,6 +6,20 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The generated app: the theme menu works; the copyright in a centred footer strip
+
+- The author: the toolbar's theme menu "does not function, it does not need a title, and it should have a separator".
+  The menu was made in the window and moved into a toolbar item; there, its choice did not reach the app's `DoDialog`
+  (not confirmed on a Mac why - FB's control events and a view moved into the toolbar). It now answers itself:
+  `AppToolbarThemeWire` (App Toolbar.incl) gives it a Cocoa target that sets the app's appearance and remembers the
+  choice (`App Theme` in the app's defaults), so the app opens in the theme it was left in; `ShellPopupIndex`,
+  `ShellApplyThemeChoice` and the theme branch of `ShellDoDialog` are gone. No label under it ("Theme" stays the
+  palette's name), and a separator before it, the same as the one after Search.
+- The author: "the copyright is needed, in a footer section, centred". The footer is two rows (66 points): the
+  navigator's, and under a line, a strip with the copyright centred, stretching with the window.
+- A toolbar the app already saved (autosaved configuration) keeps its old arrangement: the new separator appears in
+  View > Customize Toolbar; drag the default set back, or remove the app's saved toolbar, to see it in place.
+
 ## 2026-11-28 — The site and the downloads say only what is true today
 
 - The landing page opens with the author's introduction, in the first person, with a sentence on what the site holds.

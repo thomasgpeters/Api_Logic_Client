@@ -11,7 +11,8 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│            │ © Company        |◀  ◀   Customer 3 of 91   ▶  ▶|               │  footer
+│            │                  |◀  ◀   Customer 3 of 91   ▶  ▶|               │  footer
+│            │──────────────────── © Company, centred ──────────────────────│
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -19,12 +20,16 @@ Every app generated from a SQLite project opens in the same frame:
   current page is highlighted.
 - **Header** (56 points): the app icon (40), the app name and the tag-line on the left; **Log In** on the right
   (Professional). The theme menu (System / Light / Dark) is in the toolbar, at its right (author, 2026-11-27): made in
-  `ShellBuildWindow`, moved into a toolbar item (`ToolbarItemSetView`); `ShellFindView` looks in the toolbar's items
-  too, and `ShellPopupIndex` reads its choice through Cocoa.
+  `ShellBuildWindow`, moved into a toolbar item (`ToolbarItemSetView`), after a separator, with no label under it
+  (author, 2026-11-28; "Theme" names it in View > Customize Toolbar). It answers itself (`AppToolbarThemeWire`: a
+  Cocoa target): once in the toolbar its choice did not reach the app's `DoDialog` (author, 2026-11-28: "does not
+  function"). The choice is applied to the whole app and remembered in the app's defaults (`App Theme`), so the app
+  opens as it was left.
 - **Full screen** (`ShellAllowFullScreen`: `NSWindowCollectionBehaviorFullScreenPrimary`): the green button gives the
   app its own space; every part stretches (autoresizing: the cards, the List's columns, the Form's fields, the
   navigator's cells, the toolbar).
-- **Footer** (author, 2026-11-27/28): the copyright on the left, the **record navigator** centred: four icon buttons
+- **Footer** (author, 2026-11-27/28): two rows, 66 points. Below, a strip with the **copyright centred** (author,
+  2026-11-28: "in a footer section, centred"; a line above it), from Project Settings. Above it, the **record navigator** centred: four icon buttons
   (`ShellNavigatorButton`: borderless, SF Symbols `backward.end.circle.fill`, `chevron.backward.circle.fill`,
   `chevron.forward.circle.fill`, `forward.end.circle.fill` at 22 pt semibold in the accent colour, no words) round
   *"Customer 3 of 91"*; the group keeps to the middle as the window resizes (flexible margins). A dimmed pill is also faded (alpha 0.4: on macOS 15 the layer
@@ -83,7 +88,7 @@ Branding comes from **Project Settings** in the Studio (`ProjectSettingsView.xib
 `Project Settings.incl`, `Project Workspace.incl`): a logo well (paste or drag; kept as
 `<project>/Branding/logo.png`, deployed as `FBapp/AppLogo.png`), the tag-line (≤ 80 characters)
 and the copyright, all in `Project.json`. Without a logo the header shows the `building.2` symbol;
-without a copyright the footer shows none (the app's name is in its header and title).
+without a copyright the footer's strip is empty (set it in Project Settings: the app's name is in its header and title).
 
 ## Decisions
 
@@ -135,7 +140,8 @@ without a copyright the footer shows none (the app's name is in its header and t
       picture; Done; reopen the project — all three come back; ⌘X cuts text, ⇧⌘X generates XIBs.
 - [ ] Generate App, build `FBapp/<name>.fbeproj`: the window has the nav bar, header (logo, name,
       tag-line, theme menu, Log In), footer; each nav button shows its page; a List's row fills the Form.
-- [ ] Theme menu (in the toolbar): Light / Dark / System switch the window's appearance; the nav bar is dark blue, darker in Dark.
+- [ ] Theme menu (in the toolbar, after a separator, no label under it): Light / Dark / System switch the window's appearance; the nav bar is dark blue, darker in Dark; quit and open: the app opens in the theme chosen.
+- [ ] Footer: the navigator centred; under it, the copyright centred in its strip, centred again as the window resizes and in full screen.
 - [ ] The working area is a grey backdrop (near-black in Dark); the Form and the List sit on rounded cards, white (a
       lifted grey in Dark), with margins around and between them.
 - [ ] Resize: the nav bar keeps its width; header and footer stretch; the Form's fields and the List's columns spread

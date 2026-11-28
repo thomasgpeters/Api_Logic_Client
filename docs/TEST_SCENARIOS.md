@@ -175,7 +175,7 @@ Purpose: Regenerating never overwrites the files that are yours.
 ### G-01 The app's frame
 Purpose: Navigation bar, header, footer.
 1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a toolbar with Search, New, Save, Delete, Refresh; a footer with the copyright at its left and the record navigator in the middle (four icons round the record's number).
-2. Use the theme menu at the right of the toolbar: Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both. The header is slim: the app's icon, name and tag-line.
+2. Use the theme menu at the right of the toolbar (after a separator, with no label under it): Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both. The header is slim: the app's icon, name and tag-line. Quit and open the app again -> it opens in the theme you chose. The footer: the record navigator centred, and under it the copyright centred in its own strip.
 3. Click the green button (full screen), then Escape or the green button again. -> The app fills the screen: the List grows, the Form's fields and the List's columns widen, the navigator's pills spread across the footer; back to a window, everything returns.
 4. Click each navigation button. -> Each page shows its List card above its Form card, both filling the width.
 
