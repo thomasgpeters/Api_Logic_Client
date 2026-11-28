@@ -8,7 +8,7 @@ It's free and MIT licensed: use it in free or commercial apps, change it, share 
 
 ## Start small
 
-The quickest way in is the one-file demo. Download `SQL-Generator-Module.zip` (the module's four files and
+The quickest way in is the one-file demo. Download `SQL-Generator-Module-<date>.zip` (the module's four files and
 the demo), or take the same files from this folder:
 
 1. Keep the files together in one folder.

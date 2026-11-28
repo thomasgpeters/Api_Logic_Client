@@ -13,7 +13,9 @@ repository already holds, so the site and the apps never disagree:
     /samples/, /samples/<name>/   the sample applications: their READMEs, their downloads
     /app-builder/             App Builder: Lite and Professional, registration on the Imagery License Server
     /app-builder/editions.html  the editions compared, feature by feature (EDITION_FEATURES), each with its status
-    /downloads/*.zip          each module's example app (MIT), each sample; the SQL Generator's module alone with a one-file demo
+    /downloads/*.zip          each module's example app (MIT), each sample; the SQL Generator's module alone with a one-file demo;
+                              named for what they are and dated: <what>-<purpose>-<YYYY-MM-DD>.zip, the date of the last
+                              commit that changed its folder (released())
     /downloads/Test-Scenario-Guide.pdf   the test scenario guide (docs/TEST_SCENARIOS.pdf)
 Published (2026-11-28) by GitHub Pages from the repository thomasgpeters/imagery-fb-site, at
 https://thomasgpeters.github.io/imagery-fb-site/ until the fb.imagery-business-systems.com name points there: build
@@ -26,6 +28,7 @@ import urllib.parse
 import os
 import re
 import shutil
+import subprocess
 import sys
 import time
 import zipfile
@@ -36,9 +39,9 @@ SITE_URL = 'https://fb.imagery-business-systems.com/'
 YEAR = '2026'
 
 MODULES = [
-    {'slug': 'sql-generator', 'name': 'SQL Generator', 'folder': 'src/SQLGeneratorExample', 'zip': 'SQL-Generator-Example.zip',
+    {'slug': 'sql-generator', 'name': 'SQL Generator', 'folder': 'src/SQLGeneratorExample', 'zip': 'SQL-Generator-Example-App',
      # the gentle start (author, 2026-11-27): the module's four files and the one-file demo, nothing more
-     'small_zip': 'SQL-Generator-Module.zip',
+     'small_zip': 'SQL-Generator-Module',
      'small_files': ['DataObject.glbl', 'DataObject_Super.incl', 'DataObject.incl', 'SQL Generator SQLite.incl',
                      'SQL Generator - Smallest Program.fb', 'LICENSE'],
      'small_readme': 'SQL Generator for FutureBasic\n\n'
@@ -53,11 +56,11 @@ MODULES = [
                      'MIT License. See LICENSE.\n',
      'blurb': 'Describe a SELECT, INSERT, UPDATE or DELETE as a dictionary (its tables, columns, filters and joins) and get safe, '
               'parameterized SQL for SQLite. Names are quoted for you, and every value is bound rather than pasted into the SQL.'},
-    {'slug': 'logicbank', 'name': 'LogicBank for FutureBasic', 'folder': 'src/LogicBankExample', 'zip': 'LogicBank-for-FutureBasic-Example.zip',
+    {'slug': 'logicbank', 'name': 'LogicBank for FutureBasic', 'folder': 'src/LogicBankExample', 'zip': 'LogicBank-for-FutureBasic-Example-App',
      'blurb': 'Your business logic, looked after in one place. Sums, counts, formulas, copies, constraints and delete actions are '
               'declared once and enforced on every save. It works like your bank: what you put in, you can take out, and the arithmetic is done for you.'},
-    {'slug': 'web-toolkit', 'name': 'Web Toolkit for FutureBasic', 'folder': 'src/WebToolkit', 'zip': 'Web-Toolkit-for-FutureBasic.zip',
-     'example': 'src/WebToolkitExample', 'example_zip': 'Web-Toolkit-Orders-Example.zip',
+    {'slug': 'web-toolkit', 'name': 'Web Toolkit for FutureBasic', 'folder': 'src/WebToolkit', 'zip': 'Web-Toolkit-Module',
+     'example': 'src/WebToolkitExample', 'example_zip': 'Web-Toolkit-Orders-Example-App',
      'blurb': 'Web applications written in FutureBasic, with widgets, events answered in the background (AJAX), a page lifecycle, '
               'and pages you can lay out in XIB files with the Layout Tool. Your business logic runs in FB, on the server, behind nginx.'},
 ]
@@ -310,6 +313,32 @@ def write(out, rel, text):
         f.write(text)
 
 
+def released(path):
+    """a download's release date (YYYY-MM-DD): the last commit that changed its folder, so the name changes only when
+    the contents do; today when git has no answer (a folder not committed yet)"""
+    try:
+        day = subprocess.run(['git', '-C', ROOT, 'log', '-1', '--format=%cs', '--', path],
+                             capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        day = ''
+    return day or time.strftime('%Y-%m-%d')
+
+
+def with_dates(m):
+    """a module's downloads named for what they are and dated: SQL-Generator-Module-2026-11-28.zip"""
+    m = dict(m)
+    day = released(m['folder'])
+    m['zip_top'] = m['zip']                      # the folder inside each zip: named as the zip, without the date
+    m['zip'] = f'{m["zip"]}-{day}.zip'
+    if m.get('example'):
+        m['example_top'] = m['example_zip']
+        m['example_zip'] = f'{m["example_zip"]}-{released(m["example"])}.zip'
+    if m.get('small_zip'):
+        m['small_top'] = m['small_zip']
+        m['small_zip'] = f'{m["small_zip"]}-{day}.zip'
+    return m
+
+
 def zip_folder(folder, zip_path, top):
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as z:
         for base, dirs, files in os.walk(folder):
@@ -357,24 +386,25 @@ def build(out):
                 os.remove(path)
     os.makedirs(os.path.join(out, 'images'))
     os.makedirs(os.path.join(out, 'downloads'))
+    modules = [with_dates(m) for m in MODULES]
     write(out, 'styles.css', CSS)
     for logo in ('imagery_logo.png', 'imagery_logo_white.png'):
         shutil.copy(os.path.join(ROOT, 'src', 'Shared', logo), os.path.join(out, 'images', logo))
 
-    # the modules: README, download, Help
-    for m in MODULES:
+    # the modules: README, download, Help. Each download: what it is, then its release date (released()).
+    for m in modules:
         folder = os.path.join(ROOT, m['folder'])
-        zip_folder(folder, os.path.join(out, 'downloads', m['zip']), os.path.basename(m['folder']))
+        zip_folder(folder, os.path.join(out, 'downloads', m['zip']), m['zip_top'])
         readme = open(os.path.join(folder, 'README.md'), encoding='utf-8').read()
         if m.get('example'):
             # a module with its example apart: the module (its template and tools), and the example
-            zip_folder(os.path.join(ROOT, m['example']), os.path.join(out, 'downloads', m['example_zip']), os.path.basename(m['example']))
+            zip_folder(os.path.join(ROOT, m['example']), os.path.join(out, 'downloads', m['example_zip']), m['example_top'])
             buttons = (f'<p><a class="button" href="../downloads/{m["zip"]}">Download the module (zip)</a>'
                        f'<a class="button secondary" href="../downloads/{m["example_zip"]}">Download the example (zip)</a>'
                        f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>')
         elif m.get('small_zip'):
             # the small download first: the module and a one-file demo; the example app for later
-            zip_files(folder, m['small_files'], os.path.join(out, 'downloads', m['small_zip']), m['small_zip'][:-4], m.get('small_readme'))
+            zip_files(folder, m['small_files'], os.path.join(out, 'downloads', m['small_zip']), m['small_top'], m.get('small_readme'))
             buttons = (f'<p><a class="button" href="../downloads/{m["small_zip"]}">Download the module and a one-file demo (zip)</a>'
                        f'<a class="button secondary" href="../downloads/{m["zip"]}">Download the example app (zip)</a>'
                        f'<a class="button secondary" href="../help/{m["slug"]}/index.html">Read the user guide</a></p>'
@@ -392,14 +422,14 @@ def build(out):
                 shutil.copy(os.path.join(folder, f), os.path.join(help_dir, f))
         guide = open(os.path.join(folder, 'User Guide.txt'), encoding='utf-8').read()
         write(out, f'help/{m["slug"]}/index.html',
-              page(m['name'] + ': User Guide', guide_to_html(guide, '') + f'\n<p><a class="button" href="../../downloads/{m["zip"]}">Download the example (zip)</a></p>', 2))
+              page(m['name'] + ': User Guide', guide_to_html(guide, '') + f'\n<p><a class="button" href="../../downloads/{m["zip"]}">Download (zip)</a></p>', 2))
 
     # the samples
     cards = []
     for name, blurb in SAMPLES:
         folder = os.path.join(ROOT, 'samples', name)
-        zip_name = f'{name}-Sample.zip'
-        zip_folder(folder, os.path.join(out, 'downloads', zip_name), name)
+        zip_name = f'{name}-Sample-{released(os.path.join("samples", name))}.zip'
+        zip_folder(folder, os.path.join(out, 'downloads', zip_name), f'{name}-Sample')
         readme = open(os.path.join(folder, 'README.md'), encoding='utf-8').read()
         body = after_title(markdown_to_html(readme), f'<p><a class="button" href="../../downloads/{zip_name}">Download the sample (zip)</a></p>')
         write(out, f'samples/{name.lower()}/index.html', page(name + ' sample', body, 2, blurb))
@@ -467,7 +497,7 @@ designed, not yet built. A Lite project moves to Professional with its rules unc
     # the home page
     module_cards = ''.join(f'<div class="card"><span class="tag">free &middot; MIT</span><h3><a href="{m["slug"]}/index.html">{esc(m["name"])}</a></h3>'
                            f'<p>{esc(m["blurb"])}</p><p><a href="downloads/{m.get("small_zip", m["zip"])}">Download</a> &middot; <a href="help/{m["slug"]}/index.html">User guide</a></p></div>'
-                           for m in MODULES)
+                           for m in modules)
     write(out, 'index.html', page('FutureBasic tools', f"""<h1>Tools for FutureBasic programmers</h1>
 <p class="lead">We're Imagery Business Systems, and we make these for FutureBasic programmers on the Mac. There are three free
 modules for your own apps, sample applications that show them at work, and App Builder, which builds a whole app from your database.</p>

@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The site's downloads: named for what they are, with their release dates
+
+- The author: "the source code downloads should be simple zip files naming according to their purpose with release
+  dates." Each download is now `<what>-<purpose>-<YYYY-MM-DD>.zip` and unzips to one folder of the same name without
+  the date: `SQL-Generator-Module`, `SQL-Generator-Example-App`, `LogicBank-for-FutureBasic-Example-App`,
+  `Web-Toolkit-Module`, `Web-Toolkit-Orders-Example-App`, `<Name>-Sample`.
+- The date is the last commit that changed the download's folder (`released()` in `tools/make_site.py`, `git log -1
+  --format=%cs`): nobody keeps it by hand, it moves only when the contents do, and a rebuild of an unchanged site
+  gives the same names and bytes. The pages link the dated names; old files go at the next build.
+
 ## 2026-11-28 — The FutureBasic site on GitHub Pages
 
 - The author can't open the firewall for fb.imagery-business-systems.com today, and has GitHub Team: the site goes on
