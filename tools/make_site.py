@@ -15,6 +15,10 @@ repository already holds, so the site and the apps never disagree:
     /app-builder/editions.html  the editions compared, feature by feature (EDITION_FEATURES), each with its status
     /downloads/*.zip          each module's example app (MIT), each sample; the SQL Generator's module alone with a one-file demo
     /downloads/Test-Scenario-Guide.pdf   the test scenario guide (docs/TEST_SCENARIOS.pdf)
+Published (2026-11-28) by GitHub Pages from the repository thomasgpeters/imagery-fb-site, at
+https://thomasgpeters.github.io/imagery-fb-site/ until the fb.imagery-business-systems.com name points there: build
+into a clone of that repository (python3 tools/make_site.py ../imagery-fb-site/ - its README.md and .nojekyll are kept),
+commit, push; the author merges into its main, which Pages serves.
 Standard library only (no packages to install). Imagery's name and logos are not licensed for reuse.
 """
 import html
@@ -23,6 +27,7 @@ import os
 import re
 import shutil
 import sys
+import time
 import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -322,7 +327,11 @@ def zip_files(folder, names, zip_path, top, readme=None):
         for name in names:
             z.write(os.path.join(folder, name), os.path.join(top, name))
         if readme:
-            z.writestr(os.path.join(top, 'README.txt'), readme)
+            # dated as the newest file it goes with, not the build: an unchanged site rebuilds to the same bytes
+            newest = max(os.path.getmtime(os.path.join(folder, name)) for name in names)
+            info = zipfile.ZipInfo(os.path.join(top, 'README.txt'), time.localtime(newest)[:6])
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, readme)
 
 
 def licence_server():
@@ -332,9 +341,20 @@ def licence_server():
     return server + page_path
 
 
+# kept when the site is built into a clone of the repository that serves it (GitHub Pages)
+KEEP = {'.git', '.nojekyll', 'README.md', 'CNAME'}
+
+
 def build(out):
     if os.path.exists(out):
-        shutil.rmtree(out)
+        for name in os.listdir(out):
+            if name in KEEP:
+                continue
+            path = os.path.join(out, name)
+            if os.path.isdir(path) and not os.path.islink(path):
+                shutil.rmtree(path)
+            else:
+                os.remove(path)
     os.makedirs(os.path.join(out, 'images'))
     os.makedirs(os.path.join(out, 'downloads'))
     write(out, 'styles.css', CSS)

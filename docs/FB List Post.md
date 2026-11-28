@@ -5,7 +5,8 @@ It replaces the separate drafts (`src/SQLGeneratorExample/ANNOUNCEMENT.md`, `src
 stay as the longer text for each module's own page. Plain text, no attachments: the downloads are on the page the post
 links to (the list's storage fills up). The author's style: short, direct, the point first.
 
-Before sending: replace `[link]` with where the downloads are (see "Where the link points" below), and `[your name]`.
+Before sending: replace `[link]` with https://thomasgpeters.github.io/imagery-fb-site/ (once Pages is on and the address
+answers; see "Where the link points" below), and `[your name]`.
 
 ---
 
@@ -56,6 +57,9 @@ Questions welcome.
 ---
 
 ## Where the link points
+
+**Chosen (author, 2026-11-28): GitHub Pages,** from the repository `thomasgpeters/imagery-fb-site` (built by
+`tools/make_site.py`; how to republish: its header). The other options below are kept for the record.
 
 The plan is Imagery's FutureBasic site (`tools/make_site.py` builds it into `site/`: a page per module, the downloads,
 each module's help). Until it can be hosted, any of these works for the link, and the site can move later:

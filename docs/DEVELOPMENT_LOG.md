@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The FutureBasic site on GitHub Pages
+
+- The author can't open the firewall for fb.imagery-business-systems.com today, and has GitHub Team: the site goes on
+  GitHub Pages, from a new repository, `thomasgpeters/imagery-fb-site` (first commit 7d13652 there: the built site, a
+  README saying it is built from here and not edited there, `.nojekyll`). Address once Pages is on:
+  https://thomasgpeters.github.io/imagery-fb-site/; the custom name can point there later (a CNAME record).
+- Checked before publishing: every link relative (the site works under a sub-path), 154 links, none broken; no prices,
+  no toolbox files, no keys or private files in the zips.
+- `tools/make_site.py`: building into a clone of the site repository used to delete the folder first, `.git` too; it
+  now keeps `.git`, `.nojekyll`, `README.md` and `CNAME`. Its zips' generated `README.txt` was dated at build time, so
+  every rebuild changed a download; it is dated as its newest file now, and two rebuilds give identical bytes.
+- `docs/FB List Post.md` names the address.
+
 ## 2026-11-28 — One post for the FutureBasic list, for all the free modules
 
 - The author: "a single post for all the mods so as to not tire the men." `docs/FB List Post.md`: the SQL Generator,
