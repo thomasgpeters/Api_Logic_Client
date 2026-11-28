@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Web Server Test passed on the Mac
+
+- The author ran `src/MacTests/Web Server Test.fb`: the page appears, Add One counts up without reloading, Greet shows
+  `<b>Bob</b>` as typed (escaped, not bold), and two tabs with fast clicking keep up. FB can serve a page and take its
+  clicks: the Web Toolkit's feasibility question is answered yes.
+- The FastCGI Test's instructions assumed `/opt/homebrew/etc/nginx/servers/` exists: it only does once Homebrew's nginx
+  is installed, and on an Intel Mac it is under `/usr/local`. The docs and the conf's header now say
+  `$(brew --prefix)/etc/nginx/servers/`, after `brew install nginx`.
+
 ## 2026-11-28 — Web Toolkit: fastcgi_params beside nginx.conf
 
 - Before the author's Mac run of the web tests: the Template's and the Orders example's `nginx.conf` include
