@@ -38,7 +38,8 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 - `tools/make_site.py`: building into a clone of the site repository used to delete the folder first, `.git` too; it
   now keeps `.git`, `.nojekyll`, `README.md` and `CNAME`. Its zips' generated `README.txt` was dated at build time, so
   every rebuild changed a download; it is dated as its newest file now, and two rebuilds give identical bytes.
-- `docs/FB List Post.md` names the address.
+- `docs/FB List Post.md` names the address. **Live** (author, 2026-11-28): Pages serves `main` of `imagery-fb-site`;
+  the post's link is filled in.
 
 ## 2026-11-28 — One post for the FutureBasic list, for all the free modules
 

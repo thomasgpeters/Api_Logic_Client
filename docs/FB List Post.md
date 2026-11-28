@@ -5,8 +5,7 @@ It replaces the separate drafts (`src/SQLGeneratorExample/ANNOUNCEMENT.md`, `src
 stay as the longer text for each module's own page. Plain text, no attachments: the downloads are on the page the post
 links to (the list's storage fills up). The author's style: short, direct, the point first.
 
-Before sending: replace `[link]` with https://thomasgpeters.github.io/imagery-fb-site/ (once Pages is on and the address
-answers; see "Where the link points" below), and `[your name]`.
+Before sending: replace `[your name]`. The link is live (author, 2026-11-28).
 
 ---
 
@@ -48,7 +47,7 @@ fn WebOn( session, @"greet", @"clicked", @fn GreetClicked )
 The example is customers, orders and items, running the business rules from no. 2 on every save.
 This one is early; I'd like to hear what you would build with it.
 
-Everything is here, no attachments: [link]
+Everything is here, no attachments: https://thomasgpeters.github.io/imagery-fb-site/
 
 Questions welcome.
 

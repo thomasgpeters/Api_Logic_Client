@@ -20,7 +20,7 @@ repository already holds, so the site and the apps never disagree:
 Published (2026-11-28) by GitHub Pages from the repository thomasgpeters/imagery-fb-site, at
 https://thomasgpeters.github.io/imagery-fb-site/ until the fb.imagery-business-systems.com name points there: build
 into a clone of that repository (python3 tools/make_site.py ../imagery-fb-site/ - its README.md and .nojekyll are kept),
-commit, push; the author merges into its main, which Pages serves.
+commit, push to the working branch; the author merges into its main, which Pages serves (live since 2026-11-28).
 Standard library only (no packages to install). Imagery's name and logos are not licensed for reuse.
 """
 import html
