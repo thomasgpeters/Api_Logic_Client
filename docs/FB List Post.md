@@ -5,51 +5,45 @@ It replaces the separate drafts (`src/SQLGeneratorExample/ANNOUNCEMENT.md`, `src
 stay as the longer text for each module's own page. Plain text, no attachments: the downloads are on the page the post
 links to (the list's storage fills up). The author's style: short, direct, the point first.
 
-Before sending: replace `[your name]`. The link is live (author, 2026-11-28).
+Before sending: replace `[your name]`. The links are live (author, 2026-11-28). Rewritten on the author's theme
+(2026-11-28): back on the list after a long silence, three open source contributions, each with a short description and its
+page.
 
 ---
 
-**Subject:** Three free modules for FB: SQL, business rules, web apps
+**Subject:** Three open source modules for FB: SQL Generator, LogicBank, Web Toolkit
 
 Hi all,
 
-Sorry I've been quiet. I've been building some things for FB 7, and I'd like to share three of them.
-All free, MIT licence, each with a small example app.
+Although I have remained silent on the list for a long time, I still follow what's going on, and I realize that my
+participation has been lacking and my contributions few. I'd like to turn that around, so I've packaged up some
+of what I've been working on and made it available as my open source contribution.
 
-**1. SQL Generator.** You describe the query, it writes the SQL:
+Three items are available now, each with a sample app that shows what it does:
 
-```
-query = fn InitQueryDictionary
-fn AddTableToQuery( query, @"person", @"p" )
-fn AddColumnToQuery( query, @"p.surName", @"Surname" )
-fn AddFilterToQuery( query, @"p", @"balance", fn NumberWithDouble( 100.0 ), _realType, 0, _isGreaterThan, 0 )
-sql = fn GenerateSelectSQL( query )
-```
+1. SQL Generator for SQLite
+   Describe a query as a dictionary (its tables, columns, filters and joins) and it writes the SQL for you:
+   SELECT, INSERT, UPDATE and DELETE, with names quoted and every value bound rather than pasted in. Start with
+   the one-file demo, about 40 lines; the sample app has ten more examples.
+   https://thomasgpeters.github.io/imagery-fb-site/sql-generator/
 
-gives `SELECT "p"."surName" AS "Surname" FROM "person" AS "p" WHERE "p"."balance" > ?`.
-Start with the one-file demo (about 40 lines).
+2. LogicBank for FutureBasic
+   Business rules, declared once and kept on every save: an order's total is the sum of its items, a customer's
+   balance never goes over the credit limit. A save that would break a rule is refused and rolled back, with a
+   message you can show. Your rules are FB functions. The sample walks through an order step by step.
+   https://thomasgpeters.github.io/imagery-fb-site/logicbank/
 
-**2. LogicBank for FutureBasic.** Business rules, declared once and kept on every save: an order's total
-is the sum of its items, a customer's balance never goes over the credit limit. A save that would break
-a rule is refused and rolled back, with a message to show. Your rules are FB functions. The example walks
-through an order step by step.
+3. Web Toolkit for FutureBasic
+   Web apps written in FB. The page is built in FB, and every click is answered by your FB code on the server,
+   in the background, without reloading the page. nginx (free) sits in front and talks to the browsers. The
+   sample is customers, orders and items, running LogicBank's rules on every save. This one is early, and I'd
+   like to hear what you would build with it.
+   https://thomasgpeters.github.io/imagery-fb-site/web-toolkit/
 
-**3. Web Toolkit for FutureBasic** (a working name). Web apps written in FB: the page is built in FB, and
-every click is answered by your FB code on the server, in the background, without reloading the page.
-nginx (free) sits in front and talks to the browsers. A page is a few lines:
+All three are free, MIT licence, and need no registration. Everything is on the site, no attachments:
+https://thomasgpeters.github.io/imagery-fb-site/
 
-```
-fn WebField( session, @"page", @"visitorName", @"Your name", @"text", @"" )
-fn WebButton( session, @"page", @"greet", @"Greet", @"primary" )
-fn WebOn( session, @"greet", @"clicked", @fn GreetClicked )
-```
-
-The example is customers, orders and items, running the business rules from no. 2 on every save.
-This one is early; I'd like to hear what you would build with it.
-
-Everything is here, no attachments: https://thomasgpeters.github.io/imagery-fb-site/
-
-Questions welcome.
+Questions and suggestions welcome.
 
 [your name]
 

@@ -499,8 +499,9 @@ designed, not yet built. A Lite project moves to Professional with its rules unc
                            f'<p>{esc(m["blurb"])}</p><p><a href="downloads/{m.get("small_zip", m["zip"])}">Download</a> &middot; <a href="help/{m["slug"]}/index.html">User guide</a></p></div>'
                            for m in modules)
     write(out, 'index.html', page('FutureBasic tools', f"""<h1>Tools for FutureBasic programmers</h1>
-<p class="lead">We're Imagery Business Systems, and we make these for FutureBasic programmers on the Mac. There are three free
-modules for your own apps, sample applications that show them at work, and App Builder, which builds a whole app from your database.</p>
+<p class="lead">Thomas Peters has spun up a new startup business, Imagery Business Systems, LLC, now developing business applications
+across a variety of fields, including Transportation Fleet Management, Education and Big Truck Service Center Management. As this
+work has evolved, I find myself falling back on FutureBasic more often than not.</p>
 <h2>Free modules</h2>
 <div class="cards">{module_cards}</div>
 <h2>App Builder for FutureBasic</h2>
