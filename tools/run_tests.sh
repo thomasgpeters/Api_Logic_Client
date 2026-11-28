@@ -90,6 +90,12 @@ logicbank_same() {
 }
 run "LogicBank for FutureBasic: the module, identical in the runtime and the example project" logicbank_same
 run "web: the FastCGI core (compiled here; behind nginx when it is installed)" python3 "$here/tools/check_fastcgi_core.py"
+if command -v nginx >/dev/null 2>&1; then
+    for d in "$here/src/WebToolkit/Template" "$here/src/WebToolkitExample"; do
+        t=$(mktemp -d); cp "$d/nginx.conf" "$d/fastcgi_params" "$t/"
+        run "Web Toolkit: $(basename "$d")'s nginx.conf loads as the docs say (nginx -c nginx.conf -p its folder)" nginx -t -q -c "$t/nginx.conf" -p "$t"
+    done
+fi
 web_same() {
     for d in "src/WebToolkit/Template" "src/WebToolkitExample"; do
         for f in "Web Server.incl" "Web Session.incl" "Web Widgets.incl" "Web Render.incl" "Web Events.incl" "Web Layout.incl" "Web Binding.incl"; do

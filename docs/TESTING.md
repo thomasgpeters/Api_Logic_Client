@@ -62,7 +62,8 @@ into a session when something fails.
 Here: `tools/web_toolkit_reference.py --test` (in `run_tests.sh`) drives `web.js` in headless Chromium against a Python
 reference of the protocol (30 checks); `--serve 8099` shows its page. On a Mac:
 1. Build `src/WebToolkitExample/WebToolkitExample.fbeproj` and run it.
-2. In that folder, `nginx -c "$PWD/nginx.conf" -p "$PWD"`, then open http://127.0.0.1:8088/.
+2. In that folder, `nginx -c "$PWD/nginx.conf" -p "$PWD"`, then open http://127.0.0.1:8088/. (The folder carries its
+   own `fastcgi_params`, which `nginx.conf` includes; `run_tests.sh` checks the config loads, `nginx -t`.)
 3. Report:
    - a customer's credit limit lowered below the balance: refused, with the message;
    - an item added: the total and the balance follow;

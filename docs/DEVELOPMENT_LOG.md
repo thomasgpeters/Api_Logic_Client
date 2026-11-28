@@ -6,6 +6,15 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Web Toolkit: fastcgi_params beside nginx.conf
+
+- Before the author's Mac run of the web tests: the Template's and the Orders example's `nginx.conf` include
+  `fastcgi_params` by a relative path, which nginx resolves against the config's own folder when started as the docs say
+  (`nginx -c "$PWD/nginx.conf" -p "$PWD"`) - and the folder had none: nginx would have refused to start (tried here:
+  "open() .../fastcgi_params failed"). Both folders now carry their own `fastcgi_params` (the CGI variables the toolkit
+  reads; request headers are passed by nginx anyway), and `run_tests.sh` runs `nginx -t` on both configs when nginx is
+  installed. The FastCGI Test's config was fine (it sits in Homebrew's servers folder, beside Homebrew's copy).
+
 ## 2026-11-28 — The Licence page; the Studio's frame (header across, black footer, raised cards)
 
 - **Author:** Licence... "can't find the view"; Licence... should show a read-only page with the licence (not the key)
