@@ -7,7 +7,7 @@ Copy this folder, rename `Web App.fbeproj` if you like, and write your page in `
 - the event functions, and the page's lifecycle (shown, hidden, visible, leaving, the session's end).
 
 The rest is the toolkit, the same in every app. `Server Window.incl` starts the FastCGI server on
-127.0.0.1:9000 and shows you what it's doing, and the app keeps serving after you close its window.
+127.0.0.1:9010 and shows you what it's doing, and the app keeps serving after you close its window.
 
 To run it, build in FutureBasic, start nginx (`nginx -c "$PWD/nginx.conf" -p "$PWD"`) and open
 http://127.0.0.1:8088/. On a server Mac, `com.example.webapp.plist` (a LaunchAgent) keeps it running; add

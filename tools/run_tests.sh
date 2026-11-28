@@ -95,6 +95,8 @@ if command -v nginx >/dev/null 2>&1; then
         t=$(mktemp -d); cp "$d/nginx.conf" "$d/fastcgi_params" "$t/"
         run "Web Toolkit: $(basename "$d")'s nginx.conf loads as the docs say (nginx -c nginx.conf -p its folder)" nginx -t -q -c "$t/nginx.conf" -p "$t"
     done
+    t=$(mktemp -d); cp "$here/src/MacTests/FastCGI Test nginx.conf" "$here/src/MacTests/fastcgi_params" "$t/"
+    run "FastCGI Test: its nginx.conf loads as the docs say (run from src/MacTests)" nginx -t -q -c "$t/FastCGI Test nginx.conf" -p "$t"
 fi
 web_same() {
     for d in "src/WebToolkit/Template" "src/WebToolkitExample"; do

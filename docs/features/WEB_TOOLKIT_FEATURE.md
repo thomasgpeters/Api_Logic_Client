@@ -29,7 +29,7 @@ application menu). The template's `Pages.incl` gained three small functions for 
 ## How it works
 
 ```
-Browser ──HTTPS──> nginx ──FastCGI──> the FB app (long-running, 127.0.0.1:9000)
+Browser ──HTTPS──> nginx ──FastCGI──> the FB app (long-running, 127.0.0.1:9010)
   web.js: sends events (fetch, JSON),    Web Events.incl: the page, or an event -> the app's FB function
   applies the updates in place           Web Widgets / Render: what changed, as updates (or HTML)
                                          Web Binding.incl (optional): forms and tables <-> LogicBank <-> data

@@ -7,3 +7,7 @@ build_temp_*/
 
 __pycache__/
 site/
+
+# nginx run from a folder (the FastCGI Test, the Web Toolkit's template and example)
+nginx.pid
+nginx-error.log

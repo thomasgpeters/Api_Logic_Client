@@ -6,6 +6,17 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Web Toolkit: FastCGI on 9010; the FastCGI Test runs from its folder
+
+- On the author's Mac, Apache (`httpd`) holds 8080 and PHP-FPM holds 127.0.0.1:9000 - both common with Homebrew PHP.
+  Homebrew's nginx loads its default site on 8080 (so it would not start beside Apache), and our FB programs listened
+  for FastCGI on 9000, PHP-FPM's port. The FastCGI port is now **9010** in the toolkit's template, the Orders example
+  and the FastCGI Test (the `.glbl` constants, `nginx.conf`, the docs).
+- `src/MacTests/FastCGI Test nginx.conf` is now a complete configuration run from its folder
+  (`nginx -c "$PWD/FastCGI Test nginx.conf" -p "$PWD"`) with its own `fastcgi_params`, the way the Orders example
+  runs: no Homebrew `servers/` folder, no default site. `run_tests.sh` checks it with `nginx -t`; `.gitignore` keeps
+  out the `nginx.pid` and `nginx-error.log` a run writes.
+
 ## 2026-11-28 — Web Server Test passed on the Mac
 
 - The author ran `src/MacTests/Web Server Test.fb`: the page appears, Add One counts up without reloading, Greet shows
