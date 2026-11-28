@@ -54,9 +54,14 @@ FB, and your own code lives in files that regeneration never touches.
 | A data model | a SQLite database file (`.sqlite`, `.db`, `.sqlite3`), or an API Logic Server project |
 | A licence | **Lite** is free: register on Imagery's App Builder page and enter the licence that comes by email. **Professional** adds API Logic Server projects and the rules exchange with Python. |
 
-Without a licence, App Builder opens and you can look around; generating asks for one. The
-licence lives in the App Builder menu: *Licence…*, *Enter Licence…*, *Upgrade to Professional…*,
-*Manage Licence Online…* and *Remove Licence…*. It is kept in your Keychain and checked on your Mac,
+Without a licence, App Builder opens on its **Licence** page and you can look around; generating asks
+for one. Getting one takes a minute: **Get the Free Lite Edition** opens the Imagery License Server, and
+your licence comes by email. Copy it from the email and come back: the page offers **Use the Licence on
+the Clipboard**, one click. (Or **Enter Licence…** and paste it.)
+
+*App Builder → Licence…* shows the page at any time: who the licence is for, the edition, the licence
+number, when it was issued and until when, and what it includes - never the key itself - with **Upgrade to
+Professional…** (Lite) and **Renew…**. The licence is kept in your Keychain and checked on your Mac,
 with no network needed. A command your licence does not include shows "(Professional)" after its
 title and explains when you choose it.
 
@@ -612,7 +617,7 @@ names it), and the Control popup needs an attribute selected in the table.
 
 | Menu | Command | Key | Needs |
 |---|---|---|---|
-| App Builder | Licence… · Enter Licence… · Upgrade to Professional… · Manage Licence Online… · Remove Licence… | | |
+| App Builder | Licence… (the Licence page: get, enter, upgrade, renew) | | |
 | Project | New Project… | ⌘N | |
 | | New Project from API Logic Server… | ⇧⌘N | Professional |
 | | Open Project… | ⌘O | |

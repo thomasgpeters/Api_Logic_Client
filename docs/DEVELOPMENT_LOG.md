@@ -6,6 +6,28 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The Licence page; the Studio's frame (header across, black footer, raised cards)
+
+- **Author:** Licence... "can't find the view"; Licence... should show a read-only page with the licence (not the key)
+  and the registered user, with buttons to upgrade or renew; the licence entered elsewhere, from a button; a link to the
+  Imagery License Server to get one; "simple, not too many menus" (Manage Licence Online folds into Renew); "less
+  resistance means more takers"; "Lite edition". Layout: the header across the whole window with the entity list and
+  the details below it; a black, low footer across the window with the copyright small and centred; Entity Details and
+  Settings as raised rounded cards, white in light mode, a step lighter than the window in dark mode.
+- **Licence** (`Licence Window.incl`, rewritten): the separate Licence window (FB tags in another window: the "View
+  does not exist") is gone. Licence... shows a page of the main window (`_licenceView`, contents in Cocoa:
+  `LicencePageBuild`) - with no licence: Get the Free Lite Edition (one big button), Use the Licence on the Clipboard
+  when the clipboard holds one that verifies, Enter Licence... (an NSAlert with a field, the clipboard's licence filled
+  in); with one: licensed to, account, edition, number, issued, valid until, what it includes (ticks and locks),
+  Upgrade to Professional (Lite), Renew, Enter Licence. The application menu keeps Licence... only. `LicenceGate`
+  without a licence offers Get the Free Lite Edition first. The page's button handler is a global set by `LicenceShow`
+  (the page and its handler call each other: FB needs each defined before use).
+- **Frame** (Windows.incl, Menus.incl, Branding.incl): the heading and the crumb trail start at the window's left and
+  no longer move with the entity list; the entity list starts under them (`StudioLayoutFrame`) and ends above the
+  footer; the footer is a black box, 22 points, "© 2026 Imagery Business Systems, LLC" in 10 pt, centred (the Welcome
+  card's own copyright line removed); the pages sit above it (`PageFrame`). `StudioRaisedCard`: a rounded box with a
+  soft shadow behind Entity Details and Settings, `StudioCardColor`. Not built yet on a Mac.
+
 ## 2026-11-28 — Crash fix: Licence... from the application menu
 
 - **Author:** the Studio crashed on Licence... (no crash report yet). Reading the code: every menu command ends with

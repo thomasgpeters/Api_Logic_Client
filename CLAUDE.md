@@ -31,7 +31,7 @@ mode work without extra code).
   - `XIB Generator.incl` — Form and List parts per entity; `Model Tags.incl`; model entries.
   - `Binding Generator.incl` — `<Entity> Binding.incl` (record ↔ Form, records → List).
   - `Studio Library.incl` — the runtime and templates in the workspace (`workspace/Runtime`, `workspace/Templates`): installed from the repository folder, updated from the Model menu; also `AppSupportFolderURL`.
-  - `Licence.incl` — the licence: ES256, verified offline (Security framework; its calls declared at the top of `Licence.incl` itself, since FB's `Tlbx Security.incl` is newer than the author's FB), kept in the Keychain, `LicenceAllows( feature )`; `Licence Window.incl` — the Licence menu and window, `LicenceGate` on licensed commands (`docs/features/LICENSING_FEATURE.md`). Test keys only here (`tools/licence_test_keys`).
+  - `Licence.incl` — the licence: ES256, verified offline (Security framework; its calls declared at the top of `Licence.incl` itself, since FB's `Tlbx Security.incl` is newer than the author's FB), kept in the Keychain, `LicenceAllows( feature )`; `Licence Window.incl` — the Licence page (a page of the Studio's window: who, edition, dates, what it includes; Get the Free Lite Edition, a licence taken from the clipboard in one click, Enter Licence…, Upgrade, Renew) and the one Licence… menu item, `LicenceGate` on licensed commands (`docs/features/LICENSING_FEATURE.md`). Test keys only here (`tools/licence_test_keys`).
   - `Edition.incl` — which edition the Studio generates: Professional when the licence includes it.
   - `App Generator.incl` — `AppGenerate`: Generate XIBs / XIB / Binding Code / App.
   - `Generate Progress.incl` — Generate App's progress sheet (the steps ticked, a bar, Done when finished).

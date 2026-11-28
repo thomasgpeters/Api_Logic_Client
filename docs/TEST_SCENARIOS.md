@@ -32,17 +32,21 @@ Before: The repository cloned on the Mac; FutureBasic 7 installed.
 ### A-02 No licence, then a Lite licence
 Purpose: The Studio runs without a licence, and accepts a Lite licence.
 Before: A test Lite licence: in the repository folder, python3 tools/licence_reference.py --issue lite tester@example.com "Test User"
-1. With no licence entered, open the App Builder menu, Licence... -> The Licence window says no licence is entered and offers Get a Free Lite Licence.
-2. Paste the test Lite licence into the field and enter it. -> The window shows the licence in words: who, Lite, until when, its features.
-3. Open the Project menu. -> New Project from API Logic Server... shows "(Professional)" after its title.
-4. Choose it. -> A message explains it is Professional and offers the upgrade.
+1. With no licence entered, open the App Builder menu, Licence... -> The Licence page, in the Studio's window across its width: one sentence on how to get a licence, a large Get the Free Lite Edition button, and Enter Licence...
+2. Click Get the Free Lite Edition. -> The browser opens the Imagery License Server's App Builder page.
+3. Copy the test Lite licence (select it, Command-C), come back to the Studio, open Licence... again. -> "A licence is on your clipboard"; the main button is Use the Licence on the Clipboard.
+4. Click it. -> "Thank you: App Builder Lite edition is licensed to ..."; the page shows who, Lite edition, the licence number, issued, valid until, and what it includes (Professional items locked) - never the key; Upgrade to Professional..., Renew..., Enter Licence...
+5. Open the Project menu. -> New Project from API Logic Server... shows "(Professional)" after its title.
+6. Choose it. -> A message explains it is Professional and offers the upgrade.
+7. App Builder menu. -> One licence item: Licence...
 
-### A-03 Professional licence, then remove it
-Purpose: A Professional licence opens everything; removing it is clean.
+### A-03 Professional licence
+Purpose: A Professional licence opens everything.
 Before: A test Professional licence: python3 tools/licence_reference.py --issue professional tester@example.com "Test User"
-1. Enter the Professional licence (App Builder menu, Enter Licence...). -> The window shows Professional; no command shows "(Professional)" any more.
-2. Quit and start the Studio again. -> The licence is still there (it is kept in the Keychain).
-3. App Builder menu, Remove Licence..., confirm, then quit and start again. -> No licence is entered; the Studio still opens.
+1. Licence..., Enter Licence... -> A small dialog with a paste field (filled in when the clipboard holds a licence).
+2. Paste the Professional licence, Enter. -> The page shows Professional edition, every feature included; no Upgrade button; no command shows "(Professional)" any more.
+3. Quit and start the Studio again. -> The licence is still there (it is kept in the Keychain).
+4. Click Renew... -> The browser opens the account page on the Imagery License Server.
 
 ## B. Studio for FB: projects
 
