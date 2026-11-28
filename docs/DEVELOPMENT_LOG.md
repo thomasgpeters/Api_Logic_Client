@@ -6,6 +6,19 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The generated app: CUSTOMIZE: marks where developers change it
+
+- The author: "COMMENTS in the various places within code for developers to understand where they can customize the
+  generated app". One searchable word, `CUSTOMIZE:`, at each place meant for the developer's code: the templates that
+  become theirs (`App Globals.glbl`: logging, globals and keeping them alive; `EventHandlers.incl`: app events, menus,
+  sign-in, a generated control's behaviour before the pages see it, their own controls and free tag ranges;
+  `Menus.incl`; `Rules.incl`; `Theme.incl`, each group of colours) and the generated `Windows.incl` (another theme,
+  their own pages, the first page). Each file's header says to search for it.
+- `App Pages.incl` (overwritten) says not to edit it and where each thing it holds is changed instead (Entity
+  Definitions, Project Settings, EventHandlers, Theme, Rules, Windows / Menus). The README has a *Where to customize*
+  table. Theme.incl and Windows.incl no longer place the theme menu in the header (it is in the toolbar).
+- The templates are written only when missing: existing apps keep their copies.
+
 ## 2026-11-28 — The Pages view (page designer 2b); the splitter moves the List and the Form again
 
 - **The Pages view** (`src/AppBuilder/Page Designer.incl`, Project > Pages, command-3, Professional): a page of the

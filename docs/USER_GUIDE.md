@@ -260,6 +260,13 @@ Then open **`FBapp/<name>.fbeproj`** in FutureBasic and build it. The project is
 `README.md` in `FBapp/` is a developer's tour of the generated project, file by file, and every
 generated file starts with a comment saying what it does and whether it is regenerated.
 
+**Where to customize.** In FutureBasic, search the project for **`CUSTOMIZE:`**: every place meant for your own code
+is marked, in the files that are yours - what a control or a menu does (`EventHandlers.incl`), the colours
+(`Theme.incl`), your rules (`Rules.incl`), your own pages, menus and globals. The README's *Where to customize* table
+lists them, and `App Pages.incl` says where each thing it holds is changed instead (most in the Studio). The files
+that are yours are written only when missing: an app generated before 2026-11-28 gets the markers when you delete a
+file and generate again.
+
 ### 8.1 The app's look
 
 Every generated app has the same frame (`App Shell.incl`):
