@@ -18,12 +18,20 @@ Status: built here (2026-11-26); not yet built on a Mac. The License Server's si
     |---|---|---|
     | Lite | `0x0003` | core, AI |
     | Professional | `0x01FF` | Lite's, plus ALS projects, the Professional runtime, rules exchange, integration, authorization, governance, genai-logic |
-- **The Licence window and menu:** `src/AppBuilder/Licence Window.incl`.
-  - The App Builder menu, after About: Licence…, Enter Licence…, Upgrade to Professional…, Manage Licence Online…,
-    Remove Licence….
-  - The window shows the licence in words (who, the edition, until when, each feature ticked or "Professional"). It
-    has a field to paste a licence, Get a Free Lite Licence, Upgrade, Manage Online, Remove and Close.
-  - At launch, without a valid licence, the window opens.
+- **The Licence page and menu** (author, 2026-11-28: simple, few menus, as little resistance as possible to getting a
+  licence): `src/AppBuilder/Licence Window.incl`.
+  - The App Builder menu, after About: **Licence…** only.
+  - The **Licence page** is a page of the Studio's window (across its width; crumb *Projects / Licence*), information
+    and buttons, built in Cocoa (`LicencePageBuild`: a raised card, a grid of rows, what the licence includes with a
+    tick or a lock, the buttons). Never the key.
+  - Without a licence: one sentence and one large **Get the Free Lite Edition** (the License Server's App Builder
+    page; the licence comes by email). When the clipboard holds a licence that verifies (`LicenceOnClipboard`), the
+    main button is **Use the Licence on the Clipboard** - one click. **Enter Licence…** opens a small dialog
+    (`LicenceAskForKey`, an NSAlert with a field) with the clipboard's licence filled in.
+  - With a licence: licensed to, account, edition, licence number, issued, valid until, what it includes;
+    **Upgrade to Professional…** (Lite), **Renew…** (the account page, which also manages the licence online),
+    Enter Licence….
+  - At launch, without a valid licence, the page opens. Removing a licence is no longer a menu command.
 - **The gates:** `fn LicenceGate( feature, what )`:
   - New Project from API Logic Server… (menu and the New Project view's button), Open API Logic Server Metadata…:
     ALS projects;
@@ -31,7 +39,8 @@ Status: built here (2026-11-26); not yet built on a Mac. The License Server's si
   - Generate App / XIBs / XIB / Binding (menu and toolbar): core, so nothing is generated without a licence.
 
   A locked command stays in its menu with "(Professional)" after its title. Choosing it explains, and offers the
-  upgrade (or the Licence window, without a licence). `Edition.incl`'s `EditionProfessionalAvailable` is the licence's
+  upgrade; without a licence, its first button is Get the Free Lite Edition (one click to the License Server), its second
+  the Licence page. `Edition.incl`'s `EditionProfessionalAvailable` is the licence's
   Professional runtime bit.
 - **The License Server's pages:** `LICENCE_SERVER` + `/appbuilder`, `/appbuilder/upgrade?lic=…`, `/account`. The
   address (`https://license.imagery.com`, from the License Server's documents) is to confirm before release.

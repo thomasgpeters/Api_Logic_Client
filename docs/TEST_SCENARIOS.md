@@ -32,17 +32,21 @@ Before: The repository cloned on the Mac; FutureBasic 7 installed.
 ### A-02 No licence, then a Lite licence
 Purpose: The Studio runs without a licence, and accepts a Lite licence.
 Before: A test Lite licence: in the repository folder, python3 tools/licence_reference.py --issue lite tester@example.com "Test User"
-1. With no licence entered, open the App Builder menu, Licence... -> The Licence window says no licence is entered and offers Get a Free Lite Licence.
-2. Paste the test Lite licence into the field and enter it. -> The window shows the licence in words: who, Lite, until when, its features.
-3. Open the Project menu. -> New Project from API Logic Server... shows "(Professional)" after its title.
-4. Choose it. -> A message explains it is Professional and offers the upgrade.
+1. With no licence entered, open the App Builder menu, Licence... -> The Licence page, in the Studio's window across its width: one sentence on how to get a licence, a large Get the Free Lite Edition button, and Enter Licence...
+2. Click Get the Free Lite Edition. -> The browser opens the Imagery License Server's App Builder page.
+3. Copy the test Lite licence (select it, Command-C), come back to the Studio, open Licence... again. -> "A licence is on your clipboard"; the main button is Use the Licence on the Clipboard.
+4. Click it. -> "Thank you: App Builder Lite edition is licensed to ..."; the page shows who, Lite edition, the licence number, issued, valid until, and what it includes (Professional items locked) - never the key; Upgrade to Professional..., Renew..., Enter Licence...
+5. Open the Project menu. -> New Project from API Logic Server... shows "(Professional)" after its title.
+6. Choose it. -> A message explains it is Professional and offers the upgrade.
+7. App Builder menu. -> One licence item: Licence...
 
-### A-03 Professional licence, then remove it
-Purpose: A Professional licence opens everything; removing it is clean.
+### A-03 Professional licence
+Purpose: A Professional licence opens everything.
 Before: A test Professional licence: python3 tools/licence_reference.py --issue professional tester@example.com "Test User"
-1. Enter the Professional licence (App Builder menu, Enter Licence...). -> The window shows Professional; no command shows "(Professional)" any more.
-2. Quit and start the Studio again. -> The licence is still there (it is kept in the Keychain).
-3. App Builder menu, Remove Licence..., confirm, then quit and start again. -> No licence is entered; the Studio still opens.
+1. Licence..., Enter Licence... -> A small dialog with a paste field (filled in when the clipboard holds a licence).
+2. Paste the Professional licence, Enter. -> The page shows Professional edition, every feature included; no Upgrade button; no command shows "(Professional)" any more.
+3. Quit and start the Studio again. -> The licence is still there (it is kept in the Keychain).
+4. Click Renew... -> The browser opens the account page on the Imagery License Server.
 
 ## B. Studio for FB: projects
 
@@ -170,7 +174,7 @@ Purpose: Regenerating never overwrites the files that are yours.
 
 ### G-01 The app's frame
 Purpose: Navigation bar, header, footer.
-1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a toolbar with Search, New, Save, Delete, Refresh; a footer with the copyright at its left and the record navigator across the rest (First, Previous, the record's number, Next, Last as pill buttons sharing the width).
+1. Look at the window. -> A dark blue navigation bar with a button and an icon per entity; a header with the app icon, the app's name centred on it and the tag-line under it; a toolbar with Search, New, Save, Delete, Refresh; a footer with the copyright at its left and the record navigator in the middle (four icons round the record's number).
 2. Use the theme menu at the right of the toolbar: Light, Dark, System. -> The whole app follows; in dark mode the navigation bar is darker; the cards stand apart from the area behind them in both. The header is slim: the app's icon, name and tag-line.
 3. Click the green button (full screen), then Escape or the green button again. -> The app fills the screen: the List grows, the Form's fields and the List's columns widen, the navigator's pills spread across the footer; back to a window, everything returns.
 4. Click each navigation button. -> Each page shows its List card above its Form card, both filling the width.
@@ -188,10 +192,20 @@ Before: The full Northwind database (about twenty tables), Generate App.
 2. Scroll the bar (two fingers or the wheel). -> The buttons scroll; a thin scroller shows while scrolling.
 3. Make the window short, then click the last button. -> Its page shows, and the bar scrolls to keep its button in view.
 
+### G-01c The splitter between the List and the Form
+Purpose: The height shared by dragging.
+1. Point at the gap between the List card and the Details card. -> The cursor shows the up-and-down arrows; a short grip line marks the middle.
+2. Drag it up. -> The Details card grows, the List card shrinks; the List still shows at least a few rows when dragged all the way.
+3. Drag it down. -> The List grows; the Details card keeps at least its title and first fields.
+4. Switch to tiles, drag again. -> The tiles area follows the List card.
+5. Resize the window, go full screen. -> The divider stays between the cards.
+6. Go to another page. -> Its own divider, at its own place; back again: as you left it.
+7. Drag the divider on two pages to different places, quit the app and open it again. -> Each page's divider is where you left it.
+
 ### G-02a The record navigator
 Purpose: A page opens on its first record, and the footer moves through them.
-1. Open the app, click Customers. -> The first customer is selected in the List (the List has the focus) and shown in the Form; the footer reads "Customer 1 of 91" (your count) between the pill buttons; First and Previous are dimmed (faded).
-2. Make the window wider and narrower. -> The five cells of the navigator share the footer's width and stretch with it; the copyright stays at the left.
+1. Open the app, click Customers. -> The first customer is selected in the List (the List has the focus) and shown in the Form; the footer reads "Customer 1 of 91" (your count) between four icons (circled arrows, no words), centred; First and Previous are dimmed.
+2. Make the window wider and narrower. -> The navigator stays in the middle of the footer; the copyright stays at the left.
 3. Click Next three times. -> "Customer 4 of 91"; the List's selection and the Form follow; First and Previous are on.
 4. Click Last. -> The last customer; Next and Last are dimmed.
 5. Press the up arrow key. -> The one before it; the footer follows.

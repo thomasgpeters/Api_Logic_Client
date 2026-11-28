@@ -7,7 +7,7 @@ It's a free, open-source module (MIT) from Imagery Business Systems. With the mo
 ```
 Browser --HTTPS--> nginx --FastCGI--> your FB app (the Web Toolkit)
 ```
-- **nginx** (free) talks HTTP and HTTPS to the browsers, and FastCGI to your app on 127.0.0.1:9000.
+- **nginx** (free) talks HTTP and HTTPS to the browsers, and FastCGI to your app on 127.0.0.1:9010.
 - **Your app** is an FB program that keeps running: a session for each visitor, the widgets of each session's page, and your event functions.
 - **web.js and web.css** are the browser's half. They send the events, apply the changes and hold the themes.
 

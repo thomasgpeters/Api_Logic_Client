@@ -54,9 +54,14 @@ FB, and your own code lives in files that regeneration never touches.
 | A data model | a SQLite database file (`.sqlite`, `.db`, `.sqlite3`), or an API Logic Server project |
 | A licence | **Lite** is free: register on Imagery's App Builder page and enter the licence that comes by email. **Professional** adds API Logic Server projects and the rules exchange with Python. |
 
-Without a licence, App Builder opens and you can look around; generating asks for one. The
-licence lives in the App Builder menu: *Licence…*, *Enter Licence…*, *Upgrade to Professional…*,
-*Manage Licence Online…* and *Remove Licence…*. It is kept in your Keychain and checked on your Mac,
+Without a licence, App Builder opens on its **Licence** page and you can look around; generating asks
+for one. Getting one takes a minute: **Get the Free Lite Edition** opens the Imagery License Server, and
+your licence comes by email. Copy it from the email and come back: the page offers **Use the Licence on
+the Clipboard**, one click. (Or **Enter Licence…** and paste it.)
+
+*App Builder → Licence…* shows the page at any time: who the licence is for, the edition, the licence
+number, when it was issued and until when, and what it includes - never the key itself - with **Upgrade to
+Professional…** (Lite) and **Renew…**. The licence is kept in your Keychain and checked on your Mac,
 with no network needed. A command your licence does not include shows "(Professional)" after its
 title and explains when you choose it.
 
@@ -199,7 +204,7 @@ Dates are stored as `1996-07-04`, times as `14:30:00`, and dates with times as
   header, its Dock icon and its About box. Select it and press Delete to remove it. **Without a
   picture, the symbol:** an SF Symbol for the header instead, with a preview beside it.
 - **Tag-line**: a short description under the app's name, up to 80 characters.
-- **Copyright**: at the left of the footer (`© <app name>` when empty). Its company also heads the window's title:
+- **Copyright**: at the left of the footer (nothing there when it is empty: the app's name is already in its header). Its company also heads the window's title:
   *Imagery Business Systems, LLC | Northwind* (just the app's name when the copyright names no company).
 
 **Done** saves everything in `Project.json`. The project's heading in App Builder shows the same
@@ -277,12 +282,15 @@ Every generated app has the same frame (`App Shell.incl`):
   menu** (System / Light / Dark) is at the right of the toolbar;
 - **full screen:** the green button (or *View → Enter Full Screen*) gives the app its own space; the
   cards, the List and the Form's fields, the navigator and the toolbar all stretch with the window;
-- a **footer** with the copyright on the left and the **record navigator** across the rest: First, Previous,
-  *Customer 3 of 91*, Next and Last, as pill buttons that share the width and stretch with the window. A page
+- a **footer** with the copyright on the left and the **record navigator** in the middle: four icons, First,
+  Previous, Next and Last (circled arrows in the accent colour), round *Customer 3 of 91*. A page
   opens on its first record, selected in the List with the focus there, so the arrow keys move through the
   records too. First and Previous are dimmed on the first record, Next and Last on the last. What just
   happened (*Saved.*, why a save was refused, *5 of 91 match*) shows under the window's title. New, Save,
   Delete and Refresh are in the toolbar, and in the *Records* menu (⌘N, ⌘S, ⌘R);
+- a **divider** between the List card and the Form card: drag it (the cursor shows the up-and-down arrows)
+  to give the List or the Form more height. Each page keeps its own, and the app remembers it the next time
+  it opens;
 - the **page**: the entity's List in a card at the top and its Form in a card below, both the
   full width of the window.
 
@@ -609,7 +617,7 @@ names it), and the Control popup needs an attribute selected in the table.
 
 | Menu | Command | Key | Needs |
 |---|---|---|---|
-| App Builder | Licence… · Enter Licence… · Upgrade to Professional… · Manage Licence Online… · Remove Licence… | | |
+| App Builder | Licence… (the Licence page: get, enter, upgrade, renew) | | |
 | Project | New Project… | ⌘N | |
 | | New Project from API Logic Server… | ⇧⌘N | Professional |
 | | Open Project… | ⌘O | |

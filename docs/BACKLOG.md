@@ -373,8 +373,9 @@ the site, download] -> [post to the list].
 
 ## Web Toolkit for FutureBasic - feasibility (author, 2026-11-26; `design/Web Toolkit Design.md`)
 
-- [ ] Run `src/MacTests/Web Server Test.fb` on a Mac: can FB serve a page and take its clicks? (a standalone
-  replacement for Wt, no Wt licence - a feasibility question for now)
+- [x] Run `src/MacTests/Web Server Test.fb` on a Mac: can FB serve a page and take its clicks? Yes (author, 2026-11-28:
+  the page, Add One without reloading, `<b>Bob</b>` shown as typed, two tabs and fast clicks kept up)
+- [ ] Run `src/MacTests/FastCGI Test.fb` behind Homebrew's nginx on a Mac, then the Orders example (`src/WebToolkitExample`)
 
 ## Record Files for FutureBasic (author, 2026-11-27; `design/Record Files Design.md`)
 

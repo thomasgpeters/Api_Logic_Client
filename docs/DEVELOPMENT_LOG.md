@@ -6,6 +6,98 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Web Toolkit: FastCGI on 9010; the FastCGI Test runs from its folder
+
+- On the author's Mac, Apache (`httpd`) holds 8080 and PHP-FPM holds 127.0.0.1:9000 - both common with Homebrew PHP.
+  Homebrew's nginx loads its default site on 8080 (so it would not start beside Apache), and our FB programs listened
+  for FastCGI on 9000, PHP-FPM's port. The FastCGI port is now **9010** in the toolkit's template, the Orders example
+  and the FastCGI Test (the `.glbl` constants, `nginx.conf`, the docs).
+- `src/MacTests/FastCGI Test nginx.conf` is now a complete configuration run from its folder
+  (`nginx -c "$PWD/FastCGI Test nginx.conf" -p "$PWD"`) with its own `fastcgi_params`, the way the Orders example
+  runs: no Homebrew `servers/` folder, no default site. `run_tests.sh` checks it with `nginx -t`; `.gitignore` keeps
+  out the `nginx.pid` and `nginx-error.log` a run writes.
+
+## 2026-11-28 — Web Server Test passed on the Mac
+
+- The author ran `src/MacTests/Web Server Test.fb`: the page appears, Add One counts up without reloading, Greet shows
+  `<b>Bob</b>` as typed (escaped, not bold), and two tabs with fast clicking keep up. FB can serve a page and take its
+  clicks: the Web Toolkit's feasibility question is answered yes.
+- The FastCGI Test's instructions assumed `/opt/homebrew/etc/nginx/servers/` exists: it only does once Homebrew's nginx
+  is installed, and on an Intel Mac it is under `/usr/local`. The docs and the conf's header now say
+  `$(brew --prefix)/etc/nginx/servers/`, after `brew install nginx`.
+
+## 2026-11-28 — Web Toolkit: fastcgi_params beside nginx.conf
+
+- Before the author's Mac run of the web tests: the Template's and the Orders example's `nginx.conf` include
+  `fastcgi_params` by a relative path, which nginx resolves against the config's own folder when started as the docs say
+  (`nginx -c "$PWD/nginx.conf" -p "$PWD"`) - and the folder had none: nginx would have refused to start (tried here:
+  "open() .../fastcgi_params failed"). Both folders now carry their own `fastcgi_params` (the CGI variables the toolkit
+  reads; request headers are passed by nginx anyway), and `run_tests.sh` runs `nginx -t` on both configs when nginx is
+  installed. The FastCGI Test's config was fine (it sits in Homebrew's servers folder, beside Homebrew's copy).
+
+## 2026-11-28 — The Licence page; the Studio's frame (header across, black footer, raised cards)
+
+- **Author:** Licence... "can't find the view"; Licence... should show a read-only page with the licence (not the key)
+  and the registered user, with buttons to upgrade or renew; the licence entered elsewhere, from a button; a link to the
+  Imagery License Server to get one; "simple, not too many menus" (Manage Licence Online folds into Renew); "less
+  resistance means more takers"; "Lite edition". Layout: the header across the whole window with the entity list and
+  the details below it; a black, low footer across the window with the copyright small and centred; Entity Details and
+  Settings as raised rounded cards, white in light mode, a step lighter than the window in dark mode.
+- **Licence** (`Licence Window.incl`, rewritten): the separate Licence window (FB tags in another window: the "View
+  does not exist") is gone. Licence... shows a page of the main window (`_licenceView`, contents in Cocoa:
+  `LicencePageBuild`) - with no licence: Get the Free Lite Edition (one big button), Use the Licence on the Clipboard
+  when the clipboard holds one that verifies, Enter Licence... (an NSAlert with a field, the clipboard's licence filled
+  in); with one: licensed to, account, edition, number, issued, valid until, what it includes (ticks and locks),
+  Upgrade to Professional (Lite), Renew, Enter Licence. The application menu keeps Licence... only. `LicenceGate`
+  without a licence offers Get the Free Lite Edition first. The page's button handler is a global set by `LicenceShow`
+  (the page and its handler call each other: FB needs each defined before use).
+- **Frame** (Windows.incl, Menus.incl, Branding.incl): the heading and the crumb trail start at the window's left and
+  no longer move with the entity list; the entity list starts under them (`StudioLayoutFrame`) and ends above the
+  footer; the footer is a black box, 22 points, "© 2026 Imagery Business Systems, LLC" in 10 pt, centred (the Welcome
+  card's own copyright line removed); the pages sit above it (`PageFrame`). `StudioRaisedCard`: a rounded box with a
+  soft shadow behind Entity Details and Settings, `StudioCardColor`. Not built yet on a Mac.
+
+## 2026-11-28 — Crash fix: Licence... from the application menu
+
+- **Author:** the Studio crashed on Licence... (no crash report yet). Reading the code: every menu command ends with
+  `StudioUpdateCommands`, which reads the main window's views by tag (`ViewIsHidden( _welcomeView )`, the Recent
+  Projects table, the crumb trail - more of them since the context menus and the layout fix). Licence... opens the
+  Licence window and leaves it FB's output window, and FB's tag functions look only there. Now `StudioUpdateCommands`
+  notes the output window (`window( _windowOutput )`), sets the main window (`WindowSetOutput( _window )`), updates
+  (`StudioUpdateCommandsInMain`) and puts the old one back. Rule in FB Coding Rules. If it still crashes, the crash
+  report decides.
+
+## 2026-11-28 — No default copyright; less room above the List
+
+- **Author:** "the Northwind at the bottom is redundant. Still too much space at the top above the list view; that only
+  needs 5 or 10 px." App Generator no longer makes a copyright of `© <app name>` when the project has none: the footer
+  then shows none. `_shellMarginTop` = 8 above the first card (the sides and the bottom keep 16).
+
+## 2026-11-28 — The record navigator as icons
+
+- **Author** (a Northwind screenshot, dark mode, 13 tables): the pills' |< < > >| were not centred, the words redundant;
+  icons better than pills, if they can be disabled. Now four borderless icon buttons - SF Symbols
+  `backward.end.circle.fill`, `chevron.backward.circle.fill`, `chevron.forward.circle.fill`, `forward.end.circle.fill`,
+  22 pt semibold, the accent colour, no words - centred in the footer round "Supplier 1 of 29" (flexible margins). A
+  borderless symbol button dims itself when disabled, and `ShellSetEnabled` fades it too.
+
+## 2026-11-27 — The splitter remembers its place, per page
+
+- **Author:** "yes, remember the splitter position per page." The Form card's height is saved in the app's preferences on
+  mouse-up (`Splitter <page title>`) and put back when the splitter is made at launch; the moving is one method
+  (`moveBy:`) for a drag and for the restore, so the minimums hold for both. Test scenario G-01c step 7.
+
+## 2026-11-27 — A splitter between the List and the Form
+
+- **Author:** "a splitter in between the list and the scalar view in the generated app."
+- `ShellSplitter` (App Shell.incl; App Pages calls it per page after `RecordTilesBuild`): an `ABSplitHandle` (Cocoa
+  view) in the gap between the cards. Dragging moves the line between them - above, the List card, the List and its
+  tiles area; below, the Form card and the Form, the Form's title with its card's top - within minimums (List 140,
+  Form card 90). Chosen over an NSSplitView: that would have re-parented each card, its title, its XIB part and the
+  tiles area; the handle leaves the layout as it is. The views it moves are gathered without nils (an array literal
+  with a nil stops the app). Not compiled here (GNUstep has no AppKit on this machine): the Mac build is its first.
+  Test scenario G-01c.
+
 ## 2026-11-27 — The theme menu in the toolbar; a slimmer header; full screen
 
 - **Author:** the theme selector into the toolbar, to gain back the header's unused space; the app able to go full

@@ -62,7 +62,8 @@ into a session when something fails.
 Here: `tools/web_toolkit_reference.py --test` (in `run_tests.sh`) drives `web.js` in headless Chromium against a Python
 reference of the protocol (30 checks); `--serve 8099` shows its page. On a Mac:
 1. Build `src/WebToolkitExample/WebToolkitExample.fbeproj` and run it.
-2. In that folder, `nginx -c "$PWD/nginx.conf" -p "$PWD"`, then open http://127.0.0.1:8088/.
+2. In that folder, `nginx -c "$PWD/nginx.conf" -p "$PWD"`, then open http://127.0.0.1:8088/. (The folder carries its
+   own `fastcgi_params`, which `nginx.conf` includes; `run_tests.sh` checks the config loads, `nginx -t`.)
 3. Report:
    - a customer's credit limit lowered below the balance: refused, with the message;
    - an item added: the total and the balance follow;
@@ -81,8 +82,9 @@ The layouts:
 ### FastCGI Test (the pattern: nginx in front of a FutureBasic program)
 
 `tools/check_fastcgi_core.py` (in `run_tests.sh`) compiles the program's FastCGI core here and runs it behind nginx. On a
-Mac: `brew install nginx`, copy `src/MacTests/FastCGI Test nginx.conf` to `/opt/homebrew/etc/nginx/servers/`,
-`brew services restart nginx`, run `src/MacTests/FastCGI Test.fb`, open http://127.0.0.1:8088/ - the same reports as
+Mac: `brew install nginx`; in `src/MacTests`, `nginx -c "$PWD/FastCGI Test nginx.conf" -p "$PWD"` (a complete
+configuration with its own `fastcgi_params`, as the Orders example: Homebrew's default site, on 8080, is not loaded; the
+program listens on 9010, clear of PHP-FPM's 9000); run `src/MacTests/FastCGI Test.fb`, run `src/MacTests/FastCGI Test.fb`, open http://127.0.0.1:8088/ - the same reports as
 the Web Server Test below.
 
 ### Web Server Test (feasibility: a web app in FutureBasic, `docs/design/Web Toolkit Design.md`)

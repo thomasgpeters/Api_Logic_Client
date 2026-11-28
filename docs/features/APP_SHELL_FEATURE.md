@@ -11,7 +11,7 @@ Every app generated from a SQLite project opens in the same frame:
 │            │   the page: the entity's List part (top) and Form part       │  content
 │  dark blue │                                                              │
 │  nav bar   ├──────────────────────────────────────────────────────────────┤
-│            │ © Company (|< First)(< Previous) Customer 3 of 91 (Next >)(Last >|)│  footer
+│            │ © Company        |◀  ◀   Customer 3 of 91   ▶  ▶|               │  footer
 └────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -24,14 +24,21 @@ Every app generated from a SQLite project opens in the same frame:
 - **Full screen** (`ShellAllowFullScreen`: `NSWindowCollectionBehaviorFullScreenPrimary`): the green button gives the
   app its own space; every part stretches (autoresizing: the cards, the List's columns, the Form's fields, the
   navigator's cells, the toolbar).
-- **Footer** (author, 2026-11-27): the copyright on the left, then the **record navigator** across the rest of the
-  width: First, Previous, *"Customer 3 of 91"*, Next, Last, as pills in five equal cells that stretch with the window
-  (`ShellNavigatorButton`, proportional autoresizing). A dimmed pill is also faded (alpha 0.4: on macOS 15 the layer
+- **Footer** (author, 2026-11-27/28): the copyright on the left, the **record navigator** centred: four icon buttons
+  (`ShellNavigatorButton`: borderless, SF Symbols `backward.end.circle.fill`, `chevron.backward.circle.fill`,
+  `chevron.forward.circle.fill`, `forward.end.circle.fill` at 22 pt semibold in the accent colour, no words) round
+  *"Customer 3 of 91"*; the group keeps to the middle as the window resizes (flexible margins). A dimmed pill is also faded (alpha 0.4: on macOS 15 the layer
   draws the pill and does not grey itself). What just happened ("Saved.", a refused save's reason, "5 of 91 match")
   shows under the window's title, the window's subtitle (`ShellSetStatus`).
 - **Window title:** *Company | App* (author, 2026-11-27), the company taken from the copyright (`ShellCompanyName`:
   "© 2026 Imagery Business Systems, LLC" -> "Imagery Business Systems, LLC"); just the app's name when it names none.
-- **Spacing:** 16 points around the cards, 12 inside them, a 26-point title row (less room above a List: author,
+- **Splitter** (author, 2026-11-27): a handle in the gap between a page's List card and its Form card
+  (`ShellSplitter`, an `ABSplitHandle` view per page, tag `_shellSplitterBase` + the page, shown with its page).
+  Dragging it moves the line: the List card, the List and its tiles area give up or take height, the Form card and the
+  Form take or give it, the Form's title moves with its card's top; the List keeps at least 140 points, the Form card 90.
+  Up-and-down cursor, a short grip line. Its place is kept per page in the app's preferences (`Splitter <page title>`:
+  the Form card's height, saved on mouse-up) and put back when the page is built at the next launch.
+- **Spacing:** 8 points above the first card (author, 2026-11-28), 16 around the others, 12 inside them, a 26-point title row (less room above a List: author,
   2026-11-27).
 - **Toolbar** (author, 2026-11-27; `App Toolbar.incl`): FB's `toolbar` and `toolbaritem`, so each item has a tag and
   sends `_toolbarItemClick`. **Search** is first (`magnifyingglass`), its label following the page ("Search
@@ -76,7 +83,7 @@ Branding comes from **Project Settings** in the Studio (`ProjectSettingsView.xib
 `Project Settings.incl`, `Project Workspace.incl`): a logo well (paste or drag; kept as
 `<project>/Branding/logo.png`, deployed as `FBapp/AppLogo.png`), the tag-line (≤ 80 characters)
 and the copyright, all in `Project.json`. Without a logo the header shows the `building.2` symbol;
-without a copyright the footer says `© <app name>` (at its left).
+without a copyright the footer shows none (the app's name is in its header and title).
 
 ## Decisions
 
