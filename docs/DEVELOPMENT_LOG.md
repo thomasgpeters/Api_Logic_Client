@@ -6,6 +6,14 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — One post for the FutureBasic list, for all the free modules
+
+- The author: "a single post for all the mods so as to not tire the men." `docs/FB List Post.md`: the SQL Generator,
+  LogicBank for FutureBasic and the Web Toolkit in one post, a few lines each, one link. The per-module drafts stay as
+  the longer text for each module's page. Record Files is left out until it has run on a Mac.
+- The site's address cannot be set up today (the author has no access to the firewall). The post's link is a
+  placeholder; the file lists what it can point at meanwhile (GitHub Pages, a public repository, shared zips).
+
 ## 2026-11-28 — Web Toolkit: a draft post for the FutureBasic list
 
 - The author wants to share the module on the FB list. It had everything but the post: `src/WebToolkit/ANNOUNCEMENT.md`,

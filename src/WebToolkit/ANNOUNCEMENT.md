@@ -1,5 +1,8 @@
 # Draft post for the FutureBasic list
 
+The list gets one post for all the free modules: `docs/FB List Post.md` (author, 2026-11-28). This longer text is kept
+for the module's own page.
+
 Plain text, no attachments: everything is on the web page the post links to (the list's storage fills up).
 Written in the author's own style: short, direct, the point first. Not in the download (`tools/make_site.py` skips it).
 
