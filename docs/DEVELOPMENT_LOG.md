@@ -6,6 +6,18 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Page designer, phase 2 begun: its model in FB
+
+- The author: "let's start implementing the forms builder" - the page designer (Professional), confirmed when asked.
+  Phase 2a: `src/AppBuilder/Pages Model.incl`, the FB port of `tools/pages_reference.py` - the tables and join tables
+  of the model, an association's cardinality and proposed name, the links proposed when an entity is dropped on a
+  page (`PagesProposedLinks`: the parts in page order, the same entity, the model's relationships, then many to many
+  through a join table), the associations between two pages (`PagesAssociations`), the model's own pages
+  (`PagesDefault`), a drop (`PagesDrop`), the check (`PagesCheck`, the reference's messages), and `Pages.json` in the
+  project folder (`PagesLoad`, `PagesSave`). In the build order after `Project Workspace.incl`.
+- fblint caught `resources`, an FB keyword: the model's dictionary is `modelResources`, as in `App Generator.incl`.
+- Not built on a Mac yet; nothing calls it until the Pages view (2b).
+
 ## 2026-11-28 — The generated app: the theme menu works; the copyright in a centred footer strip
 
 - The author: the toolbar's theme menu "does not function, it does not need a title, and it should have a separator".
