@@ -6,6 +6,22 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — The site and the downloads say only what is true today
+
+- The landing page opens with the author's introduction, in the first person, with a sentence on what the site holds.
+  The author asked for shortcomings to be caught; found and fixed:
+  - **App Builder offered registration** (five buttons and links) though it is not released until it can be paid for:
+    `APP_BUILDER_RELEASED = False` in `tools/make_site.py`; its buttons are disabled and say *Coming Soon* (the
+    author's words), the landing card's tag too.
+  - **Claims ahead of the code:** "you write rules as plain sentences, and App Builder checks and tests them" (the
+    landing card), the same on the App Builder page and in its table, and in LogicBank's README - the Rules page and
+    the AI assistant are *Planned*. Now in the future tense or marked *coming*.
+  - **A dead address inside the downloads:** the SQL Generator module's README and the About window in every example
+    app pointed at fb.imagery-business-systems.com, which does not answer yet. Now the live GitHub Pages address
+    (`SITE_URL`, `ABOUT_IMAGERY_SITE`).
+  - **The About window** said "Lite is free when you register" and offered App Builder's registration: now "will be".
+  - **The footer** named two of the three MIT modules: the Web Toolkit added.
+
 ## 2026-11-28 — Payments: Stripe and PayPal, the buyer chooses; no release before
 
 - The author: Studio for FB is not released, Lite or otherwise, until payments work. Surveyed the other repositories:

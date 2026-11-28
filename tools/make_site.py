@@ -35,7 +35,9 @@ import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, '..'))
-SITE_URL = 'https://fb.imagery-business-systems.com/'
+SITE_URL = 'https://thomasgpeters.github.io/imagery-fb-site/'   # fb.imagery-business-systems.com once its name points there
+# App Builder is not released until it can be paid for (author, 2026-11-28): its pages say so and offer no registration.
+APP_BUILDER_RELEASED = False
 YEAR = '2026'
 
 MODULES = [
@@ -52,7 +54,7 @@ MODULES = [
                      'In your own program, include the four files in the same order as the demo does,\n'
                      'and add -lsqlite3 to Build Settings > Compiler options.\n\n'
                      'More examples, the user guide and the full example app:\n'
-                     'https://fb.imagery-business-systems.com/sql-generator/\n\n'
+                     + SITE_URL + 'sql-generator/\n\n'
                      'MIT License. See LICENSE.\n',
      'blurb': 'Describe a SELECT, INSERT, UPDATE or DELETE as a dictionary (its tables, columns, filters and joins) and get safe, '
               'parameterized SQL for SQLite. Names are quoted for you, and every value is bound rather than pasted into the SQL.'},
@@ -128,6 +130,7 @@ a { color:var(--accent); } p, li { max-width: 760px; } .lead { font-size:19px; c
 .card h3 { margin-top:0; } .tag { display:inline-block; font-size:12px; font-weight:600; padding:2px 8px; border-radius:999px; border:1px solid var(--line); color:var(--soft); }
 .button { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:9px 18px; border-radius:999px; font-weight:600; margin:6px 8px 6px 0; }
 .button.secondary { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+.button.disabled { background:var(--card); color:var(--soft); border:1px solid var(--line); cursor:default; pointer-events:none; }
 pre { background:var(--code); border:1px solid var(--line); border-radius:10px; padding:14px; overflow-x:auto; font-size:13px; line-height:1.45; }
 code { font-family: ui-monospace, Menlo, monospace; font-size:0.92em; } p code, li code, td code { background:var(--code); padding:1px 4px; border-radius:4px; }
 table { border-collapse:collapse; margin:16px 0; width:100%; font-size:15px; display:block; overflow-x:auto; } th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; } th { background:var(--card); }
@@ -300,7 +303,7 @@ def page(title, body, depth, description=''):
 <main>
 {body}
 </main>
-<footer>&copy; {YEAR} Imagery Business Systems, LLC. The SQL Generator and LogicBank for FutureBasic are free and open source (MIT).
+<footer>&copy; {YEAR} Imagery Business Systems, LLC. The SQL Generator, LogicBank for FutureBasic and the Web Toolkit for FutureBasic are free and open source (MIT).
 The Imagery name and logos are not licensed for reuse. FutureBasic is the work of its own authors.</footer>
 </body></html>
 """
@@ -445,21 +448,28 @@ def build(out):
 
     # App Builder
     register = licence_server()
+    if APP_BUILDER_RELEASED:
+        get_it = (f'<p><a class="button" href="{register}">Register for a free Lite licence</a>'
+                  f'<a class="button secondary" href="{register}">Professional</a>')
+    else:
+        # not shipping: the same buttons, disabled, saying so (author, 2026-11-28)
+        get_it = ('<p><span class="button disabled" aria-disabled="true">Lite: Coming Soon</span>'
+                  '<span class="button disabled" aria-disabled="true">Professional: Coming Soon</span>')
     write(out, 'app-builder/index.html', page('App Builder for FutureBasic', f"""<h1>App Builder for FutureBasic</h1>
 <p class="lead">A Mac app that builds a complete FutureBasic application from your database: the windows and forms, the lists,
 the data binding and the business rules, ready for you to open in the FutureBasic editor and build.</p>
-<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Professional</a><a class="button secondary" href="editions.html">Compare the editions</a></p>
+{get_it}<a class="button secondary" href="editions.html">Compare the editions</a></p>
 <table><thead><tr><th></th><th>Lite</th><th>Professional</th></tr></thead><tbody>
 <tr><td>Licence</td><td>free, with registration</td><td>paid</td></tr>
 <tr><td>Start from</td><td>a SQLite database</td><td>a SQLite database, or an API Logic Server project</td></tr>
 <tr><td>The app</td><td>runs on your Mac, its rules with it (LogicBank for FutureBasic)</td><td>three tiers: many users, the rules enforced on the server, sign-in and security</td></tr>
-<tr><td>Rules</td><td>written, checked and tested in App Builder</td><td>the same, and shared with your Python project (declare_logic.py)</td></tr>
+<tr><td>Rules</td><td>LogicBank for FutureBasic in every app; a Rules page to write, check and test them (coming)</td><td>the same, and shared with your Python project (declare_logic.py, coming)</td></tr>
 <tr><td>AI assistant (coming)</td><td>rules from sentences in your model's names, with your own key</td><td>also through API Logic Server's genai-logic</td></tr>
 </tbody></table>
 <p>Every feature, edition by edition, with where each one stands: <a href="editions.html">Lite and Professional compared</a>.</p>
 <p>App Builder stands on the free modules, and every app it builds carries the SQL Generator and LogicBank for FutureBasic.
-With the modules on their own, you write your rules by hand. App Builder writes them for you from plain sentences, checks them
-against your model, tests every rule, and builds the app around them.</p>
+With the modules on their own, you write your rules by hand. App Builder builds the app around them, and the Rules page we're
+building will write them for you from plain sentences, check them against your model and test every rule.</p>
 <p>We're working on the same for the web, though it isn't ready yet. With the Web Toolkit on its own you write each page yourself;
 App Builder will build the pages from your model (forms, lists, bindings and rules) for a web app beside the Mac app, or in its place.</p>
 <h2>Test it yourself</h2>
@@ -485,7 +495,7 @@ step at a time: what to do, what you should see, and a box to tick. It's how we 
 <p class="lead">Both editions are the same App Builder: your licence decides which one a project uses. Lite builds an app that runs on
 your Mac with its SQLite database and its rules. Professional adds three tiers, many users and the rules on a server, with API
 Logic Server, and the page designer.</p>
-<p><a class="button" href="{register}">Register for a free Lite licence</a><a class="button secondary" href="{register}">Professional</a></p>
+{get_it}</p>
 <table class="editions"><thead><tr><th>Feature</th><th>Lite</th><th>Professional</th><th>Status</th></tr></thead><tbody>
 {''.join(rows)}
 </tbody></table>
@@ -499,15 +509,17 @@ designed, not yet built. A Lite project moves to Professional with its rules unc
                            f'<p>{esc(m["blurb"])}</p><p><a href="downloads/{m.get("small_zip", m["zip"])}">Download</a> &middot; <a href="help/{m["slug"]}/index.html">User guide</a></p></div>'
                            for m in modules)
     write(out, 'index.html', page('FutureBasic tools', f"""<h1>Tools for FutureBasic programmers</h1>
-<p class="lead">Thomas Peters has spun up a new startup business, Imagery Business Systems, LLC, now developing business applications
-across a variety of fields, including Transportation Fleet Management, Education and Big Truck Service Center Management. As this
-work has evolved, I find myself falling back on FutureBasic more often than not.</p>
+<p class="lead">I'm Thomas Peters. I've started a new business, Imagery Business Systems, LLC, and we build business applications
+in several fields: transportation fleet management, education, and service centers for big trucks. As the work has grown, I've
+found myself reaching for FutureBasic more often than not.</p>
+<p>These are the tools that came out of it: three free modules for your own FB apps, each with a sample app that shows it at work,
+and the sample applications we built to prove them on real problems.</p>
 <h2>Free modules</h2>
 <div class="cards">{module_cards}</div>
 <h2>App Builder for FutureBasic</h2>
-<div class="cards"><div class="card"><span class="tag">Lite free &middot; Professional licensed</span><h3><a href="app-builder/index.html">App Builder</a></h3>
-<p>Windows, forms, lists, data binding and business rules, generated from your database. You write rules as plain sentences, and App Builder checks and tests them.</p>
-<p><a href="{register}">Register</a> &middot; <a href="app-builder/index.html">Lite and Professional</a></p></div>
+<div class="cards"><div class="card"><span class="tag">{"Lite free &middot; Professional licensed" if APP_BUILDER_RELEASED else "Coming Soon"}</span><h3><a href="app-builder/index.html">App Builder</a></h3>
+<p>Windows, forms, lists, data binding and business rules (LogicBank for FutureBasic), generated from your database.</p>
+<p>{f'<a href="{register}">Register</a> &middot; ' if APP_BUILDER_RELEASED else ''}<a href="app-builder/index.html">Lite and Professional</a></p></div>
 <div class="card"><span class="tag">samples</span><h3><a href="samples/index.html">Sample applications</a></h3>
 <p>{", ".join(esc(n) for n, _ in SAMPLES)}: real problems, each with its database, rules and tests.</p></div>
 <div class="card"><span class="tag">PDF</span><h3><a href="downloads/Test-Scenario-Guide.pdf">Test scenario guide</a></h3>

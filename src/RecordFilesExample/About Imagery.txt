@@ -8,9 +8,9 @@ We build business software at Imagery Business Systems, and a growing set of too
 All three are yours to download, use and change for free, with their examples and documentation, from the website below.
 
 ## App Builder for FutureBasic
-A Mac app that builds a complete FutureBasic application from your database: the windows and forms (XIB), the lists, the data binding and the business rules, ready for you to open in the FutureBasic editor and build.
-- **Lite** is free when you register. You start from a SQLite database, and the app and its rules run on your Mac, with LogicBank for FutureBasic.
-- **Professional** is licensed. It works in three tiers with API Logic Server: many users, the rules enforced on the server, sign-in and security, and rules shared with your Python project.
+A Mac app that builds a complete FutureBasic application from your database: the windows and forms (XIB), the lists, the data binding and the business rules, ready for you to open in the FutureBasic editor and build. It isn't released yet; it comes in two editions:
+- **Lite** will be free, with registration. You start from a SQLite database, and the app and its rules run on your Mac, with LogicBank for FutureBasic.
+- **Professional** will be licensed. It works in three tiers with API Logic Server: many users, the rules enforced on the server, sign-in and security, and rules shared with your Python project.
 - We're also working on an AI assistant, though it isn't ready yet. You'll describe a rule in plain language, in your model's own names, and App Builder will turn it into the rule.
 
 ## Sample applications
@@ -20,4 +20,4 @@ We built these to show what the rules can do. Each comes with its database, its 
 - **Flight Planner**: VFR flight planning with wind, weight and balance, runways, weather and a go / no-go decision.
 
 ## Find out more
-On the website you'll find the modules, the samples, the documentation, and App Builder's registration and licences.
+On the website you'll find the modules, the samples and the documentation, and App Builder's news.

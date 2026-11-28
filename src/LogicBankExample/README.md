@@ -74,8 +74,8 @@ they are.
 ## Rules by hand, or with App Builder
 
 With the module on its own, you write the rules in FB and test them yourself. **App Builder for FutureBasic**
-(licensed, from Imagery Business Systems) can write them for you from sentences in your model's own names,
-check them against the model, test every rule, and build the whole app around them.
+(licensed, from Imagery Business Systems; not released yet) builds the whole app around them, and is to write
+them for you from sentences in your model's own names, check them against the model and test every rule.
 
 ## Licence
 
