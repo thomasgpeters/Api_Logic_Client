@@ -161,6 +161,10 @@ python3 tools/fblint.py ~/Library/Application\ Support/Api_Logic_Client/workspac
 - **Cocoa collections refuse NULL.** `MutableDictionarySetObjectForKey( d, NULL, k )` raises
   an exception — guard optional values, or store `NSNull` for SQL NULL.
 
+- **Code that updates one window from a menu command sets that window as FB's output window first** (2026-11-28, a
+  crash on Licence...): a command can open another window and leave it current, and FB's tag functions (`ViewIsHidden`,
+  `TableViewSelectedRow`, `MenuItem...` on views) then look there. Note `window( _windowOutput )`, call
+  `WindowSetOutput( _window )`, do the work, and put the old one back (`StudioUpdateCommands` does this).
 - **Replacing an object in a dictionary (or an array) frees the old one when nothing else holds it** (2026-11-27,
   a crash in `AppPageChooseRow`): `old = fn DictionaryObjectForKey( d, key )`, then `MutableDictionarySetObjectForKey(
   d, new, key )` leaves `old` pointing at freed memory. Copy it first (`old = fn ArrayWithArray( old )`, autoreleased:

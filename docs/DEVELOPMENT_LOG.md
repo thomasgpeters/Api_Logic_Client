@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Crash fix: Licence... from the application menu
+
+- **Author:** the Studio crashed on Licence... (no crash report yet). Reading the code: every menu command ends with
+  `StudioUpdateCommands`, which reads the main window's views by tag (`ViewIsHidden( _welcomeView )`, the Recent
+  Projects table, the crumb trail - more of them since the context menus and the layout fix). Licence... opens the
+  Licence window and leaves it FB's output window, and FB's tag functions look only there. Now `StudioUpdateCommands`
+  notes the output window (`window( _windowOutput )`), sets the main window (`WindowSetOutput( _window )`), updates
+  (`StudioUpdateCommandsInMain`) and puts the old one back. Rule in FB Coding Rules. If it still crashes, the crash
+  report decides.
+
 ## 2026-11-28 — No default copyright; less room above the List
 
 - **Author:** "the Northwind at the bottom is redundant. Still too much space at the top above the list view; that only
