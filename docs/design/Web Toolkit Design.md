@@ -143,6 +143,44 @@ fn WebServe( 8080, @fn BuildPage )
   rules, beside the Mac app: the same entities, the same LogicBank for FutureBasic rules, the same SQL Generator
   queries - another view on the same domain (the DDD book's layer rule: the UI is replaceable).
 
+## Hosting a Web Toolkit app (author, 2026-11-28: "the new path forward for my apps")
+
+The author's direction after the Mac tests passed (2026-11-28: the Web Server Test, the FastCGI Test, the Orders
+example): web apps in FB, served to anyone, hosted on macOS. What is in place and what a first public app still needs,
+in the order that unblocks it. Backlog: *Web Toolkit - hosting*.
+
+**In place (the toolkit, 2026-11-26):** every text escaped (proved on the Mac: `<b>Bob</b>` shown as typed); a 128-bit
+random session id in an `HttpOnly; SameSite=Strict` cookie, `Secure` when nginx passes `HTTPS=on`; a token every event must carry; a 1 MB request limit and
+bounded parameters; idle sessions ended after two hours; nginx in front (TLS, slow clients, static files); the app on
+127.0.0.1 only; a LaunchAgent plist in the template (`com.example.webapp.plist`).
+
+1. **The Mac.** FB builds macOS programs, so the host is a Mac:
+   - a Mac mini on the author's network (cheapest; the router forwards 443, or a tunnel such as Cloudflare Tunnel
+     reaches it with no open port and no fixed address);
+   - or a rented Mac in a data centre (MacStadium, AWS EC2 Mac) when the app must not depend on the office.
+   Either way: automatic login off, FileVault on, the firewall on, only 80 and 443 reachable (nginx), updates applied.
+2. **HTTPS.** nginx with a Let's Encrypt certificate (`certbot`, renewed on a schedule); HTTP redirected to HTTPS; HSTS (the session
+   cookie turns `Secure` by itself: the template's `nginx.conf` passes `HTTPS`). The template's `nginx.conf` gets a commented HTTPS server
+   block, ready to fill in.
+3. **Unattended.** The app as a LaunchDaemon (starts at boot with nobody logged in, restarted when it stops), not the
+   template's LaunchAgent (needs a login); nginx as a `brew services` daemon; logs written to files and rotated;
+   a health URL (`/health`) for a monitor to call. The app must run with no window: the server window becomes optional.
+4. **Sign-in.** Users and passwords (salted, slow hashes: PBKDF2 through CommonCrypto), a sign-in page, the session
+   tied to the user, sign-out, and a new session id at sign-in (against session fixation). Roles later, checked on the
+   server for every event. Rate limits on sign-in in nginx (`limit_req`).
+5. **Hardening.** Response headers from nginx: `Content-Security-Policy` (scripts only from the site: `web.js`),
+   `X-Content-Type-Options`, `Referrer-Policy`, `frame-ancestors 'none'`; limits per address (`limit_req`,
+   `limit_conn`); a security review of the toolkit for public use (escaping, the token, the session store, the
+   FastCGI parser - the C fuzzed here) before the first public app.
+6. **Data.** SQLite behind the rules (`Data Records.incl`, as generated desktop apps), not the example's memory store;
+   one writer (the app); backups on a schedule (`sqlite3 .backup` to another disk, kept for a set time) and a restore
+   that has been tried.
+7. **Deploying a new version.** Build on the development Mac, copy the app, restart the daemon (`launchctl kickstart
+   -k`); sessions are in memory, so visitors sign in again - acceptable at first, sessions in SQLite later.
+8. **Scale, honestly.** One FB process answers requests one at a time on the main thread: comfortable for small and
+   medium apps (a few hundred users, forms and lists). More: several copies behind nginx with sessions in SQLite (the
+   backlog has it). A public site with heavy traffic is not the target.
+
 ## The plan
 
 1. **Proof (done):** `src/MacTests/Web Server Test.fb`. A single-file program: the C server and an FB handler; a page

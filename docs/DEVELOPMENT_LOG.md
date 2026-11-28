@@ -6,6 +6,16 @@ For the plan see `ROADMAP.md`; for open items `BACKLOG.md`.
 
 ---
 
+## 2026-11-28 — Web Toolkit: the Orders example on the Mac; hosting planned
+
+- The author's run of the Orders example after the `WebTableRefresh` fix: totals and the balance follow an added item,
+  Ship Today moves the unshipped count, the theme menu works (with the page, a customer chosen and a refused credit
+  limit from the first run). Two browsers side by side and saving on a tab switch are still to try.
+- The author: the Web Toolkit "will become the new path forward for my apps ... serve to anyone. Just need to be
+  hosted on macOS." `Web Toolkit Design.md` has a new section, *Hosting a Web Toolkit app*: what is in place (escaping,
+  the session cookie and token, limits, nginx in front) and what a first public app needs, in order - the Mac, HTTPS,
+  running unattended, sign-in, hardening, data and backups, deploying, scale. The backlog has the items.
+
 ## 2026-11-28 — Web Toolkit: a crash after a save (use after free in WebTableRefresh)
 
 - The author's run of the Orders example on the Mac: the page, choosing a customer and a refused credit limit all

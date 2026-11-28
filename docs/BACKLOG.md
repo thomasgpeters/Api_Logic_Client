@@ -376,7 +376,27 @@ the site, download] -> [post to the list].
 - [x] Run `src/MacTests/Web Server Test.fb` on a Mac: can FB serve a page and take its clicks? Yes (author, 2026-11-28:
   the page, Add One without reloading, `<b>Bob</b>` shown as typed, two tabs and fast clicks kept up)
 - [x] Run `src/MacTests/FastCGI Test.fb` behind nginx on a Mac: passed (author, 2026-11-28; nginx run from `src/MacTests`, FastCGI on 9010)
-- [ ] Run the Orders example (`src/WebToolkitExample`) behind nginx on a Mac
+- [ ] Run the Orders example (`src/WebToolkitExample`) behind nginx on a Mac - mostly passed (author, 2026-11-28): the
+  page, a customer chosen, a credit limit refused, totals and balance following an item, Ship Today, the theme menu.
+  A save after a refused one crashed (`WebTableRefresh`, fixed in bd55a86). Still to try: two browsers side by side;
+  an item typed, then the tab switched (saved)
+
+## Web Toolkit - hosting: a first public app (author, 2026-11-28; `design/Web Toolkit Design.md` -> Hosting)
+
+- [ ] The host Mac: a Mac mini (port forwarding or Cloudflare Tunnel) or a rented Mac; a setup checklist (FileVault,
+  firewall, no automatic login, updates)
+- [ ] HTTPS: a commented HTTPS server block in the template's `nginx.conf`; `certbot` and its renewal; HTTP to HTTPS;
+  HSTS (the cookie's `Secure` is in place: set when nginx passes `HTTPS=on`)
+- [ ] Unattended: a LaunchDaemon plist beside the LaunchAgent; the app runs with no window; logs to files, rotated;
+  a `/health` URL
+- [ ] Sign-in: users with salted PBKDF2 hashes (CommonCrypto), a sign-in page, sign-out, a new session id at sign-in;
+  `limit_req` on sign-in; roles later, checked on the server
+- [ ] Hardening: CSP, `X-Content-Type-Options`, `Referrer-Policy`, `frame-ancestors` from nginx; `limit_req` /
+  `limit_conn` per address; fuzz the FastCGI parser here
+- [ ] A security review of the toolkit for public use, before the first public app
+- [ ] Data: SQLite behind the rules in a web app (`Data Records.incl`); scheduled backups and a tried restore
+- [ ] Deploying a new version: a short script (copy, `launchctl kickstart -k`) and its notes
+- [ ] The first public app: chosen by the author, built on all of the above
 
 ## Record Files for FutureBasic (author, 2026-11-27; `design/Record Files Design.md`)
 
